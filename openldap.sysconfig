@@ -1,5 +1,11 @@
-# nice level for sldap
-SLDAPNICE="+2"
+# nice level for slapd
+SLAPDNICE="+2"
+
+# debug level for slapd
+SLAPDSYSLOGLEVEL=""
+
+# SLAPD URL list 
+SLAPDURLLIST="ldap:///"
 
 # nice level for slurp
 SLURPNICE="+2"			     
