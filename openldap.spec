@@ -45,7 +45,7 @@ URL:		http://www.openldap.org/
 %{!?_with_db3:BuildRequires:	db-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	libwrap-devel
-BuildRequires:	openssl-devel >= 0.9.6a
+BuildRequires:	openssl-devel >= 0.9.6m
 BuildRequires:	pam-devel
 BuildRequires:	perl
 BuildRequires:	readline-devel >= 4.2
