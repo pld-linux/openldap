@@ -6,7 +6,7 @@
 %bcond_without	odbc	# disable sql backend
 %bcond_without	perl	# disable perl backend
 %bcond_without	sasl 	# don't build cyrus sasl support
-%bcond_without	slp  	# disable SLP support
+%bcond_without	slp	# disable SLP support
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
