@@ -60,10 +60,10 @@ The servers (daemons) that come with LDAP.
 %build
 autoconf
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
-CPPFLAGS="-I/usr/include/ncurses" \
+CPPFLAGS="-I%{_includedir}/ncurses" \
 ./configure %{_target} \
 	--prefix=/usr \
-	--libexecdir=/usr/sbin \
+	--libexecdir=%{_sbindir} \
 	--sysconfdir=/etc/ldap \
 	--localstatedir=/var/state \
 	--with-subdir=ldap \
@@ -83,7 +83,7 @@ install -d $RPM_BUILD_ROOT/{etc/{ldap,sysconfig,rc.d/init.d},var/ldap}
 
 make install \
 	prefix=$RPM_BUILD_ROOT/usr \
-	libexecdir=$RPM_BUILD_ROOT/usr/sbin \
+	libexecdir=$RPM_BUILD_ROOT%{_sbindir} \
 	sysconfdir=$RPM_BUILD_ROOT/etc/ldap
 
 chmod a+x $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
@@ -265,7 +265,7 @@ echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT%{_mandir}/man8/ldif2id2entry.8
 echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT%{_mandir}/man8/ldif2index.8
 
 (
-	cd $RPM_BUILD_ROOT/usr/sbin/
+	cd $RPM_BUILD_ROOT%{_sbindir}/
 	sed -e "s|^#! /bin/sh|#!/bin/sh|g" < xrpcomp >xrpcomp.work
 	mv xrpcomp.work xrpcomp
 	chmod a+x xrpcomp
@@ -311,7 +311,7 @@ rm -rf $RPM_BUILD_ROOT
 %config /etc/ldap/ldaptemplates.conf
 %config /etc/ldap/ldapsearchprefs.conf
 %config /etc/ldap/ldap.conf
-%attr(755,root,root) /usr/sbin/xrpcomp
+%attr(755,root,root) %{_sbindir}/xrpcomp
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %{_mandir}/man1/*
@@ -325,7 +325,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
-/usr/include/*
+%{_includedir}/*
 %{_mandir}/man3/*
 
 %files static
@@ -341,7 +341,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(700,root,root) /var/ldap
 %{_datadir}/ldap
-%attr(755,root,root) /usr/sbin/*
+%attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/ldif.5.gz
 %{_mandir}/man5/slapd.conf.5.gz
 %{_mandir}/man5/slapd.replog.5.gz
