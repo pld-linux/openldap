@@ -1,8 +1,8 @@
 Filed in OpenLDAP ITS (no number assigned yet, it was filed about
 ten minutes ago) on 25 January.  Our candidate workaround:
---- openldap-2.0.7/servers/slapd/daemon.c.sendbuf	Mon Oct 30 13:14:51 2000
-+++ openldap-2.0.7/servers/slapd/daemon.c	Mon Jan 29 18:05:20 2001
-@@ -954,6 +954,42 @@
+--- openldap-2.0.23/servers/slapd/daemon.c	Mon Oct 30 13:14:51 2000
++++ openldap-2.0.23/servers/slapd/daemon.c	Mon Jan 29 18:05:20 2001
+@@ -954,6 +954,45 @@
  #endif
  			}
  #endif
@@ -29,6 +29,9 @@ ten minutes ago) on 25 January.  Our candidate workaround:
 +
 +				do {
 +					tmp *= 2;
++					if (tmp < 0) {
++						break;
++					}
 +					rc = setsockopt( s, SOL_SOCKET,
 +							 SO_SNDBUF,
 +							 &tmp, sizeof(tmp) );
