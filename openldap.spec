@@ -6,7 +6,7 @@ Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
 Version:	2.0.7
-Release:	1
+Release:	15
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -21,6 +21,12 @@ Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-db3.patch
 Patch4:		%{name}-sql.patch
+Patch5:		%{name}-sendbuf.patch
+Patch6:		%{name}-syslog.patch
+Patch7:		%{name}-fast.patch
+Patch8:		%{name}-pidfile.patch
+Patch9:		%{name}-cldap.patch
+Patch10:	%{name}-norbert.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	ncurses-devel >= 5.0
@@ -29,7 +35,7 @@ BuildRequires:	perl
 BuildRequires:	openssl-devel
 BuildRequires:	cyrus-sasl-devel
 BuildRequires:	unixODBC-devel
-BuildRequires:	libltdl-devel
+BuildRequires:	libltdl-devel >= 1.4
 BuildRequires:	db3-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -112,13 +118,20 @@ Serwery (daemons) które przychodz± z LDAPem.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+
 install %{SOURCE3} .
 #perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 %build
 autoconf
-CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
-CFLAGS="%{optflags} -I%{_includedir}/db3"
+CPPFLAGS="-I/usr/include/ncurses -I/usr/include/db3"
+CFLAGS="%{rpmcflags} -I/usr/include/db3"
 %configure \
 	--enable-syslog \
 	--enable-proctitle \
