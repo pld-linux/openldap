@@ -1,5 +1,0 @@
-# nice level for sldap
-SLDAPNICE="+2"
-
-# nice level for slurp
-SLURPNICE="+2"			     
