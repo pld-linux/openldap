@@ -1,8 +1,8 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	1.2.7
-Release:	3
+Version:	1.2.9
+Release:	1
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Artistic
@@ -24,6 +24,7 @@ Patch5:		openldap-secretfile.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
+BuildRequires:	perl
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %define		_sysconfdir	/etc
@@ -94,13 +95,14 @@ The servers (daemons) that come with LDAP.
 Serwery (daemons) które przychodz± z LDAPem.
 
 %prep
-%setup  -q -n ldap -a 3
+%setup  -q -a 3
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+%patch3 -p1 
 %patch4 -p1
 %patch5 -p1
+perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 install %{SOURCE4} .
 
@@ -130,11 +132,7 @@ make install TMPROOT=$RPM_BUILD_ROOT
 # hack the default config files
 perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
 
-(
-cd $RPM_BUILD_ROOT%{_sbindir}/
-sed -e "s|^#! /bin/sh|#!/bin/sh|g" < xrpcomp >xrpcomp.work
-mv xrpcomp.work xrpcomp
-)
+perl -pi -e "s|^#! /bin/sh|#!/bin/sh|g" $RPM_BUILD_ROOT%{_sbindir}/xrpcomp 
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -236,7 +234,25 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/openldap/*.help
 %{_datadir}/openldap/ldapfriendly
 %{_datadir}/openldap/*.conf
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/centipede
+%attr(755,root,root) %{_sbindir}/fax500
+%attr(755,root,root) %{_sbindir}/go500
+%attr(755,root,root) %{_sbindir}/go500gw
+%attr(755,root,root) %{_sbindir}/in.xfingerd
+%attr(755,root,root) %{_sbindir}/ldapsetupdb
+%attr(755,root,root) %{_sbindir}/ldbmcat
+%attr(755,root,root) %{_sbindir}/ldbmtest
+%attr(755,root,root) %{_sbindir}/ldif
+%attr(755,root,root) %{_sbindir}/ldif2id2children
+%attr(755,root,root) %{_sbindir}/ldif2id2entry
+%attr(755,root,root) %{_sbindir}/ldif2index
+%attr(755,root,root) %{_sbindir}/ldif2ldbm
+%attr(755,root,root) %{_sbindir}/mail500
+%attr(755,root,root) %{_sbindir}/rcpt500
+%attr(755,root,root) %{_sbindir}/rp500
+%attr(755,root,root) %{_sbindir}/slapd
+%attr(755,root,root) %{_sbindir}/slurpd
+
 %{_mandir}/man5/ldif.5*
 %{_mandir}/man5/slapd.conf.5*
 %{_mandir}/man5/slapd.replog.5*
