@@ -1,19 +1,19 @@
---- openldap-2.1.17/servers/slapd/slapd.confwiget	Mon Mar 24 04:54:12 2003
-+++ openldap-2.1.17/servers/slapd/slapd.conf	Mon Apr 14 23:02:03 2003
-@@ -3,24 +3,38 @@
+--- openldap-2.2.6/servers/slapd/slapd.conf.orig	2003-12-29 19:10:40.000000000 +0100
++++ openldap-2.2.6/servers/slapd/slapd.conf	2004-02-28 15:42:39.692604592 +0100
+@@ -2,24 +2,38 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
  #
 -include		%SYSCONFDIR%/schema/core.schema
-+include      /usr/share/openldap/schema/core.schema
-+#include      /usr/share/openldap/schema/cosine.schema
-+#include      /usr/share/openldap/schema/inetorgperson.schema
-+#include      /usr/share/openldap/schema/java.schema
-+#include      /usr/share/openldap/schema/misc.schema
-+#include      /usr/share/openldap/schema/nis.schema
-+#include      /usr/share/openldap/schema/corba.schema
-+#include      /usr/share/openldap/schema/openldap.schema
-+include      %SYSCONFDIR%/schema/local.schema
++include		/usr/share/openldap/schema/core.schema
++#include	/usr/share/openldap/schema/cosine.schema
++#include	/usr/share/openldap/schema/inetorgperson.schema
++#include	/usr/share/openldap/schema/java.schema
++#include	/usr/share/openldap/schema/misc.schema
++#include	/usr/share/openldap/schema/nis.schema
++#include	/usr/share/openldap/schema/corba.schema
++#include	/usr/share/openldap/schema/openldap.schema
++include		%SYSCONFDIR%/schema/local.schema
  
  # Define global ACLs to disable default read access.
 +include 	%SYSCONFDIR%/slapd.access.conf
@@ -22,14 +22,14 @@
  # service AND an understanding of referrals.
  #referral	ldap://root.openldap.org
  
--pidfile		%LOCALSTATEDIR%/slapd.pid
--argsfile	%LOCALSTATEDIR%/slapd.args
+-pidfile		%LOCALSTATEDIR%/run/slapd.pid
+-argsfile	%LOCALSTATEDIR%/run/slapd.args
 +pidfile		/var/run/slapd.pid
 +argsfile	/var/run/slapd.args
  
  # Load dynamic backend modules:
 -# modulepath	%MODULEDIR%
-+modulepath	/usr/lib/openldap
++modulepath	%MODULEDIR%
  # moduleload	back_bdb.la
 +# moduleload	back_dnssrv.la
  # moduleload	back_ldap.la
@@ -42,8 +42,8 @@
 +# moduleload	back_sql.la
  
  # Sample security restrictions
- #
-@@ -55,17 +69,26 @@
+ #	Require integrity protection (prevent hijacking)
+@@ -51,17 +65,26 @@
  #######################################################################
  # ldbm database definitions
  #######################################################################
@@ -73,3 +73,14 @@
 +##rootpw		secret
 +#directory	%LOCALSTATEDIR%/openldap-data
 +#index	objectClass	eq
+--- openldap-2.2.6/build/top.mk.orig	2004-01-01 19:16:25.000000000 +0100
++++ openldap-2.2.6/build/top.mk	2004-02-28 15:43:38.579652400 +0100
+@@ -37,7 +37,7 @@
+ libexecdir = @libexecdir@
+ localstatedir = @localstatedir@
+ mandir = @mandir@
+-moduledir = @libexecdir@$(ldap_subdir)
++moduledir = @libdir@$(ldap_subdir)
+ sbindir = @sbindir@
+ sharedstatedir = @sharedstatedir@
+ sysconfdir = @sysconfdir@$(ldap_subdir)
