@@ -1,6 +1,5 @@
-diff -durN openldap-2.1.12.orig/servers/slapd/slapd.conf openldap-2.1.12/servers/slapd/slapd.conf
---- openldap-2.1.12.orig/servers/slapd/slapd.conf	Tue Nov 26 19:26:01 2002
-+++ openldap-2.1.12/servers/slapd/slapd.conf	Wed Jan  8 14:39:10 2003
+--- openldap-2.1.17/servers/slapd/slapd.confwiget	Mon Mar 24 04:54:12 2003
++++ openldap-2.1.17/servers/slapd/slapd.conf	Mon Apr 14 23:02:03 2003
 @@ -3,24 +3,38 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
@@ -44,17 +43,15 @@ diff -durN openldap-2.1.12.orig/servers/slapd/slapd.conf openldap-2.1.12/servers
  
  # Sample security restrictions
  #
-@@ -50,19 +64,25 @@
- #
- # rootdn can always write!
- 
--#######################################################################
--# ldbm database definitions
--#######################################################################
+@@ -55,17 +69,26 @@
+ #######################################################################
+ # ldbm database definitions
+ #######################################################################
+-
+-database	bdb
 +# A NULL database configuration follows. It is enough to run slapd, but it does
 +# nothing. You need to install one of the backends and configure a real database 
- 
--database	bdb
++  
 +database	null
  suffix		"dc=my-domain,dc=com"
  rootdn		"cn=Manager,dc=my-domain,dc=com"
@@ -64,11 +61,12 @@ diff -durN openldap-2.1.12.orig/servers/slapd/slapd.conf openldap-2.1.12/servers
 -rootpw		secret
 +#rootpw		secret
  # The database directory MUST exist prior to running slapd AND 
- # should only be accessible by the slapd/tools. Mode 700 recommended.
+ # should only be accessible by the slapd and slap tools.
+ # Mode 700 recommended.
  directory	%LOCALSTATEDIR%/openldap-data
  # Indices to maintain
  index	objectClass	eq
-+
++ 
 +#database	bdb
 +#suffix		"dc=my-domain,dc=com"
 +#rootdn		"cn=Manager,dc=my-domain,dc=com"
