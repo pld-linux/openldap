@@ -391,7 +391,7 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 	--enable-phonetic \
 	--enable-rewrite \
 	--enable-rlookups \
-	%{!?_withtout_slp:--enable-slp} \
+	%{!?_without_slp:--enable-slp} \
 	%{?_without_slp:--disable-slp} \
 	--enable-wrappers \
 %{?!_with_db3:--enable-bdb}%{?_with_db3:--disable-bdb} \
