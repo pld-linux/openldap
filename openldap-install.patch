@@ -1,0 +1,44 @@
+--- openldap-2.2.8/servers/slapd/Makefile.in.orig	2004-03-18 02:01:02.000000000 +0100
++++ openldap-2.2.8/servers/slapd/Makefile.in	2004-03-28 03:43:04.484125840 +0200
+@@ -417,5 +417,9 @@
+ 	-$(MKDIR) $(DESTDIR)$(sbindir)
+ 	cd $(DESTDIR)$(sbindir); rm -f $(SLAPTOOLS); \
+ 	for i in $(SLAPTOOLS); do \
+-		$(LN_S) $(DESTDIR)$(libexecdir)/slapd $$i; done
++		if test "$(libexecdir)" = "$(sbindir)" ; then \
++			$(LN_S) slapd $$i ; \
++		else \
++			$(LN_S) $(libexecdir)/slapd $$i; \
++		fi ; done
+ 
+--- openldap-2.2.8/servers/slapd/Makefile.in.orig	2004-03-28 03:57:15.000000000 +0200
++++ openldap-2.2.8/servers/slapd/Makefile.in	2004-03-28 04:27:13.213457776 +0200
+@@ -283,6 +283,19 @@
+ 	    echo " "; \
+ 	fi
+ 
++.dynamicbackends: FORCE
++	@if test -n "$(SLAPD_DYNAMIC_BACKENDS)"; then \
++	    echo "building dynamic backends..."; \
++	    for i in XX $(SLAPD_DYNAMIC_BACKENDS); do \
++	    	if test $$i != XX; then \
++		    echo " "; echo "  cd $$i; $(MAKE) $(MFLAGS) all"; \
++		    ( cd $$i; $(MAKE) $(MFLAGS) all ); \
++		    if test $$? != 0; then exit 1; fi; \
++		fi; \
++	    done; \
++	    echo " "; \
++	fi
++
+ libbackends.a: .backend
+ 	@$(RM) -r tmp
+ 	@$(MKDIR) tmp
+@@ -362,7 +375,7 @@
+ 	    fi; \
+ 	done
+ 
+-all-cffiles: slapd $(SLAPD_DYNAMIC_BACKENDS)
++all-cffiles: slapd .dynamicbackends
+ 	@if test $(PLAT) = NT; then \
+ 	    sysconfdir=`cygpath -w $(sysconfdir) | \
+ 		$(SED) -e 's/\\\\/\\\\\\\\\\\\\\\\/g'`; \
