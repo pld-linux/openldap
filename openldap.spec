@@ -8,7 +8,7 @@ Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Name:		openldap
 Version:	2.0.21
-Release:	1
+Release:	2
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -96,7 +96,7 @@ Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 Requires:	cyrus-sasl-devel
 Requires:	pam-devel
-Requires:	db-devel
+Requires:	db3-devel
 Requires:	openssl-devel
 
 %description devel
