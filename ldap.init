@@ -21,7 +21,7 @@
 
 # Check that networking is up.
 if [ "${NETWORKING}" = "no" ]; then
-	echo "WARNING: Networking is down. Ldap service can't be runed."
+	echo "WARNING: Networking is down. LDAP service can't be runed."
 	exit 1
 fi
 
@@ -31,10 +31,10 @@ case "$1" in
   start)
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/ldap ]; then
-		show Starting OpenLDAP
+		show Starting OpenLDAP Daemon
 		daemon slapd
 		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
-			show "Starting slurpd"
+			show "Starting OpenLDAP Update Replication Daemon"
 			daemon slurpd
 		fi
 	else
@@ -43,10 +43,10 @@ case "$1" in
 	touch /var/lock/subsys/ldap
 	;;
   stop)
-	show "Shutting down OpenLDAP"
+	show "Shutting down OpenLDAP Daemon"
 	killproc slapd
-	if grep -q '^replogfile' /etc/open/ldap/slapd.conf; then
-		show "Shutting down slurpd"
+	if grep -q '^replogfile' /etc/openldap/slapd.conf; then
+		show "Shutting down OpenLDAP Update Replication Daemon"
 		killproc slurpd
  	fi
 	rm -f /var/lock/subsys/ldap
