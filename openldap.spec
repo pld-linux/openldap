@@ -2,7 +2,7 @@ Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
 Version:	1.2.11
-Release:	1
+Release:	2
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Artistic
@@ -21,6 +21,7 @@ Patch2:		openldap-migrate_passwd.patch
 Patch3:		openldap-config.patch
 Patch4:		openldap-conffile.patch
 Patch5:		openldap-secretfile.patch
+Patch6:		openldap-ldbm.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
@@ -104,6 +105,7 @@ Serwery (daemons) które przychodz± z LDAPem.
 %patch3 -p1 
 %patch4 -p1
 %patch5 -p1
+%patch6	-p1
 perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 install %{SOURCE4} .
@@ -141,7 +143,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
 install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
-echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap//ldapserver
+echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 touch $RPM_BUILD_ROOT%{_sysconfdir}/openldap/secret
 
 # move oc.conf and at.conf files to proper place
