@@ -45,7 +45,7 @@ BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
 %{?with_slp:BuildRequires:	openslp-devel}
-BuildRequires:	openssl-devel >= 0.9.7c
+BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	readline-devel >= 4.2
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
