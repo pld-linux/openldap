@@ -734,45 +734,55 @@ fi
 %if %{!?_with_db3:1}%{?_with_db3:0}
 %files backend-bdb
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_bdb*
+%{_libdir}/openldap/back_bdb.la
+%attr(755,root,root) %{_libdir}/openldap/back_bdb.s*
 %endif
 
 %files backend-dnssrv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_dnssrv*
+%{_libdir}/openldap/back_dnssrv.la
+%attr(755,root,root) %{_libdir}/openldap/back_dnssrv.s*
 
 #%files backend-ldap
 #%defattr(644,root,root,755)
-#%attr(755,root,root) %{_libdir}/openldap/back_ldap*
+#%{_libdir}/openldap/back_ldap.la
+#%attr(755,root,root) %{_libdir}/openldap/back_ldap.s*
 
 %files backend-ldbm
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_ldbm*
+%{_libdir}/openldap/back_ldbm.la
+%attr(755,root,root) %{_libdir}/openldap/back_ldbm.s*
 
 %files backend-meta
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_meta*
+%{_libdir}/openldap/back_meta.la
+%attr(755,root,root) %{_libdir}/openldap/back_meta.s*
 
 %files backend-monitor
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_monitor*
+%{_libdir}/openldap/back_monitor.la
+%attr(755,root,root) %{_libdir}/openldap/back_monitor.s*
 
 %files backend-passwd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_passwd*
+%{_libdir}/openldap/back_passwd.la
+%attr(755,root,root) %{_libdir}/openldap/back_passwd.s*
 
 %if %{!?_without_perl:1}%{?_without_perl:0}
 %files backend-perl
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_perl*
+%{_libdir}/openldap/back_perl.la
+%attr(755,root,root) %{_libdir}/openldap/back_perl.s*
 %endif
 
 %files backend-shell
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_shell*
+%{_libdir}/openldap/back_shell.la
+%attr(755,root,root) %{_libdir}/openldap/back_shell.s*
 
 %if %{!?_without_odbc:1}%{?_without_perl:0}
 %files backend-sql
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_sql*
+%{_libdir}/openldap/back_sql.la
+%attr(755,root,root) %{_libdir}/openldap/back_sql.s*
 %endif
