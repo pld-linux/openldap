@@ -94,6 +94,10 @@ Group(pt_BR):	Desenvolvimento/Bibliotecas
 Group(ru):	Разработка/Библиотеки
 Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
+Requires:	cyrus-sasl-devel
+Requires:	pam-devel
+Requires:	db-devel
+Requires:	openssl-devel
 
 %description devel
 Header files and libraries for developing applications that use LDAP.
