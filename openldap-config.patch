@@ -1,24 +1,20 @@
-diff -urN openldap-2.0.8.org/servers/slapd/slapd.conf openldap-2.0.8/servers/slapd/slapd.conf
---- openldap-2.0.8.org/servers/slapd/slapd.conf	Fri May 11 17:21:08 2001
-+++ openldap-2.0.8/servers/slapd/slapd.conf	Fri May 11 17:22:00 2001
-@@ -3,19 +3,32 @@
+diff -durN openldap-2.1.12.orig/servers/slapd/slapd.conf openldap-2.1.12/servers/slapd/slapd.conf
+--- openldap-2.1.12.orig/servers/slapd/slapd.conf	Tue Nov 26 19:26:01 2002
++++ openldap-2.1.12/servers/slapd/slapd.conf	Wed Jan  8 14:39:10 2003
+@@ -3,24 +3,38 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
  #
 -include		%SYSCONFDIR%/schema/core.schema
-+include		/usr/share/openldap/schema/core.schema
-+#include	/usr/share/openldap/schema/cosine.schema
-+#include	/usr/share/openldap/schema/inetorgperson.schema
-+#include	/usr/share/openldap/schema/krb5-kdc.schema.schema
-+#include	/usr/share/openldap/schema/microsoft.schema
-+#include	/usr/share/openldap/schema/microsoft.std.schema
-+#include	/usr/share/openldap/schema/microsoft.ext.schema
-+#include	/usr/share/openldap/schema/misc.schema
-+#include	/usr/share/openldap/schema/nadf.schema
-+#include	/usr/share/openldap/schema/nis.schema
-+#include	/usr/share/openldap/schema/openldap.schema
-+#include	/usr/share/openldap/schema/pilot.schema
-+include		%SYSCONFDIR%/schema/local.schema
++include      /usr/share/openldap/schema/core.schema
++#include      /usr/share/openldap/schema/cosine.schema
++#include      /usr/share/openldap/schema/inetorgperson.schema
++#include      /usr/share/openldap/schema/java.schema
++#include      /usr/share/openldap/schema/misc.schema
++#include      /usr/share/openldap/schema/nis.schema
++#include      /usr/share/openldap/schema/corba.schema
++#include      /usr/share/openldap/schema/openldap.schema
++include      %SYSCONFDIR%/schema/local.schema
  
  # Define global ACLs to disable default read access.
 +include 	%SYSCONFDIR%/slapd.access.conf
@@ -35,10 +31,33 @@ diff -urN openldap-2.0.8.org/servers/slapd/slapd.conf openldap-2.0.8/servers/sla
  # Load dynamic backend modules:
 -# modulepath	%MODULEDIR%
 +modulepath	/usr/lib/openldap
+ # moduleload	back_bdb.la
++# moduleload	back_dnssrv.la
  # moduleload	back_ldap.la
  # moduleload	back_ldbm.la
++# moduleload	back_meta.la
++# moduleload	back_monitor.la
  # moduleload	back_passwd.la
-@@ -33,7 +46,7 @@
++# moduleload	back_perl.la
+ # moduleload	back_shell.la
++# moduleload	back_sql.la
+ 
+ # Sample security restrictions
+ #
+@@ -50,19 +64,25 @@
+ #
+ # rootdn can always write!
+ 
+-#######################################################################
+-# ldbm database definitions
+-#######################################################################
++# A NULL database configuration follows. It is enough to run slapd, but it does
++# nothing. You need to install one of the backends and configure a real database 
+ 
+-database	bdb
++database	null
+ suffix		"dc=my-domain,dc=com"
+ rootdn		"cn=Manager,dc=my-domain,dc=com"
  # Cleartext passwords, especially for the rootdn, should
  # be avoid.  See slappasswd(8) and slapd.conf(5) for details.
  # Use of strong authentication encouraged.
@@ -46,4 +65,13 @@ diff -urN openldap-2.0.8.org/servers/slapd/slapd.conf openldap-2.0.8/servers/sla
 +#rootpw		secret
  # The database directory MUST exist prior to running slapd AND 
  # should only be accessible by the slapd/tools. Mode 700 recommended.
- directory	%LOCALSTATEDIR%/openldap-ldbm
+ directory	%LOCALSTATEDIR%/openldap-data
+ # Indices to maintain
+ index	objectClass	eq
++
++#database	bdb
++#suffix		"dc=my-domain,dc=com"
++#rootdn		"cn=Manager,dc=my-domain,dc=com"
++##rootpw		secret
++#directory	%LOCALSTATEDIR%/openldap-data
++#index	objectClass	eq
