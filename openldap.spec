@@ -340,7 +340,7 @@ rm -rf $RPM_BUILD_ROOT
 %config %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(700,root,root) /var/ldap
-/usr/share/ldap
+%{_datadir}/ldap
 %attr(755,root,root) /usr/sbin/*
 %{_mandir}/man5/ldif.5.gz
 %{_mandir}/man5/slapd.conf.5.gz
