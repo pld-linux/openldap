@@ -15,12 +15,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.8
-Release:	2
+Version:	2.2.10
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	e22855a3e8d934df1afc9ebed5e913be
+# Source0-md5:	3620465b331626308463a7651e4fb9c6
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -37,7 +37,8 @@ Patch10:	%{name}-backend_libs.patch
 Patch11:	%{name}-perl.patch
 Patch12:	%{name}-pic.patch
 Patch13:	%{name}-ltinstall-mode.patch
-#Patch14:	%{name}-sendbuf.patch
+Patch14:	%{name}-mod.patch
+#Patch15:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -393,6 +394,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 %build
 %{__libtoolize}
@@ -426,40 +428,26 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--disable-slp \
 %endif
 	--enable-wrappers \
-	--enable-bdb \
-	--with-bdb-module=dynamic \
-	--enable-dnssrv \
-	--with-dnssrv-module=dynamic \
-	--enable-hdb \
-	--with-hdb-module=dynamic \
-	--enable-ldap \
-	--with-ldap-module=dynamic \
-	--enable-ldbm \
-	--with-ldbm-module=dynamic \
+	--enable-bdb=mod \
+	--enable-dnssrv=mod \
+	--enable-hdb=mod \
+	--enable-ldap=mod \
+	--enable-ldbm=mod \
 	--with-ldbm-api=berkeley \
 	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
-	--enable-meta \
-	--with-meta-module=dynamic \
-	--enable-monitor \
-	--with-monitor-module=dynamic \
+	--enable-meta=mod \
+	--enable-monitor=mod \
 	--enable-null \
-	--with-null-module=static \
-	--enable-passwd \
-	--with-passwd-module=dynamic \
+	--enable-passwd=mod \
 %if %{with perl}
-	--enable-perl \
-	--with-perl-module=dynamic \
+	--enable-perl=mod \
 %endif
-	--enable-shell \
-	--with-shell-module=dynamic \
+	--enable-shell=mod \
 %if %{with odbc}
-	--enable-sql \
-	--with-sql-module=dynamic \
+	--enable-sql=mod \
 %endif
 	--enable-slurpd \
-	--enable-shared \
-	--enable-dynamic \
-	--enable-static
+	--enable-dynamic
 
 %{__make} depend
 %{__make}
