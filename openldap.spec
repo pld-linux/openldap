@@ -1,8 +1,6 @@
 #
 # TODO:
 # - package contribs?
-# - SECURITY: http://securitytracker.com/alerts/2004/Sep/1011192.html (CAN-2004-0823)
-#   MacOS-specific???
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -18,12 +16,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.21
+Version:	2.2.22
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	2e51b35fb71941e14d2a49d04d31b0c6
+# Source0-md5:	38dc0a1321614ed4599435ed97429b9a
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
