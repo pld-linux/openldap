@@ -1,6 +1,6 @@
-diff -durN openldap-2.0.1.orig/servers/slapd/slapd.conf openldap-2.0.1/servers/slapd/slapd.conf
---- openldap-2.0.1.orig/servers/slapd/slapd.conf	Sat Aug 26 19:06:18 2000
-+++ openldap-2.0.1/servers/slapd/slapd.conf	Sun Sep 10 17:53:25 2000
+diff -urN openldap-2.0.8.org/servers/slapd/slapd.conf openldap-2.0.8/servers/slapd/slapd.conf
+--- openldap-2.0.8.org/servers/slapd/slapd.conf	Fri May 11 17:21:08 2001
++++ openldap-2.0.8/servers/slapd/slapd.conf	Fri May 11 17:22:00 2001
 @@ -3,19 +3,32 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
@@ -45,9 +45,8 @@ diff -durN openldap-2.0.1.orig/servers/slapd/slapd.conf openldap-2.0.1/servers/s
 -rootpw		secret
 +#rootpw		secret
  # The database directory MUST exist prior to running slapd AND 
--# should only be accessable by the slapd/tools. Mode 700 recommended.
+ # should only be accessible by the slapd/tools. Mode 700 recommended.
 -directory	%LOCALSTATEDIR%/openldap-ldbm
-+# should only be accessable by the slapd/tools. Mode 770 recommended.
 +directory	%LOCALSTATEDIR%/lib/openldap-ldbm
  # Indices to maintain
  index	objectClass	eq
