@@ -7,8 +7,8 @@ Summary(es):	Clientes y servidor para LDAP
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Name:		openldap
-Version:	2.0.18
-Release:	3
+Version:	2.0.21
+Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
