@@ -46,4 +46,4 @@ diff -Nru openldap-1.2.11/servers/slapd/slapd.conf openldap-1.2.11.new/servers/s
  # should only be accessable by the slapd/tools  Mode 700 recommended.
 -directory	%LOCALSTATEDIR%/openldap-ldbm
 -
-+#directory	%LOCALSTATEDIR%/state/openldap
++#directory	%LOCALSTATEDIR%/lib/openldap
