@@ -1,7 +1,7 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Name:		openldap
 Version:	1.2.1
-Release:	1
+Release:	2
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Freely distributable
@@ -10,8 +10,11 @@ Source1:	ldap.init
 Source2:	openldap.sysconfig
 Patch0:		openldap-conf.patch
 Patch1:		openldap-strdup.patch
+Patch2:		openldap-man.patch
+Patch3:		openldap-syslog.patch
 URL:		http://www.openldap.org/
 BuildPrereq:	ncurses-devel
+BuildPrereq:	libwrap
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %Description
@@ -51,6 +54,8 @@ The servers (daemons) that come with LDAP.
 %setup  -q -n ldap
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 #CPPFLAGS="-D_MIT_POSIX_THREADS -I/usr/include/ncurses" 
@@ -250,6 +255,9 @@ echo ".so ldap_ufn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_url_search_st.3
 echo ".so ldap_modrdn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_modrdn2.3
 echo ".so ldap_modrdn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_modrdn2_s.3
 
+rm -f $RPM_BUILD_ROOT/usr/man/man5/ldaprc.5
+echo ".so ldap.conf.5" > $RPM_BUILD_ROOT/usr/man/man5/ldaprc.5
+
 rm -f $RPM_BUILD_ROOT/usr/man/man8/{fax500,ldif2id2children,ldif2id2entry,ldif2index}.8
 echo ".so mail500.8" > $RPM_BUILD_ROOT/usr/man/man8/fax500.8
 echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT/usr/man/man8/ldif2id2children.8
@@ -340,6 +348,19 @@ rm -rf $RPM_BUILD_ROOT
 /usr/man/man8/*
 
 %ChangeLog
+* Thu May  6 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [1.2.1-2]
+- more fixes agains symlinks on man pages files,
+- small fix in man pages about ability using ~/.ldaprc 
+  (openldap-man.patch),
+- added BiolPrereq: libwrap (we ./configure --with-wrappers),
+- fix for logging to LOG_DAEMON va syslogd (openldap-syslog.patch).
+
+* Thu May  6 1999 Artur Frysiak <wiget@pld.org.pl>
+- fixes agains symlinks on man pages files,
+- added %%{_target} macro to ./configure parameters,
+- fixed strdup macro owerwriting (openldap-strdup.patch).
+
 * Thu Apr 22 1999 Arne Coucheron <arneco@online.no>
   [1.2.1-1]
 - using %%{name} and %%{version} macros
