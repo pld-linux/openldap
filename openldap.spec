@@ -6,7 +6,7 @@ Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
 Version:	2.0.8
-Release:	1
+Release:	2
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -225,10 +225,10 @@ gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
 
 %pre servers
 grep -q slapd %{_sysconfdir}/group || (
-%attr(755,root,root) %{_sbindir}/groupadd -g 93 -r -f slapd 1>&2 || :
+/usr/sbin/groupadd -g 93 -r -f slapd 1>&2 || :
 )
 grep -q slapd %{_sysconfdir}/passwd || (
-%attr(755,root,root) %{_sbindir}/useradd -M -o -r -u 93 \
+/usr/sbin/useradd -M -o -r -u 93 \
         -g slapd -c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2 || :
 )
 
