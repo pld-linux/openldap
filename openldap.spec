@@ -4,6 +4,7 @@ Name:		openldap
 Version:	2.0.1
 Release:	1
 Group:		Networking/Daemons
+Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Copyright:	Artistic
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -53,6 +54,7 @@ Pakiet ten zawiera:
 Summary:	LDAP development files
 Summary(pl):	Pliki dla developerów LDAP
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
@@ -68,6 +70,7 @@ u¿ywaj±cych LDAP.
 Summary:	LDAP static libraries
 Summary(pl):	Biblioteki statyczne LDAP
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
@@ -82,6 +85,7 @@ Biblioteki statyczne LDAP.
 Summary:	LDAP servers
 Summary(pl):	Serwery LDAP
 Group:		Networking/Daemons
+Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Prereq:		chkconfig
 Requires:	rc-scripts
@@ -102,7 +106,7 @@ perl -pi -e 's/AC_PREREQ.*//' configure.in
 
 %build
 autoconf
-CPPFLAGS="-I%{_includedir}/ncurses"; export CPPFLAGS
+CPPFLAGS="-I%{_includedir}/ncurses"
 %configure \
 	--enable-syslog \
 	--enable-proctitle \
@@ -146,7 +150,7 @@ CPPFLAGS="-I%{_includedir}/ncurses"; export CPPFLAGS
 
 %Install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm,/usr/share/openldap/schema}
+install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm,%{_datadir}/openldap/schema}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -166,15 +170,15 @@ install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
 # Standard schemas should not be changed by users
-mv $RPM_BUILD_ROOT/etc/openldap/schema/* $RPM_BUILD_ROOT/usr/share/openldap/schema/
+mv $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema/
 
 # create slapd.access.conf
-echo "# This is a good plase to put slapd access-control directives" \
-         > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.access.conf
+echo "# This is a good plase to put slapd access-control directives" > \
+	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.access.conf
 
 # create local.schema
-echo "# This is a good plase to put your schema definitions " \
-	> $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
+echo "# This is a good plase to put your schema definitions " > \
+	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
 
@@ -186,11 +190,11 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 %postun -p /sbin/ldconfig
 
 %pre servers
-grep -q slapd /etc/group || (
-    /usr/sbin/groupadd -g 93 -r -f slapd 1>&2 || :
+grep -q slapd %{_sysconfdir}/group || (
+	/usr/sbin/groupadd -g 93 -r -f slapd 1>&2 || :
 )
-grep -q slapd /etc/passwd || (
-    /usr/sbin/useradd -M -o -r -u 93 \
+grep -q slapd %{_sysconfdir}/passwd || (
+	/usr/sbin/useradd -M -o -r -u 93 \
         -g slapd -c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2 || :
 )
 
