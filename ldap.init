@@ -33,7 +33,14 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/ldap ]; then
 		msg_starting "OpenLDAP"
-		daemon slapd
+		ARGS="-u slapd -g slapd"
+		if [ -n "$SLAPDSYSLOGLEVEL" ] ; then
+			ARGS="$ARGS -s $SLAPDSYSLOGLEVEL"
+		fi
+		if [ -n "$SLAPDURLLIST" ] ; then
+			ARGS="$ARGS -h $SLAPDURLLIST"
+		fi
+		daemon slapd $ARGS
 		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
 			show "Starting OpenLDAP Update Replication Daemon"
 			daemon slurpd
