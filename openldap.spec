@@ -183,8 +183,8 @@ The package includes:
 
 Install this package if you want to setup an OpenLDAP-2.x server.
 
-You will also need some backend for server, so install some openldap-backend
-package. The bdb backend is recommended.
+You will also need some backend for server, so install some
+openldap-backend package. The bdb backend is recommended.
 
 %description servers -l pl
 Serwery (demony) które przychodz± z LDAPem.
@@ -195,8 +195,9 @@ Pakiet ten zawiera:
 
 Zainstaluj ten pakiet je¿eli potrzebujesz server OpenLDAP-2.x.
 
-Potrzebny te¿ jest jaki¶ backend dla serwera, dlatego nale¿y zainstalowaæ
-odpowiedni pakiet openldap-backend. Zalecany jest backend bdb.
+Potrzebny te¿ jest jaki¶ backend dla serwera, dlatego nale¿y
+zainstalowaæ odpowiedni pakiet openldap-backend. Zalecany jest backend
+bdb.
 
 %description servers -l pt_BR
 O pacote openldap-server contém o servidor slapd que é responsável por
@@ -233,14 +234,10 @@ Requires(post,pre):	/bin/ed
 %description backend-dnssrv
 DNS SRV backend to slapd, the OpenLDAP server.
 
-#%package backend-ldap
-#Summary:	LDAP backend to Openldap server
-#Group:		Networking/Daemons
-#PreReq:		rc-scripts
-#Requires(post,pre):	/bin/ed
-#
-#%description backend-ldap
-#LDAP backend to slapd, the OpenLDAP server.
+#%package backend-ldap #Summary: LDAP backend to Openldap server
+#Group: Networking/Daemons #PreReq: rc-scripts #Requires(post,pre):
+/bin/ed # #%description backend-ldap #LDAP backend to slapd, the
+OpenLDAP server.
 
 %package backend-ldbm
 Summary:	LDBM backend to Openldap server
@@ -470,204 +467,185 @@ fi
 
 %if %{!?_with_db3:1}%{?_with_db3:0}
 %post backend-bdb
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/moduleload    back_bdb.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/moduleload    back_bdb.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-bdb
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_bdb.la[[:blank:]]*$/# moduleload    back_bdb.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_bdb.la[[:blank:]]*$/# moduleload    back_bdb.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 %endif
 
 %post backend-dnssrv
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_dnssrv.la[[:blank:]]*$/moduleload    back_dnssrv.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_dnssrv.la[[:blank:]]*$/moduleload    back_dnssrv.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-dnssrv
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_dnssrv.la[[:blank:]]*$/# moduleload    back_dnssrv.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_dnssrv.la[[:blank:]]*$/# moduleload    back_dnssrv.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 #%%post backend-ldap
-#ed %%{_sysconfdir}/openldap/slapd.conf << EOF 
-#,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/moduleload    back_ldap.la/ 
-#w
-#q
+#ed -s %%{_sysconfdir}/openldap/slapd.conf << EOF || :
+#,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/moduleload    back_ldap.la/
+#wq
 #EOF
 #if [ -f /var/lock/subsys/ldap ]; then
 #	/etc/rc.d/init.d/ldap restart >&2
 #fi
 #
 #%%preun backend-ldap
-#ed %%{_sysconfdir}/openldap/slapd.conf << EOF\
-#,s/^# moduleload    back_ldap.la[[:blank:]]*$/# moduleload    back_ldap.la/\
-#w\
-#q\
-#EOF\
-#if [ -f /var/lock/subsys/ldap ]; then\
-#	/etc/rc.d/init.d/ldap restart >&2\
+#ed -s %%{_sysconfdir}/openldap/slapd.conf << EOF || :
+#,s/^# moduleload    back_ldap.la[[:blank:]]*$/# moduleload    back_ldap.la/
+#wq
+#EOF
+#if [ -f /var/lock/subsys/ldap ]; then
+#	/etc/rc.d/init.d/ldap restart >&2
 #fi
 
 %post backend-ldbm
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldbm.la[[:blank:]]*$/moduleload    back_ldbm.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldbm.la[[:blank:]]*$/moduleload    back_ldbm.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-ldbm
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_ldbm.la[[:blank:]]*$/# moduleload    back_ldbm.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_ldbm.la[[:blank:]]*$/# moduleload    back_ldbm.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %post backend-meta
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_meta.la[[:blank:]]*$/moduleload    back_meta.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_meta.la[[:blank:]]*$/moduleload    back_meta.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-meta
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_meta.la[[:blank:]]*$/# moduleload    back_meta.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_meta.la[[:blank:]]*$/# moduleload    back_meta.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %post backend-monitor
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_monitor.la[[:blank:]]*$/moduleload    back_monitor.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_monitor.la[[:blank:]]*$/moduleload    back_monitor.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-monitor
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_monitor.la[[:blank:]]*$/# moduleload    back_monitor.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_monitor.la[[:blank:]]*$/# moduleload    back_monitor.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %post backend-passwd
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_passwd.la[[:blank:]]*$/moduleload    back_passwd.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_passwd.la[[:blank:]]*$/moduleload    back_passwd.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-passwd
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_passwd.la[[:blank:]]*$/# moduleload    back_passwd.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+
+,s/^# moduleload    back_passwd.la[[:blank:]]*$/# moduleload    back_passwd.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %post backend-perl
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/moduleload    back_perl.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/moduleload    back_perl.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-perl
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_perl.la[[:blank:]]*$/# moduleload    back_perl.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_perl.la[[:blank:]]*$/# moduleload    back_perl.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %post backend-shell
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/moduleload    back_shell.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/moduleload    back_shell.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-shell
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_shell.la[[:blank:]]*$/# moduleload    back_shell.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_shell.la[[:blank:]]*$/# moduleload    back_shell.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %post backend-sql
-ed %{_sysconfdir}/openldap/slapd.conf << EOF 
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/moduleload    back_sql.la/ 
-w
-q
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/moduleload    back_sql.la/
+wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %preun backend-sql
-ed %{_sysconfdir}/openldap/slapd.conf << EOF\
-,s/^# moduleload    back_sql.la[[:blank:]]*$/# moduleload    back_sql.la/\
-w\
-q\
-EOF\
-if [ -f /var/lock/subsys/ldap ]; then\
-	/etc/rc.d/init.d/ldap restart >&2\
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_sql.la[[:blank:]]*$/# moduleload    back_sql.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
 fi
 
 %files
