@@ -272,7 +272,7 @@ $_=<STDIN>; chop;
 
 $BASEDN=$_ if $_;
 
-$DIRECTORY="/var/state/openldap";
+$DIRECTORY="/var/lib/openldap";
 print "Directory for your database [$DIRECTORY]? ";
 $_=<STDIN>; chop;
 $DIRECTORY=$_ if $_;
