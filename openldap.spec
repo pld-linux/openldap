@@ -213,19 +213,29 @@ gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
 %postun -p /sbin/ldconfig
 
 %pre servers
-GROUP=slapd; GID=93; %groupadd
-USER=slapd; UID=93; HOMEDIR=/var/lib/openldap-ldbm
-COMMENT="OpenLDAP server"; %useradd
+grep -q slapd %{_sysconfdir}/group || (
+/usr/sbin/groupadd -g 93 -r -f slapd 1>&2 || :
+)
+grep -q slapd %{_sysconfdir}/passwd || (
+/usr/sbin/useradd -M -o -r -u 93 \
+        -g slapd -c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2 || :
+)
 
 %post servers
-NAME=ldap; DESC="OpenLDAP server"; %chkconfig_add
+chkconfig --add ldap
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+else
+	echo "Run '/etc/rc.d/init.d/ldap start' to start OpenLDAP server." >&2
+fi
 			
 %preun servers
-NAME=ldap; %chkconfig_del
-
-%postun servers
-USER=slapd; %userdel
-GROUP=slapd; %groupdel
+if [ "$1" = "0" ] ; then
+	if [ -f /var/lock/subsys/ldap ]; then
+		/etc/rc.d/init.d/ldap stop >&2
+	fi
+	chkconfig --del ldap
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
