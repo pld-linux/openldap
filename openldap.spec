@@ -1,5 +1,5 @@
 #
-# Conditional build:	
+# Conditional build:
 # ldbm_type - set to needed value (btree<default> or hash)
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
@@ -93,14 +93,14 @@ Requires:	openssl-devel
 %description devel
 Header files and libraries for developing applications that use LDAP.
 
-%description -l es devel
+%description devel -l es
 Bibliotecas de desarrollo y archivos de inclusión de OpenLDAP.
 
-%description -l pl devel
+%description devel -l pl
 Pliki nag³ówkowe i biblioteki konieczne do rozwoju aplikacji
 u¿ywaj±cych LDAP.
 
-%description -l pt_BR devel
+%description devel -l pt_BR
 Bibliotecas de desenvolvimento e arquivos de inclusão do OpenLDAP.
 Instale este pacote se você for trabalhar com desenvolvimento em LDAP
 ou desejar compilar algum programa que utilize LDAP.
@@ -118,10 +118,10 @@ needed for compilation of applications that are making use of the LDAP
 internals. Install this package only if you plan to develop or will
 need to compile cutomized LDAP clients.
 
-%description -l pl static
+%description static -l pl
 Biblioteki statyczne LDAP.
 
-%description -l pt_BR static
+%description static -l pt_BR
 Bibliotecas estáticas para desenvolvimento com openldap.
 
 %package servers
@@ -143,7 +143,7 @@ The package includes:
 
 Install this package if you want to setup an OpenLDAP-2.x server.
 
-%description -l pl servers
+%description servers -l pl
 Serwery (demony) które przychodz± z LDAPem.
 
 Pakiet ten zawiera:
@@ -152,7 +152,7 @@ Pakiet ten zawiera:
 
 Zainstaluj ten pakiet je¿eli potrzebujesz server OpenLDAP-2.x.
 
-%description -l pt_BR servers
+%description servers -l pt_BR
 O pacote openldap-server contém o servidor slapd que é responsável por
 receber as requisições dos clientes e por manter a base de dados do
 diretório.
@@ -251,7 +251,7 @@ mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
 # hack the default config files
 perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.conf
 
-perl -pi -e "s|^#! /bin/sh|#!/bin/sh|g" $RPM_BUILD_ROOT%{_sbindir}/xrpcomp 
+perl -pi -e "s|^#! /bin/sh|#!/bin/sh|g" $RPM_BUILD_ROOT%{_sbindir}/xrpcomp
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -296,7 +296,7 @@ if [ -f /var/lock/subsys/ldap ]; then
 else
 	echo "Run '/etc/rc.d/init.d/ldap start' to start OpenLDAP server." >&2
 fi
-			
+
 %preun servers
 if [ "$1" = "0" ] ; then
 	if [ -f /var/lock/subsys/ldap ]; then
