@@ -1,6 +1,6 @@
 diff -durN ldap.orig/servers/slapd/slapd.conf ldap/servers/slapd/slapd.conf
---- ldap.orig/servers/slapd/slapd.conf	Sat Sep 18 15:52:34 1999
-+++ ldap/servers/slapd/slapd.conf	Sat Sep 18 16:35:53 1999
+--- ldap.orig/servers/slapd/slapd.conf	Wed Jun  9 23:42:51 1999
++++ ldap/servers/slapd/slapd.conf	Fri Oct 22 16:40:59 1999
 @@ -2,13 +2,15 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
@@ -25,7 +25,7 @@ diff -durN ldap.orig/servers/slapd/slapd.conf ldap/servers/slapd/slapd.conf
  database	ldbm
  suffix		"dc=your-domain, dc=com"
  #suffix		"o=Your Organization Name, c=US"
--directory	/var/ldap
+-directory	/usr/tmp
 +directory	%LOCALSTATEDIR%/state/openldap
  rootdn		"cn=root, dc=your-domain, dc=com"
  #rootdn		"cn=root, o=Your Organization Name, c=US"
