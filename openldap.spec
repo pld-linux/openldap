@@ -43,7 +43,7 @@ URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
-BuildRequires:	db-devel >= 4.2
+BuildRequires:	db4.3-devel >= 4.3
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
