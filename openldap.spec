@@ -1,3 +1,4 @@
+#
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
 # _with_db3	- use old db3 package instead of db (and disable bdb backend)
@@ -13,8 +14,8 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.1.17
-Release:	0.2
+Version:	2.1.19
+Release:	0.1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -48,7 +49,6 @@ BuildRequires:	readline-devel >= 4.2
 %{!?_without_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	/etc
 %define		_libexecdir	%{_sbindir}
 %define		_localstatedir	/var/lib
 
