@@ -115,6 +115,7 @@ CPPFLAGS="-I%{_includedir}/ncurses"
 	--enable-ipv6 \
 	--enable-local \
 	--with-cyrus-sasl \
+	--with-ldbm-api=gdbm \
 	--with-readline \
 	--with-threads \
 	--with-tls \
@@ -144,6 +145,9 @@ CPPFLAGS="-I%{_includedir}/ncurses"
 	--enable-slurpd \
 	--enable-shared \
 	--enable-static
+
+# without this server won't start
+echo "#undef HAVE_GETADDRINFO" >> include/portable.h
 
 %{__make} depend
 %{__make}
@@ -203,7 +207,7 @@ chkconfig --add ldap
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 else
-	echo "Run '/etc/rc.d/init.d/ipsec start' to start IPSEC services." >&2
+	echo "Run '/etc/rc.d/init.d/ldap start' to start OpenLDAP server." >&2
 fi
 			
 %preun servers
