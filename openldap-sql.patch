@@ -1,0 +1,11 @@
+--- openldap-2.0.7/servers/slapd/back-sql/init.c.wiget	Thu Jul  6 18:45:23 2000
++++ openldap-2.0.7/servers/slapd/back-sql/init.c	Tue Nov  7 19:34:19 2000
+@@ -26,7 +26,7 @@
+ 
+     memset( &bi, '\0', sizeof(bi) );
+     bi.bi_type = "sql";
+-    bi.bi_init = backbacksql_initialize;
++    bi.bi_init = sql_back_initialize;
+ 
+     backend_add(&bi);
+     return 0;
