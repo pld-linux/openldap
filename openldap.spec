@@ -10,7 +10,7 @@ Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
 Version:	2.0.25
-Release:	1
+Release:	2
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -28,17 +28,11 @@ Patch5:		%{name}-syslog.patch
 Patch6:		%{name}-fast.patch
 Patch7:		%{name}-cldap.patch
 Patch8:		%{name}-no_libnsl.patch
-Patch9:		%{name}-lt_fixes.patch
-Patch10:	%{name}-ldapi_FHS.patch
-Patch11:	%{name}-crypt_lib_order.patch
-Patch12:	%{name}-ac25x.patch
+Patch9:		%{name}-ldapi_FHS.patch
+Patch10:	%{name}-ac25x.patch
 URL:		http://www.openldap.org/
-BuildRequires:	autoconf
-BuildRequires:	automake
 BuildRequires:	cyrus-sasl-devel
 BuildRequires:	db3-devel
-BuildRequires:	libltdl-devel >= 1.4
-BuildRequires:	libtool
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	pam-devel
@@ -217,18 +211,11 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
-%patch12 -p1
 
 %build
-rm -f build/missing
-%{__libtoolize}
-aclocal
-%{__autoconf}
-automake -a -c || :
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
 CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
-%configure \
+%configure2_13 \
 	--enable-syslog \
 	--enable-proctitle \
 	--enable-cache \
