@@ -1,8 +1,8 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	1.2.10
-Release:	2
+Version:	1.2.11
+Release:	1
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Artistic
