@@ -1,0 +1,72 @@
+--- openldap-2.2.10/configure.in.orig	2004-04-18 11:28:42.000000000 +0200
++++ openldap-2.2.10/configure.in	2004-04-18 12:00:24.693998136 +0200
+@@ -366,7 +366,7 @@
+ 		AC_MSG_ERROR([NDBM only supports LDBM type hash])
+ 	fi
+ 
+-	if test $ol_enable_bdb = yes -o $ol_enable_hdb = yes ; then
++	if test $ol_enable_bdb != no -o $ol_enable_hdb != no ; then
+ 		if test $ol_with_ldbm_api = auto ; then
+ 			ol_with_ldbm_api=berkeley
+ 		elif test $ol_with_ldbm_api != berkeley ; then
+@@ -382,7 +382,7 @@
+ 	fi
+ fi
+ 
+-if test $ol_enable_meta = yes -a $ol_enable_ldap = no ; then
++if test $ol_enable_meta != no -a $ol_enable_ldap = no ; then
+ 	AC_MSG_ERROR([--enable-meta requires --enable-ldap])
+ fi
+ 
+@@ -393,7 +393,7 @@
+ 	fi
+ fi
+ 
+-if test $ol_enable_lmpasswd = yes ; then
++if test $ol_enable_lmpasswd != no ; then
+ 	if test $ol_with_tls = no ; then
+ 		AC_MSG_ERROR([LAN Manager passwords require OpenSSL])
+ 	fi
+@@ -569,7 +569,7 @@
+ 	AC_PATH_PROG(PERLBIN, perl, /usr/bin/perl)
+ 
+ 	if test "no$PERLBIN" = "no" ; then
+-		if test $ol_enable_perl = yes ; then
++		if test $ol_enable_perl != no ; then
+ 			AC_MSG_ERROR([could not locate perl])
+ 		fi
+ 
+@@ -1834,20 +1834,20 @@
+ 	fi
+ fi
+ 
+-if test $ol_enable_bdb = yes -a $ol_link_ldbm != berkeley ; then
++if test $ol_enable_bdb != no -a $ol_link_ldbm != berkeley ; then
+ 	AC_MSG_ERROR(BDB: BerkeleyDB not available)
+ elif test $ol_enable_bdb != no -a $ol_link_ldbm = berkeley ; then
+ 	OL_BDB_COMPAT
+ 
+ 	if test $ol_cv_bdb_compat = yes ; then
+-		ol_enable_bdb=yes
+-	elif test $ol_enable_bdb = yes ; then
++		:
++	elif test $ol_enable_bdb != no ; then
+ 		AC_MSG_ERROR([BDB: BerkeleyDB version incompatible])
+ 	else
+ 		ol_enable_bdb=no
+ 	fi
+ fi
+-if test $ol_enable_hdb = yes -a $ol_link_ldbm != berkeley ; then
++if test $ol_enable_hdb != no -a $ol_link_ldbm != berkeley ; then
+ 	AC_MSG_ERROR([HDB: BerkeleyDB not available])
+ fi
+ 
+@@ -1896,7 +1896,7 @@
+ 
+ if test $ol_link_ldbm = no -a $ol_enable_ldbm != no ; then
+ 	AC_MSG_WARN([could not find suitable LDBM backend])
+-	if test $ol_enable_ldbm = yes ; then
++	if test $ol_enable_ldbm != no ; then
+ 		AC_MSG_ERROR([select appropriate LDBM options or disable])
+ 	fi
+ 
