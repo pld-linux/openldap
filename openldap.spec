@@ -8,7 +8,7 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(es):	Clientes y servidor para LDAP
 Name:		openldap
 Version:	2.0.11
-Release:	1
+Release:	2
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -26,8 +26,7 @@ Patch4:		%{name}-sql.patch
 Patch5:		%{name}-sendbuf.patch
 Patch6:		%{name}-syslog.patch
 Patch7:		%{name}-fast.patch
-Patch8:		%{name}-pidfile.patch
-Patch9:		%{name}-cldap.patch
+Patch8:		%{name}-cldap.patch
 URL:		http://www.openldap.org/
 BuildRequires:	libwrap-devel
 BuildRequires:	readline-devel >= 4.2
@@ -148,7 +147,7 @@ Install this package if you want to setup an OpenLDAP-2.x
 server.
 
 %description -l pl servers
-Serwery (daemons) które przychodz± z LDAPem.
+Serwery (demony) które przychodz± z LDAPem.
 
 %description -l pt_BR servers
 O pacote openldap-server contém o servidor slapd que é responsável por receber
@@ -173,7 +172,6 @@ Install this package if you want to setup an OpenLDAP server.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
 
 install %{SOURCE3} .
 
