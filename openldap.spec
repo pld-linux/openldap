@@ -16,7 +16,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.2.8
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -36,7 +36,8 @@ Patch9:		%{name}-install.patch
 Patch10:	%{name}-backend_libs.patch
 Patch11:	%{name}-perl.patch
 Patch12:	%{name}-pic.patch
-#Patch13:	%{name}-sendbuf.patch
+Patch13:	%{name}-ltinstall-mode.patch
+#Patch14:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -391,6 +392,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 
 %build
 %{__libtoolize}
