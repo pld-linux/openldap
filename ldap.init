@@ -1,34 +1,41 @@
 #!/bin/sh
 #
-# Startup script for the OpenLDAP server
+# ldap		Startup script for the OpenLDAP server
 #
-# chkconfig: 345 80 10
+# chkconfig:	345 80 10
 #
-# description: OpenLDAP is a Lightweight Directory Access Protocol server
+# description:	OpenLDAP is a Lightweight Directory Access Protocol server
 #
-# processname: slapd
-# pidfile: /var/run/slapd.pid
+# processname:	slapd
+# pidfile:	/var/run/slapd.pid
 
-# Source function library.
+
+# Source function library
 . /etc/rc.d/init.d/functions
 
-# Source networking configuration.
+# Get network config
 . /etc/sysconfig/network
 
-# Customized setup
+# Get service config
 [ -f /etc/sysconfig/ldap ] && . /etc/sysconfig/ldap
 
 # Check that networking is up.
-[ ${NETWORKING} = "no" ] && exit 0
+[ "${NETWORKING}" = "no" ] && echo "Error: Networking is down"; exit 0
+
 
 # See how we were called.
 case "$1" in
   start)
-	show "Starting OpenLDAP"
-	daemon $SLDAPNICE slapd
-	if grep -q '^replogfile' /etc/ldap/slapd.conf; then
-		show "Starting slurpd"
-		daemon $SLURPNICE slurpd
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/ldap ]; then
+		show Starting OpenLDAP
+		daemon slapd
+		if grep -q '^replogfile' /etc/ldap/slapd.conf; then
+			show "Starting slurpd"
+			daemon $SLURPNICE slurpd
+		fi
+	else
+		echo "OpenLDAP already is running"
 	fi
 	touch /var/lock/subsys/ldap
 	;;
