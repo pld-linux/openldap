@@ -5,6 +5,8 @@
 # _without_sasl - don't build cyrus sasl support
 # _without_odbc	- disable sql support
 #
+%define		_with_db3	yes
+
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
 Summary(pl):	Klienci Lightweight Directory Access Protocol
