@@ -164,7 +164,6 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
-touch $RPM_BUILD_ROOT%{_sysconfdir}/openldap/secret
 
 # Standard schemas should not be changed by users
 mv $RPM_BUILD_ROOT/etc/openldap/schema/* $RPM_BUILD_ROOT/usr/share/openldap/schema/
@@ -173,11 +172,9 @@ mv $RPM_BUILD_ROOT/etc/openldap/schema/* $RPM_BUILD_ROOT/usr/share/openldap/sche
 echo "# This is a good plase to put slapd access-control directives" \
          > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.access.conf
 
-# create custom.schema
-cat > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/custom.schema <<EOF
-# This is a good plase to put your schema definitions
-include /usr/share/openldap/schema/core.schema
-EOF
+# create local.schema
+echo "# This is a good plase to put your schema definitions " \
+	> $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
 
@@ -225,7 +222,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldaptemplates.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapserver
-%attr(600,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/secret
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
