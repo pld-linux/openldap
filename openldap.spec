@@ -20,7 +20,7 @@ BuildRoot:	/tmp/%{name}-%{version}-root
 
 %define		_sysconfdir	/etc
 %define		_libexecdir	%{_sbindir}
-%define		_localstatedir	/var/state
+%define		_localstatedir	/var/run
 
 %description
 LDAP servers and clients, as well as interfaces to other protocols.
@@ -97,7 +97,6 @@ LDFLAGS="-s"
 CPPFLAGS="-I%{_includedir}/ncurses"
 export CPPFLAGS LDFLAGS
 %configure \
-	--with-subdir=ldap \
 	--enable-cldap \
 	--enable-passwd \
 	--enable-shell \
@@ -115,24 +114,26 @@ install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/ldap,%{_datadir}/ope
 
 make install TMPROOT=$RPM_BUILD_ROOT
 
-strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
+# hack the default config files
+perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
 
 (
-	cd $RPM_BUILD_ROOT%{_sbindir}/
-	sed -e "s|^#! /bin/sh|#!/bin/sh|g" < xrpcomp >xrpcomp.work
-	mv xrpcomp.work xrpcomp
-	chmod a+x xrpcomp
+cd $RPM_BUILD_ROOT%{_sbindir}/
+sed -e "s|^#! /bin/sh|#!/bin/sh|g" < xrpcomp >xrpcomp.work
+mv xrpcomp.work xrpcomp
 )
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
-echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/ldap/ldapserver
+echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap//ldapserver
 
 # deal with the migration tools
 install MigrationTools-*/migrate_* \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/migration
 cp MigrationTools-*/README README.migration
+
+strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	ANNOUNCEMENT CHANGES COPYRIGHT INSTALL README \
@@ -163,12 +164,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc {ANNOUNCEMENT,CHANGES,COPYRIGHT,INSTALL,README,README.migration}.gz
 %doc MigrationTools.txt.gz doc/rfc/rfc*
-%dir %{_sysconfdir}/ldap
-%config %{_sysconfdir}/ldap/ldapfilter.conf
-%config %{_sysconfdir}/ldap/ldapserver
-%config %{_sysconfdir}/ldap/ldaptemplates.conf
-%config %{_sysconfdir}/ldap/ldapsearchprefs.conf
-%config %{_sysconfdir}/ldap/ldap.conf
+%dir %{_sysconfdir}/openldap/
+%config %{_sysconfdir}/openldap/ldapfilter.conf
+%config %{_sysconfdir}/openldap/ldapserver
+%config %{_sysconfdir}/openldap/ldaptemplates.conf
+%config %{_sysconfdir}/openldap/ldapsearchprefs.conf
+%config %{_sysconfdir}/openldap/ldap.conf
 %attr(755,root,root) %{_sbindir}/xrpcomp
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
@@ -198,13 +199,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files servers
 %defattr(644,root,root,755)
-%attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfdir}/ldap/slapd.conf
-%config %verify(not size mtime md5) %{_sysconfdir}/ldap/slapd.oc.conf
-%config %verify(not size mtime md5) %{_sysconfdir}/ldap/slapd.at.conf
+%attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
+%config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.oc.conf
+%config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.at.conf
 %config %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(700,root,root) /var/ldap
-%{_datadir}/ldap
+%{_datadir}/openldap/*.help
+%{_datadir}/openldap/ldapfriendly
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/ldif.5*
 %{_mandir}/man5/slapd.conf.5*
