@@ -52,6 +52,7 @@ BuildRequires:	libwrap-devel
 %{?with_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	readline-devel >= 4.2
+BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -327,17 +328,19 @@ Summary(ru):	Сервера LDAP
 Summary(uk):	Сервера LDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getent
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	textutils
 Requires(post):	/usr/sbin/usermod
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
+Provides:	group(slapd)
+Provides:	user(slapd)
 
 %description servers
 The openldap2-server package has the slapd daemon which is responsible
@@ -494,21 +497,21 @@ rm -rf $RPM_BUILD_ROOT
 %postun	libs	-p /sbin/ldconfig
 
 %pre servers
-if [ -n "`getgid slapd`" ]; then
-	if [ "`getgid slapd`" != "93" ]; then
+if [ -n "`/usr/bin/getgid slapd`" ]; then
+	if [ "`/usr/bin/getgid slapd`" != "93" ]; then
 		echo "Error: group slapd doesn't have gid=93. Correct this before installing openldap." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 93 -r -f slapd
+	/usr/sbin/groupadd -g 93 slapd
 fi
-if [ -n "`id -u slapd 2>/dev/null`" ]; then
-	if [ "`id -u slapd`" != "93" ]; then
+if [ -n "`/bin/id -u slapd 2>/dev/null`" ]; then
+	if [ "`/bin/id -u slapd`" != "93" ]; then
 		echo "Error: user slapd doesn't have uid=93. Correct this before installing openldap." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -M -r -u 93 -s /bin/false -g slapd \
+	/usr/sbin/useradd -u 93 -s /bin/false -g slapd \
 		-c "OpenLDAP server" -d /var/lib/openldap-data slapd 1>&2
 fi
 
@@ -521,7 +524,7 @@ else
 fi
 
 %triggerpostun servers -- openldap-servers < 2.1.12
-if [ "`getend passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
+if [ "`/usr/bin/getent passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
 	/usr/sbin/usermod -d /var/lib/openldap-data slapd
 fi
 
@@ -535,8 +538,8 @@ fi
 
 %postun servers
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel slapd
-	/usr/sbin/groupdel slapd
+	%userremove slapd
+	%groupremove slapd
 fi
 
 %post backend-bdb
