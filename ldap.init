@@ -33,7 +33,7 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/ldap ]; then
 		show Starting OpenLDAP
 		daemon slapd
-		if grep -q '^replogfile' /etc/ldap/slapd.conf; then
+		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
 			show "Starting slurpd"
 			daemon slurpd
 		fi
@@ -45,7 +45,7 @@ case "$1" in
   stop)
 	show "Shutting down OpenLDAP"
 	killproc slapd
-	if grep -q '^replogfile' /etc/ldap/slapd.conf; then
+	if grep -q '^replogfile' /etc/open/ldap/slapd.conf; then
 		show "Shutting down slurpd"
 		killproc slurpd
  	fi
@@ -53,7 +53,7 @@ case "$1" in
 	;;
   status)
 	status slapd
-	if grep -q '^replogfile' /etc/ldap/slapd.conf; then
+	if grep -q '^replogfile' /etc/openldap/slapd.conf; then
 		status slurpd
 	fi
 	;;
