@@ -16,7 +16,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.2.6
-Release:	0.1
+Release:	0.2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -33,8 +33,9 @@ Patch6:		%{name}-cldap.patch
 Patch7:		%{name}-ldapi_FHS.patch
 Patch8:		%{name}-ac25x.patch
 Patch10:	%{name}-backend_libs.patch
-#Patch11:	%{name}-sendbuf.patch
-Patch12:	%{name}-perl.patch
+Patch11:	%{name}-perl.patch
+Patch12:	%{name}-pic.patch
+#Patch13:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -372,7 +373,7 @@ Backend SQL do slapd - serwera OpenLDAP.
 %patch7 -p1
 %patch8 -p1
 %patch10 -p1
-#%patch11 -p1
+%patch11 -p1
 %patch12 -p1
 
 %build
