@@ -31,7 +31,8 @@ Patch6:		%{name}-cldap.patch
 Patch7:		%{name}-ldapi_FHS.patch
 Patch8:		%{name}-ac25x.patch
 Patch9:		%{name}-link_no_static.patch
-#Patch10:	%{name}-sendbuf.patch
+Patch10:	%{name}-backend_libs.patch
+#Patch11:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -359,6 +360,7 @@ Backend SQL do slapd - serwera OpenLDAP.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 #%patch10 -p1
 
 %build
@@ -420,12 +422,12 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 %{__make} depend
 %{__make}
 
+rm -f doc/rfc/rfc*
+
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-data} \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/schema
-
-rm -f doc/rfc/rfc*
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -728,7 +730,9 @@ fi
 %{_datadir}/openldap/schema/*.schema
 %dir %{_libdir}/openldap/
 %attr(755,root,root) %{_sbindir}/*
-%{_mandir}/man5/slapd*
+%{_mandir}/man5/slapd.*
+%{_mandir}/man5/slapd-null.*
+%{_mandir}/man5/slapd-ldap.*
 %{_mandir}/man8/*
 
 %if %{!?_with_db3:1}%{?_with_db3:0}
@@ -736,12 +740,14 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/openldap/back_bdb.la
 %attr(755,root,root) %{_libdir}/openldap/back_bdb.s*
+%{_mandir}/man5/slapd-bdb.*
 %endif
 
 %files backend-dnssrv
 %defattr(644,root,root,755)
 %{_libdir}/openldap/back_dnssrv.la
 %attr(755,root,root) %{_libdir}/openldap/back_dnssrv.s*
+%{_mandir}/man5/slapd-dnssrv.*
 
 #%files backend-ldap
 #%defattr(644,root,root,755)
@@ -752,14 +758,17 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/openldap/back_ldbm.la
 %attr(755,root,root) %{_libdir}/openldap/back_ldbm.s*
+%{_mandir}/man5/slapd-ldbm.*
 
 %files backend-meta
 %defattr(644,root,root,755)
 %{_libdir}/openldap/back_meta.la
 %attr(755,root,root) %{_libdir}/openldap/back_meta.s*
+%{_mandir}/man5/slapd-meta.*
 
 %files backend-monitor
 %defattr(644,root,root,755)
+%doc servers/slapd/back-monitor/README
 %{_libdir}/openldap/back_monitor.la
 %attr(755,root,root) %{_libdir}/openldap/back_monitor.s*
 
@@ -767,22 +776,28 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/openldap/back_passwd.la
 %attr(755,root,root) %{_libdir}/openldap/back_passwd.s*
+%{_mandir}/man5/slapd-passwd.*
 
 %if %{!?_without_perl:1}%{?_without_perl:0}
 %files backend-perl
 %defattr(644,root,root,755)
+%doc servers/slapd/back-perl/*.pm
 %{_libdir}/openldap/back_perl.la
 %attr(755,root,root) %{_libdir}/openldap/back_perl.s*
+%{_mandir}/man5/slapd-perl.*
 %endif
 
 %files backend-shell
 %defattr(644,root,root,755)
 %{_libdir}/openldap/back_shell.la
 %attr(755,root,root) %{_libdir}/openldap/back_shell.s*
+%{_mandir}/man5/slapd-shell.*
 
 %if %{!?_without_odbc:1}%{?_without_perl:0}
 %files backend-sql
 %defattr(644,root,root,755)
+%doc servers/slapd/back-sql/docs/*
 %{_libdir}/openldap/back_sql.la
 %attr(755,root,root) %{_libdir}/openldap/back_sql.s*
+%{_mandir}/man5/slapd-sql.*
 %endif
