@@ -1,4 +1,5 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
+Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
 Version:	1.2.4
 Release:	0.1
@@ -19,8 +20,14 @@ LDAP servers and clients, as well as interfaces to other protocols.
 Note that this does not include the slapd interface to X.500 and
 therefore does not require the ISODE package.
 
+%description -l pl
+Serwery i klienci LDAP jak i interfejsy do innych protoko³ów.
+Wiedz, ¿e pakiet ten nie zawiera interfejsu slapd to X.500 i dlatego
+nie wymaga pakietu ISODE.
+
 %Package devel
 Summary:	LDAP development files
+Summary(pl):	Pliki dla developerów LDAP
 Group:		Development/Libraries
 Group(pl):      Programowanie/Biblioteki
 Requires:	%{name} = %{version}
@@ -28,8 +35,13 @@ Requires:	%{name} = %{version}
 %description devel
 Header files and libraries for developing applications that use LDAP.
 
+%description -l pl devel
+Pliki nag³ówkowe i biblioteki konieczne do rozwoju aplikacji
+u¿ywaj±cych LDAP.
+
 %Package static
 Summary:	LDAP static libraries
+Summary(pl):	Biblioteki statyczne LDAP
 Group:		Development/Libraries
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
@@ -37,8 +49,12 @@ Requires:	%{name}-devel = %{version}
 %description static
 LDAP static libraries.
 
+%description -l pl static
+Biblioteki statyczne LDAP.
+
 %package servers
 Summary:	LDAP servers
+Summary(pl):	Serwery LDAP
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Prereq:		chkconfig
@@ -46,6 +62,9 @@ Prereq:		chkconfig
 
 %description servers
 The servers (daemons) that come with LDAP.
+
+%description -l pl servers
+Serwery (daemons) które przychodz± z LDAPem.
 
 %prep
 %setup  -q -n ldap
