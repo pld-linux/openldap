@@ -61,7 +61,7 @@ case "$1" in
 	    msg_stopping "OpenLDAP"
 	    killproc slapd
 	    if grep -q '^replogfile' /etc/openldap/slapd.conf; then
-		    msg_stopping "OpenLDAP"
+		    msg_stopping "OpenLDAP Update Replication Daemon"
 		    killproc slurpd
  	    fi
 	    rm -f /var/lock/subsys/ldap >/dev/null 2>&1
