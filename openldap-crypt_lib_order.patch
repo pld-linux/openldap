@@ -1,0 +1,142 @@
+This patch changes order of libcrypto and libcrypt libraries on linker command
+line, so system (libcrypt) rather than OpenSSL (libcrypto) version of crypt()
+fuction is used.  crypt() from libcrypto sometimes doesn't work for MD5 hashed
+passwords.
+
+diff -durN openldap-2.0.23.orig/clients/fax500/Makefile.in openldap-2.0.23/clients/fax500/Makefile.in
+--- openldap-2.0.23.orig/clients/fax500/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/fax500/Makefile.in	Thu Apr 18 13:55:49 2002
+@@ -16,7 +16,7 @@
+ XLIBS = ../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la \
+ 	../../libraries/liblutil/liblutil.a
+-XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(LUTIL_LIBS) $(SECURITY_LIBS)
+ 
+ rp500 : rpversion.o
+ 	$(LTLINK) -o $@ $(RPOBJS) rpversion.o $(LIBS)
+diff -durN openldap-2.0.23.orig/clients/finger/Makefile.in openldap-2.0.23/clients/finger/Makefile.in
+--- openldap-2.0.23.orig/clients/finger/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/finger/Makefile.in	Thu Apr 18 13:55:38 2002
+@@ -13,7 +13,7 @@
+ XLIBS = ../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la \
+ 	../../libraries/liblutil/liblutil.a
+-XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(LUTIL_LIBS) $(SECURITY_LIBS)
+ 
+ in.xfingerd : version.o
+ 	$(LTLINK) -o $@ version.o $(OBJS) $(LIBS)
+diff -durN openldap-2.0.23.orig/clients/gopher/Makefile.in openldap-2.0.23/clients/gopher/Makefile.in
+--- openldap-2.0.23.orig/clients/gopher/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/gopher/Makefile.in	Thu Apr 18 13:55:24 2002
+@@ -18,7 +18,7 @@
+ XLIBS = ../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la \
+ 	../../libraries/liblutil/liblutil.a
+-XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(LUTIL_LIBS) $(SECURITY_LIBS)
+ 
+ go500 : goversion.o
+ 	$(LTLINK) -o $@ $(GOOBJS) goversion.o $(LIBS)
+diff -durN openldap-2.0.23.orig/clients/mail500/Makefile.in openldap-2.0.23/clients/mail500/Makefile.in
+--- openldap-2.0.23.orig/clients/mail500/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/mail500/Makefile.in	Thu Apr 18 13:55:16 2002
+@@ -13,7 +13,7 @@
+ XLIBS = ../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la \
+ 	../../libraries/liblutil/liblutil.a
+-XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(LUTIL_LIBS) $(SECURITY_LIBS)
+ 
+ mail500 : version.o
+ 	$(LTLINK) -o $@ version.o $(OBJS) $(LIBS)
+diff -durN openldap-2.0.23.orig/clients/maildap/Makefile.in openldap-2.0.23/clients/maildap/Makefile.in
+--- openldap-2.0.23.orig/clients/maildap/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/maildap/Makefile.in	Thu Apr 18 13:55:06 2002
+@@ -13,7 +13,7 @@
+ XLIBS = ../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la \
+ 	../../libraries/liblutil/liblutil.a
+-XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(LUTIL_LIBS) $(SECURITY_LIBS)
+ 
+ maildap : version.o
+ 	$(LTLINK) -o $@ version.o $(OBJS) $(LIBS)
+diff -durN openldap-2.0.23.orig/clients/rcpt500/Makefile.in openldap-2.0.23/clients/rcpt500/Makefile.in
+--- openldap-2.0.23.orig/clients/rcpt500/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/rcpt500/Makefile.in	Thu Apr 18 13:54:54 2002
+@@ -14,7 +14,7 @@
+ XLIBS = ../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la \
+ 	../../libraries/liblutil/liblutil.a
+-XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(LUTIL_LIBS) $(SECURITY_LIBS)
+ 
+ rcpt500 : version.o
+ 	$(LTLINK) -o $@ version.o $(OBJS) $(LIBS)
+diff -durN openldap-2.0.23.orig/clients/tools/Makefile.in openldap-2.0.23/clients/tools/Makefile.in
+--- openldap-2.0.23.orig/clients/tools/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/tools/Makefile.in	Thu Apr 18 13:54:29 2002
+@@ -15,7 +15,7 @@
+ 	../../libraries/libldif/libldif.a \
+ 	../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la
+-XXLIBS	= $(SECURITY_LIBS) $(LDIF_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(LUTIL_LIBS) $(SECURITY_LIBS) $(LDIF_LIBS)
+ 
+ XSRCS	= ldsversion.c ldmversion.c lddversion.c ldrversion.c ldpversion.c
+ 
+diff -durN openldap-2.0.23.orig/clients/ud/Makefile.in openldap-2.0.23/clients/ud/Makefile.in
+--- openldap-2.0.23.orig/clients/ud/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/clients/ud/Makefile.in	Thu Apr 18 13:54:40 2002
+@@ -19,7 +19,7 @@
+ 	../../libraries/libldif/libldif.a \
+ 	../../libraries/libldap/libldap.la \
+ 	../../libraries/liblber/liblber.la
+-XXLIBS	= $(TERMCAP_LIBS) $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS	= $(TERMCAP_LIBS) $(LUTIL_LIBS) $(SECURITY_LIBS)
+ 
+ ud : version.o
+ 	$(LTLINK) -o $@ version.o $(OBJS) $(LIBS)
+diff -durN openldap-2.0.23.orig/libraries/libldap_r/Makefile.in openldap-2.0.23/libraries/libldap_r/Makefile.in
+--- openldap-2.0.23.orig/libraries/libldap_r/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/libraries/libldap_r/Makefile.in	Thu Apr 18 13:53:31 2002
+@@ -42,7 +42,7 @@
+ 
+ XDEFS = -DLDAP_R_COMPILE -I$(XXDIR)
+ XLIBS = libldap_r.la ../liblber/liblber.la ../liblutil/liblutil.a
+-XXLIBS = $(SECURITY_LIBS) $(LUTIL_LIBS)
++XXLIBS = $(LUTIL_LIBS) $(SECURITY_LIBS)
+ XXXLIBS = $(LTHREAD_LIBS)
+ 
+ LINKAGE = @LT_LIB_LINKAGE@
+diff -durN openldap-2.0.23.orig/servers/slapd/Makefile.in openldap-2.0.23/servers/slapd/Makefile.in
+--- openldap-2.0.23.orig/servers/slapd/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/servers/slapd/Makefile.in	Thu Apr 18 13:51:35 2002
+@@ -51,8 +51,9 @@
+ 	../../libraries/libldap_r/libldap_r.la \
+ 	../../libraries/liblber/liblber.la
+ XXLIBS = $(LDBM_LIBS) $(SLAPD_LIBS) \
++	 $(LUTIL_LIBS) \
+ 	 $(SECURITY_LIBS) \
+-	 $(LDIF_LIBS) $(LUTIL_LIBS)
++	 $(LDIF_LIBS)
+ XXXLIBS = $(LTHREAD_LIBS) $(MODULES_LIBS)
+ 
+ BUILD_OPT = "--enable-slapd"
+diff -durN openldap-2.0.23.orig/servers/slapd/tools/Makefile.in openldap-2.0.23/servers/slapd/tools/Makefile.in
+--- openldap-2.0.23.orig/servers/slapd/tools/Makefile.in	Thu Apr 18 13:47:33 2002
++++ openldap-2.0.23/servers/slapd/tools/Makefile.in	Thu Apr 18 13:52:03 2002
+@@ -31,9 +31,9 @@
+ 	../../../libraries/libldbm/libldbm.a \
+ 	../../../libraries/libldap_r/libldap_r.la \
+ 	../../../libraries/liblber/liblber.la
+-XXLIBS = $(SLAPD_LIBS) \
++XXLIBS = $(SLAPD_LIBS) $(LUTIL_LIBS)\
+ 	$(LDBM_LIBS) $(SECURITY_LIBS) \
+-	$(LDIF_LIBS) $(LUTIL_LIBS)
++	$(LDIF_LIBS)
+ XXXLIBS = $(MODULES_LIBS) $(LTHREAD_LIBS)
+ 
+ PROGRAMS=slapadd slapcat slapindex slappasswd
