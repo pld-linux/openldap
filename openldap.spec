@@ -10,7 +10,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.0.25
-Release:	3
+Release:	4
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -337,7 +337,6 @@ fi
 %defattr(644,root,root,755)
 %doc ANNOUNCEMENT CHANGES COPYRIGHT README
 %doc doc/{drafts,rfc}
-%doc guide
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
