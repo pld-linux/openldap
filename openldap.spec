@@ -25,7 +25,7 @@ URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
 BuildRequires:	perl
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
 %define		_libexecdir	%{_sbindir}
@@ -164,7 +164,6 @@ strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	ANNOUNCEMENT CHANGES COPYRIGHT INSTALL README \
 	README.migration MigrationTools.txt doc/rfc/rfc*
-
 
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
