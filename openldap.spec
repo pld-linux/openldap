@@ -43,7 +43,7 @@ URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
-BuildRequires:	db4.3-devel >= 4.3
+BuildRequires:	db-devel >= 4.3
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
@@ -109,7 +109,7 @@ Summary(uk):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel >= 2.1.15}
-Requires:	db4.3-devel >= 4.3
+Requires:	db-devel >= 4.3
 Requires:	openssl-devel >= 0.9.7c
 
 %description devel
