@@ -1,8 +1,8 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	1.2.6
-Release:	2
+Version:	1.2.7
+Release:	1
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Artistic
@@ -18,7 +18,6 @@ Patch2:		openldap-migrate_passwd.patch
 Patch3:		openldap-config.patch
 Patch4:		openldap-conffile.patch
 URL:		http://www.openldap.org/
-Requires:	rc-scripts
 BuildRequires:	ncurses-devel
 BuildRequires:	libwrap-devel
 BuildRoot:	/tmp/%{name}-%{version}-root
