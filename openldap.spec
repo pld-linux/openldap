@@ -497,7 +497,8 @@ echo "# This is a good place to put your schema definitions " > \
 rm -rf $RPM_BUILD_ROOT
 
 %post	libs	-p /sbin/ldconfig
-%postun	libs	-p /sbin/ldconfig
+%postun	libs
+/sbin/ldconfig || :
 
 %pre servers
 if [ -n "`/usr/bin/getgid slapd`" ]; then
@@ -534,15 +535,15 @@ fi
 %preun servers
 if [ "$1" = "0" ] ; then
 	if [ -f /var/lock/subsys/ldap ]; then
-		/etc/rc.d/init.d/ldap stop >&2
+		/etc/rc.d/init.d/ldap stop >&2 || :
 	fi
-	/sbin/chkconfig --del ldap
+	/sbin/chkconfig --del ldap || :
 fi
 
 %postun servers
 if [ "$1" = "0" ]; then
-	%userremove slapd
-	%groupremove slapd
+	%userremove slapd || :
+	%groupremove slapd || :
 fi
 
 %post backend-bdb
@@ -560,7 +561,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %post backend-dnssrv
@@ -578,7 +579,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %post backend-hdb
@@ -596,7 +597,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %post backend-ldap
@@ -614,7 +615,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %post backend-ldbm
@@ -632,7 +633,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %post backend-meta
@@ -650,7 +651,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %post backend-monitor
@@ -668,7 +669,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %post backend-passwd
@@ -687,7 +688,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %if %{with perl}
@@ -706,7 +707,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 %endif
 
@@ -725,7 +726,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %if %{with odbc}
@@ -744,7 +745,7 @@ ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
+	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 %endif
 
