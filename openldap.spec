@@ -52,6 +52,7 @@ BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
 %{?with_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
+%{?with_perl:BuildRequires:	perl-devel}
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_odbc:BuildRequires:	unixODBC-devel}
