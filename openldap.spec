@@ -81,10 +81,10 @@ Este pacote contИm apenas as bibliotecas usadas por alguns programas.
 VocЙ provavelmente tambИm vai querer instalar o pacote
 openldap-client.
 
-%description clients -l ru
+%description -l ru
 Образцы клиентов, поставляемые с LDAP.
 
-%description clients -l uk
+%description -l uk
 Зразки кл╕╓нт╕в, що поставляються з LDAP.
 
 %package devel
