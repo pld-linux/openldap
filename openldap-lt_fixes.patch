@@ -1,0 +1,243 @@
+--- openldap-2.0.14/build/lib-static.mk~	Tue Jun 13 19:57:00 2000
++++ openldap-2.0.14/build/lib-static.mk	Fri Sep 14 00:45:30 2001
+@@ -9,8 +9,5 @@
+ 
+ $(LIBRARY): version.o
+ 	$(AR) ru $@ $(OBJS) version.o
+-	@$(RANLIB) $@;	\
+-	$(RM) ../$@;	\
+-	(d=`$(PWD)` ; cd .. ; $(LN_S) `$(BASENAME) $$d`/$@ $@)
+ 
+ Makefile: $(top_srcdir)/build/lib-static.mk
+--- openldap-2.0.14/build/lib-shared.mk~	Wed Oct 11 04:32:05 2000
++++ openldap-2.0.14/build/lib-shared.mk	Fri Sep 14 01:07:21 2001
+@@ -32,19 +32,6 @@
+ 
+ $(LIBRARY):  version.lo
+ 	$(LTLIBLINK) -o $@ $(OBJS) version.lo $(EXTRA_LIBS)
+-	$(RM) ../$@
+-	d=`$(PWD)`; d=`$(BASENAME) $$d`; cd ..; $(LN_S) $$d/$@ $@; \
+-	t=`$(BASENAME) $@ .la`.a; $(RM) $$t; $(LN_S) $$d/.libs/$$t $$t
+-	if test "$(LINK_BINS_DYNAMIC)" = "yes"; then \
+-		d=`$(PWD)`; d=`$(BASENAME) $$d`; b=`$(BASENAME) $@ .la`; \
+-		 cd .libs; t=`echo $$b*.$(DYN_EXT)`; (cd ../.. ; $(RM) $$t; \
+-		 $(LN_S) $$d/.libs/$$t $$t); \
+-		if test "$(DYN_EXT)" != dll; then \
+-		    t=`echo $$b.$(DYN_EXT).?`; cd ../.. ; \
+-		    $(RM) $$t; \
+-		    $(LN_S) $$d/.libs/$$t $$t; \
+-		fi \
+-	fi
+ 
+ Makefile: $(top_srcdir)/build/lib-shared.mk
+ 
+--- openldap-2.0.14/libraries/libldap/Makefile.in~	Sat Jul 21 21:01:39 2001
++++ openldap-2.0.14/libraries/libldap/Makefile.in	Fri Sep 14 01:42:29 2001
+@@ -33,7 +33,7 @@
+ LDAP_INCDIR= ../../include       
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS = -lldap -llber -llutil
++XLIBS = libldap.la ../liblber/liblber.la ../liblutil/liblutil.a
+ XXLIBS = $(SECURITY_LIBS) $(TLS_LIBS)
+ 
+ LINKAGE = @LT_LIB_LINKAGE@
+--- openldap-2.0.14/libraries/libldap_r/Makefile.in~	Sat Jul 21 21:01:40 2001
++++ openldap-2.0.14/libraries/libldap_r/Makefile.in	Fri Sep 14 03:05:40 2001
+@@ -41,7 +41,7 @@
+ LDAP_LIBDIR= ../../libraries
+ 
+ XDEFS = -DLDAP_R_COMPILE -I$(XXDIR)
+-XLIBS = -lldap_r -llber -llutil
++XLIBS = libldap_r.la ../liblber/liblber.la ../liblutil/liblutil.a
+ XXLIBS = $(SECURITY_LIBS) $(LUTIL_LIBS)
+ XXXLIBS = $(LTHREAD_LIBS)
+ 
+--- openldap-2.0.14/libraries/libavl/Makefile.in~	Mon Oct  2 19:20:30 2000
++++ openldap-2.0.14/libraries/libavl/Makefile.in	Fri Sep 14 03:07:25 2001
+@@ -14,7 +14,7 @@
+ 
+ LIBRARY = libavl.a
+ PROGRAMS	= testavl
+-XLIBS = -lavl
++XLIBS = libavl.a
+ 
+ testavl:	$(LIBRARY) testavl.o
+ 	$(LTLINK) -o $@ testavl.o $(LIBS)
+--- openldap-2.0.14/clients/tools/Makefile.in~	Tue Jul  4 19:58:44 2000
++++ openldap-2.0.14/clients/tools/Makefile.in	Fri Sep 14 04:35:29 2001
+@@ -11,7 +11,10 @@
+ NT_DYN_DEFS = -DLBER_DECL=dllimport -DLDAP_DECL=dllimport
+ CPPFLAGS = $(@PLAT@_@LIB_LINKAGE@_DEFS)
+ 
+-XLIBS =  -llutil -lldif -lldap -llber
++XLIBS = ../../libraries/liblutil/liblutil.a \
++	../../libraries/libldif/libldif.a \
++	../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la
+ XXLIBS	= $(SECURITY_LIBS) $(LDIF_LIBS) $(LUTIL_LIBS)
+ 
+ XSRCS	= ldsversion.c ldmversion.c lddversion.c ldrversion.c ldpversion.c
+--- openldap-2.0.14/clients/fax500/Makefile.in~	Tue Jun 13 19:57:01 2000
++++ openldap-2.0.14/clients/fax500/Makefile.in	Fri Sep 14 05:26:14 2001
+@@ -13,7 +13,9 @@
+ LDAP_INCDIR= ../../include
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS =  -lldap -llber -llutil
++XLIBS = ../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la \
++	../../libraries/liblutil/liblutil.a
+ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ rp500 : rpversion.o
+--- openldap-2.0.14/clients/finger/Makefile.in~	Tue Jun 13 19:57:01 2000
++++ openldap-2.0.14/clients/finger/Makefile.in	Fri Sep 14 05:27:58 2001
+@@ -10,7 +10,9 @@
+ LDAP_INCDIR= ../../include
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS =  -lldap -llber -llutil
++XLIBS = ../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la \
++	../../libraries/liblutil/liblutil.a
+ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ in.xfingerd : version.o
+--- openldap-2.0.14/clients/gopher/Makefile.in~	Tue Jun 13 19:57:01 2000
++++ openldap-2.0.14/clients/gopher/Makefile.in	Fri Sep 14 05:29:06 2001
+@@ -15,7 +15,9 @@
+ LDAP_INCDIR= ../../include
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS =  -lldap -llber -llutil
++XLIBS = ../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la \
++	../../libraries/liblutil/liblutil.a
+ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ go500 : goversion.o
+--- openldap-2.0.14/clients/mail500/Makefile.in~	Tue Jun 13 19:57:02 2000
++++ openldap-2.0.14/clients/mail500/Makefile.in	Fri Sep 14 05:29:56 2001
+@@ -10,7 +10,9 @@
+ LDAP_INCDIR= ../../include
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS =  -lldap -llber -llutil
++XLIBS = ../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la \
++	../../libraries/liblutil/liblutil.a
+ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ mail500 : version.o
+--- openldap-2.0.14/clients/maildap/Makefile.in~	Tue Jun 13 19:57:02 2000
++++ openldap-2.0.14/clients/maildap/Makefile.in	Fri Sep 14 05:30:35 2001
+@@ -10,7 +10,9 @@
+ LDAP_INCDIR= ../../include
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS =  -lldap -llber -llutil
++XLIBS = ../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la \
++	../../libraries/liblutil/liblutil.a
+ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ maildap : version.o
+--- openldap-2.0.14/clients/rcpt500/Makefile.in~	Tue Jun 13 19:57:03 2000
++++ openldap-2.0.14/clients/rcpt500/Makefile.in	Fri Sep 14 05:31:35 2001
+@@ -11,7 +11,9 @@
+ LDAP_INCDIR= ../../include       
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS =  -lldap -llber -llutil
++XLIBS = ../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la \
++	../../libraries/liblutil/liblutil.a
+ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ rcpt500 : version.o
+--- openldap-2.0.14/clients/ud/Makefile.in~	Tue Jul  4 19:58:45 2000
++++ openldap-2.0.14/clients/ud/Makefile.in	Fri Sep 14 05:34:30 2001
+@@ -15,6 +15,10 @@
+ CPPFLAGS = $(@PLAT@_@LIB_LINKAGE@_DEFS)
+ 
+ XLIBS =  -llutil -lldif -lldap -llber
++XLIBS = ../../libraries/liblutil/liblutil.a \
++	../../libraries/libldif/libldif.a \
++	../../libraries/libldap/libldap.la \
++	../../libraries/liblber/liblber.la
+ XXLIBS	= $(TERMCAP_LIBS) $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ ud : version.o
+--- openldap-2.0.14/servers/slapd/Makefile.in~	Sun Jul 22 04:28:28 2001
++++ openldap-2.0.14/servers/slapd/Makefile.in	Fri Sep 14 06:09:12 2001
+@@ -43,7 +43,13 @@
+ XLDFLAGS = $(MODULES_LDFLAGS) $(SLAPD_MODULES)
+ 
+ # $(LTHREAD_LIBS) must be last
+-XLIBS = libbackends.a -lavl -lldbm -lldif -llutil -lldap_r -llber
++XLIBS = libbackends.a \
++	../../libraries/libavl/libavl.a \
++	../../libraries/libldbm/libldbm.a \
++	../../libraries/libldif/libldif.a \
++	../../libraries/liblutil/liblutil.a \
++	../../libraries/libldap_r/libldap_r.la \
++	../../libraries/liblber/liblber.la
+ XXLIBS = $(LDBM_LIBS) $(SLAPD_LIBS) \
+ 	 $(SECURITY_LIBS) \
+ 	 $(LDIF_LIBS) $(LUTIL_LIBS)
+--- openldap-2.0.14/servers/slurpd/Makefile.in~	Tue Oct 17 21:38:22 2000
++++ openldap-2.0.14/servers/slurpd/Makefile.in	Fri Sep 14 06:11:33 2001
+@@ -28,7 +28,10 @@
+ all-local-srv: 	$(PROGRAMS)
+ 
+ # $(LTHREAD_LIBS) must be last!
+-XLIBS = -lldif -lldap_r -llber -llutil
++XLIBS =	../../libraries/libldif/libldif.a \
++	../../libraries/libldap_r/libldap_r.la \
++	../../libraries/liblber/liblber.la \
++	../../libraries/liblutil/liblutil.a
+ XXLIBS = $(SLURPD_LIBS) $(SECURITY_LIBS) \
+ 	$(LDIF_LIBS) $(LUTIL_LIBS)
+ XXXLIBS = $(LTHREAD_LIBS)
+--- openldap-2.0.14/servers/slapd/back-dnssrv/Makefile.in~	Sat Jun 17 18:16:59 2000
++++ openldap-2.0.14/servers/slapd/back-dnssrv/Makefile.in	Fri Sep 14 07:12:17 2001
+@@ -18,7 +18,6 @@
+ 
+ BUILD_OPT = "--enable-dnssrv"
+ BUILD_MOD = @BUILD_DNSSRV@
+-LINKAGE = @BUILD_DNSSRV_DYNAMIC@
+ 
+ LIBBASE = back_dnssrv
+ 
+--- openldap-2.0.14/build/mod.mk~	Wed Oct  4 17:21:30 2000
++++ openldap-2.0.14/build/mod.mk	Fri Sep 14 07:55:05 2001
+@@ -10,10 +10,8 @@
+ LIBRARY = $(LIBBASE).la
+ LIBSTAT = lib$(LIBBASE).a
+ 
+-LTFLAGS = --only-$(LINKAGE)
+-
+-COMPILE = $(LIBTOOL) $(LTFLAGS) --mode=compile $(CC) $(CFLAGS) $(MODDEFS) -c
+-LTLIBLINK = $(LIBTOOL) $(LTFLAGS) --mode=link $(CC) -rpath $(moduledir) \
++COMPILE = $(LIBTOOL) --mode=compile $(CC) $(CFLAGS) $(MODDEFS) -c
++LTLIBLINK = $(LIBTOOL) --mode=link $(CC) -export-dynamic -avoid-version -rpath $(moduledir) \
+ 	$(CFLAGS) $(LDFLAGS) $(LTVERSION) $(LT_NO_UNDEF)
+ 
+ MKDEPFLAG = -l
+--- openldap-2.0.14/servers/slapd/tools/Makefile.in~	Sun Jul 22 04:28:30 2001
++++ openldap-2.0.14/servers/slapd/tools/Makefile.in	Fri Sep 14 08:39:15 2001
+@@ -25,7 +25,12 @@
+ XDEFS = $(MODULES_CPPFLAGS)
+ XLDFLAGS = $(MODULES_LDFLAGS) $(SLAPD_MODULES)
+ 
+-XLIBS = -lavl -lldif -lldbm -llutil -lldap_r -llber
++XLIBS = ../../../libraries/libavl/libavl.a \
++	../../../libraries/libldif/libldif.a \
++	../../../libraries/liblutil/liblutil.a \
++	../../../libraries/libldbm/libldbm.a \
++	../../../libraries/libldap_r/libldap_r.la \
++	../../../libraries/liblber/liblber.la
+ XXLIBS = $(SLAPD_LIBS) \
+ 	$(LDBM_LIBS) $(SECURITY_LIBS) \
+ 	$(LDIF_LIBS) $(LUTIL_LIBS)
