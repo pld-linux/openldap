@@ -18,6 +18,7 @@ Patch2:		openldap-migrate_passwd.patch
 Patch3:		openldap-config.patch
 Patch4:		openldap-conffile.patch
 URL:		http://www.openldap.org/
+Requires:	rc-scripts
 BuildRequires:	ncurses-devel
 BuildRequires:	libwrap-devel
 BuildRoot:	/tmp/%{name}-%{version}-root
@@ -81,6 +82,7 @@ Summary(pl):	Serwery LDAP
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Prereq:		chkconfig
+Requires:	rc-scripts
 
 %description servers
 The servers (daemons) that come with LDAP.
