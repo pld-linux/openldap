@@ -1,12 +1,12 @@
-diff -Nru ldap/build/man.mk ldap.new/build/man.mk
---- ldap/build/man.mk	Fri Jul 16 17:13:07 1999
-+++ ldap.new/build/man.mk	Thu Aug 19 03:16:28 1999
+diff -Nru openldap-2.0.0/build/man.mk openldap-2.0.0.new/build/man.mk
+--- openldap-2.0.0/build/man.mk	Tue Sep  5 04:34:34 2000
++++ openldap-2.0.0.new/build/man.mk	Tue Sep  5 04:36:28 2000
 @@ -36,7 +36,7 @@
  			for link in `$(CAT) $(srcdir)/$$page.links`; do \
  				echo "installing $(MANDIR)/$$link as link to $$page"; \
- 				$(RM) $(MANDIR)/$$link; \
--				$(LN_S) $$page $(MANDIR)/$$link; \
-+				echo ".so $$page" > $(MANDIR)/$$link; \
+ 				$(RM) $(DESTDIR)$(MANDIR)/$$link ; \
+-				$(LN_S) $$page $(DESTDIR)$(MANDIR)/$$link; \
++				echo ".so $$page" > $(DESTDIR)$(MANDIR)/$$link; \
  			done; \
  		fi; \
  	done
