@@ -312,7 +312,7 @@ rm -rf $RPM_BUILD_ROOT
 %config /etc/ldap/ldapsearchprefs.conf
 %config /etc/ldap/ldap.conf
 %attr(755,root,root) /usr/sbin/xrpcomp
-%attr(755,root,root) /usr/bin/*
+%attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %{_mandir}/man1/*
 %{_mandir}/man5/ldap.conf.5.gz
