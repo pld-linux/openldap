@@ -16,7 +16,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.2.6
-Release:	0.3
+Release:	0.4
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -48,7 +48,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	readline-devel >= 4.2
 %{?with_odbc:BuildRequires:	unixODBC-devel}
-Requires:	%{name}-%{libs} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
