@@ -341,7 +341,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(700,root,root) /var/ldap
 /usr/share/ldap
-/usr/sbin/*
+%attr(755,root,root) /usr/sbin/*
 /usr/man/man5/ldif.5.gz
 /usr/man/man5/slapd.conf.5.gz
 /usr/man/man5/slapd.replog.5.gz
