@@ -289,7 +289,7 @@ grep -q slapd %{_sysconfdir}/group || (
 /usr/sbin/groupadd -g 93 -r -f slapd 1>&2 || :
 )
 grep -q slapd %{_sysconfdir}/passwd || (
-/usr/sbin/useradd -M -o -r -u 93 \
+/usr/sbin/useradd -M -o -r -u 93 -s /bin/false \
         -g slapd -c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2 || :
 )
 
