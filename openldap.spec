@@ -230,6 +230,7 @@ Summary(pl):	Backend BDB do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-bdb
 BDB backend to slapd, the OpenLDAP server.
@@ -243,6 +244,7 @@ Summary(pl):	Backend DNS SRV do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-dnssrv
 DNS SRV backend to slapd, the OpenLDAP server.
@@ -269,6 +271,7 @@ Summary(pl):	Backend LDBM do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-ldbm
 LDBM backend to slapd, the OpenLDAP server.
@@ -282,6 +285,7 @@ Summary(pl):	Backend Meta do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-meta
 Meta backend to slapd, the OpenLDAP server.
@@ -295,6 +299,7 @@ Summary(pl):	Backend Monitor do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-monitor
 Meta backend to slapd, the OpenLDAP server.
@@ -308,6 +313,7 @@ Summary(pl):	Backend /etc/passwd do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-passwd
 /etc/passwd backend to slapd, the OpenLDAP server.
@@ -321,6 +327,7 @@ Summary(pl):	Backend Perl do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-perl
 Perl backend to slapd, the OpenLDAP server.
@@ -334,6 +341,7 @@ Summary(pl):	Backend Shell do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-shell
 Shell backend to slapd, the OpenLDAP server.
@@ -347,6 +355,7 @@ Summary(pl):	Backend SQL do serwera OpenLDAP
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}
 
 %description backend-sql
 SQL backend to slapd, the OpenLDAP server.
