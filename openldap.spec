@@ -1,142 +1,97 @@
-%define Name		openldap
-%define Version		1.1.2
-%define Release		1
-%define Dist		OL
-
-Summary		: Lightweight Directory Access Protocol clients/servers
-Name		: %{Name}
-Version		: %{Version}
-Release		: %{Release}
-Group		: Server/Network
-
-Copyright	: Freely distributable
-Packager	: edo@calderasystems.com (Ed Orcutt)
-Icon		: dummy.xpm
-URL		: http://www.openldap.org/
-
-#Requires	: gdbm
-
-BuildRoot	: /tmp/%{Name}-%{Version}
-
-Source0: ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/openldap-1.1.2.tgz
-Source9: fixup.pl
-Patch0: openldap-%{Version}-%{Dist}.patch
-
-%define fixUP   %{SOURCE9}
-%define prefix /usr
-%define ldap_subdir ldap
-%define bindir %{prefix}/bin
-#%define datadir /etc
-%define datadir  %{prefix}/share/%{ldap_subdir}
-%define datadirC %{prefix}/share
-%define sbindir %{prefix}/sbin
-%define libdir %{prefix}/lib
-%define libexecdir %{prefix}/sbin
-%define sysconfdir  /etc/%{ldap_subdir}
-%define sysconfdirC /etc
-%define localstatedir /var/run
-
-
-%Package devel
-Summary		: LDAP development files
-Group		: Development/Libraries
-
-
-%Package servers
-Summary		: LDAP servers
-Group		: Server/Network
-
+Summary:	Lightweight Directory Access Protocol clients/servers
+Name:		openldap
+Version:	1.2.0
+Release:	1
+Group:		Server/Network
+Copyright:	Freely distributable
+Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
+Patch0:		openldap-%{Version}-%{Dist}.patch
+URL:		http://www.openldap.org/
+BuildRoot:	/tmp/%{name}-%{version}-root
 
 %Description
 LDAP servers and clients, as well as interfaces to other protocols.
 Note that this does not include the slapd interface to X.500 and
 therefore does not require the ISODE package.
 
+%Package devel
+Summary:	LDAP development files
+Group:		Development/Libraries
 
 %Description devel
 Header files and libraries for developing applications that use LDAP.
 
+%Package servers
+Summary:	LDAP servers
+Group:		Server/Network
 
 %Description servers
 The servers (daemons) that come with LDAP.
 
+%prep
+%setup -q -n ldap
 
-%Prep
-%setup -n ldap
-%patch -p1
-
-
-%Build
+%build
 
 # How to build with Threads under Linux (esp. OpenLinux)
 # OpenLDAP FAQ: http://www.openldap.org/faq/data/cache/19.html
 # This did *not* work ... build without-threads -edo
 # CPPFLAGS="-D_MIT_POSIX_THREADS"; export CPPFLAGS
 
-./configure --prefix=%{prefix} --enable-cldap --enable-phonetic \
-  --libexecdir=%{libexecdir} --sysconfdir=%{sysconfdirC} \
-  --localstatedir=%{localstatedir} --datadir=%{datadirC} \
-  --with-wrappers --without-threads --with-subdir=%{ldap_subdir}
+CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
+CPPFLAGS="$RPM_OPT_FLAGS -D_MIT_POSIX_THREADS"
+./configure \
+	--prefix=/usr \
+	--enable-cldap \
+	--enable-phonetic \
+	--sysconfdir=/etc \
+	--localstatedir=/var/run \
+	--with-wrappers \
+	--without-threads \
+	--with-subdir=ldap
 
 make depend
 make
 
-
 %Install
-DESTDIR=$RPM_BUILD_ROOT; export DESTDIR
-[ -n "`echo $DESTDIR | sed -n 's:^/tmp/[^.].*$:OK:p'`" ] && rm -rf $DESTDIR ||
-(echo "Invalid BuildRoot: '$DESTDIR'! Check this .spec ..."; exit 1) || exit 1
+rm -rf $RPM_BUILD_ROOT
 
-# In order to install into the "BUILDIR", and yet have the correct
-# substitutions performed ... we will have to do it ourselves first! -edo
-
-%{fixUP} -vT clients/fax500/xrpcomp -e 's:%LIBEXECDIR%:%{libexecdir}:g;'
-for i in servers/slapd/*.conf; do
-  %{fixUP} -vT $i -e 's:%SYSCONFDIR%:%{sysconfdir}:g;'
-done
-for i in doc/man/man1/*.1 doc/man/man3/*.3 doc/man/man5/*.5 doc/man/man8/*.8 ; do
-  %{fixUP} -vT $i -e '
-    s:ETCDIR:%{sysconfdir}:g +
-    s:DATADIR:%{datadir}:g +
-    s:SBINDIR:%{sbindir}:g +
-    s:BINDIR:%{bindir}:g +
-    s:LIBDIR:%{libdir}:g +
-    s:LIBEXECDIR:%{libexecdir}:g +
-    s:SYSCONFDIR:%{sysconfdir}:g;
-'
-done
+install -d $RPM_BUILD_ROOT/{etc/rc.d/init.d,var/ldap}
 
 make install \
-	prefix=$DESTDIR%{prefix} \
-	libexecdir=$DESTDIR%{libexecdir} \
-	sysconfdir=$DESTDIR%{sysconfdir} \
-	datadir=$DESTDIR%{datadir}
+	prefix=$RPM_BUILD_ROOT/usr \
+	sysconfdir=$RPM_BUILD_ROOT/etc
 
-strip `file $DESTDIR/usr/{bin,sbin}/* | grep ELF | cut -d':' -f 1`
-mkdir -p $DESTDIR/etc/rc.d/init.d
-cp openldap.init $DESTDIR/etc/rc.d/init.d/ldap
-chmod 755 $DESTDIR/etc/rc.d/init.d/ldap
+strip $RPM_BUILD_ROOT/usr/{bin,sbin}/*
 
-mkdir -p $DESTDIR/var/ldap
+rm -f $RPM_BUILD_ROOT/usr/man/man1/ldapadd.1
+echo ".so ldapmodify.1" > $RPM_BUILD_ROOT/usr/man/man1/ldapadd.1
 
-%{fixManPages}
+$RPM_BUILD_ROOT/usr/man/man3/{cldap,ld_errno,ldap_8859_to_t61}.3
+echo ".so cldap.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap.3
+echo ".so ldap_error.3" > $RPM_BUILD_ROOT/usr/man/man3/ld_errno.3
+echo ".so ldap_charset.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_8859_to_t61.3
 
+$RPM_BUILD_ROOT/usr/man/man8/{fax500,ldif2id2children,ldif2id2entry,ldif2index}.8
+echo ".so mail500.8" > $RPM_BUILD_ROOT/usr/man/man8/fax500.8
+echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT/usr/man/man8/ldif2id2children.8
+echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT/usr/man/man8/ldif2id2entry.8
+echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT/usr/man/man8/ldif2index.8
 
-%Clean
-DESTDIR=$RPM_BUILD_ROOT;export DESTDIR;[ -n "$UID" ]&&[ "$UID" -gt 0 ]&&exit 0
-[ -n "`echo $DESTDIR | sed -n 's:^/tmp/[^.].*$:OK:p'`" ] && rm -rf $DESTDIR ||
-(echo "Invalid BuildRoot: '$DESTDIR'! Check this .spec ..."; exit 1) || exit 1
+insyall openldap.init $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 
+gzip -9nf $RPM_BUILD_ROOT/usr/man/man*/*
 
-%Post servers
+%post servers
 lisa --SysV-init install ldap S91 3:4:5 K09 0:1:2:6
 
-
-%PostUn servers
+%postun servers
 lisa --SysV-init remove ldap $1
 
+%clean
+rm -rf $RPM_BUILD_ROOT
 
-%Files
+%files
 %doc ANNOUNCEMENT CHANGES COPYRIGHT LICENSE README
 %config /etc/ldap/*
 %dir /etc/ldap
@@ -150,14 +105,12 @@ lisa --SysV-init remove ldap $1
 /usr/man/man5/ldaptemplates.conf.5.gz
 /usr/man/man5/ud.conf.5.gz
 
-
-%Files devel
+%files devel
 /usr/include/*
 /usr/lib/*a
 /usr/man/man3/*
 
-
-%Files servers
+%files servers
 %config /etc/ldap/*
 %dir /etc/ldap
 /etc/rc.d/init.d/ldap
@@ -168,7 +121,6 @@ lisa --SysV-init remove ldap $1
 /usr/man/man5/slapd.conf.5.gz
 /usr/man/man5/slapd.replog.5.gz
 /usr/man/man8/*
-
 
 %ChangeLog
 * Fri Jan 08 1999 ...
