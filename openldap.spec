@@ -15,6 +15,7 @@ Source5:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
+Patch3:		%{name}-db3.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
@@ -22,6 +23,7 @@ BuildRequires:	perl
 BuildRequires:	openssl-devel
 BuildRequires:	cyrus-sasl-devel
 BuildRequires:	unixODBC-devel
+BuildRequires:	db3-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
@@ -101,12 +103,14 @@ Serwery (daemons) które przychodz± z LDAPem.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 install %{SOURCE3} .
 perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 %build
 autoconf
-CPPFLAGS="-I%{_includedir}/ncurses"
+CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
+CFLAGS="%{optflags} -I%{_includedir}/db3"
 %configure \
 	--enable-syslog \
 	--enable-proctitle \
@@ -115,7 +119,7 @@ CPPFLAGS="-I%{_includedir}/ncurses"
 	--enable-ipv6 \
 	--enable-local \
 	--with-cyrus-sasl \
-	--with-ldbm-api=gdbm \
+	--with-ldbm-api=berkeley \
 	--with-readline \
 	--with-threads \
 	--with-tls \
