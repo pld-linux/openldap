@@ -57,6 +57,7 @@ BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.159
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
+Obsoletes:	openldap-clients
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
