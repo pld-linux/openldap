@@ -335,6 +335,7 @@ Requires(post):	/usr/sbin/usermod
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}-%{release}
 
 %description servers
 The openldap2-server package has the slapd daemon which is responsible
