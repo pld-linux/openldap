@@ -1,9 +1,10 @@
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
-# _with_db3	- use old db3 package instead of db
+# _with_db3	- use old db3 package instead of db (and disable bdb backend)
 # _without_sasl - don't build cyrus sasl support
-# _without_odbc	- disable sql support
+# _without_odbc	- disable sql backend
+# _without_perl	- disable perl backend
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
@@ -12,29 +13,27 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
-Version:	2.0.27
-Release:	3
+Version:	2.1.12
+Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
-# Taken from http://www.openldap.org/doc/admin/guide.html. Tarball includes images.
-Source3:	ldap-guide.tar.gz
-Source5:	ldap.conf
+Source3:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
-Patch3:		%{name}-sql.patch
-Patch4:		%{name}-sendbuf.patch
-Patch5:		%{name}-syslog.patch
-Patch6:		%{name}-fast.patch
-Patch7:		%{name}-cldap.patch
-Patch8:		%{name}-no_libnsl.patch
-Patch9:		%{name}-ldapi_FHS.patch
-Patch10:	%{name}-ac25x.patch
-Patch11:	%{name}-db41.patch
-Patch12:	%{name}-secpatch.patch
+#Patch3:		%{name}-sendbuf.patch
+Patch4:		%{name}-sql.patch
+Patch5:		%{name}-fast.patch
+Patch6:		%{name}-cldap.patch
+#Patch7:		%{name}-no_libnsl.patch
+Patch8:		%{name}-ldapi_FHS.patch
+Patch9:		%{name}-ac25x.patch
+#Patch10:	%{name}-db41.patch
+#Patch11:	%{name}-secpatch.patch
+Patch12:	%{name}-link_no_static.patch
 URL:		http://www.openldap.org/
 %{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?_with_db3:BuildRequires:	db3-devel}
@@ -43,7 +42,7 @@ BuildRequires:	libltdl-devel
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	pam-devel
-BuildRequires:	perl
+BuildRequires:	ed
 BuildRequires:	readline-devel >= 4.2
 %{!?_without_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -184,6 +183,9 @@ The package includes:
 
 Install this package if you want to setup an OpenLDAP-2.x server.
 
+You will also need some backend for server, so install some openldap-backend
+package. The bdb backend is recommended.
+
 %description servers -l pl
 Serwery (demony) które przychodz± z LDAPem.
 
@@ -192,6 +194,9 @@ Pakiet ten zawiera:
 - serwer replikacji bazy LDAP (slurpd)
 
 Zainstaluj ten pakiet je¿eli potrzebujesz server OpenLDAP-2.x.
+
+Potrzebny te¿ jest jaki¶ backend dla serwera, dlatego nale¿y zainstalowaæ
+odpowiedni pakiet openldap-backend. Zalecany jest backend bdb.
 
 %description servers -l pt_BR
 O pacote openldap-server contém o servidor slapd que é responsável por
@@ -210,80 +215,182 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %description servers -l uk
 óÅÒ×ÅÒÁ (ÄÅÍÏÎÉ), ÝÏ ÐÏÓÔÁ×ÌÑÀÔØÓÑ Ú LDAP.
 
+%package backend-bdb
+Summary:	BDB backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-bdb
+BDB backend to slapd, the OpenLDAP server.
+
+%package backend-dnssrv
+Summary:	DNS SRV backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-dnssrv
+DNS SRV backend to slapd, the OpenLDAP server.
+
+#%package backend-ldap
+#Summary:	LDAP backend to Openldap server
+#Group:		Networking/Daemons
+#PreReq:		rc-scripts
+#Requires(post,pre):	/bin/ed
+#
+#%description backend-ldap
+#LDAP backend to slapd, the OpenLDAP server.
+
+%package backend-ldbm
+Summary:	LDBM backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-ldbm
+LDBM backend to slapd, the OpenLDAP server.
+
+%package backend-meta
+Summary:	Meta backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-meta
+Meta backend to slapd, the OpenLDAP server.
+
+%package backend-monitor
+Summary:	Monitor backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-monitor
+Meta backend to slapd, the OpenLDAP server.
+
+%package backend-passwd
+Summary:	/etc/passwd backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-passwd
+/etc/passwd backend to slapd, the OpenLDAP server.
+
+%package backend-perl
+Summary:	Perl backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-perl
+Perl backend to slapd, the OpenLDAP server.
+
+%package backend-shell
+Summary:	Shell backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-shell
+Shell backend to slapd, the OpenLDAP server.
+
+%package backend-sql
+Summary:	SQL backend to Openldap server
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(post,pre):	/bin/ed
+
+%description backend-sql
+SQL backend to slapd, the OpenLDAP server.
+
 %prep
-%setup -q -a 3
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+#%patch3 -p1
 %patch4 -p1
+
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
+#%patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p0
+#%patch10 -p1
+#%patch11 -p0
+%patch12 -p1
 
 %build
-CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
-CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
+CPPFLAGS="-I%{_includedir}/ncurses %{?_with_db3:-I%{_includedir}/db3}"
+CFLAGS="%{rpmcflags} %{?_with_db3:-I%{_includedir}/db3}"
+LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 %configure2_13 \
 	--enable-syslog \
-	--enable-proctitle \
 	--enable-cache \
 	--enable-referrals \
 	--enable-ipv6 \
 	--enable-local \
 %{!?_without_sasl:--with-cyrus-sasl} \
-%{!?_without_sasl:--enable-spasswd} \
 	--with-readline \
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
-	--enable-slapd \
-	--enable-crypt \
-	--enable-multimaster \
-	--enable-phonetic \
-	--enable-rlookups \
 	--enable-aci \
-	--enable-wrappers \
-	--enable-dynamic \
+	--enable-crypt \
+	--enable-lmpasswd \
+%{!?_without_sasl:--enable-spasswd} \
 	--enable-modules \
+	--enable-phonetic \
+	--enable-rewrite \
+	--enable-rlookups \
+	--disable-slp \
+	--enable-wrappers \
+%{?!_with_db3:--enable-bdb}%{?_with_db3:--disable-bdb} \
+%{?!_with_db3:--with-bdb-module=dynamic} \
 	--enable-dnssrv \
 	--with-dnssrv-module=dynamic \
 	--enable-ldap \
 	--with-ldap-module=dynamic \
 	--enable-ldbm \
-	--with-ldbm-module=static \
+	--with-ldbm-module=dynamic \
 	--with-ldbm-api=berkeley \
 	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{?!ldbm_type:btree} \
+	--enable-meta \
+	--with-meta-module=dynamic \
+	--enable-monitor \
+	--with-monitor-module=dynamic \
+	--enable-null \
+	--with-null-module=static \
 	--enable-passwd \
 	--with-passwd-module=dynamic \
+%{!?_without_perl:--enable-perl} \
+%{!?_without_perl:--with-perl-module=dynamic} \
 	--enable-shell \
-	--with-shell-module=static \
+	--with-shell-module=dynamic \
+%{!?_without_odbc:--enable-sql} \
+%{!?_without_odbc:--with-sql-module=dynamic} \
 	--enable-slurpd \
 	--enable-shared \
-	--enable-static \
-%{!?_without_odbc:--enable-sql} \
-%{!?_without_odbc:--with-sql-module=dynamic} 
+	--enable-static
 
-
-# without this server won't start
-#echo "#undef HAVE_GETADDRINFO" >> include/portable.h
 
 %{__make} depend
 %{__make}
 
 # avoid relinking to allow build without openldap-devel already installed
 for d in libraries/libldap/libldap.la libraries/libldap_r/libldap_r.la ; do
-	perl -pi -e 's/^relink_command.*//' $d
+	ed $d <<EOF
+,s/^relink_command.*//
+w
+q
+EOF
 done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm} \
+install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-data} \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/schema
 
 rm -f doc/rfc/rfc*
@@ -291,19 +398,17 @@ rm -f doc/rfc/rfc*
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
-
-# hack the default config files
-perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.conf
-
-perl -pi -e "s|^#! /bin/sh|#!/bin/sh|g" $RPM_BUILD_ROOT%{_sbindir}/xrpcomp
+mv $RPM_BUILD_ROOT%{_libexecdir}/openldap/ $RPM_BUILD_ROOT%{_libdir}
+rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
-install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
+install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
+
+rm -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.default,ldap.conf}
 
 # Standard schemas should not be changed by users
 mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema/
@@ -338,7 +443,7 @@ if [ -n "`id -u slapd 2>/dev/null`" ]; then
 	fi
 else
 	/usr/sbin/useradd -M -r -u 93 -s /bin/false -g slapd \
-		-c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2
+		-c "OpenLDAP server" -d /var/lib/openldap-data slapd 1>&2
 fi
 
 %post servers
@@ -363,15 +468,213 @@ if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel slapd
 fi
 
+%if %{!?_with_db3:1}%{?_with_db3:0}
+%post backend-bdb
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/moduleload    back_bdb.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-bdb
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_bdb.la[[:blank:]]*$/# moduleload    back_bdb.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+%endif
+
+%post backend-dnssrv
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_dnssrv.la[[:blank:]]*$/moduleload    back_dnssrv.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-dnssrv
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_dnssrv.la[[:blank:]]*$/# moduleload    back_dnssrv.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
+#%%post backend-ldap
+#ed %%{_sysconfdir}/openldap/slapd.conf << EOF 
+#,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/moduleload    back_ldap.la/ 
+#w
+#q
+#EOF
+#if [ -f /var/lock/subsys/ldap ]; then
+#	/etc/rc.d/init.d/ldap restart >&2
+#fi
+#
+#%%preun backend-ldap
+#ed %%{_sysconfdir}/openldap/slapd.conf << EOF\
+#,s/^# moduleload    back_ldap.la[[:blank:]]*$/# moduleload    back_ldap.la/\
+#w\
+#q\
+#EOF\
+#if [ -f /var/lock/subsys/ldap ]; then\
+#	/etc/rc.d/init.d/ldap restart >&2\
+#fi
+
+%post backend-ldbm
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldbm.la[[:blank:]]*$/moduleload    back_ldbm.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-ldbm
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_ldbm.la[[:blank:]]*$/# moduleload    back_ldbm.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
+%post backend-meta
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_meta.la[[:blank:]]*$/moduleload    back_meta.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-meta
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_meta.la[[:blank:]]*$/# moduleload    back_meta.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
+%post backend-monitor
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_monitor.la[[:blank:]]*$/moduleload    back_monitor.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-monitor
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_monitor.la[[:blank:]]*$/# moduleload    back_monitor.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
+%post backend-passwd
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_passwd.la[[:blank:]]*$/moduleload    back_passwd.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-passwd
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_passwd.la[[:blank:]]*$/# moduleload    back_passwd.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
+%post backend-perl
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/moduleload    back_perl.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-perl
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_perl.la[[:blank:]]*$/# moduleload    back_perl.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
+%post backend-shell
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/moduleload    back_shell.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-shell
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_shell.la[[:blank:]]*$/# moduleload    back_shell.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
+%post backend-sql
+ed %{_sysconfdir}/openldap/slapd.conf << EOF 
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/moduleload    back_sql.la/ 
+w
+q
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-sql
+ed %{_sysconfdir}/openldap/slapd.conf << EOF\
+,s/^# moduleload    back_sql.la[[:blank:]]*$/# moduleload    back_sql.la/\
+w\
+q\
+EOF\
+if [ -f /var/lock/subsys/ldap ]; then\
+	/etc/rc.d/init.d/ldap restart >&2\
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc ANNOUNCEMENT CHANGES COPYRIGHT README
 %doc doc/{drafts,rfc}
-%doc guide
 %dir %{_sysconfdir}/openldap
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldaptemplates.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapserver
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_bindir}/*
@@ -379,13 +682,8 @@ fi
 %dir %{_datadir}/openldap
 %{_datadir}/openldap/*
 %{_mandir}/man1/*
-%{_mandir}/man5/ldap.conf.5*
-%{_mandir}/man5/ldapfilter.conf.5*
-%{_mandir}/man5/ldapfriendly.5*
-%{_mandir}/man5/ldapsearchprefs.conf.5*
-%{_mandir}/man5/ldaptemplates.conf.5*
-%{_mandir}/man5/ldif.5*
-%{_mandir}/man5/ud.conf.5*
+%{_mandir}/man5/ldap.*
+%{_mandir}/man5/ldif.*
 
 %files devel
 %defattr(644,root,root,755)
@@ -406,14 +704,57 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
-%attr(770,root,slapd) %{_localstatedir}/openldap-ldbm
+%attr(770,root,slapd) %{_localstatedir}/openldap-data
 %attr(770,root,slapd) %{_localstatedir}/openldap-slurp
-%{_datadir}/openldap/*.help
 %dir %{_datadir}/openldap/schema
 %{_datadir}/openldap/schema/*.schema
 %dir %{_libdir}/openldap/
-%attr(755,root,root) %{_libdir}/openldap/*
 %attr(755,root,root) %{_sbindir}/*
-%{_mandir}/man5/slapd.conf.5*
-%{_mandir}/man5/slapd.replog.5*
+%{_mandir}/man5/slapd*
 %{_mandir}/man8/*
+
+%if %{!?_with_db3:1}%{?_with_db3:0}
+%files backend-bdb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_bdb*
+%endif
+
+%files backend-dnssrv
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_dnssrv*
+
+#%files backend-ldap
+#%defattr(644,root,root,755)
+#%attr(755,root,root) %{_libdir}/openldap/back_ldap*
+
+%files backend-ldbm
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_ldbm*
+
+%files backend-meta
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_meta*
+
+%files backend-monitor
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_monitor*
+
+%files backend-passwd
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_passwd*
+
+%if %{!?_without_perl:1}%{?_without_perl:0}
+%files backend-perl
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_perl*
+%endif
+
+%files backend-shell
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_shell*
+
+%if %{!?_without_odbc:1}%{?_without_perl:0}
+%files backend-sql
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_sql*
+%endif
