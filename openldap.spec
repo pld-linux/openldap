@@ -16,7 +16,7 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.22
+Version:	2.2.23
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
