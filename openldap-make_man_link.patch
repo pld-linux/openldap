@@ -1,0 +1,12 @@
+diff -Nru ldap/build/man.mk ldap.new/build/man.mk
+--- ldap/build/man.mk	Fri Jul 16 17:13:07 1999
++++ ldap.new/build/man.mk	Thu Aug 19 03:16:28 1999
+@@ -36,7 +36,7 @@
+ 			for link in `$(CAT) $(srcdir)/$$page.links`; do \
+ 				echo "installing $(MANDIR)/$$link as link to $$page"; \
+ 				$(RM) $(MANDIR)/$$link; \
+-				$(LN_S) $$page $(MANDIR)/$$link; \
++				echo ".so $$page" > $(MANDIR)/$$link; \
+ 			done; \
+ 		fi; \
+ 	done
