@@ -38,10 +38,10 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/ldap ]; then
 		msg_starting "OpenLDAP"
 		ARGS="-u slapd -g slapd"
-		if [ -n "$SLAPDSYSLOGLEVEL" ] ; then
+		if [ -n "$SLAPDSYSLOGLEVEL" ]; then
 			ARGS="$ARGS -s $SLAPDSYSLOGLEVEL"
 		fi
-		if [ -n "$SLAPDURLLIST" ] ; then
+		if [ -n "$SLAPDURLLIST" ]; then
 			ARGS="$ARGS -h \"$SLAPDURLLIST\""
 		fi
 		daemon slapd $ARGS
@@ -54,7 +54,7 @@ case "$1" in
 			[ $RETVAL -eq 0 ] && RETVAL=$RET
 		fi
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
-		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ] ; then
+		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
 			chown "$LDAPI_SOCKET_OWNER"."$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
 			chmod "$LDAPI_SOCKET_MODE" /var/run/ldapi 
 		fi
