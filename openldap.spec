@@ -10,8 +10,8 @@ Source1:	ldap.init
 Source2:	openldap.sysconfig
 Patch0:		openldap-man.patch
 URL:		http://www.openldap.org/
-BuildPrereq:	ncurses-devel
-BuildPrereq:	libwrap
+BuildRequires:	ncurses-devel
+BuildRequires:	libwrap
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %Description
