@@ -1,8 +1,12 @@
+#
+# Conditional build:
+# ldbm_type - set to needed value (btree<default> or hash)
+#
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
 Version:	2.0.4
-Release:	1
+Release:	2
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
@@ -141,7 +145,7 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-ldbm \
 	--with-ldbm-module=static \
 	--with-ldbm-api=berkeley \
-	--with-ldbm-type=btree \
+	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{?!ldbm_type:btree} \
 	--enable-passwd \
 	--with-passwd-module=dynamic \
 	--enable-shell \
