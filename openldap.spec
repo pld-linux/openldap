@@ -13,6 +13,8 @@ Source3:	http://www.padl.com/download/MigrationTools.tgz
 Source4:	MigrationTools.txt
 Patch0:		openldap-man.patch
 Patch1:		openldap-make_man_link.patch
+Patch2:		openldap-migrate_passwd.patch
+Patch3:		openldap-config.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel
 BuildRequires:	libwrap-devel
@@ -88,6 +90,8 @@ Serwery (daemons) które przychodz± z LDAPem.
 %setup  -q -n ldap -a 3
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 install %{SOURCE4} .
 
