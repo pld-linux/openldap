@@ -5,12 +5,12 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	2.0.4
-Release:	2
+Version:	2.0.5
+Release:	1
+License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
-Copyright:	Artistic
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
@@ -194,10 +194,7 @@ echo "# This is a good plase to put slapd access-control directives" > \
 echo "# This is a good plase to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
-strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
-
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
-	ANNOUNCEMENT CHANGES COPYRIGHT README \
+gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
 	doc/rfc/* doc/drafts/*
 
 %post   -p /sbin/ldconfig
