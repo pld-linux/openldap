@@ -254,7 +254,7 @@ echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT/usr/man/man8/ldif2index.8
 
 (
 	cd $RPM_BUILD_ROOT/usr/sbin/
-	sed -e "s|^#! /bin/sh|#!/bin/sh|g" <xrpcomp xrpcomp.work
+	sed -e "s|^#! /bin/sh|#!/bin/sh|g" < xrpcomp >xrpcomp.work
 	mv xrpcomp.work xrpcomp
 	chmod a+x xrpcomp
 )
