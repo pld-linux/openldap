@@ -1,12 +1,12 @@
-diff -durN openldap-2.0.23.orig/include/Makefile.in openldap-2.0.23/include/Makefile.in
---- openldap-2.0.23.orig/include/Makefile.in	Fri Jan  4 21:38:14 2002
-+++ openldap-2.0.23/include/Makefile.in	Tue Apr  2 14:55:03 2002
-@@ -34,7 +34,7 @@
- 			-e 's;%BINDIR%;$(bindir);' \
- 			-e 's;%SBINDIR%;$(sbindir);' \
- 			-e 's;%LIBEXECDIR%;$(libexecdir);' \
--			-e 's;%RUNDIR%;$(localstatedir);' \
-+			-e 's;%RUNDIR%;/var/run/;' \
- 			-e 's;%EDITOR%;$(EDITOR);' \
- 			-e 's;%FINGER%;$(FINGER);' \
- 			-e 's;%SENDMAIL%;$(SENDMAIL);' \
+diff -durN openldap-2.0.25.orig/include/ldap_defaults.h openldap-2.0.25/include/ldap_defaults.h
+--- openldap-2.0.25.orig/include/ldap_defaults.h	Tue Jul  2 10:13:00 2002
++++ openldap-2.0.25/include/ldap_defaults.h	Tue Jul  2 10:15:37 2002
+@@ -37,7 +37,7 @@
+ #define LDAP_ENV_PREFIX "LDAP"
+ 
+ /* default ldapi:// socket */
+-#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "ldapi"
++#define LDAPI_SOCK "/var/run/ldapi"
+ 
+ /* default file: URI prefix */
+ #define LDAP_FILE_URI_PREFIX "file://" LDAP_TMPDIR LDAP_DIRSEP
