@@ -34,6 +34,7 @@ Patch8:		%{name}-no_libnsl.patch
 Patch9:		%{name}-ldapi_FHS.patch
 Patch10:	%{name}-ac25x.patch
 Patch11:	%{name}-db41.patch
+Patch12:	%{name}-secpatch.patch
 URL:		http://www.openldap.org/
 %{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?_with_db3:BuildRequires:	db3-devel}
@@ -223,6 +224,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 %build
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
