@@ -753,7 +753,7 @@ fi
 
 #%files backend-ldap
 #%defattr(644,root,root,755)
-#%{_libdir}/openldap/back_ldap.la
+#%%{_libdir}/openldap/back_ldap.la
 #%attr(755,root,root) %{_libdir}/openldap/back_ldap.s*
 
 %files backend-ldbm
