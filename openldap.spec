@@ -14,6 +14,7 @@ Source4:	MigrationTools.txt
 Source5:	ldap.conf
 Source6:	slapd.at-rfc2307.conf
 Source7:	slapd.oc-rfc2307.conf
+Source8:	ldapsetupdb
 Patch0:		openldap-man.patch
 Patch1:		openldap-make_man_link.patch
 Patch2:		openldap-migrate_passwd.patch
@@ -148,10 +149,17 @@ install %{SOURCE6} %{SOURCE7} $RPM_BUILD_ROOT%{_datadir}/openldap
 mv $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{slapd.at.conf,slapd.oc.conf} \
 		$RPM_BUILD_ROOT%{_datadir}/openldap
 
+# create slapd.access.conf
+echo "# This is a good plase to put slapd access-control directives" \
+         > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.access.conf
+
 # deal with the migration tools
 install MigrationTools-*/migrate_* \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/migration
 cp MigrationTools-*/README README.migration
+
+# deal with ldapsetupdb
+install %{SOURCE8} $RPM_BUILD_ROOT%{_sbindir}
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
 
@@ -168,10 +176,10 @@ chkconfig --add ldap
 if test -r /var/lock/subsys/ldap; then
 	/etc/rc.d/init.d/ldap restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/ldap start\" to start sldap server."
+	echo "Run \"ldapsetupdb\" to configure and start sldap server."
 fi
 			
-%postun servers
+%preun servers
 if [ "$1" = "0" ] ; then
 	chkconfig --del ldap
 	/etc/rc.d/init.d/ldap stop
@@ -221,6 +229,7 @@ rm -rf $RPM_BUILD_ROOT
 %files servers
 %defattr(644,root,root,755)
 %attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
+%attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(700,root,root) %{_localstatedir}/state/openldap
