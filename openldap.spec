@@ -23,7 +23,8 @@ Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 # Taken from http://www.openldap.org/doc/admin/guide.html. Tarball includes images.
-#Source3:	ldap-guide.tar.gz
+Source3:	ldap-guide.tar.gz
+# Source3-md5:	7b5cdc5a2ca4f0e6050da4e223accaae
 Source5:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
@@ -214,7 +215,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 Сервера (демони), що поставляються з LDAP.
 
 %prep
-%setup -q
+%setup -q -a 3
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -370,7 +371,7 @@ fi
 %defattr(644,root,root,755)
 %doc ANNOUNCEMENT CHANGES COPYRIGHT README
 %doc doc/{drafts,rfc}
-#%%doc guide
+%doc guide
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
