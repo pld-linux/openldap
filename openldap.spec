@@ -23,6 +23,7 @@ BuildRequires:	perl
 BuildRequires:	openssl-devel
 BuildRequires:	cyrus-sasl-devel
 BuildRequires:	unixODBC-devel
+BuildRequires:	libltdl-devel
 BuildRequires:	db3-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -119,7 +120,6 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-ipv6 \
 	--enable-local \
 	--with-cyrus-sasl \
-	--with-ldbm-api=berkeley \
 	--with-readline \
 	--with-threads \
 	--with-tls \
@@ -140,6 +140,8 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--with-ldap-module=static \
 	--enable-ldbm \
 	--with-ldbm-module=static \
+	--with-ldbm-api=berkeley \
+	--with-ldbm-type=btree \
 	--enable-passwd \
 	--with-passwd-module=dynamic \
 	--enable-shell \
@@ -151,7 +153,7 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-static
 
 # without this server won't start
-echo "#undef HAVE_GETADDRINFO" >> include/portable.h
+#echo "#undef HAVE_GETADDRINFO" >> include/portable.h
 
 %{__make} depend
 %{__make}
