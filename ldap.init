@@ -32,7 +32,7 @@ case "$1" in
 		daemon slapd
 		if grep -q '^replogfile' /etc/ldap/slapd.conf; then
 			show "Starting slurpd"
-			daemon $SLURPNICE slurpd
+			daemon slurpd
 		fi
 	else
 		echo "OpenLDAP already is running"
