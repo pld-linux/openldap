@@ -12,6 +12,8 @@ LDAPI_SOCKET_MODE=600
 LDAPI_SOCKET_OWNER=root
 LDAPI_SOCKET_GROUP=root
 
+# additional slapd options, e.g. "-4" to disable IPv6
+#SLAPDOPTIONS="-4"
+
 # nice level for slurp
 SLURPNICE="+2"
-
