@@ -6,7 +6,7 @@ Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
 Version:	2.0.7
-Release:	15
+Release:	16
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -29,10 +29,10 @@ Patch9:		%{name}-cldap.patch
 Patch10:	%{name}-norbert.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
-BuildRequires:	ncurses-devel >= 5.0
+BuildRequires:	ncurses-devel >= 5.2
 BuildRequires:	libwrap-devel
+BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl
-BuildRequires:	openssl-devel
 BuildRequires:	cyrus-sasl-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	libltdl-devel >= 1.4
