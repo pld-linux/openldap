@@ -16,7 +16,7 @@ Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
 Version:	2.2.6
-Release:	0.2
+Release:	0.3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -48,6 +48,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	readline-devel >= 4.2
 %{?with_odbc:BuildRequires:	unixODBC-devel}
+Requires:	%{name}-%{libs} = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
@@ -100,7 +101,7 @@ Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusão para o Ope
 Summary(ru):	æÁÊÌÙ ÄÌÑ ĞÒÏÇÒÁÍÍÉÒÏ×ÁÎÉÑ Ó LDAP
 Summary(uk):	æÁÊÌÉ ÄÌÑ ĞÒÏÇÒÁÍÕ×ÁÎÎÑ Ú LDAP
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel}
 Requires:	db-devel >= 4.2
 Requires:	openssl-devel >= 0.9.7c
@@ -156,68 +157,6 @@ Bibliotecas estáticas para desenvolvimento com openldap.
 %description static -l uk
 óÔÁÔÉŞÎ¦ Â¦ÂÌ¦ÏÔÅËÉ, ÎÅÏÂÈ¦ÄÎ¦ ÄÌÑ ÒÏÚÒÏÂËÉ ĞÒÏÇÒÁÍ, İÏ ×ÉËÏÒÉÓÔÏ×ÕÀÔØ
 LDAP.
-
-%package servers
-Summary:	LDAP servers
-Summary(pl):	Serwery LDAP
-Summary(pt_BR):	Arquivos para o servidor OpenLDAP
-Summary(ru):	óÅÒ×ÅÒÁ LDAP
-Summary(uk):	óÅÒ×ÅÒÁ LDAP
-Group:		Networking/Daemons
-PreReq:		rc-scripts
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getent
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
-Requires(pre):	textutils
-Requires(post):	/usr/sbin/usermod
-Requires(postun):	/usr/sbin/userdel
-Requires(postun):	/usr/sbin/groupdel
-Requires(post,preun):	/sbin/chkconfig
-
-%description servers
-The openldap2-server package has the slapd daemon which is responsible
-for handling the database and client queries.
-
-The package includes:
-- stand-alone LDAP server (slapd),
-- stand-alone LDAP replication server (slurpd)
-
-Install this package if you want to setup an OpenLDAP-2.x server.
-
-You will also need some backend for server, so install some
-openldap-backend package. The bdb backend is recommended.
-
-%description servers -l pl
-Serwery (demony) które przychodz± z LDAPem.
-
-Pakiet ten zawiera:
-- serwer LDAP (slapd)
-- serwer replikacji bazy LDAP (slurpd)
-
-Zainstaluj ten pakiet je¿eli potrzebujesz server OpenLDAP-2.x.
-
-Potrzebny te¿ jest jaki¶ backend dla serwera, dlatego nale¿y
-zainstalowaæ odpowiedni pakiet openldap-backend. Zalecany jest backend
-bdb.
-
-%description servers -l pt_BR
-O pacote openldap-server contém o servidor slapd que é responsável por
-receber as requisições dos clientes e por manter a base de dados do
-diretório.
-
-O conjunto completo contém:
-- servidor LDAP (slapd),
-- servidor de replicação (slurpd)
-
-Instale este pacote se você desejar executar um servidor OpenLDAP.
-
-%description servers -l ru
-óÅÒ×ÅÒÁ (ÄÅÍÏÎÙ), ĞÏÓÔÁ×ÌÑÅÍÙÅ Ó LDAP.
-
-%description servers -l uk
-óÅÒ×ÅÒÁ (ÄÅÍÏÎÉ), İÏ ĞÏÓÔÁ×ÌÑÀÔØÓÑ Ú LDAP.
 
 %package backend-bdb
 Summary:	BDB backend to OpenLDAP server
@@ -362,6 +301,80 @@ SQL backend to slapd, the OpenLDAP server.
 %description backend-sql -l pl
 Backend SQL do slapd - serwera OpenLDAP.
 
+%package servers
+Summary:	LDAP servers
+Summary(pl):	Serwery LDAP
+Summary(pt_BR):	Arquivos para o servidor OpenLDAP
+Summary(ru):	óÅÒ×ÅÒÁ LDAP
+Summary(uk):	óÅÒ×ÅÒÁ LDAP
+Group:		Networking/Daemons
+PreReq:		rc-scripts
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getent
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(pre):	textutils
+Requires(post):	/usr/sbin/usermod
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
+Requires(post,preun):	/sbin/chkconfig
+
+%package libs
+Summary:	LDAP shared libraries
+Summary(pl):	Biblioteki wspó³dzielone LDAP
+Group:		Libraries
+Conflicts:	openldap < 2.2.6-0.3
+
+%description libs
+LDAP shared libraries.
+
+%description libs -l pl
+Biblioteki wspó³dzielone LDAP.
+
+%description servers
+The openldap2-server package has the slapd daemon which is responsible
+for handling the database and client queries.
+
+The package includes:
+- stand-alone LDAP server (slapd),
+- stand-alone LDAP replication server (slurpd)
+
+Install this package if you want to setup an OpenLDAP-2.x server.
+
+You will also need some backend for server, so install some
+openldap-backend package. The bdb backend is recommended.
+
+%description servers -l pl
+Serwery (demony) które przychodz± z LDAPem.
+
+Pakiet ten zawiera:
+- serwer LDAP (slapd)
+- serwer replikacji bazy LDAP (slurpd)
+
+Zainstaluj ten pakiet je¿eli potrzebujesz server OpenLDAP-2.x.
+
+Potrzebny te¿ jest jaki¶ backend dla serwera, dlatego nale¿y
+zainstalowaæ odpowiedni pakiet openldap-backend. Zalecany jest backend
+bdb.
+
+%description servers -l pt_BR
+O pacote openldap-server contém o servidor slapd que é responsável por
+receber as requisições dos clientes e por manter a base de dados do
+diretório.
+
+O conjunto completo contém:
+- servidor LDAP (slapd),
+- servidor de replicação (slurpd)
+
+Instale este pacote se você desejar executar um servidor OpenLDAP.
+
+%description servers -l ru
+óÅÒ×ÅÒÁ (ÄÅÍÏÎÙ), ĞÏÓÔÁ×ÌÑÅÍÙÅ Ó LDAP.
+
+%description servers -l uk
+óÅÒ×ÅÒÁ (ÄÅÍÏÎÉ), İÏ ĞÏÓÔÁ×ÌÑÀÔØÓÑ Ú LDAP.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -481,8 +494,8 @@ echo "# This is a good place to put your schema definitions " > \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post   -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post	libs	-p /sbin/ldconfig
+%postun	libs	-p /sbin/ldconfig
 
 %pre servers
 if [ -n "`getgid slapd`" ]; then
@@ -741,7 +754,6 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapserver
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_datadir}/openldap
 %{_datadir}/openldap/ucdata
 %{_mandir}/man1/ldap*.1*
@@ -758,24 +770,6 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
-
-%files servers
-%defattr(644,root,root,755)
-%dir %{_sysconfdir}/openldap/schema
-%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
-%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/schema/*.schema
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
-%attr(754,root,root) /etc/rc.d/init.d/ldap
-%attr(770,root,slapd) %{_localstatedir}/openldap-data
-%attr(770,root,slapd) %{_localstatedir}/openldap-slurp
-%dir %{_datadir}/openldap/schema
-%{_datadir}/openldap/schema/*.schema
-%dir %{_libdir}/openldap/
-%attr(755,root,root) %{_sbindir}/*
-%{_mandir}/man5/slapd.*.5*
-%{_mandir}/man5/slapd-null.5*
-%{_mandir}/man8/*
 
 %files backend-bdb
 %defattr(644,root,root,755)
@@ -848,3 +842,25 @@ fi
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
 %endif
+
+%files libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+
+%files servers
+%defattr(644,root,root,755)
+%dir %{_sysconfdir}/openldap/schema
+%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
+%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/schema/*.schema
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
+%attr(754,root,root) /etc/rc.d/init.d/ldap
+%attr(770,root,slapd) %{_localstatedir}/openldap-data
+%attr(770,root,slapd) %{_localstatedir}/openldap-slurp
+%dir %{_datadir}/openldap/schema
+%{_datadir}/openldap/schema/*.schema
+%dir %{_libdir}/openldap/
+%attr(755,root,root) %{_sbindir}/*
+%{_mandir}/man5/slapd.*.5*
+%{_mandir}/man5/slapd-null.5*
+%{_mandir}/man8/*
