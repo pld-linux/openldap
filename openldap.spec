@@ -456,6 +456,7 @@ rm -f doc/rfc/rfc*
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
+	$RPM_BUILD_ROOT/var/run/slapd \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/schema
 
 %{__make} install \
