@@ -11,8 +11,6 @@ Version:	2.0.21
 Release:	2
 License:	Artistic
 Group:		Networking/Daemons
-Group(de):	Netzwerkwesen/Server
-Group(pl):	Sieciowe/Serwery
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
@@ -86,13 +84,6 @@ Summary(pl):	Pliki dla developerСw LDAP
 Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusЦo para o OpenLDAP
 Summary(es):	Bibliotecas de desarrollo y archivos de inclusiСn para OpenLDAP
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 Requires:	cyrus-sasl-devel
 Requires:	pam-devel
@@ -119,13 +110,6 @@ Summary:	LDAP static libraries
 Summary(pl):	Biblioteki statyczne LDAP
 Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com openldap
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-devel = %{version}
 
 %description static
@@ -145,8 +129,6 @@ Summary:	LDAP servers
 Summary(pl):	Serwery LDAP
 Summary(pt_BR):	Arquivos para o servidor OpenLDAP
 Group:		Networking/Daemons
-Group(de):	Netzwerkwesen/Server
-Group(pl):	Sieciowe/Serwery
 Prereq:		shadow
 Prereq:		rc-scripts
 Prereq:		/sbin/chkconfig
