@@ -133,7 +133,6 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-spasswd \
 	--enable-multimaster \
 	--enable-phonetic \
-	--enable-modules \
 	--enable-rlookups \
 	--enable-aci \
 	--enable-wrappers \
@@ -156,6 +155,8 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-shared \
 	--enable-static
 
+# modules are disabled in 2.0.5 (why?)
+#	--enable-modules 
 # without this server won't start
 #echo "#undef HAVE_GETADDRINFO" >> include/portable.h
 
@@ -169,7 +170,7 @@ install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm,%{
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
+#mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
 
 # hack the default config files
 perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
@@ -273,8 +274,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/openldap/*.help
 %{_datadir}/openldap/ldapfriendly
 %{_datadir}/openldap/schema
-%dir %{_libdir}/openldap/
-%attr(755,root,root) %{_libdir}/openldap/*
+#%dir %{_libdir}/openldap/
+#%attr(755,root,root) %{_libdir}/openldap/*
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/ldif.5*
 %{_mandir}/man5/slapd.conf.5*
