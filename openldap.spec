@@ -86,8 +86,8 @@ make install \
 	libexecdir=$RPM_BUILD_ROOT/usr/sbin \
 	sysconfdir=$RPM_BUILD_ROOT/etc/ldap
 
-chmod a+x $RPM_BUILD_ROOT/usr/lib/*.so.*.*
-strip --strip-unneeded $RPM_BUILD_ROOT/usr/lib/*.so.*.*
+chmod a+x $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
+strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
 strip $RPM_BUILD_ROOT/usr/{bin,sbin}/* || :
 
 rm -f $RPM_BUILD_ROOT%{_mandir}/man1/ldapadd.1
@@ -313,7 +313,7 @@ rm -rf $RPM_BUILD_ROOT
 %config /etc/ldap/ldap.conf
 %attr(755,root,root) /usr/sbin/xrpcomp
 %attr(755,root,root) /usr/bin/*
-%attr(755,root,root) /usr/lib/lib*.so.*.*.*
+%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %{_mandir}/man1/*
 %{_mandir}/man5/ldap.conf.5.gz
 %{_mandir}/man5/ldapfilter.conf.5.gz
@@ -324,13 +324,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) /usr/lib/lib*.so
+%attr(755,root,root) %{_libdir}/lib*.so
 /usr/include/*
 %{_mandir}/man3/*
 
 %files static
 %defattr(644,root,root,755)
-/usr/lib/lib*.a
+%{_libdir}/lib*.a
 
 %files servers
 %defattr(644,root,root,755)
