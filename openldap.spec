@@ -1,11 +1,11 @@
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
-# _with_db3	- use old db3 package instead of db (and disable bdb backend)
-# _without_sasl - don't build cyrus sasl support
-# _without_odbc	- disable sql backend
-# _without_perl	- disable perl backend
-# _without_slp  - disable SLP support
+%bcond_with	db3	# use old db3 package instead of db (and disable bdb backend)
+%bcond_without	sasl 	# don't build cyrus sasl support
+%bcond_without	odbc	# disable sql backend
+%bcond_without	perl	# disable perl backend
+%bcond_without	slp  	# disable SLP support
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
@@ -14,12 +14,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.1.22
+Version:	2.1.23
 Release:	0.1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	391512053eded93e73ffa0d377ce272a
+# Source0-md5:	a25b5806f8fe031e248f99ca7fe6df2c
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -37,17 +37,17 @@ Patch12:	%{name}-perl.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
-%{?_with_db3:BuildRequires:	db3-devel}
-%{!?_with_db3:BuildRequires:	db-devel}
+%{?with_sasl:BuildRequires:	cyrus-sasl-devel}
+%{?with_db3:BuildRequires:	db3-devel}
+%{!?with_db3:BuildRequires:	db-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
-%{!?_without_slp:BuildRequires:	openslp-devel}
+%{?with_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 0.9.7c
 BuildRequires:	pam-devel
 BuildRequires:	readline-devel >= 4.2
-%{!?_without_odbc:BuildRequires:	unixODBC-devel}
+%{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
@@ -101,10 +101,13 @@ Summary(ru):	Файлы для программирования с LDAP
 Summary(uk):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
-%{!?_without_sasl:Requires:	cyrus-sasl-devel}
+%{?with_sasl:Requires:	cyrus-sasl-devel}
 Requires:	pam-devel
-%{?_with_db3:Requires:	db3-devel}
-%{!?_with_db3:Requires:	db-devel}
+%if %{with db3}
+Requires:	db3-devel
+%else
+Requires:	db-devel
+%endif
 Requires:	openssl-devel >= 0.9.7c
 
 %description devel
@@ -369,16 +372,15 @@ Backend SQL do slapd - serwera OpenLDAP.
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
-CPPFLAGS="-I%{_includedir}/ncurses %{?_with_db3:-I%{_includedir}/db3}"
-CFLAGS="%{rpmcflags} %{?_with_db3:-I%{_includedir}/db3}"
-LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
+CPPFLAGS="-I%{_includedir}/ncurses %{?with_db3:-I%{_includedir}/db3}"
+CFLAGS="%{rpmcflags} %{?with_db3:-I%{_includedir}/db3}"
+LDFLAGS="%{rpmldflags} %{?with_db3:-ldb3}"
 %configure \
 	--enable-syslog \
 	--enable-cache \
 	--enable-referrals \
 	--enable-ipv6 \
 	--enable-local \
-%{!?_without_sasl:--with-cyrus-sasl} \
 	--with-readline \
 	--with-threads \
 	--with-tls \
@@ -386,16 +388,26 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 	--enable-aci \
 	--enable-crypt \
 	--enable-lmpasswd \
-%{!?_without_sasl:--enable-spasswd} \
+%if %{with sasl}
+	--with-cyrus-sasl \
+	--enable-spasswd \
+%endif
 	--enable-modules \
 	--enable-phonetic \
 	--enable-rewrite \
 	--enable-rlookups \
-	%{!?_without_slp:--enable-slp} \
-	%{?_without_slp:--disable-slp} \
+%if %{with slp}
+	--enable-slp \
+%else
+	--disable-slp \
+%endif
 	--enable-wrappers \
-%{?!_with_db3:--enable-bdb}%{?_with_db3:--disable-bdb} \
-%{?!_with_db3:--with-bdb-module=dynamic} \
+%if %{with db3}
+	--disable-bdb \
+%else
+	--enable-bdb \
+	--with-bdb-module=dynamic \
+%endif
 	--enable-dnssrv \
 	--with-dnssrv-module=dynamic \
 	--enable-ldap \
@@ -403,7 +415,7 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 	--enable-ldbm \
 	--with-ldbm-module=dynamic \
 	--with-ldbm-api=berkeley \
-	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{?!ldbm_type:btree} \
+	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
 	--enable-meta \
 	--with-meta-module=dynamic \
 	--enable-monitor \
@@ -412,12 +424,16 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 	--with-null-module=static \
 	--enable-passwd \
 	--with-passwd-module=dynamic \
-%{!?_without_perl:--enable-perl} \
-%{!?_without_perl:--with-perl-module=dynamic} \
+%if %{with perl}
+	--enable-perl \
+	--with-perl-module=dynamic \
+%endif
 	--enable-shell \
 	--with-shell-module=dynamic \
-%{!?_without_odbc:--enable-sql} \
-%{!?_without_odbc:--with-sql-module=dynamic} \
+%if %{with odbc}
+	--enable-sql \
+	--with-sql-module=dynamic \
+%endif
 	--enable-slurpd \
 	--enable-shared \
 	--enable-dynamic \
@@ -511,7 +527,7 @@ if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel slapd
 fi
 
-%if %{!?_with_db3:1}%{?_with_db3:0}
+%if ! %{with db3}
 %post backend-bdb
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/moduleload    back_bdb.la/
@@ -640,6 +656,7 @@ if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
+%if %{with perl}
 %post backend-perl
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/moduleload    back_perl.la/
@@ -657,6 +674,7 @@ EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
+%endif
 
 %post backend-shell
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
@@ -676,6 +694,7 @@ if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
 
+%if %{with odbc}
 %post backend-sql
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/moduleload    back_sql.la/
@@ -693,6 +712,7 @@ EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
+%endif
 
 %files
 %defattr(644,root,root,755)
@@ -739,7 +759,7 @@ fi
 %{_mandir}/man5/slapd-ldap.*
 %{_mandir}/man8/*
 
-%if %{!?_with_db3:1}%{?_with_db3:0}
+%if ! %{with db3}
 %files backend-bdb
 %defattr(644,root,root,755)
 %{_libdir}/openldap/back_bdb.la
@@ -782,7 +802,7 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/back_passwd.s*
 %{_mandir}/man5/slapd-passwd.*
 
-%if %{!?_without_perl:1}%{?_without_perl:0}
+%if %{with perl}
 %files backend-perl
 %defattr(644,root,root,755)
 %doc servers/slapd/back-perl/*.pm
@@ -797,7 +817,7 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/back_shell.s*
 %{_mandir}/man5/slapd-shell.*
 
-%if %{!?_without_odbc:1}%{?_without_perl:0}
+%if %{with odbc}
 %files backend-sql
 %defattr(644,root,root,755)
 %doc servers/slapd/back-sql/docs/*
