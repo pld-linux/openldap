@@ -1,27 +1,26 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	1.2.11
-Release:	3
+Version:	2.0.0
+Release:	0.1
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Artistic
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
-Source2:	openldap.sysconfig
+Source2:	%{name}.sysconfig
 Source3:	http://www.padl.com/download/MigrationTools.tgz
 Source4:	MigrationTools.txt
 Source5:	ldap.conf
 Source6:	slapd.at-rfc2307.conf
 Source7:	slapd.oc-rfc2307.conf
 Source8:	ldapsetupdb
-Patch0:		openldap-man.patch
-Patch1:		openldap-make_man_link.patch
-Patch2:		openldap-migrate_passwd.patch
-Patch3:		openldap-config.patch
-Patch4:		openldap-conffile.patch
-Patch5:		openldap-secretfile.patch
-Patch6:		openldap-ldbm.patch
+Patch0:		%{name}-make_man_link.patch
+Patch1:		%{name}-migrate_passwd.patch
+Patch2:		%{name}-config.patch
+Patch3:		%{name}-conffile.patch
+Patch4:		%{name}-secretfile.patch
+Patch5:		%{name}-ldbm.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
@@ -101,27 +100,46 @@ Serwery (daemons) które przychodz± z LDAPem.
 %setup  -q -a 3
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1 
-%patch4 -p1
-%patch5 -p1
-%patch6	-p1
+#%patch2 -p1
+#%patch3 -p1 
+#%patch4 -p1
+#%patch5 -p1
 perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 install %{SOURCE4} .
 
 %build
 autoconf
-LDFLAGS="-s"
-CPPFLAGS="-I%{_includedir}/ncurses"
-export CPPFLAGS LDFLAGS
+CPPFLAGS="-I%{_includedir}/ncurses"; export CPPFLAGS
 %configure \
-	--enable-cldap \
+	--enable-syslog \
+	--enable-proctitle \
+	--enable-cache \
+	--enable-referrals \
+	--enable-ipv6 \
+	--enable-local \
+	--with-cyrus-sasl \
+	--with-readline \
+	--with-threads \
+	--with-tls \
+	--with-yielding-select \
+	--enable-slapd \
+	--enable-crypt \
+	--enable-spasswd \
+	--enable-multimaster \
+	--enable-phonetic \
+	--enable-modules \
+	--enable-rlookups \
+	--enable-aci \
+	--enable-wrappers \
+	--enable-dynamic \
+	--enable-dnssrv \
+	--enable-ldap \
+	--enable-ldbm \
 	--enable-passwd \
 	--enable-shell \
-	--enable-phonetic \
-	--with-wrappers \
-	--with-threads \
+	--enable-sql \
+	--enable-slurpd \
 	--enable-shared
 
 %{__make} depend
@@ -131,7 +149,8 @@ export CPPFLAGS LDFLAGS
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap,%{_datadir}/openldap/migration}
 
-%{__make} install TMPROOT=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 # hack the default config files
 perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
