@@ -5,7 +5,13 @@ SLAPDNICE="+2"
 SLAPDSYSLOGLEVEL=""
 
 # SLAPD URL list 
-SLAPDURLLIST="ldap:///"
+SLAPDURLLIST="ldap:/// ldapi:///"
+
+# ldapi:/// socket access permisions 
+LDAPI_SOCKET_MODE=600
+LDAPI_SOCKET_OWNER=root
+LDAPI_SOCKET_GROUP=root
 
 # nice level for slurp
-SLURPNICE="+2"			     
+SLURPNICE="+2"
+
