@@ -838,6 +838,7 @@ fi
 %files backend-sql
 %defattr(644,root,root,755)
 %doc servers/slapd/back-sql/docs/*
+%doc servers/slapd/back-sql/rdbms_depend
 %attr(755,root,root) %{_libdir}/openldap/back_sql*.so*
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
