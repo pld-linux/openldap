@@ -847,6 +847,7 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
+%attr(770,root,slapd) %{_var}/run/slapd
 %attr(770,root,slapd) %{_localstatedir}/openldap-data
 %attr(770,root,slapd) %{_localstatedir}/openldap-slurp
 %dir %{_datadir}/openldap/schema
