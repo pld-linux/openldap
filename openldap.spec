@@ -1,7 +1,8 @@
 #
 # TODO:
 # - package contribs?
-# - SECURITY: http://securitytracker.com/alerts/2004/Sep/1011192.html (no details...)
+# - SECURITY: http://securitytracker.com/alerts/2004/Sep/1011192.html (CAN-2004-0823)
+#   MacOS-specific???
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -17,7 +18,7 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.17
+Version:	2.2.18
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
