@@ -15,12 +15,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.6
+Version:	2.2.8
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	00b0b1bb22e1d908bc549b5b8e850f40
+# Source0-md5:	e22855a3e8d934df1afc9ebed5e913be
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -32,6 +32,7 @@ Patch5:		%{name}-fast.patch
 Patch6:		%{name}-cldap.patch
 Patch7:		%{name}-ldapi_FHS.patch
 Patch8:		%{name}-ac25x.patch
+Patch9:		%{name}-install.patch
 Patch10:	%{name}-backend_libs.patch
 Patch11:	%{name}-perl.patch
 Patch12:	%{name}-pic.patch
@@ -385,6 +386,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
@@ -773,49 +775,49 @@ fi
 
 %files backend-bdb
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_bdb.so*
+%attr(755,root,root) %{_libdir}/openldap/back_bdb*.so*
 %{_libdir}/openldap/back_bdb.la
 %{_mandir}/man5/slapd-bdb.5*
 
 %files backend-dnssrv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_dnssrv.so*
+%attr(755,root,root) %{_libdir}/openldap/back_dnssrv*.so*
 %{_libdir}/openldap/back_dnssrv.la
 %{_mandir}/man5/slapd-dnssrv.5*
 
 %files backend-hdb
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_hdb.so*
+%attr(755,root,root) %{_libdir}/openldap/back_hdb*.so*
 %{_libdir}/openldap/back_hdb.la
 
 %files backend-ldap
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_ldap.so*
+%attr(755,root,root) %{_libdir}/openldap/back_ldap*.so*
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
 
 %files backend-ldbm
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_ldbm.so*
+%attr(755,root,root) %{_libdir}/openldap/back_ldbm*.so*
 %{_libdir}/openldap/back_ldbm.la
 %{_mandir}/man5/slapd-ldbm.5*
 
 %files backend-meta
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_meta.so*
+%attr(755,root,root) %{_libdir}/openldap/back_meta*.so*
 %{_libdir}/openldap/back_meta.la
 %{_mandir}/man5/slapd-meta.5*
 
 %files backend-monitor
 %defattr(644,root,root,755)
 %doc servers/slapd/back-monitor/README
-%attr(755,root,root) %{_libdir}/openldap/back_monitor.so*
+%attr(755,root,root) %{_libdir}/openldap/back_monitor*.so*
 %{_libdir}/openldap/back_monitor.la
 %{_mandir}/man5/slapd-monitor.5*
 
 %files backend-passwd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_passwd.so*
+%attr(755,root,root) %{_libdir}/openldap/back_passwd*.so*
 %{_libdir}/openldap/back_passwd.la
 %{_mandir}/man5/slapd-passwd.5*
 
@@ -823,14 +825,14 @@ fi
 %files backend-perl
 %defattr(644,root,root,755)
 %doc servers/slapd/back-perl/*.pm
-%attr(755,root,root) %{_libdir}/openldap/back_perl.so*
+%attr(755,root,root) %{_libdir}/openldap/back_perl*.so*
 %{_libdir}/openldap/back_perl.la
 %{_mandir}/man5/slapd-perl.5*
 %endif
 
 %files backend-shell
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_shell.so*
+%attr(755,root,root) %{_libdir}/openldap/back_shell*.so*
 %{_libdir}/openldap/back_shell.la
 %{_mandir}/man5/slapd-shell.5*
 
@@ -838,7 +840,7 @@ fi
 %files backend-sql
 %defattr(644,root,root,755)
 %doc servers/slapd/back-sql/docs/*
-%attr(755,root,root) %{_libdir}/openldap/back_sql.so*
+%attr(755,root,root) %{_libdir}/openldap/back_sql*.so*
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
 %endif
