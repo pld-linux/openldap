@@ -89,86 +89,88 @@ rm -f $RPM_BUILD_ROOT/usr/man/man1/ldapadd.1
 echo ".so ldapmodify.1" > $RPM_BUILD_ROOT/usr/man/man1/ldapadd.1
 
 (cd $RPM_BUILD_ROOT/usr/man/man3/;
-rm -f cldap.3 \
-      ld_errno.3 \
-      ldap_8859_to_t61.3 \
-      ldap_add_s.3 \
-      ldap_bind_s.3 \
-      ldap_simple_bind.3 \
-      ldap_simple_bind_s.3 \
-      ldap_kerberos_bind_s.3 \
-      ldap_kerberos_bind1.3 \
-      ldap_kerberos_bind1_s.3 \
-      ldap_kerberos_bind2.3 \
-      ldap_kerberos_bind2_s.3 \
-      ldap_unbind.3 \
-      ldap_unbind_s.3 \
-      ldap_set_rebind_proc.3 \
-      ldap_enable_cache.3 \
-      ldap_disable_cache.3 \
-      ldap_destroy_cache.3 \
-      ldap_flush_cache.3 \
-      ldap_uncache_entry.3 \
-      ldap_uncache_request.3 \
-      ldap_set_cache_options.3 \
-      ldap_set_string_translators.3 \
-      ldap_enable_translation.3 \
-      ldap_translate_from_t61.3 \
-      ldap_translate_to_t61.3 \
-      ldap_t61_to_8859.3 \
-      ldap_compare_s.3 \
-      ldap_delete_s.3 \
-      ldap_init_templates.3 \
-      ldap_init_templates_buf.3 \
-      ldap_free_templates.3 \
-      ldap_init_templates_buf.3 \
-      ldap_free_templates.3 \
-      ldap_first_disptmpl.3 \
-      ldap_next_disptmpl.3 \
-      ldap_oc2template.3 \
-      ldap_tmplattrs.3 \
-      ldap_first_tmplrow.3 \
-      ldap_next_tmplrow.3 \
-      ldap_first_tmplcol.3 \
-      ldap_next_tmplcol.3 \
-      ldap_entry2text_search.3 \
-      ldap_vals2text.3 \
-      ldap_vals2html.3 \
-      ldap_perror.3 \
-      ldap_result2error.3 \
-      ldap_next_attribute.3 \
-      ldap_next_entry.3 \
-      ldap_friendly_name.3 \
-      ldap_is_dns_dn.3 \
-      ldap_init_getfilter.3 \
-      ldap_init_getfilter_buf.3 \
-      ldap_getfilter_free.3 \
-      ldap_getfirstfilter.3 \
-      ldap_getnextfilter.3 \
-      ldap_setfilteraffixes.3 \
-      ldap_get_values_len.3 \
-      ldap_value_free.3 \
-      ldap_value_free_len.3 \
-      ldap_modify_s.3 \
-      ldap_mods_free.3 \
-      ldap_modrdn_s.3 \
-      ldap_search_s.3 \
-      ldap_search_st.3 \
-      ldap_sort_entries.3 \
-      ldap_sort_values.3 \
-      ldap_sort_strcasecmp.3 \
-      ldap_ufn_search_s.3 \
-      ldap_ufn_search_c.3 \
-      ldap_ufn_search_ct.3 \
-      ldap_ufn_setprefix.3 \
-      ldap_ufn_setfilter.3 \
-      ldap_ufn_timeout.3 \
-      ldap_url_parse.3 \
-      ldap_url_search.3 \
-      ldap_url_search_s.3 \
-      ldap_url_search_st.3
-)      
-       
+rm -f	cldap.3 \
+	ld_errno.3 \
+	ldap_8859_to_t61.3 \
+	ldap_add_s.3 \
+	ldap_bind_s.3 \
+	ldap_simple_bind.3 \
+	ldap_simple_bind_s.3 \
+	ldap_kerberos_bind_s.3 \
+	ldap_kerberos_bind1.3 \
+	ldap_kerberos_bind1_s.3 \
+	ldap_kerberos_bind2.3 \
+	ldap_kerberos_bind2_s.3 \
+	ldap_unbind.3 \
+	ldap_unbind_s.3 \
+	ldap_set_rebind_proc.3 \
+	ldap_enable_cache.3 \
+	ldap_disable_cache.3 \
+	ldap_destroy_cache.3 \
+	ldap_flush_cache.3 \
+	ldap_uncache_entry.3 \
+	ldap_uncache_request.3 \
+	ldap_set_cache_options.3 \
+	ldap_set_string_translators.3 \
+	ldap_enable_translation.3 \
+	ldap_translate_from_t61.3 \
+	ldap_translate_to_t61.3 \
+	ldap_t61_to_8859.3 \
+	ldap_compare_s.3 \
+	ldap_delete_s.3 \
+	ldap_init_templates.3 \
+	ldap_init_templates_buf.3 \
+	ldap_free_templates.3 \
+	ldap_init_templates_buf.3 \
+	ldap_free_templates.3 \
+	ldap_first_disptmpl.3 \
+	ldap_next_disptmpl.3 \
+	ldap_oc2template.3 \
+	ldap_tmplattrs.3 \
+	ldap_first_tmplrow.3 \
+	ldap_next_tmplrow.3 \
+	ldap_first_tmplcol.3 \
+	ldap_next_tmplcol.3 \
+	ldap_entry2text_search.3 \
+	ldap_vals2text.3 \
+	ldap_vals2html.3 \
+	ldap_perror.3 \
+	ldap_result2error.3 \
+	ldap_next_attribute.3 \
+	ldap_next_entry.3 \
+	ldap_friendly_name.3 \
+	ldap_is_dns_dn.3 \
+	ldap_init_getfilter.3 \
+	ldap_init_getfilter_buf.3 \
+	ldap_getfilter_free.3 \
+	ldap_getfirstfilter.3 \
+	ldap_getnextfilter.3 \
+	ldap_setfilteraffixes.3 \
+	ldap_get_values_len.3 \
+	ldap_value_free.3 \
+	ldap_value_free_len.3 \
+	ldap_modify_s.3 \
+	ldap_mods_free.3 \
+	ldap_modrdn_s.3 \
+	ldap_search_s.3 \
+	ldap_search_st.3 \
+	ldap_sort_entries.3 \
+	ldap_sort_values.3 \
+	ldap_sort_strcasecmp.3 \
+	ldap_ufn_search_s.3 \
+	ldap_ufn_search_c.3 \
+	ldap_ufn_search_ct.3 \
+	ldap_ufn_setprefix.3 \
+	ldap_ufn_setfilter.3 \
+	ldap_ufn_timeout.3 \
+	ldap_url_parse.3 \
+	ldap_url_search.3 \
+	ldap_url_search_s.3 \
+	ldap_url_search_st.3 \
+	ldap_modrdn2.3 \
+	ldap_modrdn2_s.3 \
+)
+
 echo ".so cldap.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap.3
 echo ".so ldap_error.3" > $RPM_BUILD_ROOT/usr/man/man3/ld_errno.3
 echo ".so ldap_charset.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_8859_to_t61.3
@@ -245,6 +247,8 @@ echo ".so ldap_ufn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_url_parse.3
 echo ".so ldap_ufn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_url_search.3
 echo ".so ldap_ufn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_url_search_s.3
 echo ".so ldap_ufn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_url_search_st.3
+echo ".so ldap_modrdn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_modrdn2.3
+echo ".so ldap_modrdn.3" > $RPM_BUILD_ROOT/usr/man/man3/ldap_modrdn2_s.3
 
 rm -f $RPM_BUILD_ROOT/usr/man/man8/{fax500,ldif2id2children,ldif2id2entry,ldif2index}.8
 echo ".so mail500.8" > $RPM_BUILD_ROOT/usr/man/man8/fax500.8
@@ -274,10 +278,10 @@ gzip -9nf $RPM_BUILD_ROOT/usr/man/man*/* \
 %post servers
 chkconfig --add ldap
 if test -r /var/run/ldap.pid; then
-        /etc/rc.d/init.d/ldap stop >&2
-        /etc/rc.d/init.d/ldap start >&2
+	/etc/rc.d/init.d/ldap stop >&2
+	/etc/rc.d/init.d/ldap start >&2
 else
-        echo "Run \"/etc/rc.d/init.d/ldap start\" to start sldap server."
+	echo "Run \"/etc/rc.d/init.d/ldap start\" to start sldap server."
 fi
 			
 %postun servers
