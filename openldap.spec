@@ -222,7 +222,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 
 %build
 rm -f build/missing
-libtoolize --copy --force
+%{__libtoolize}
 aclocal
 %{__autoconf}
 automake -a -c || :
