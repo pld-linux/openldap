@@ -337,6 +337,7 @@ fi
 %defattr(644,root,root,755)
 %doc ANNOUNCEMENT CHANGES COPYRIGHT README
 %doc doc/{drafts,rfc}
+%doc guide
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
@@ -369,7 +370,6 @@ fi
 
 %files servers
 %defattr(644,root,root,755)
-%doc guide.html
 %dir %{_sysconfdir}/openldap/schema
 %attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
 %attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
