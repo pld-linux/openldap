@@ -6,9 +6,11 @@ Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
+Summary(ru):	Образцы клиентов LDAP
+Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.0.23
-Release:	1
+Release:	5
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -79,11 +81,19 @@ Este pacote contИm apenas as bibliotecas usadas por alguns programas.
 VocЙ provavelmente tambИm vai querer instalar o pacote
 openldap-client.
 
+%description clients -l ru
+Образцы клиентов, поставляемые с LDAP.
+
+%description clients -l uk
+Зразки кл╕╓нт╕в, що поставляються з LDAP.
+
 %package devel
 Summary:	LDAP development files
+Summary(es):	Bibliotecas de desarrollo y archivos de inclusiСn para OpenLDAP
 Summary(pl):	Pliki dla developerСw LDAP
 Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusЦo para o OpenLDAP
-Summary(es):	Bibliotecas de desarrollo y archivos de inclusiСn para OpenLDAP
+Summary(ru):	Файлы для программирования с LDAP
+Summary(uk):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	cyrus-sasl-devel
@@ -106,10 +116,20 @@ Bibliotecas de desenvolvimento e arquivos de inclusЦo do OpenLDAP.
 Instale este pacote se vocЙ for trabalhar com desenvolvimento em LDAP
 ou desejar compilar algum programa que utilize LDAP.
 
+%description devel -l ru
+Хедеры и библиотеки, необходимые для разработки приложений,
+использующих LDAP.
+
+%description devel -l uk
+Хедери та б╕бл╕отеки, необх╕дн╕ для розробки програм, що
+використовують LDAP.
+
 %package static
 Summary:	LDAP static libraries
 Summary(pl):	Biblioteki statyczne LDAP
 Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com openldap
+Summary(ru):	Статические библиотеки LDAP
+Summary(uk):	Статичн╕ б╕бл╕отеки LDAP
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
@@ -125,10 +145,20 @@ Biblioteki statyczne LDAP.
 %description static -l pt_BR
 Bibliotecas estАticas para desenvolvimento com openldap.
 
+%description static -l ru
+Статические библиотеки, необходимые для разработки приложений,
+использующих LDAP.
+
+%description static -l uk
+Статичн╕ б╕бл╕отеки, необх╕дн╕ для розробки програм, що використовують
+LDAP.
+
 %package servers
 Summary:	LDAP servers
 Summary(pl):	Serwery LDAP
 Summary(pt_BR):	Arquivos para o servidor OpenLDAP
+Summary(ru):	Сервера LDAP
+Summary(uk):	Сервера LDAP
 Group:		Networking/Daemons
 Prereq:		shadow
 Prereq:		rc-scripts
@@ -163,6 +193,12 @@ O conjunto completo contИm:
 - servidor de replicaГЦo (slurpd)
 
 Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
+
+%description servers -l ru
+Сервера (демоны), поставляемые с LDAP.
+
+%description servers -l uk
+Сервера (демони), що поставляються з LDAP.
 
 %prep
 %setup  -q
