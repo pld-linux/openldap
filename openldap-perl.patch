@@ -34,8 +34,8 @@
  # define na	PL_na
  #endif
  
--#ifdef HAVE_WIN32_ASPERL
-+#if defined(HAVE_WIN32_ASPERL) || defined(PERL_IS_5_8)
+-#if defined( HAVE_WIN32_ASPERL ) || defined( USE_ITHREADS )
++#if defined( HAVE_WIN32_ASPERL ) || defined( USE_ITHREADS ) || defined( PERL_IS_5_8 )
  /* pTHX is needed often now */
  # define PERL_INTERPRETER			my_perl
  # define PERL_BACK_XS_INIT_PARAMS		pTHX
