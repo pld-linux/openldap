@@ -18,12 +18,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.20
+Version:	2.2.21
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	bd45020a47061ea1c1e14e2f6204a0f9
+# Source0-md5:	2e51b35fb71941e14d2a49d04d31b0c6
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -40,8 +40,7 @@ Patch10:	%{name}-backend_libs.patch
 Patch11:	%{name}-perl.patch
 Patch12:	%{name}-pic.patch
 Patch13:	%{name}-ltinstall-mode.patch
-Patch14:	%{name}-mod.patch
-#Patch15:	%{name}-sendbuf.patch
+#Patch14:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -404,7 +403,6 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 
 %build
 %{__libtoolize}
