@@ -14,12 +14,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.1.23
+Version:	2.1.25
 Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	a25b5806f8fe031e248f99ca7fe6df2c
+# Source0-md5:	7e3e53a44230bedd66152f4bdb08f50b
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -39,7 +39,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?with_db3:BuildRequires:	db3-devel}
-%{!?with_db3:BuildRequires:	db-devel}
+%{!?with_db3:BuildRequires:	db-devel >= 4.2}
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
@@ -106,7 +106,7 @@ Requires:	pam-devel
 %if %{with db3}
 Requires:	db3-devel
 %else
-Requires:	db-devel
+Requires:	db-devel >= 4.2
 %endif
 Requires:	openssl-devel >= 0.9.7c
 
