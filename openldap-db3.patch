@@ -1,13 +1,15 @@
-diff -durN openldap-2.0.4.orig/build/openldap.m4 openldap-2.0.4/build/openldap.m4
---- openldap-2.0.4.orig/build/openldap.m4	Wed Aug 16 21:28:58 2000
-+++ openldap-2.0.4/build/openldap.m4	Sun Oct  1 19:09:45 2000
-@@ -288,8 +288,8 @@
+diff -durN openldap-2.0.23.orig/build/openldap.m4 openldap-2.0.23/build/openldap.m4
+--- openldap-2.0.23.orig/build/openldap.m4	Fri Jan 25 17:03:55 2002
++++ openldap-2.0.23/build/openldap.m4	Tue Apr  2 14:50:37 2002
+@@ -312,9 +312,9 @@
  AC_DEFUN([OL_BERKELEY_DB_LINK],
  [ol_cv_lib_db=no
  OL_BERKELEY_DB_TRY(ol_cv_db_none)
 -OL_BERKELEY_DB_TRY(ol_cv_db_db,[-ldb])
+ OL_BERKELEY_DB_TRY(ol_cv_db_db4,[-ldb4])
  OL_BERKELEY_DB_TRY(ol_cv_db_db3,[-ldb3])
 +OL_BERKELEY_DB_TRY(ol_cv_db_db,[-ldb])
  OL_BERKELEY_DB_TRY(ol_cv_db_db2,[-ldb2])
  OL_BERKELEY_DB_TRY(ol_cv_db_db1,[-ldb1])
  ])
+
