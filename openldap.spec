@@ -1,12 +1,10 @@
-# TODO:
-# - check openslp and enable SLP support
-#
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
 # _with_db3	- use old db3 package instead of db (and disable bdb backend)
 # _without_sasl - don't build cyrus sasl support
 # _without_odbc	- disable sql backend
 # _without_perl	- disable perl backend
+# _without_slp  - disable SLP support
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
@@ -16,7 +14,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.1.17
-Release:	0.1
+Release:	0.2
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -43,6 +41,7 @@ BuildRequires:	automake
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
+%{!?_without_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
 BuildRequires:	readline-devel >= 4.2
@@ -391,7 +390,8 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 	--enable-phonetic \
 	--enable-rewrite \
 	--enable-rlookups \
-	--disable-slp \
+	%{!?_withtout_slp:--enable-slp} \
+	%{?_without_slp:--disable-slp} \
 	--enable-wrappers \
 %{?!_with_db3:--enable-bdb}%{?_with_db3:--disable-bdb} \
 %{?!_with_db3:--with-bdb-module=dynamic} \
