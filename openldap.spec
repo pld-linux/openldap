@@ -7,8 +7,8 @@ Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(es):	Clientes y servidor para LDAP
 Name:		openldap
-Version:	2.0.11
-Release:	2
+Version:	2.0.13
+Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -27,6 +27,7 @@ Patch5:		%{name}-sendbuf.patch
 Patch6:		%{name}-syslog.patch
 Patch7:		%{name}-fast.patch
 Patch8:		%{name}-cldap.patch
+Patch9:		%{name}-no_libnsl.patch
 URL:		http://www.openldap.org/
 BuildRequires:	libwrap-devel
 BuildRequires:	readline-devel >= 4.2
@@ -172,13 +173,16 @@ Install this package if you want to setup an OpenLDAP server.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 install %{SOURCE3} .
 
 %build
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
 CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
-%configure2_13 \
+aclocal
+autoconf
+%configure \
 	--enable-syslog \
 	--enable-proctitle \
 	--enable-cache \
@@ -226,8 +230,8 @@ CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 
 %Install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm}
-install -d $RPM_BUILD_ROOT%{_datadir}/openldap/schema
+install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm} \
+	$RPM_BUILD_ROOT%{_datadir}/openldap/schema
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
