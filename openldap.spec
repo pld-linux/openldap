@@ -1,7 +1,9 @@
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
-# _with_db4	- use new db 4.1 package instead of db3 [temporary]
+# _without_db	- use old db3 package instead of db
+# _without_sasl - don't build cyrus sasl support
+# _without_odbc	- disable sql support
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
@@ -11,7 +13,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.0.27
-Release:	2
+Release:	3
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -33,16 +35,16 @@ Patch9:		%{name}-ldapi_FHS.patch
 Patch10:	%{name}-ac25x.patch
 Patch11:	%{name}-db41.patch
 URL:		http://www.openldap.org/
-BuildRequires:	cyrus-sasl-devel
-%{!?_with_db4:BuildRequires:	db3-devel}
-%{?_with_db4:BuildRequires:	db-devel}
+%{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
+%{?_without_db:BuildRequires:	db3-devel}
+%{!?_without_db:BuildRequires:	db-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	pam-devel
 BuildRequires:	perl
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	unixODBC-devel
+%{!?_without_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
@@ -97,10 +99,10 @@ Summary(ru):	Файлы для программирования с LDAP
 Summary(uk):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
-Requires:	cyrus-sasl-devel
+%{!?_without_sasl:Requires:	cyrus-sasl-devel}
 Requires:	pam-devel
-%{!?_with_db4:Requires:	db3-devel}
-%{?_with_db4:Requires:	db-devel}
+%{?_without_db:Requires:	db3-devel}
+%{!?_without_db:Requires:	db-devel}
 Requires:	openssl-devel
 
 %description devel
@@ -232,14 +234,14 @@ CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 	--enable-referrals \
 	--enable-ipv6 \
 	--enable-local \
-	--with-cyrus-sasl \
+%{!?_without_sasl:--with-cyrus-sasl} \
+%{!?_without_sasl:--enable-spasswd} \
 	--with-readline \
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
 	--enable-slapd \
 	--enable-crypt \
-	--enable-spasswd \
 	--enable-multimaster \
 	--enable-phonetic \
 	--enable-rlookups \
@@ -259,11 +261,12 @@ CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 	--with-passwd-module=dynamic \
 	--enable-shell \
 	--with-shell-module=static \
-	--enable-sql \
-	--with-sql-module=dynamic \
 	--enable-slurpd \
 	--enable-shared \
-	--enable-static
+	--enable-static \
+%{!?_without_odbc:--enable-sql} \
+%{!?_without_odbc:--with-sql-module=dynamic} 
+
 
 # without this server won't start
 #echo "#undef HAVE_GETADDRINFO" >> include/portable.h
@@ -372,7 +375,7 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_datadir}/openldap
-%{_datadir}/openldap/ldapfriendly
+%{_datadir}/openldap/*
 %{_mandir}/man1/*
 %{_mandir}/man5/ldap.conf.5*
 %{_mandir}/man5/ldapfilter.conf.5*
