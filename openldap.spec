@@ -23,7 +23,7 @@ Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 # Taken from http://www.openldap.org/doc/admin/guide.html. Tarball includes images.
-Source3:	ldap-guide.tar.gz
+#Source3:	ldap-guide.tar.gz
 Source5:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
@@ -370,7 +370,7 @@ fi
 %defattr(644,root,root,755)
 %doc ANNOUNCEMENT CHANGES COPYRIGHT README
 %doc doc/{drafts,rfc}
-%doc guide
+#%%doc guide
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
