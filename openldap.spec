@@ -25,25 +25,24 @@ Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-nolibbind.patch
-#Patch3:		%{name}-sendbuf.patch
 Patch4:		%{name}-sql.patch
 Patch5:		%{name}-fast.patch
 Patch6:		%{name}-cldap.patch
-#Patch7:		%{name}-no_libnsl.patch
-Patch8:		%{name}-ldapi_FHS.patch
-Patch9:		%{name}-ac25x.patch
-#Patch10:	%{name}-db41.patch
-#Patch11:	%{name}-secpatch.patch
-Patch12:	%{name}-link_no_static.patch
+Patch7:		%{name}-ldapi_FHS.patch
+Patch8:		%{name}-ac25x.patch
+Patch9:		%{name}-link_no_static.patch
+#Patch10:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 %{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?_with_db3:BuildRequires:	db3-devel}
 %{!?_with_db3:BuildRequires:	db-devel}
 BuildRequires:	libltdl-devel
+BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	pam-devel
-BuildRequires:	ed
 BuildRequires:	readline-devel >= 4.2
 %{!?_without_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -170,6 +169,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires(post):	/usr/sbin/usermod
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
 Requires(post,preun):	/sbin/chkconfig
@@ -353,23 +353,22 @@ Backend SQL do slapd - serwera OpenLDAP.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-#%patch3 -p1
 %patch4 -p1
-
 %patch5 -p1
 %patch6 -p1
-#%patch7 -p1
+%patch7 -p1
 %patch8 -p1
 %patch9 -p1
 #%patch10 -p1
-#%patch11 -p0
-%patch12 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
 CPPFLAGS="-I%{_includedir}/ncurses %{?_with_db3:-I%{_includedir}/db3}"
 CFLAGS="%{rpmcflags} %{?_with_db3:-I%{_includedir}/db3}"
 LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
-%configure2_13 \
+%configure \
 	--enable-syslog \
 	--enable-cache \
 	--enable-referrals \
@@ -418,18 +417,8 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 	--enable-shared \
 	--enable-static
 
-
 %{__make} depend
 %{__make}
-
-# avoid relinking to allow build without openldap-devel already installed
-for d in libraries/libldap/libldap.la libraries/libldap_r/libldap_r.la ; do
-	ed $d <<EOF
-,s/^relink_command.*//
-w
-q
-EOF
-done
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -454,7 +443,7 @@ echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 rm -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.default,ldap.conf}
 
 # Standard schemas should not be changed by users
-mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema/
+mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema
 
 # create slapd.access.conf
 echo "# This is a good place to put slapd access-control directives" > \
@@ -495,6 +484,11 @@ if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 else
 	echo "Run '/etc/rc.d/init.d/ldap start' to start OpenLDAP server." >&2
+fi
+
+%triggerpostun servers -- openldap-servers < 2.1.12
+if [ "`su - slapd -s /bin/sh -c pwd 2>/dev/null`" = "/var/lib/openldap-ldbm" ]; then
+	/usr/sbin/usermod -d /var/lib/openldap-data slapd
 fi
 
 %preun servers

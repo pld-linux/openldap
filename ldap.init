@@ -43,7 +43,8 @@ case "$1" in
 		daemon slapd $ARGS
 		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
 			show "Starting OpenLDAP Update Replication Daemon"
-			daemon --user slapd slurpd
+			# slapd has /bin/false as shell, so -s must be passed to su
+			daemon --user 'slapd -s /bin/sh' slurpd
 		fi
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
