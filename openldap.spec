@@ -8,7 +8,7 @@ Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Name:		openldap
 Version:	2.0.21
-Release:	2
+Release:	3
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -243,6 +243,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm} \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/schema
 
+rm -f doc/rfc/rfc*
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -272,7 +274,7 @@ echo "# This is a good place to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
 gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
-	doc/rfc/* doc/drafts/*
+	doc/rfc/INDEX doc/drafts/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -308,7 +310,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc *.gz
-%doc doc/rfc doc/drafts
+%doc doc/{drafts,rfc}
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
