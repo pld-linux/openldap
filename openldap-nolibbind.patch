@@ -1,0 +1,240 @@
+--- openldap-2.1.12/configure.in.orig	Thu Jan  9 08:01:18 2003
++++ openldap-2.1.12/configure.in	Thu Jan  9 08:13:29 2003
+@@ -960,23 +960,23 @@
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(bind, res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_bind_res_query
++	AC_CHECK_LIB(resolv, res_query)
++	ac_cv_func_res_query=$ac_cv_lib_resolv_res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(bind, __res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_bind___res_query
++	AC_CHECK_LIB(resolv, __res_query)
++	ac_cv_func_res_query=$ac_cv_lib_resolv___res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(resolv, res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_resolv_res_query
++	AC_CHECK_LIB(bind, res_query)
++	ac_cv_func_res_query=$ac_cv_lib_bind_res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(resolv, __res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_resolv___res_query
++	AC_CHECK_LIB(bind, __res_query)
++	ac_cv_func_res_query=$ac_cv_lib_bind___res_query
+ fi
+ 
+ if test "$ac_cv_func_res_query" = yes ; then
+--- openldap-2.1.12/configure.orig	Fri Jan  3 19:09:47 2003
++++ openldap-2.1.12/configure	Thu Jan  9 08:14:41 2003
+@@ -10141,16 +10141,16 @@
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	echo $ac_n "checking for res_query in -lbind""... $ac_c" 1>&6
+-echo "configure:10146: checking for res_query in -lbind" >&5
+-ac_lib_var=`echo bind'_'res_query | sed 'y%./+-:%__p__%'`
++	echo $ac_n "checking for res_query in -lresolv""... $ac_c" 1>&6
++echo "configure:10248: checking for res_query in -lresolv" >&5
++ac_lib_var=`echo resolv'_'res_query | sed 'y%./+-:%__p__%'`
+ if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+   ac_save_LIBS="$LIBS"
+-LIBS="-lbind  $LIBS"
++LIBS="-lresolv  $LIBS"
+ cat > conftest.$ac_ext <<EOF
+-#line 10154 "configure"
++#line 10256 "configure"
+ #include "confdefs.h"
+ /* Override any gcc2 internal prototype to avoid an error.  */
+ /* We use char because int might match the return type of a gcc2
+@@ -10161,7 +10161,7 @@
+ res_query()
+ ; return 0; }
+ EOF
+-if { (eval echo configure:10165: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:10267: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   rm -rf conftest*
+   eval "ac_cv_lib_$ac_lib_var=yes"
+ else
+@@ -10176,32 +10176,32 @@
+ fi
+ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+   echo "$ac_t""yes" 1>&6
+-    ac_tr_lib=HAVE_LIB`echo bind | sed -e 's/[^a-zA-Z0-9_]/_/g' \
++    ac_tr_lib=HAVE_LIB`echo resolv | sed -e 's/[^a-zA-Z0-9_]/_/g' \
+     -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+   cat >> confdefs.h <<EOF
+ #define $ac_tr_lib 1
+ EOF
+ 
+-  LIBS="-lbind $LIBS"
++  LIBS="-lresolv $LIBS"
+ 
+ else
+   echo "$ac_t""no" 1>&6
+ fi
+ 
+-	ac_cv_func_res_query=$ac_cv_lib_bind_res_query
++	ac_cv_func_res_query=$ac_cv_lib_resolv_res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	echo $ac_n "checking for __res_query in -lbind""... $ac_c" 1>&6
+-echo "configure:10197: checking for __res_query in -lbind" >&5
+-ac_lib_var=`echo bind'_'__res_query | sed 'y%./+-:%__p__%'`
++	echo $ac_n "checking for __res_query in -lresolv""... $ac_c" 1>&6
++echo "configure:10299: checking for __res_query in -lresolv" >&5
++ac_lib_var=`echo resolv'_'__res_query | sed 'y%./+-:%__p__%'`
+ if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+   ac_save_LIBS="$LIBS"
+-LIBS="-lbind  $LIBS"
++LIBS="-lresolv  $LIBS"
+ cat > conftest.$ac_ext <<EOF
+-#line 10205 "configure"
++#line 10307 "configure"
+ #include "confdefs.h"
+ /* Override any gcc2 internal prototype to avoid an error.  */
+ /* We use char because int might match the return type of a gcc2
+@@ -10212,7 +10212,7 @@
+ __res_query()
+ ; return 0; }
+ EOF
+-if { (eval echo configure:10216: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:10318: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   rm -rf conftest*
+   eval "ac_cv_lib_$ac_lib_var=yes"
+ else
+@@ -10227,32 +10227,32 @@
+ fi
+ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+   echo "$ac_t""yes" 1>&6
+-    ac_tr_lib=HAVE_LIB`echo bind | sed -e 's/[^a-zA-Z0-9_]/_/g' \
++    ac_tr_lib=HAVE_LIB`echo resolv | sed -e 's/[^a-zA-Z0-9_]/_/g' \
+     -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+   cat >> confdefs.h <<EOF
+ #define $ac_tr_lib 1
+ EOF
+ 
+-  LIBS="-lbind $LIBS"
++  LIBS="-lresolv $LIBS"
+ 
+ else
+   echo "$ac_t""no" 1>&6
+ fi
+ 
+-	ac_cv_func_res_query=$ac_cv_lib_bind___res_query
++	ac_cv_func_res_query=$ac_cv_lib_resolv___res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	echo $ac_n "checking for res_query in -lresolv""... $ac_c" 1>&6
+-echo "configure:10248: checking for res_query in -lresolv" >&5
+-ac_lib_var=`echo resolv'_'res_query | sed 'y%./+-:%__p__%'`
++	echo $ac_n "checking for res_query in -lbind""... $ac_c" 1>&6
++echo "configure:10146: checking for res_query in -lbind" >&5
++ac_lib_var=`echo bind'_'res_query | sed 'y%./+-:%__p__%'`
+ if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+   ac_save_LIBS="$LIBS"
+-LIBS="-lresolv  $LIBS"
++LIBS="-lbind  $LIBS"
+ cat > conftest.$ac_ext <<EOF
+-#line 10256 "configure"
++#line 10154 "configure"
+ #include "confdefs.h"
+ /* Override any gcc2 internal prototype to avoid an error.  */
+ /* We use char because int might match the return type of a gcc2
+@@ -10263,7 +10263,7 @@
+ res_query()
+ ; return 0; }
+ EOF
+-if { (eval echo configure:10267: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:10165: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   rm -rf conftest*
+   eval "ac_cv_lib_$ac_lib_var=yes"
+ else
+@@ -10278,32 +10278,32 @@
+ fi
+ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+   echo "$ac_t""yes" 1>&6
+-    ac_tr_lib=HAVE_LIB`echo resolv | sed -e 's/[^a-zA-Z0-9_]/_/g' \
++    ac_tr_lib=HAVE_LIB`echo bind | sed -e 's/[^a-zA-Z0-9_]/_/g' \
+     -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+   cat >> confdefs.h <<EOF
+ #define $ac_tr_lib 1
+ EOF
+ 
+-  LIBS="-lresolv $LIBS"
++  LIBS="-lbind $LIBS"
+ 
+ else
+   echo "$ac_t""no" 1>&6
+ fi
+ 
+-	ac_cv_func_res_query=$ac_cv_lib_resolv_res_query
++	ac_cv_func_res_query=$ac_cv_lib_bind_res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	echo $ac_n "checking for __res_query in -lresolv""... $ac_c" 1>&6
+-echo "configure:10299: checking for __res_query in -lresolv" >&5
+-ac_lib_var=`echo resolv'_'__res_query | sed 'y%./+-:%__p__%'`
++	echo $ac_n "checking for __res_query in -lbind""... $ac_c" 1>&6
++echo "configure:10197: checking for __res_query in -lbind" >&5
++ac_lib_var=`echo bind'_'__res_query | sed 'y%./+-:%__p__%'`
+ if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
+   echo $ac_n "(cached) $ac_c" 1>&6
+ else
+   ac_save_LIBS="$LIBS"
+-LIBS="-lresolv  $LIBS"
++LIBS="-lbind  $LIBS"
+ cat > conftest.$ac_ext <<EOF
+-#line 10307 "configure"
++#line 10205 "configure"
+ #include "confdefs.h"
+ /* Override any gcc2 internal prototype to avoid an error.  */
+ /* We use char because int might match the return type of a gcc2
+@@ -10314,7 +10314,7 @@
+ __res_query()
+ ; return 0; }
+ EOF
+-if { (eval echo configure:10318: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:10216: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   rm -rf conftest*
+   eval "ac_cv_lib_$ac_lib_var=yes"
+ else
+@@ -10329,19 +10329,19 @@
+ fi
+ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+   echo "$ac_t""yes" 1>&6
+-    ac_tr_lib=HAVE_LIB`echo resolv | sed -e 's/[^a-zA-Z0-9_]/_/g' \
++    ac_tr_lib=HAVE_LIB`echo bind | sed -e 's/[^a-zA-Z0-9_]/_/g' \
+     -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
+   cat >> confdefs.h <<EOF
+ #define $ac_tr_lib 1
+ EOF
+ 
+-  LIBS="-lresolv $LIBS"
++  LIBS="-lbind $LIBS"
+ 
+ else
+   echo "$ac_t""no" 1>&6
+ fi
+ 
+-	ac_cv_func_res_query=$ac_cv_lib_resolv___res_query
++	ac_cv_func_res_query=$ac_cv_lib_bind___res_query
+ fi
+ 
+ if test "$ac_cv_func_res_query" = yes ; then
