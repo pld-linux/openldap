@@ -1,3 +1,5 @@
+# TODO:
+# - check openslp and enable SLP support
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -13,8 +15,8 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.1.12
-Release:	2
+Version:	2.1.17
+Release:	0.1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -25,14 +27,13 @@ Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-nolibbind.patch
-Patch4:		%{name}-sql.patch
 Patch5:		%{name}-fast.patch
 Patch6:		%{name}-cldap.patch
 Patch7:		%{name}-ldapi_FHS.patch
 Patch8:		%{name}-ac25x.patch
-Patch9:		%{name}-link_no_static.patch
 Patch10:	%{name}-backend_libs.patch
 #Patch11:	%{name}-sendbuf.patch
+Patch12:	%{name}-perl.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -356,14 +357,13 @@ Backend SQL do slapd - serwera OpenLDAP.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
 %patch10 -p1
 #%patch10 -p1
+%patch12 -p1
 
 %build
 %{__libtoolize}
@@ -419,6 +419,7 @@ LDFLAGS="%{rpmldflags} %{?_with_db3:-ldb3}"
 %{!?_without_odbc:--with-sql-module=dynamic} \
 	--enable-slurpd \
 	--enable-shared \
+	--enable-dynamic \
 	--enable-static
 
 %{__make} depend
