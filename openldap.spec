@@ -27,6 +27,7 @@ Patch7:		%{name}-cldap.patch
 Patch8:		%{name}-no_libnsl.patch
 Patch9:		%{name}-lt_fixes.patch
 Patch10:	%{name}-ldapi_FHS.patch
+Patch11:	%{name}-crypt_lib_order.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -176,6 +177,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 install %{SOURCE3} .
 
