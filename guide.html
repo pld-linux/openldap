@@ -23,7 +23,7 @@
 <DIV CLASS="title">
 <H1 CLASS="doc-title">OpenLDAP 2.0 Administrator's Guide</H1>
 <ADDRESS CLASS="doc-author">The OpenLDAP Project &lt;<A HREF="http://www.openldap.org/">http://www.openldap.org/</A>&gt;</ADDRESS>
-<ADDRESS CLASS="doc-modified">4 September 2000</ADDRESS>
+<ADDRESS CLASS="doc-modified">15 September 2000</ADDRESS>
 <BR CLEAR="All">
 </DIV>
 <DIV CLASS="contents">
@@ -218,9 +218,9 @@ Support Pages
 <P><CENTER><IMG SRC="intro_dctree.gif" ALIGN="center"></CENTER></P>
 <P ALIGN="Center">Figure 1.2: LDAP directory tree (Internet naming)</P>
 <P>In addition, LDAP allows you to control which attributes are required and allowed in an entry through the use of a special attribute called <TT>objectClass</TT>.  The values of the <TT>objectClass</TT> attribute determine the <EM>schema</EM> rules the entry must obey.</P>
-<P><EM>How is the information referenced?</EM> An entry is referenced by its distinguished name, which is constructed by taking the name of the entry itself (called the <TERM>Relative Distinguished Name</TERM> or RDN) and concatenating the names of its ancestor entries. For example, the entry for Barbara Jensen in the Internet naming example above has an RDN of <TT>uid=babs</TT> and a DN of <TT>uid=babs, ou=People, dc=example, dc=com</TT>&quot;. The full DN format is described in <A HREF="ftp://ftp.isi.edu/in-notes/rfc2253.txt">RFC2253</A>, &quot;Lightweight Directory Access Protocol (v3): UTF-8 String Representation of Distinguished Names.&quot;</P>
+<P><EM>How is the information referenced?</EM> An entry is referenced by its distinguished name, which is constructed by taking the name of the entry itself (called the <TERM>Relative Distinguished Name</TERM> or RDN) and concatenating the names of its ancestor entries. For example, the entry for Barbara Jensen in the Internet naming example above has an RDN of <TT>uid=babs</TT> and a DN of <TT>uid=babs,ou=People,dc=example,dc=com</TT>&quot;. The full DN format is described in <A HREF="ftp://ftp.isi.edu/in-notes/rfc2253.txt">RFC2253</A>, &quot;Lightweight Directory Access Protocol (v3): UTF-8 String Representation of Distinguished Names.&quot;</P>
 <P><EM>How is the information accessed?</EM> LDAP defines operations for interrogating and updating the directory. Operations are provided for adding and deleting an entry from the directory, changing an existing entry, and changing the name of an entry. Most of the time, though, LDAP is used to search for information in the directory. The LDAP search operation allows some portion of the directory to be searched for entries that match some criteria specified by a search filter. Information can be requested from each entry that matches the criteria.</P>
-<P>For example, you might want to search the entire directory subtree at and below <TT>dc=example,dc=com</TT> for people with the name <TT>Barbara Jensen</TT>, retrieving the email address of each entry found. LDAP lets you do this easily.  Or you might want to search the entries directly below the <TT>st=California, c=US</TT> entry for organizations with the string <TT>Acme</TT> in their name, and that have a fax number. LDAP lets you do this too. The next section describes in more detail what you can do with LDAP and how it might be useful to you.</P>
+<P>For example, you might want to search the entire directory subtree at and below <TT>dc=example,dc=com</TT> for people with the name <TT>Barbara Jensen</TT>, retrieving the email address of each entry found. LDAP lets you do this easily.  Or you might want to search the entries directly below the <TT>st=California,c=US</TT> entry for organizations with the string <TT>Acme</TT> in their name, and that have a fax number. LDAP lets you do this too. The next section describes in more detail what you can do with LDAP and how it might be useful to you.</P>
 <P><EM>How is the information protected from unauthorized access?</EM> Some directory services provide no protection, allowing anyone to see the information. LDAP provides a mechanisms for a client to authenticate, or prove its identity to a directory server, paving the way for rich access control to protect the information the server contains.  LDAP also supports privacy and integrity security services.</P>
 <H2><A NAME="How does LDAP work">1.3. How does LDAP work?</A></H2>
 <P>LDAP directory service is based on a <EM>client-server</EM> model. One or more LDAP servers contain the data making up the LDAP directory tree. An LDAP client connects to an LDAP server and asks it a question. The server responds with the answer and/or with a pointer to where the client can get additional information (typically, another LDAP server). No matter which LDAP server a client connects to, it sees the same view of the directory; a name presented to one LDAP server references the same entry it would at another LDAP server. This is an important feature of a global directory service, like LDAP.</P>
@@ -249,7 +249,7 @@ Support Pages
 <P></P>
 <HR>
 <H1><A NAME="A Quick-Start Guide">2. A Quick-Start Guide</A></H1>
-<P>The following is a quick start guide to OpenLDAP software, including the stand-alone LDAP daemon, <EM>slapd</EM>(8).</P>
+<P>The following is a quick start guide to OpenLDAP 2.0 software, including the stand-alone LDAP daemon, <EM>slapd</EM>(8).</P>
 <P>It is meant to step you through the basic steps needed to install and configure OpenLDAP software. It should be used in conjunction with the other chapters of this document, manual pages, and other materials provided with the distribution (e.g. the <TT>INSTALL</TT> document) or on the OpenLDAP web site (in particular, the OpenLDAP Software FAQ).</P>
 <P>If you intend to run OpenLDAP seriously, you should review the all of this document before attempt to install the software.</P>
 <P><HR WIDTH="80%" ALIGN="Left">
@@ -259,7 +259,7 @@ Support Pages
 &nbsp;</UL><OL>
 <LI><B>Get the software</B>
 <BR>
-You can obtain a copy of the software by following the instructions on the OpenLDAP download page (<A HREF="http://www.openldap.org/software/download/">http://www.openldap.org/software/download/</A>). It is recommended that new users start with either the (latest) <EM>release</EM> or the (most) <EM>stable</EM> release.
+You can obtain a copy of the software by following the instructions on the OpenLDAP download page (<A HREF="http://www.openldap.org/software/download/">http://www.openldap.org/software/download/</A>). It is recommended that new users start with the (latest) <EM>release</EM>.
 <BR>
 &nbsp;
 <LI><B>Unpack the distribution</B>
@@ -273,9 +273,13 @@ then relocate yourself into the distribution directory:<UL>
 You'll have to replace <TT>VERSION</TT> with the version name of the release.
 <BR>
 &nbsp;
-<LI><B>Review the release documents</B>
+<LI><B>Review documentation</B>
 <BR>
-You should now review the <TT>COPYRIGHT</TT>, <TT>LICENSE</TT>, <TT>README</TT> and <TT>INSTALL</TT> documents provided with the distribution. The <TT>COPYRIGHT</TT> and <TT>LICENSE</TT> provide information on acceptable use, copying, and limitation of warranty of OpenLDAP software. The <TT>README</TT> and <TT>INSTALL</TT> documents provide detailed information on prerequisite software and installation procedures.
+You should now review the <TT>COPYRIGHT</TT>, <TT>LICENSE</TT>, <TT>README</TT> and <TT>INSTALL</TT> documents provided with the distribution. The <TT>COPYRIGHT</TT> and <TT>LICENSE</TT> provide information on acceptable use, copying, and limitation of warranty of OpenLDAP software.
+<BR>
+&nbsp;
+<BR>
+You should also review other chapters of this document. In particular, the <A HREF="#Building and Installing OpenLDAP Software">Building and Installing OpenLDAP Software</A> chapter of this document provides detailed information on prerequisite software and installation procedures.
 <BR>
 &nbsp;
 <LI><B>Run <TT>configure</TT></B>
@@ -320,9 +324,9 @@ Everything should now be installed under <TT>/usr/local</TT> (or whatever instal
 Use your favorite editor to edit the provided <EM>slapd.conf</EM>(5) example (usually installed as <TT>/usr/local/etc/openldap/slapd.conf</TT>) to contain an LDBM database definition of the form:<UL>
 <TT>database        ldbm</TT>
 <BR>
-<TT>suffix          &quot;dc=&lt;MY-DOMAIN&gt;, dc=&lt;COM&gt;&quot;</TT>
+<TT>suffix          &quot;dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;&quot;</TT>
 <BR>
-<TT>rootdn          &quot;cn=Manager, dc=&lt;MY-DOMAIN&gt;, dc=&lt;COM&gt;&quot;</TT>
+<TT>rootdn          &quot;cn=Manager,dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;&quot;</TT>
 <BR>
 <TT>rootpw          secret</TT>
 <BR>
@@ -331,9 +335,9 @@ Use your favorite editor to edit the provided <EM>slapd.conf</EM>(5) example (us
 Be sure to replace <TT>&lt;MY-DOMAIN&gt;</TT> and <TT>&lt;COM&gt;</TT> with the appropriate domain components of your domain name.  For example, for <TT>example.com</TT>, use:<UL>
 <TT>database        ldbm</TT>
 <BR>
-<TT>suffix          &quot;dc=example, dc=com&quot;</TT>
+<TT>suffix          &quot;dc=example,dc=com&quot;</TT>
 <BR>
-<TT>rootdn          &quot;cn=Manager, dc=example, dc=com&quot;</TT>
+<TT>rootdn          &quot;cn=Manager,dc=example,dc=com&quot;</TT>
 <BR>
 <TT>rootpw          secret</TT>
 <BR>
@@ -342,9 +346,9 @@ Be sure to replace <TT>&lt;MY-DOMAIN&gt;</TT> and <TT>&lt;COM&gt;</TT> with the 
 If your domain contains additional components, such as <TT>eng.uni.edu.eu</TT>, use:<UL>
 <TT>database        ldbm</TT>
 <BR>
-<TT>suffix          &quot;dc=eng, dc=uni, dc=edu, dc=eu&quot;</TT>
+<TT>suffix          &quot;dc=eng,dc=uni,dc=edu,dc=eu&quot;</TT>
 <BR>
-<TT>rootdn          &quot;cn=Manager, dc=eng, dc=uni, dc=edu, dc=eu&quot;</TT>
+<TT>rootdn          &quot;cn=Manager,dc=eng,dc=uni,dc=edu,dc=eu&quot;</TT>
 <BR>
 <TT>rootpw          secret</TT>
 <BR>
@@ -364,7 +368,7 @@ To check to see if the server is running and configured correctly, you can run a
 Note the use of single quotes around command parameters to prevent special characters from being interpreted by the shell.  This should return:<UL>
 <TT>dn:</TT>
 <BR>
-<TT>namingContexts: dc=example, dc=com</TT></UL>
+<TT>namingContexts: dc=example,dc=com</TT></UL>
 <BR>
 Details regarding running <EM>slapd</EM>(8) can be found in the <EM>slapd</EM>(8) manual page and the <A HREF="#Running slapd">Running slapd</A> chapter of this document.
 <BR>
@@ -376,7 +380,7 @@ You can use <EM>ldapadd</EM>(1) to add entries to your LDAP directory. <EM>ldapa
 <LI>run ldapadd</OL>
 <BR>
 Use your favorite editor and create an LDIF file that contains:<UL>
-<TT>dn: dc=&lt;MY-DOMAIN&gt;, dc=&lt;COM&gt;</TT>
+<TT>dn: dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;</TT>
 <BR>
 <TT>objectclass: dcObject</TT>
 <BR>
@@ -386,18 +390,16 @@ Use your favorite editor and create an LDIF file that contains:<UL>
 <BR>
 <TT>dc: &lt;MY-DOMAIN&gt;</TT>
 <BR>
-<TT> </TT>
+<TT></TT>
 <BR>
-<TT>dn: cn=Manager, dc=&lt;MY-DOMAIN&gt;, dc=&lt;COM&gt;</TT>
+<TT>dn: cn=Manager,dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;</TT>
 <BR>
-<TT>objectclass: person</TT>
+<TT>objectclass: organizationalRole</TT>
 <BR>
-<TT>cn: Manager</TT>
+<TT>cn: Manager</TT></UL>
 <BR>
-<TT>sn: Manager</TT></UL>
-<BR>
-Be sure to replace &lt;MY-DOMAIN&gt; and &lt;COM&gt; with the appropriate domain components of your domain name.  &lt;MY ORGANIZATION&gt; should be replaced with the name of your organization. If you cut and paste, be sure to trim any leading whitespace from the example:<UL>
-<TT>dn: dc=example, dc=com</TT>
+Be sure to replace &lt;MY-DOMAIN&gt; and &lt;COM&gt; with the appropriate domain components of your domain name.  &lt;MY ORGANIZATION&gt; should be replaced with the name of your organization.  If you cut and paste, be sure to trim any leading and trailing whitespace from the example.<UL>
+<TT>dn: dc=example,dc=com</TT>
 <BR>
 <TT>objectclass: dcObject</TT>
 <BR>
@@ -407,21 +409,19 @@ Be sure to replace &lt;MY-DOMAIN&gt; and &lt;COM&gt; with the appropriate domain
 <BR>
 <TT>dc: example</TT>
 <BR>
-<TT> </TT>
+<TT></TT>
 <BR>
-<TT>dn: cn=Bob Smith, dc=example, dc=com</TT>
+<TT>dn: cn=Manager,dc=example,dc=com</TT>
 <BR>
-<TT>objectclass: person</TT>
+<TT>objectclass: organizationalRole</TT>
 <BR>
-<TT>cn: Bob Smith</TT>
-<BR>
-<TT>sn: Smith</TT></UL>
+<TT>cn: Manager</TT></UL>
 <BR>
 Now, you may run <EM>ldapadd</EM>(1) to insert these entries into your directory.<UL>
-<TT>ldapadd -D &quot;cn=Manager, dc=&lt;MY-DOMAIN&gt;, dc=&lt;COM&gt;&quot; -W -f example.ldif</TT></UL>
+<TT>ldapadd -x -D &quot;cn=Manager,dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;&quot; -W -f example.ldif</TT></UL>
 <BR>
 Be sure to replace <TT>&lt;MY-DOMAIN&gt;</TT> and <TT>&lt;COM&gt;</TT> with the appropriate domain components of your domain name.  You will be prompted for the &quot;<TT>secret</TT>&quot; specified in <TT>slapd.conf</TT>. For example, for <TT>example.com</TT>, use:<UL>
-<TT>ldapadd -x -D &quot;cn=Manager, dc=example, dc=com&quot; -W -f example.ldif</TT></UL>
+<TT>ldapadd -x -D &quot;cn=Manager,dc=example,dc=com&quot; -W -f example.ldif</TT></UL>
 <BR>
 where <TT>example.ldif</TT> is the file you created above.<UL>
 <TT> </TT></UL>
@@ -502,7 +502,7 @@ This command will search for and retrieve every entry in the database.</OL>
 <PRE>
         ./configure --help
 </PRE>
-<P>The <TT>configure</TT> script will also look at certain environment variables for certain settings.  These environment variables are:</P>
+<P>The <TT>configure</TT> script will also look at various environment variables for certain settings.  These environment variables include:</P>
 <TABLE CLASS="columns" BORDER ALIGN='Center'>
 <CAPTION ALIGN=top>Table 4.1: Environment Variables</CAPTION>
 <TR CLASS="heading">
@@ -555,9 +555,6 @@ Specify additional libraries
 </TR>
 </TABLE>
 
-<P><HR WIDTH="80%" ALIGN="Left">
-<STRONG>Note: </STRONG>If you intend to build OpenLDAP for multiple platforms from a single source tree you should consult the <TT>INSTALL</TT> file in the top level distribution directory before running <TT>configure</TT>.
-<HR WIDTH="80%" ALIGN="Left"></P>
 <P>Now run the configure script with any desired configuration options or environment variables.</P>
 <PRE>
         [[env] settings] ./configure [options]
@@ -860,7 +857,7 @@ print entry parsing debugging
 <P>This directive specifies the DN that is not subject to access control or administrative limit restrictions for operations on this database.  The DN need not refer to an entry in the directory. The DN may refer to a SASL identity.</P>
 <P>Entry-based Example:</P>
 <PRE>
-        rootdn &quot;cn=Manager, dc=example, dc=com&quot;
+        rootdn &quot;cn=Manager,dc=example,dc=com&quot;
 </PRE>
 <P>SASL-based Example:</P>
 <PRE>
@@ -876,17 +873,17 @@ print entry parsing debugging
 <P>This directive specifies the DN suffix of queries that will be passed to this backend database. Multiple suffix lines can be given, and at least one is required for each database definition.</P>
 <P>Example:</P>
 <PRE>
-        suffix &quot;dc=example, dc=com&quot;
+        suffix &quot;dc=example,dc=com&quot;
 </PRE>
-<P>Queries with a DN ending in &quot;dc=example, dc=com&quot; will be passed to this backend.</P>
+<P>Queries with a DN ending in &quot;dc=example,dc=com&quot; will be passed to this backend.</P>
 <P><HR WIDTH="80%" ALIGN="Left">
 <STRONG>Note: </STRONG>When the backend to pass a query to is selected, slapd looks at the suffix line(s) in each database definition in the order they appear in the file. Thus, if one database suffix is a prefix of another, it must appear after it in the config file.
 <HR WIDTH="80%" ALIGN="Left"></P>
 <H4><A NAME="updatedn &lt;dn&gt;">5.2.3.8. updatedn &lt;dn&gt;</A></H4>
-<P>This directive is only applicable in a slave slapd. It specifies the DN allowed to make changes to the replica.  This may be the the DN slurpd binds as when making changes to the replica or the DN associated with a SASL identity.</P>
+<P>This directive is only applicable in a slave slapd. It specifies the DN allowed to make changes to the replica.  This may be the DN <EM>slurpd</EM>(8) binds as when making changes to the replica or the DN associated with a SASL identity.</P>
 <P>Entry-based Example:</P>
 <PRE>
-        updatedn &quot;cn=Update Daemon, dc=example, dc=com&quot;
+        updatedn &quot;cn=Update Daemon,dc=example,dc=com&quot;
 </PRE>
 <P>SASL-based Example:</P>
 <PRE>
@@ -897,7 +894,7 @@ print entry parsing debugging
 <P>This directive is only applicable in a slave slapd. It specifies the URL to return to clients which submit update requests upon the replica. If specified multiple times, each <TERM>URL</TERM> is provided.</P>
 <P>Example:</P>
 <PRE>
-        update  ldap://master.example.net
+        updateref       ldap://master.example.net
 </PRE>
 <H3><A NAME="LDBM Backend-Specific Directives">5.2.4. LDBM Backend-Specific Directives</A></H3>
 <P>Directives in this category only apply to the LDBM backend database. That is, they must follow a &quot;database ldbm&quot; line and come before any other &quot;database&quot; line.</P>
@@ -1019,7 +1016,7 @@ SQL Programmable backend
         dn=&lt;regular expression&gt;
 </PRE>
 <P><HR WIDTH="80%" ALIGN="Left">
-<STRONG>Note: </STRONG>The DN pattern specified should be &quot;normalized&quot;, meaning that there should be no extra spaces, and commas should be used to separate components. An example normalized DN is &quot;cn=Babs Jensen,dc=example,dc=com&quot;. An example of a non-normalized DN is &quot;cn=Babs Jensen; dc=example, dc=com&quot;.
+<STRONG>Note: </STRONG>The DN pattern specified should be &quot;normalized&quot; to the RFC2253 restricted DN form.  In particular, there should be no extra spaces and commas should be used to separate components.  An example normalized DN is &quot;<TT>cn=Babs Jensen,dc=example,dc=com</TT>&quot;.  An example of a non-normalized DN is &quot;<TT>cn=Babs Jensen; dc=example; dc=com</TT>&quot;.
 <HR WIDTH="80%" ALIGN="Left"></P>
 <P>Or, entries may be selected by a filter matching some attribute(s) in the entry:</P>
 <PRE>
@@ -1091,9 +1088,8 @@ Users matching regular expression
         dn=&lt;regular expression&gt;
 </PRE>
 <P>By &quot;normalized&quot;, we mean that all extra spaces have been removed from the entity's DN and commas are used to separate RDN components.</P>
-<P>Other control factors are also supported. For example, a <TT>&lt;what&gt;</TT> can be restricted by a regular expression matching the client's IP address or domain name:</P>
+<P>Other control factors are also supported. For example, a <TT>&lt;what&gt;</TT> can be restricted by a regular expression matching the client's domain name:</P>
 <PRE>
-        addr=&lt;regular expression&gt;
         domain=&lt;regular expression&gt;
 </PRE>
 <P>or by an entry listed in a DN-valued attribute in the entry to which the access applies:</P>
@@ -1223,7 +1219,7 @@ needed to modify/rename
                 by dn=&quot;.*,dc=example,dc=com&quot; search
                 by anonymous auth
 </PRE>
-<P>This example applies to entries in the &quot;<TT>dc=example, dc=com</TT>&quot; subtree. To all attributes except <TT>homePhone</TT>, the entry itself can write them, other <TT>example.com</TT> entries can search by them, anybody else has no access ((implicit <TT>by * none</TT>) excepting for authentication/authorization (which is always done anonymously). The <TT>homePhone</TT> attribute is writable by the entry, searchable by other <TT>example.com</TT> entries, readable by clients connecting from somewhere in the <TT>example.com</TT> domain, and otherwise not readable (implicit <TT>by * none</TT>).  All other access is denied by the implicit <TT>access to * by * none</TT>.</P>
+<P>This example applies to entries in the &quot;<TT>dc=example,dc=com</TT>&quot; subtree. To all attributes except <TT>homePhone</TT>, the entry itself can write them, other <TT>example.com</TT> entries can search by them, anybody else has no access ((implicit <TT>by * none</TT>) excepting for authentication/authorization (which is always done anonymously). The <TT>homePhone</TT> attribute is writable by the entry, searchable by other <TT>example.com</TT> entries, readable by clients connecting from somewhere in the <TT>example.com</TT> domain, and otherwise not readable (implicit <TT>by * none</TT>).  All other access is denied by the implicit <TT>access to * by * none</TT>.</P>
 <P>Sometimes it is useful to permit a particular DN to add or remove itself from an attribute. For example, if you would like to create a group and allow people to add and remove only their own DN from the member attribute, you could accomplish it with an access directive like this:</P>
 <PRE>
         access to attr=member,entry
@@ -1244,17 +1240,17 @@ needed to modify/rename
 <PRE>
   5.    # ldbm definition for the example.com
   6.    database ldbm
-  7.    suffix &quot;dc=example, dc=com&quot;
+  7.    suffix &quot;dc=example,dc=com&quot;
   8.    directory /usr/local/var/openldap
-  9.    rootdn &quot;cn=Manager, dc=example, dc=com&quot;
+  9.    rootdn &quot;cn=Manager,dc=example,dc=com&quot;
  10.    rootpw secret
  11.    # replication directives
  12.    replogfile /usr/local/var/openldap/slapd.replog
  13.    replica host=slave1.example.com:389
- 14.            binddn=&quot;cn=Replicator, dc=example, dc=com&quot;
+ 14.            binddn=&quot;cn=Replicator,dc=example,dc=com&quot;
  15.            bindmethod=simple credentials=secret
  16.    replica host=slave2.example.com
- 17.            binddn=&quot;cn=Replicator, dc=example, dc=com&quot;
+ 17.            binddn=&quot;cn=Replicator,dc=example,dc=com&quot;
  18.            bindmethod=simple credentials=secret
  19.    # indexed attribute definitions
  20.    index uid pres,eq
@@ -1269,7 +1265,7 @@ needed to modify/rename
  29.    access to *
  30.            by self write
  31.            by dn=&quot;cn=Admin,dc=example,dc=com&quot; write
- 32.            by * read
+ 32.            by users read
 </PRE>
 <P>Line 5 is a comment. The start of the database definition is marked by the database keyword on line 6. Line 7 specifies the DN suffix for queries to pass to this database. Line 8 specifies the directory in which the database files will live.</P>
 <P>Lines 9 and 10 identify the database &quot;super user&quot; entry and associated password. This entry is not subject to access control or size or time limit restrictions.</P>
@@ -1280,9 +1276,9 @@ needed to modify/rename
 <PRE>
  33.    # ldbm definition for example.net
  34.    database ldbm
- 35.    suffix &quot;dc=example, dc=net&quot;
+ 35.    suffix &quot;dc=example,dc=net&quot;
  36.    directory /usr/local/var/ldbm-example-net
- 37.    rootdn &quot;cn=Manager, dc=example, dc=com&quot;
+ 37.    rootdn &quot;cn=Manager,dc=example,dc=com&quot;
  38.    access to * by users read
 </PRE>
 <P></P>
@@ -1298,7 +1294,7 @@ needed to modify/rename
 <PRE>
         -h &lt;URLs&gt;
 </PRE>
-<P>This option specifies alternative listener configurations.  The default is <TT>ldap:///</TT> which implies LDAP over TCP on all interfaces on the default LDAP port 389.  You can specify specific host-port pairs or other protocol schemes (such as ldaps:// or ldapi://).  For example, <TT>-h &quot;ldaps:// ldap://127.0.0.1:666&quot;</TT> will create two listeners: one for LDAP over SSL on all interfaces on the default LDAP/SSL port 646, and one for LDAP over TCL on the <TT>localhost</TT> (<EM>loopback</EM>) interface on port 666. Hosts may be specified using IPv4 dotted-decimal form or using host names.  Port values must be numeric.</P>
+<P>This option specifies alternative listener configurations.  The default is <TT>ldap:///</TT> which implies LDAP over TCP on all interfaces on the default LDAP port 389.  You can specify specific host-port pairs or other protocol schemes (such as ldaps:// or ldapi://).  For example, <TT>-h &quot;ldaps:// ldap://127.0.0.1:666&quot;</TT> will create two listeners: one for LDAP over SSL on all interfaces on the default LDAP/SSL port 636, and one for LDAP over TCP on the <TT>localhost</TT> (<EM>loopback</EM>) interface on port 666. Hosts may be specified using IPv4 dotted-decimal form or using host names.  Port values must be numeric.</P>
 <PRE>
         -n &lt;service-name&gt;
 </PRE>
@@ -1474,7 +1470,7 @@ print entry parsing debugging
 </PRE>
 <P>As described in the <A HREF="#General Database Directives">General Database Directives</A> section, this option defines which entries are to be held by this database. You should set this to the DN of the root of the subtree you are trying to create.  For example:</P>
 <PRE>
-        suffix &quot;dc=example, dc=com&quot;
+        suffix &quot;dc=example,dc=com&quot;
 </PRE>
 <P>You should be sure to specify a directory where the index files should be created:</P>
 <PRE>
@@ -1492,7 +1488,7 @@ print entry parsing debugging
 </PRE>
 <P>For example:</P>
 <PRE>
-        rootdn &quot;cn=Manager, dc=example, dc=com&quot;
+        rootdn &quot;cn=Manager,dc=example,dc=com&quot;
         rootpw secret
 </PRE>
 <P>These options specify a DN and password that can be used to authenticate as the <EM>super-user</EM> entry of the database (i.e., the entry allowed to do anything). The DN and password specified here will always work, regardless of whether the entry named actually exists or has the password given. This solves the chicken-and-egg problem of how to authenticate and add entries before any entries yet exist.</P>
@@ -1505,19 +1501,21 @@ print entry parsing debugging
         index cn,sn,uid
         index objectClass pres,eq
 </PRE>
-<P>See <A HREF="#The slapd Configuration File">The slapd Configuration File</A> section for more details on this option. Once you have configured things to your liking, start up slapd, connect with your LDAP client, and start adding entries. For example, to add a the organizational entry followed by a Postmaster entry using the <I>ldapadd</I> tool, you could create an <TERM>LDIF</TERM> file called <TT>entries.ldif</TT> with the contents:</P>
+<P>See <A HREF="#The slapd Configuration File">The slapd Configuration File</A> section for more details on this option. Once you have configured things to your liking, start up slapd, connect with your LDAP client, and start adding entries.  For example, to add an organization entry and an organizational role entry using the <I>ldapadd</I> tool, you could create an <TERM>LDIF</TERM> file called <TT>entries.ldif</TT> with the contents:</P>
 <PRE>
-        dc=example, dc=com
-        objectClass=dcObject
-        objectClass=organization
-        dc=example
-        o=Example Corporation
-        description=The Example Corporation
+        # Organization for Example Corporation
+        dn: dc=example,dc=com
+        objectClass: dcObject
+        objectClass: organization
+        dc: example
+        o: Example Corporation
+        description: The Example Corporation
 
-        cn=Postmaster, dc=example, dc=com
-        objectClass=organizationalRole
-        cn=Postmaster
-        description=OpenLDAP Postmaster &lt;Postmaster@example.com&gt;
+        # Organizational Role for Directory Manager
+        dn: cn=Manager,dc=example,dc=com
+        objectClass: organizationalRole
+        cn: Manager
+        description: Directory Manager
 </PRE>
 <P>and then use a command like this to actually create the entry:</P>
 <PRE>
@@ -1531,7 +1529,7 @@ print entry parsing debugging
 </PRE>
 <P>As described in the <A HREF="#General Database Directives">General Database Directives</A> section, this option defines which entries are to be held by this database. You should set this to the DN of the root of the subtree you are trying to create.  For example:</P>
 <PRE>
-        suffix &quot;dc=example, dc=com&quot;
+        suffix &quot;dc=example,dc=com&quot;
 </PRE>
 <P>You should be sure to specify a directory where the index files should be created:</P>
 <PRE>
@@ -1606,14 +1604,14 @@ print entry parsing debugging
 <P>Lines starting with a '<TT>#</TT>' character are comments.  An attribute description may be a simple attribute type like <TT>cn</TT> or <TT>objectClass</TT> or <TT>1.2.3</TT> (an <TERM>OID</TERM> associated with an attribute type) or may include options such as <TT>cn;lang_en_US</TT> or <TT>userCertificate;binary</TT>.</P>
 <P>A line may be continued by starting the next line with a <EM>single</EM> space or tab character.  For example:</P>
 <PRE>
-        dn: cn=Barbara J Jensen, dc=example, dc=
+        dn: cn=Barbara J Jensen,dc=example,dc=
          com
         cn: Barbara J
           Jensen
 </PRE>
 <P>is equivalent to:</P>
 <PRE>
-        dn: cn=Barbara J Jensen, dc=example, dc=com
+        dn: cn=Barbara J Jensen,dc=example,dc=com
         cn: Barbara J Jensen
 </PRE>
 <P>Multiple attribute values are specified on separate lines. e.g.,</P>
@@ -1627,36 +1625,36 @@ print entry parsing debugging
 </PRE>
 <P>You can also specify a <TERM>URL</TERM> containing the attribute value. For example, the following specifies the <TT>jpegPhoto</TT> value should be obtained from the file <TT>/path/to/file.jpeg</TT>.</P>
 <PRE>
-        cn:&lt; file://path/to/file.jpeg
+        cn:&lt; file:///path/to/file.jpeg
 </PRE>
 <P>Multiple entries within the same LDIF file are separated by blank lines. Here's an example of an LDIF file containing three entries.</P>
 <PRE>
-        # First Entry
-        dn: cn=Barbara J Jensen, dc=example, dc=com
+        # Barbara's Entry
+        dn: cn=Barbara J Jensen,dc=example,dc=com
         cn: Barbara J Jensen
         cn: Babs Jensen
         objectClass: person
         sn: Jensen
 
-        # Second Entry
-        dn: cn=Bjorn J Jensen, dc=example, dc=com
+        # Bjorn's Entry
+        dn: cn=Bjorn J Jensen,dc=example,dc=com
         cn: Bjorn J Jensen
         cn: Bjorn Jensen
         objectClass: person
         sn: Jensen
         # Base64 encoded JPEG photo
         jpegPhoto:: /9j/4AAQSkZJRgABAAAAAQABAAD/2wBDABALD
-        A4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQ
-        ERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVG
+         A4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQ
+         ERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVG
 
-        # Third Entry
-        dn: cn=Jennifer J Jensen, dc=example, dc=com
+        # Jennifer's Entry
+        dn: cn=Jennifer J Jensen,dc=example,dc=com
         cn: Jennifer J Jensen
         cn: Jennifer Jensen
         objectClass: person
         sn: Jensen
         # JPEG photo from file
-        jpegPhoto:&lt; file://path/to/file.jpeg
+        jpegPhoto:&lt; file:///path/to/file.jpeg
 </PRE>
 <P>Notice that the <TT>jpegPhoto</TT> in Bjorn's entry is base 64 encoded and the <TT>jpegPhoto</TT> in Jennifer's entry is obtained from the location indicated by the URL.</P>
 <P><HR WIDTH="80%" ALIGN="Left">
@@ -1882,11 +1880,11 @@ myObjectClass
 <P>where whsp is a space ('<TT> </TT>'), numericoid is a globally unique OID in numeric form (e.g. <TT>1.2.3</TT>), qdescrs is one or more names, woid is either the name or OID, and noidlen is an optional length specifier (e.g <TT>{10</TT>}).</P>
 <P>For example, the attribute types <TT>name</TT> and <TT>cn</TT> are defined in <TT>core.schema</TT> as:</P>
 <PRE>
-        attributeType: ( 2.5.4.41 NAME 'name'
+        attributeType ( 2.5.4.41 NAME 'name'
                 EQUALITY caseIgnoreMatch
                 SUBSTR caseIgnoreSubstringsMatch
                 SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32768} )
-        attributeType: ( 2.5.4.3 NAME
+        attributeType ( 2.5.4.3 NAME
                 ( 'cn' $ 'commonName' ) SUP name )
 </PRE>
 <P>Notice that each defines the attribute's OID and descriptive names.  Each name is an alias for the OID.  <EM>slapd</EM>(8) returns the first listed name when returning results.</P>
@@ -1931,7 +1929,7 @@ boolean value
 <TT>distinguishedName</TT>
 </TD>
 <TD>
-<TT>1.3.6.1.4.1.1466.115.121.1.15</TT>
+<TT>1.3.6.1.4.1.1466.115.121.1.12</TT>
 </TD>
 <TD>
 DN
@@ -2199,7 +2197,7 @@ case insensitive, space insensitive
 </TR>
 <TR>
 <TD>
-<TT>caseIgnoreOrderingIA5Match</TT>
+<TT>caseIgnoreIA5OrderingMatch</TT>
 </TD>
 <TD>
 ordering
@@ -2210,7 +2208,7 @@ case insensitive, space insensitive
 </TR>
 <TR>
 <TD>
-<TT>caseIgnoreSubstringsIA5Match</TT>
+<TT>caseIgnoreIA5SubstringsMatch</TT>
 </TD>
 <TD>
 substrings
@@ -2232,7 +2230,7 @@ case sensitive, space insensitive
 </TR>
 <TR>
 <TD>
-<TT>caseExactOrderingIA5Match</TT>
+<TT>caseExactIA5OrderingMatch</TT>
 </TD>
 <TD>
 ordering
@@ -2243,7 +2241,7 @@ case sensitive, space insensitive
 </TR>
 <TR>
 <TD>
-<TT>caseExactSubstringsIA5Match</TT>
+<TT>caseExactIA5SubstringsMatch</TT>
 </TD>
 <TD>
 substrings
@@ -2332,11 +2330,11 @@ case sensitive, space insensitive
 <P>A referral object has a structural object class of <TT>referral</TT> and has the same <TERM>Distinguished Name</TERM> as the delegated subtree.  Generally, the referral object will also provide the auxiliary object class <TT>extensibleObject</TT>. This allows the entry to contain appropriate <TERM>Relative Distinguished Name</TERM> values.  This is best demonstrated by example.</P>
 <P>If the server <TT>a.example.net</TT> holds <TT>dc=example,dc=net</TT> and wished to delegate the subtree <TT>ou=subtree,dc=example,dc=net</TT> to another server <TT>b.example.net</TT>, the following named referral object would be added to <TT>a.example.net</TT>:</P>
 <PRE>
-        dn: dc=subtree, dc=example, dc=net
+        dn: dc=subtree,dc=example,dc=net
         objectClass: referral
         objectClass: extensibleObject
         dc: subtree
-        ref: ldap://b.example.net/dc=subtree,dc=example,dc=net/
+        ref: ldap://b.example.net/dc=subtree,dc=example,dc=net
 </PRE>
 <P>The server uses this information to generate referrals and search continuations to subordinate servers.</P>
 <P>For those familiar with X.500, a <EM>named referral</EM> object is similar to an X.500 knowledge reference held in a <EM>subr</EM> <TERM>DSE</TERM>.</P>
@@ -2345,7 +2343,7 @@ case sensitive, space insensitive
 <PRE>
         referral        ldap://root.openldap.org/
 </PRE>
-<P>However, as <TT>a.example.net</TT> is the <EM>immediate superior</EM> to <TT>b.example.net</TT>, <EM>a.example.net</EM> would be configured as follows:</P>
+<P>However, as <TT>a.example.net</TT> is the <EM>immediate superior</EM> to <TT>b.example.net</TT>, <EM>b.example.net</EM> would be configured as follows:</P>
 <PRE>
         referral        ldap://a.example.net/
 </PRE>
@@ -2383,13 +2381,13 @@ case sensitive, space insensitive
 <PRE>
         replica: slave.example.com:389
         time: 809618633
-        dn: uid=bjensen, dc=example, dc=com
+        dn: uid=bjensen,dc=example,dc=com
         changetype: modify
         replace: multiLineDescription
         description: A dreamer...
         -
         replace: modifiersName
-        modifiersName: uid=bjensen, dc=example, dc=com
+        modifiersName: uid=bjensen,dc=example,dc=com
         -
         replace: modifyTimestamp
         modifyTimestamp: 20000805073308Z
@@ -2537,20 +2535,20 @@ GNU DBM backend
 <H3><A NAME="Replication errors">10.5.1. Replication errors</A></H3>
 <P>When slurpd propagates a change to a slave slapd and receives an error return code, it writes the reason for the error and the replication record to a reject file. The reject file is located in the same directory as the per-replica replication logfile, and has the same name, but with the string &quot;<TT>.rej</TT>&quot; appended. For example, for a replica running on host <TT>slave.example.com</TT>, port 389, the reject file, if it exists, will be named</P>
 <PRE>
-        /usr/local/var/openldap/replog.slave.example.com:389.
+        /usr/local/var/openldap/replog.slave.example.com:389.rej
 </PRE>
 <P>A sample rejection log entry follows:</P>
 <PRE>
         ERROR: No such attribute
         replica: slave.example.com:389
         time: 809618633
-        dn: uid=bjensen, dc=example, dc=com
+        dn: uid=bjensen,dc=example,dc=com
         changetype: modify
         replace: description
         description: A dreamer...
         -
         replace: modifiersName
-        modifiersName: uid=bjensen, dc=example, dc=com
+        modifiersName: uid=bjensen,dc=example,dc=com
         -
         replace: modifyTimestamp
         modifyTimestamp: 20000805073308Z
@@ -2776,7 +2774,7 @@ operates.
 <H1><A NAME="The OpenLDAP Public License">C. The OpenLDAP Public License</A></H1>
 <PRE>
 The OpenLDAP Public License
-  Version 2.3, 28 July 2000
+  Version 2.4, 8 December 2000
 
 Redistribution and use of this software and associated documentation
 (&quot;Software&quot;), with or without modification, are permitted provided
@@ -2792,18 +2790,14 @@ with the distribution.
 
 3. Redistributions must contain a verbatim copy of this document.
 
-4. The name &quot;OpenLDAP&quot; must not be used to endorse or promote
-products derived from this Software without prior written permission
-of the OpenLDAP Foundation.
+4. The names and trademarks of the authors and copyright holders
+must not be used in advertising or otherwise to promote the sale,
+use or other dealing in this Software without specific, written
+prior permission.
 
-5. Products derived from this Software may not be called &quot;OpenLDAP&quot;
-nor may &quot;OpenLDAP&quot; appear in their names without prior written
-permission of the OpenLDAP Foundation.
+5. Due credit should be given to the OpenLDAP Project.
 
-6. Due credit should be given to the OpenLDAP Project
-(http://www.openldap.org/).
-
-7. The OpenLDAP Foundation may revise this license from time to
+6. The OpenLDAP Foundation may revise this license from time to
 time.  Each revision is distinguished by a version number.  You
 may use the Software under terms of this license revision or under
 the terms of any subsequent revision of the license.
@@ -2812,21 +2806,20 @@ THIS SOFTWARE IS PROVIDED BY THE OPENLDAP FOUNDATION AND CONTRIBUTORS
 ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT
 NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
-THE OPENLDAP FOUNDATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
-STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
-OF THE POSSIBILITY OF SUCH DAMAGE.
+THE OPENLDAP FOUNDATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 OpenLDAP is a trademark of the OpenLDAP Foundation.
 
 Copyright 1999-2000 The OpenLDAP Foundation, Redwood City,
 California, USA.  All Rights Reserved.  Permission to copy and
 distributed verbatim copies of this document is granted.
-
 </PRE>
 </DIV>
 <DIV CLASS="footer">
