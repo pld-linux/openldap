@@ -306,6 +306,7 @@ Backend SQL do slapd - serwera OpenLDAP.
 Summary:	LDAP shared libraries
 Summary(pl):	Biblioteki wspó³dzielone LDAP
 Group:		Libraries
+%{?with_sasl:Requires:	cyrus-sasl >= 2.1.15}
 Conflicts:	openldap < 2.2.6-0.3
 
 %description libs
