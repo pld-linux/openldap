@@ -497,8 +497,7 @@ echo "# This is a good place to put your schema definitions " > \
 rm -rf $RPM_BUILD_ROOT
 
 %post	libs	-p /sbin/ldconfig
-%postun	libs
-/sbin/ldconfig || :
+%postun	libs	-p /sbin/ldconfig
 
 %pre servers
 if [ -n "`/usr/bin/getgid slapd`" ]; then
@@ -542,8 +541,8 @@ fi
 
 %postun servers
 if [ "$1" = "0" ]; then
-	%userremove slapd || :
-	%groupremove slapd || :
+	%userremove slapd
+	%groupremove slapd
 fi
 
 %post backend-bdb
