@@ -59,6 +59,9 @@ The package includes:
 - libraries implementing the LDAP protocol,
 - utilities, tools, and sample clients.
 
+%description -l es
+Cliente y servidor LDAP.
+
 %description -l pl
 Serwery i klienci LDAP jak i interfejsy do innych protoko³ów. Wiedz,
 ¿e pakiet ten nie zawiera interfejsu slapd to X.500 i dlatego nie
@@ -81,9 +84,6 @@ servidor de diretórios. O conjunto completo contém:
 Este pacote contém apenas as bibliotecas usadas por alguns programas.
 Você provavelmente também vai querer instalar o pacote
 openldap-client.
-
-%description -l es
-Cliente y servidor LDAP.
 
 %package devel
 Summary:	LDAP development files
@@ -119,7 +119,6 @@ ou desejar compilar algum programa que utilize LDAP.
 Summary:	LDAP static libraries
 Summary(pl):	Biblioteki statyczne LDAP
 Summary(pt_BR):	Bibliotecas estáticas para desenvolvimento com openldap
-Summary(es):	Static libraries for openldap development
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
 Group(es):	Desarrollo/Bibliotecas
@@ -167,12 +166,6 @@ receber as requisições dos clientes e por manter a base de dados do
 diretório.
 
 Instale este pacote se você desejar executar um servidor OpenLDAP.
-
-%description -l es servers
-The openldap-server package has the slapd daemon which is responsible
-for handling the database and client queries.
-
-Install this package if you want to setup an OpenLDAP server.
 
 %prep
 %setup  -q
