@@ -4,6 +4,8 @@
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
+Summary(pt_BR):	Clientes e servidor para LDAP
+Summary(es):	Clientes y servidor para LDAP
 Name:		openldap
 Version:	2.0.11
 Release:	1
@@ -63,9 +65,25 @@ Pakiet ten zawiera:
 - biblioteki implementuj±ce obs³ugê protoko³u LDAP,
 - dodatkowe narzedzia i przyk³adowe aplikacje klienckie LDAP.
 
+%description -l pt_BR
+OpenLDAP é um conjunto de ferramentas e aplicações para construir um servidor
+de diretórios. O conjunto completo contém:
+        servidor LDAP (slapd)
+	servidor de replicação (slurpd)
+	bibliotecas implementando o protocolo LDAP
+	utilitários, ferramentas e clientes
+
+Este pacote contém apenas as bibliotecas usadas por alguns programas. Você
+provavelmente também vai querer instalar o pacote openldap-client.
+
+%description -l es
+Cliente y servidor LDAP
+				
 %package devel
 Summary:	LDAP development files
 Summary(pl):	Pliki dla developerów LDAP
+Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclusão para o OpenLDAP
+Summary(es):	Bibliotecas de desarrollo y archivos de inclusión para OpenLDAP
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
@@ -79,9 +97,20 @@ Header files and libraries for developing applications that use LDAP.
 Pliki nag³ówkowe i biblioteki konieczne do rozwoju aplikacji
 u¿ywaj±cych LDAP.
 
+%description -l pt_BR devel
+Bibliotecas de desenvolvimento e arquivos de inclusão do OpenLDAP. Instale este
+pacote se você for trabalhar com desenvolvimento em LDAP ou desejar compilar
+algum programa que utilize LDAP.
+
+%description -l es devel
+Bibliotecas de desarrollo y archivos de inclusión de OpenLDAP
+
+
 %package static
 Summary:	LDAP static libraries
 Summary(pl):	Biblioteki statyczne LDAP
+Summary(pt_BR):	Bibliotecas estáticas para desenvolvimento com openldap
+Summary(es):	Static libraries for openldap development
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
@@ -89,14 +118,21 @@ Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
 
 %description static
-LDAP static libraries.
+This package includes the development libraries and header files needed for
+compilation of applications that are making use of the LDAP internals.
+Install this package only if you plan to develop or will need to compile
+cutomized LDAP clients.
 
 %description -l pl static
 Biblioteki statyczne LDAP.
 
+%description -l pt_BR static
+Bibliotecas estáticas para desenvolvimento com openldap
+
 %package servers
 Summary:	LDAP servers
 Summary(pl):	Serwery LDAP
+Summary(pt_BR):	Arquivos para o servidor OpenLDAP
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
@@ -104,10 +140,27 @@ Prereq:		chkconfig
 Prereq:		rc-scripts
 
 %description servers
-The servers (daemons) that come with LDAP.
+The openldap2-server package has the slapd daemon which
+is responsible for handling the database and client
+queries.
+
+Install this package if you want to setup an OpenLDAP-2.x
+server.
 
 %description -l pl servers
 Serwery (daemons) które przychodz± z LDAPem.
+
+%description -l pt_BR servers
+O pacote openldap-server contém o servidor slapd que é responsável por receber
+as requisições dos clientes e por manter a base de dados do diretório.
+
+Instale este pacote se você desejar executar um servidor OpenLDAP.
+
+%description -l es servers
+The openldap-server package has the slapd daemon which is responsible for
+handling the database and client queries.
+
+Install this package if you want to setup an OpenLDAP server.
 
 %prep
 %setup  -q
@@ -127,7 +180,7 @@ install %{SOURCE3} .
 %build
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
 CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
-%configure \
+%configure2_13 \
 	--enable-syslog \
 	--enable-proctitle \
 	--enable-cache \
