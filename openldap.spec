@@ -122,14 +122,14 @@ export CPPFLAGS LDFLAGS
 	--with-threads \
 	--enable-shared
 
-make depend
+%{__make} depend
 make
 
 %Install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap,%{_datadir}/openldap/migration}
 
-make install TMPROOT=$RPM_BUILD_ROOT
+%{__make} install TMPROOT=$RPM_BUILD_ROOT
 
 # hack the default config files
 perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
