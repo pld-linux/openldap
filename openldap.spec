@@ -21,7 +21,7 @@ Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	38dc0a1321614ed4599435ed97429b9a
+# Source0-md5:	51d1cf0a8f77f5cd27a5aa2b82a344ec
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
