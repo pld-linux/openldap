@@ -1,49 +1,37 @@
-diff -Nru openldap-1.2.11/servers/slapd/slapd.conf openldap-1.2.11.new/servers/slapd/slapd.conf
---- openldap-1.2.11/servers/slapd/slapd.conf	Fri Jun  9 15:44:41 2000
-+++ openldap-1.2.11.new/servers/slapd/slapd.conf	Fri Jun  9 15:53:27 2000
-@@ -2,28 +2,31 @@
+diff -durN openldap-2.0.1.orig/servers/slapd/slapd.conf openldap-2.0.1/servers/slapd/slapd.conf
+--- openldap-2.0.1.orig/servers/slapd/slapd.conf	Sat Aug 26 19:06:18 2000
++++ openldap-2.0.1/servers/slapd/slapd.conf	Sat Sep  9 13:18:28 2000
+@@ -3,19 +3,20 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
  #
--include		%SYSCONFDIR%/slapd.at.conf
--include		%SYSCONFDIR%/slapd.oc.conf
-+include		/usr/share/openldap/slapd.at.conf
-+include		/usr/share/openldap/slapd.at-rfc2307.conf
-+include		/usr/share/openldap/slapd.oc.conf
-+include		/usr/share/openldap/slapd.oc-rfc2307.conf
-+include		%SYSCONFDIR%/slapd.access.conf	
- schemacheck	off
- #referral	ldap://root.openldap.org/
+-include		%SYSCONFDIR%/schema/core.schema
++include		%SYSCONFDIR%/schema/custom.schema
+ 
+ # Define global ACLs to disable default read access.
++include 	%SYSCONFDIR%/slapd.access.conf
+ 
+ # Do not enable referrals until AFTER you have a working directory
+ # service AND an understanding of referrals.
+ #referral	ldap://root.openldap.org
  
 -pidfile		%LOCALSTATEDIR%/slapd.pid
 -argsfile	%LOCALSTATEDIR%/slapd.args
 +pidfile		%LOCALSTATEDIR%/run/slapd.pid
 +argsfile	%LOCALSTATEDIR%/run/slapd.args
  
- #######################################################################
- # ldbm database definitions
- #######################################################################
- 
--database	ldbm
--suffix		"dc=my-domain, dc=com"
--#suffix		"o=My Organization Name, c=US"
--rootdn		"cn=Manager, dc=my-domain, dc=com"
--#rootdn		"cn=Manager, o=My Organization Name, c=US"
--# cleartext passwords, especially for the rootdn, should
--# be avoid.  See slapd.conf(5) for details.
+ # Load dynamic backend modules:
+-# modulepath	%MODULEDIR%
++modulepath	/usr/lib/openldap
+ # moduleload	back_ldap.la
+ # moduleload	back_ldbm.la
+ # moduleload	back_passwd.la
+@@ -33,7 +34,7 @@
+ # Cleartext passwords, especially for the rootdn, should
+ # be avoid.  See slappasswd(8) and slapd.conf(5) for details.
+ # Use of strong authentication encouraged.
 -rootpw		secret
-+#database	ldbm
-+#suffix		"dc=your-domain, dc=com"
-+##suffix		"o=Your Organization Name, c=US"
-+#rootdn		"cn=root, dc=your-domain, dc=com"
-+##rootdn		"cn=root, o=Your Organization Name, c=US"
-+## Set your LDAP root password here:
-+## cleartext passwords, especially for the rootdn, should be avoid.
-+## See slapd.conf(5) for details.
-+#rootpw		{crypt}x
- # database directory
- # this directory MUST exist prior to running slapd AND
- # should only be accessable by the slapd/tools  Mode 700 recommended.
--directory	%LOCALSTATEDIR%/openldap-ldbm
--
-+#directory	%LOCALSTATEDIR%/lib/openldap
++rootpw		{crypt}x
+ # The database directory MUST exist prior to running slapd AND 
+ # should only be accessable by the slapd/tools. Mode 700 recommended.
+ directory	%LOCALSTATEDIR%/openldap-ldbm
