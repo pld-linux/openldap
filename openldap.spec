@@ -301,6 +301,18 @@ SQL backend to slapd, the OpenLDAP server.
 %description backend-sql -l pl
 Backend SQL do slapd - serwera OpenLDAP.
 
+%package libs
+Summary:	LDAP shared libraries
+Summary(pl):	Biblioteki wspó³dzielone LDAP
+Group:		Libraries
+Conflicts:	openldap < 2.2.6-0.3
+
+%description libs
+LDAP shared libraries.
+
+%description libs -l pl
+Biblioteki wspó³dzielone LDAP.
+
 %package servers
 Summary:	LDAP servers
 Summary(pl):	Serwery LDAP
@@ -319,18 +331,6 @@ Requires(post):	/usr/sbin/usermod
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
 Requires(post,preun):	/sbin/chkconfig
-
-%package libs
-Summary:	LDAP shared libraries
-Summary(pl):	Biblioteki wspó³dzielone LDAP
-Group:		Libraries
-Conflicts:	openldap < 2.2.6-0.3
-
-%description libs
-LDAP shared libraries.
-
-%description libs -l pl
-Biblioteki wspó³dzielone LDAP.
 
 %description servers
 The openldap2-server package has the slapd daemon which is responsible
