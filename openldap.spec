@@ -1,7 +1,7 @@
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
-# _without_db	- use old db3 package instead of db
+# _with_db3	- use old db3 package instead of db
 # _without_sasl - don't build cyrus sasl support
 # _without_odbc	- disable sql support
 #
@@ -36,8 +36,8 @@ Patch10:	%{name}-ac25x.patch
 Patch11:	%{name}-db41.patch
 URL:		http://www.openldap.org/
 %{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
-%{?_without_db:BuildRequires:	db3-devel}
-%{!?_without_db:BuildRequires:	db-devel}
+%{?_with_db3:BuildRequires:	db3-devel}
+%{!?_with_db3:BuildRequires:	db-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
@@ -101,8 +101,8 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}
 %{!?_without_sasl:Requires:	cyrus-sasl-devel}
 Requires:	pam-devel
-%{?_without_db:Requires:	db3-devel}
-%{!?_without_db:Requires:	db-devel}
+%{?_with_db3:Requires:	db3-devel}
+%{!?_with_db3:Requires:	db-devel}
 Requires:	openssl-devel
 
 %description devel
