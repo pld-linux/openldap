@@ -22,6 +22,7 @@ Patch2:		%{name}-config.patch
 Patch3:		%{name}-db3.patch
 Patch4:		%{name}-sql.patch
 URL:		http://www.openldap.org/
+BuildRequires:	autoconf
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
 BuildRequires:	perl
