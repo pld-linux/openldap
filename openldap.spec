@@ -403,7 +403,6 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 CPPFLAGS="-I/usr/include/ncurses"
 %configure \
 	--enable-syslog \
-	--enable-cache \
 	--enable-referrals \
 	--enable-ipv6 \
 	--enable-local \
