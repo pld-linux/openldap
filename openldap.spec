@@ -8,7 +8,7 @@ Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Name:		openldap
 Version:	2.0.14
-Release:	2
+Release:	3
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -150,6 +150,7 @@ Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Prereq:		shadow
 Prereq:		rc-scripts
+Prereq:		/sbin/chkconfig
 
 %description servers
 The openldap2-server package has the slapd daemon which is responsible
@@ -274,6 +275,9 @@ echo "# This is a good plase to put your schema definitions " > \
 gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
 	doc/rfc/* doc/drafts/*
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
@@ -301,9 +305,6 @@ if [ "$1" = "0" ] ; then
 	fi
 	chkconfig --del ldap
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
