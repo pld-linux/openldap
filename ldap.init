@@ -50,7 +50,8 @@ case "$1" in
 			msg_starting "OpenLDAP Update Replication Daemon"
 			# slapd has /bin/false as shell, so -s must be passed to su
 			daemon --user 'slapd -s /bin/sh' slurpd
-			[ $RETVAL -eq 0 ] && RETVAL=$?
+			RET=$?
+			[ $RETVAL -eq 0 ] && RETVAL=$RET
 		fi
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
 		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ] ; then
@@ -79,7 +80,8 @@ case "$1" in
 	RETVAL=$?
 	if grep -q '^replogfile' /etc/openldap/slapd.conf; then
 		status slurpd
-		[ $RETVAL -eq 0 ] && RETVAL=$?
+		RET=$?
+		[ $RETVAL -eq 0 ] && RETVAL=$RET
 	fi
 	;;
   restart|force-reload)
