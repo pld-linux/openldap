@@ -138,7 +138,7 @@ need to compile cutomized LDAP clients.
 Biblioteki statyczne LDAP.
 
 %description -l pt_BR static
-Bibliotecas estáticas para desenvolvimento com openldap
+Bibliotecas estáticas para desenvolvimento com openldap.
 
 %package servers
 Summary:	LDAP servers
@@ -236,6 +236,11 @@ CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 
 %{__make} depend
 %{__make}
+
+# avoid relinking to allow build without openldap-devel already installed
+for d in libraries/libldap/libldap.la libraries/libldap_r/libldap_r.la ; do
+	perl -pi -e 's/^relink_command.*//' $d
+done
 
 %Install
 rm -rf $RPM_BUILD_ROOT
