@@ -12,7 +12,7 @@ Source2:	openldap.sysconfig
 Source3:	http://www.padl.com/download/MigrationTools.tgz
 Source4:	MigrationTools.txt
 Patch0:		openldap-man.patch
-Patch1:		ldap-make_man_link.patch
+Patch1:		openldap-make_man_link.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel
 BuildRequires:	libwrap-devel
