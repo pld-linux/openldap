@@ -1,17 +1,14 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Name:		openldap
-Version:	1.2.1
-Release:	2
+Version:	1.2.4
+Release:	0.1
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Freely distributable
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
 Source2:	openldap.sysconfig
-Patch0:		openldap-conf.patch
-Patch1:		openldap-strdup.patch
-Patch2:		openldap-man.patch
-Patch3:		openldap-syslog.patch
+Patch0:		openldap-man.patch
 URL:		http://www.openldap.org/
 BuildPrereq:	ncurses-devel
 BuildPrereq:	libwrap
@@ -53,9 +50,6 @@ The servers (daemons) that come with LDAP.
 %prep
 %setup  -q -n ldap
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
 autoconf
