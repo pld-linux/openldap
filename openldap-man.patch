@@ -1,0 +1,20 @@
+--- openldap-1.2.1.orig/doc/man/man5/ldap.conf.5
++++ openldap-1.2.1/doc/man/man5/ldap.conf.5
+@@ -1,14 +1,14 @@
+ .TH LDAP.CONF 5 "29 November 1998" "OpenLDAP LDVERSION"
+ .UC 6
+ .SH NAME
+-ldap.conf \- ldap configuration file
++ldap.conf, .ldaprc \- ldap configuration file
+ .SH SYNOPSIS
+ ETCDIR/ldap.conf
++~/.ldaprc
+ .SH DESCRIPTION
+ The
+ .I ldap.conf
+-configuration file is used to set system-wide defaults to be applied when
+-running
++configuration file is used to set system-wide defaults to be applied when running
+ .I ldap
+ clients.  If the environment variable \fBLDAPNOINIT\fP is defined, all
+ defaulting is disabled.
