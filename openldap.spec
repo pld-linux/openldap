@@ -9,8 +9,8 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.0.23
-Release:	6
+Version:	2.0.25
+Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -314,9 +314,6 @@ echo "# This is a good place to put slapd access-control directives" > \
 echo "# This is a good place to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
-gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
-	doc/rfc/INDEX doc/drafts/*
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -350,7 +347,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc ANNOUNCEMENT CHANGES COPYRIGHT README
 %doc doc/{drafts,rfc}
 %doc guide
 %dir %{_sysconfdir}/openldap
