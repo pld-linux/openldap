@@ -1,16 +1,37 @@
-
-/etc/ldap.con is not OpenLDAP - specific. It is also used by pam_ldap, nss_ldap and 
-propably other software
-
-diff -durN ldap.orig/include/ldapconfig.h.edit ldap/include/ldapconfig.h.edit
---- ldap.orig/include/ldapconfig.h.edit	Sat Jan 23 22:24:59 1999
-+++ ldap/include/ldapconfig.h.edit	Fri Sep 10 14:19:09 1999
-@@ -39,7 +39,7 @@
- #define DEFAULT_LIBEXECDIR	"%LIBEXECDIR%"
- #define DEFAULT_RUNDIR		"%RUNDIR%"
+diff -durN ldap.orig/servers/slapd/slapd.conf ldap/servers/slapd/slapd.conf
+--- ldap.orig/servers/slapd/slapd.conf	Sat Sep 18 15:52:34 1999
++++ ldap/servers/slapd/slapd.conf	Sat Sep 18 16:35:53 1999
+@@ -2,13 +2,15 @@
+ # See slapd.conf(5) for details on configuration options.
+ # This file should NOT be world readable.
+ #
+-include		%SYSCONFDIR%/slapd.at.conf
+-include		%SYSCONFDIR%/slapd.oc.conf
++include		/usr/share/openldap/slapd.at.conf
++include		/usr/share/openldap/slapd.at-rfc2307.conf
++include		/usr/share/openldap/slapd.oc.conf
++include		/usr/share/openldap/slapd.oc-rfc2307.conf
+ schemacheck	off
+ #referral	ldap://ldap.itd.umich.edu
  
--#define DEFAULT_LDAP_CONF_FILE "%SYSCONFDIR%/ldap.conf"
-+#define DEFAULT_LDAP_CONF_FILE "/etc/ldap.conf"
- #define DEFAULT_LDAP_USERRC_FILE "ldaprc"
- #define DEFAULT_LDAP_ENV_PREFIX "LDAP"
+-pidfile		%LOCALSTATEDIR%/slapd.pid
+-argsfile	%LOCALSTATEDIR%/slapd.args
++pidfile		%LOCALSTATEDIR%/run/slapd.pid
++argsfile	%LOCALSTATEDIR%/run/slapd.args
+ 
+ #######################################################################
+ # ldbm database definitions
+@@ -17,10 +19,11 @@
+ database	ldbm
+ suffix		"dc=your-domain, dc=com"
+ #suffix		"o=Your Organization Name, c=US"
+-directory	/var/ldap
++directory	%LOCALSTATEDIR%/state/openldap
+ rootdn		"cn=root, dc=your-domain, dc=com"
+ #rootdn		"cn=root, o=Your Organization Name, c=US"
+-rootpw		secret
++# Set your LDAP root password here:
++rootpw		{crypt}x
+ # cleartext passwords, especially for the rootdn, should
+ # be avoid.  See slapd.conf(5) for details.
  
