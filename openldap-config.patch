@@ -1,0 +1,12 @@
+diff -durN ldap.orig/servers/slapd/slapd.conf ldap/servers/slapd/slapd.conf
+--- ldap.orig/servers/slapd/slapd.conf	Wed Jun  9 23:42:51 1999
++++ ldap/servers/slapd/slapd.conf	Fri Sep 10 11:27:43 1999
+@@ -17,7 +17,7 @@
+ database	ldbm
+ suffix		"dc=your-domain, dc=com"
+ #suffix		"o=Your Organization Name, c=US"
+-directory	/usr/tmp
++directory	/var/ldap
+ rootdn		"cn=root, dc=your-domain, dc=com"
+ #rootdn		"cn=root, o=Your Organization Name, c=US"
+ rootpw		secret
