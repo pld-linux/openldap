@@ -256,7 +256,7 @@ for d in libraries/libldap/libldap.la libraries/libldap_r/libldap_r.la ; do
 	perl -pi -e 's/^relink_command.*//' $d
 done
 
-%Install
+%install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm} \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/schema
