@@ -1,5 +1,7 @@
 #
-# TODO: package contribs?
+# TODO:
+# - package contribs?
+# - SECURITY: http://securitytracker.com/alerts/2004/Sep/1011192.html (no details...)
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
