@@ -16,6 +16,11 @@
 # Get network config
 . /etc/sysconfig/network
 
+# defaults
+SLAPDSYSLOGLEVEL=""
+SLAPDURLLIST=""
+SLAPDOPTIONS=""
+
 # Get service config
 [ -f /etc/sysconfig/ldap ] && . /etc/sysconfig/ldap
 
@@ -44,10 +49,15 @@ case "$1" in
 		if [ -n "$SLAPDURLLIST" ]; then
 			ARGS="$ARGS -h \"$SLAPDURLLIST\""
 		fi
+		if [ -n "$SLAPDOPTIONS" ]; then
+			ARGS="$ARGS $SLAPDOPTIONS"
+		fi
+		SERVICE_RUN_NICE_LEVEL="$SLAPDNICE"
 		daemon slapd $ARGS
 		RETVAL=$?
 		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
 			msg_starting "OpenLDAP Update Replication Daemon"
+			SERVICE_RUN_NICE_LEVEL="$SLURPNICE"
 			# slapd has /bin/false as shell, so -s must be passed to su
 			daemon --user 'slapd -s /bin/sh' slurpd
 			RET=$?
@@ -55,7 +65,7 @@ case "$1" in
 		fi
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
 		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
-			chown "$LDAPI_SOCKET_OWNER"."$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
+			chown "$LDAPI_SOCKET_OWNER":"$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
 			chmod "$LDAPI_SOCKET_MODE" /var/run/ldapi 
 		fi
 	else
