@@ -1,13 +1,13 @@
---- openldap-2.2.10/servers/slapd/Makefile.in.orig	2004-03-18 02:01:02.000000000 +0100
-+++ openldap-2.2.10/servers/slapd/Makefile.in	2004-03-28 03:43:04.484125840 +0200
-@@ -417,5 +417,9 @@
+--- openldap-2.2.15/servers/slapd/Makefile.in.orig	2004-07-26 00:31:04.000000000 +0200
++++ openldap-2.2.15/servers/slapd/Makefile.in	2004-07-31 01:57:16.371699848 +0200
+@@ -421,6 +421,10 @@
  	cd $(DESTDIR)$(sbindir); \
-	rm -f $(SLAPTOOLS); \
+ 	rm -f $(SLAPTOOLS); \
  	for i in $(SLAPTOOLS); do \
--		$(LN_S) $(libexecdir)/slapd $$i; \
 +		if test "$(libexecdir)" = "$(sbindir)" ; then \
-+			$(LN_S) slapd $$i ; \
++			$(LN_S) slapd$(EXEEXT) $$i$(EXEEXT) ; \
 +		else \
-+			$(LN_S) $(libexecdir)/slapd $$i; \
+ 		$(LN_S) $(libexecdir)/slapd$(EXEEXT) $$i$(EXEEXT); \
 +		fi ; \
  	done
+ 
