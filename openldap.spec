@@ -1,7 +1,7 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	2.0.0
+Version:	2.0.1
 Release:	0.1
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
@@ -9,12 +9,11 @@ Copyright:	Artistic
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
-Source3:	http://www.padl.com/download/MigrationTools.tgz
-Source4:	MigrationTools.txt
+Source3:	http://www.openldap.org/doc/admin/guide.html
+#Source3:	http://www.padl.com/download/MigrationTools.tgz
+#Source4:	MigrationTools.txt
 Source5:	ldap.conf
-Source6:	slapd.at-rfc2307.conf
-Source7:	slapd.oc-rfc2307.conf
-Source8:	ldapsetupdb
+#Source8:	ldapsetupdb
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-migrate_passwd.patch
 Patch2:		%{name}-config.patch
@@ -97,7 +96,7 @@ The servers (daemons) that come with LDAP.
 Serwery (daemons) które przychodz± z LDAPem.
 
 %prep
-%setup  -q -a 3
+%setup  -q
 %patch0 -p1
 %patch1 -p1
 #%patch2 -p1
