@@ -40,7 +40,7 @@ Patch12:	%{name}-pic.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_sasl:BuildRequires:	cyrus-sasl-devel}
+%{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
 BuildRequires:	db-devel >= 4.2
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
@@ -103,7 +103,7 @@ Summary(ru):	Файлы для программирования с LDAP
 Summary(uk):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-%{?with_sasl:Requires:	cyrus-sasl-devel}
+%{?with_sasl:Requires:	cyrus-sasl-devel >= 2.1.15}
 Requires:	db-devel >= 4.2
 Requires:	openssl-devel >= 0.9.7c
 
