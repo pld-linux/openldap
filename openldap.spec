@@ -16,7 +16,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.2.11
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -591,7 +591,7 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %post backend-ldap
-ed -s %%{_sysconfdir}/openldap/slapd.conf << EOF || :
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/moduleload    back_ldap.la/
 wq
 EOF
@@ -600,7 +600,7 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-ldap
-ed -s %%{_sysconfdir}/openldap/slapd.conf << EOF || :
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^# moduleload    back_ldap.la[[:blank:]]*$/# moduleload    back_ldap.la/
 wq
 EOF
