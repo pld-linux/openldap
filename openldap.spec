@@ -346,29 +346,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/slapd.conf.5.gz
 %{_mandir}/man5/slapd.replog.5.gz
 %{_mandir}/man8/*
-
-%ChangeLog
-* Thu May  6 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [1.2.1-2]
-- more fixes agains symlinks on man pages files,
-- small fix in man pages about ability using ~/.ldaprc 
-  (openldap-man.patch),
-- added BiolPrereq: libwrap (we ./configure --with-wrappers),
-- fix for logging to LOG_DAEMON va syslogd (openldap-syslog.patch).
-
-* Thu May  6 1999 Artur Frysiak <wiget@pld.org.pl>
-- fixes agains symlinks on man pages files,
-- added %%{_target_platform} macro to ./configure parameters,
-- fixed strdup macro owerwriting (openldap-strdup.patch).
-
-* Thu Apr 22 1999 Arne Coucheron <arneco@online.no>
-  [1.2.1-1]
-- using %%{name} and %%{version} macros
-- added -q parameter to %setup
-- added URL tag
-- using chkconfig to activate init script and added Prereq: for it
-- devel package requires openldap
-- fixed the path names in the man pages
-- using %defattr in %files section
-- simplified the use %files
-- some changes in the init script (check that networking is up etc)
