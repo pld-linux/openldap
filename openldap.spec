@@ -350,7 +350,6 @@ rm -rf $RPM_BUILD_ROOT
 %ChangeLog
 * Thu May  6 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [1.2.1-2]
-- modyfications for FHS 2.0 compiliance,
 - more fixes agains symlinks on man pages files,
 - small fix in man pages about ability using ~/.ldaprc 
   (openldap-man.patch),
