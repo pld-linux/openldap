@@ -11,10 +11,12 @@ Source1:	ldap.init
 Source2:	openldap.sysconfig
 Source3:	http://www.padl.com/download/MigrationTools.tgz
 Source4:	MigrationTools.txt
+Source5:	ldap.conf
 Patch0:		openldap-man.patch
 Patch1:		openldap-make_man_link.patch
 Patch2:		openldap-migrate_passwd.patch
 Patch3:		openldap-config.patch
+Patch4:		openldap-conffile.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel
 BuildRequires:	libwrap-devel
@@ -92,6 +94,7 @@ Serwery (daemons) które przychodz± z LDAPem.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 install %{SOURCE4} .
 
@@ -129,6 +132,8 @@ mv xrpcomp.work xrpcomp
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
+
+install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT/etc/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap//ldapserver
 
@@ -172,7 +177,7 @@ rm -rf $RPM_BUILD_ROOT
 %config %{_sysconfdir}/openldap/ldapserver
 %config %{_sysconfdir}/openldap/ldaptemplates.conf
 %config %{_sysconfdir}/openldap/ldapsearchprefs.conf
-%config %{_sysconfdir}/openldap/ldap.conf
+%config %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_sbindir}/xrpcomp
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
