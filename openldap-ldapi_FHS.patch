@@ -5,7 +5,7 @@
  
  /* default ldapi:// socket */
 -#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"
-+#define LDAPI_SOCK "var" LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"
++#define LDAPI_SOCK "/var/run/ldapi"
  
  /*
   * SLAPD DEFINITIONS
