@@ -2,7 +2,7 @@ Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
 Version:	1.2.10
-Release:	1
+Release:	2
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
 Copyright:	Artistic
@@ -125,7 +125,7 @@ make
 
 %Install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/state/openldap,%{_datadir}/openldap/migration}
+install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap,%{_datadir}/openldap/migration}
 
 make install TMPROOT=$RPM_BUILD_ROOT
 
@@ -231,7 +231,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
-%attr(700,root,root) %{_localstatedir}/state/openldap
+%attr(700,root,root) %{_localstatedir}/lib/openldap
 %{_datadir}/openldap/*.help
 %{_datadir}/openldap/ldapfriendly
 %{_datadir}/openldap/*.conf
