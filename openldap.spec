@@ -76,7 +76,7 @@ wymaga pakietu ISODE.
 
 Pakiet ten zawiera:
 - biblioteki implementuj±ce obs³ugê protoko³u LDAP,
-- dodatkowe narzedzia i przyk³adowe aplikacje klienckie LDAP.
+- dodatkowe narzêdzia i przyk³adowe aplikacje klienckie LDAP.
 
 %description -l pt_BR
 OpenLDAP é um conjunto de ferramentas e aplicações para construir um
