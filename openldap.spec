@@ -19,6 +19,7 @@ Release:	3
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
+# Source0-md5:	a1e6508c471dd47205a3492cf57110a6
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 # Taken from http://www.openldap.org/doc/admin/guide.html. Tarball includes images.
