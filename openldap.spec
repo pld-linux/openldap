@@ -1,12 +1,12 @@
 #
-# Conditional build:
+# Conditional build:	
 # ldbm_type - set to needed value (btree<default> or hash)
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	2.0.7
-Release:	16
+Version:	2.0.8
+Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -26,11 +26,14 @@ Patch6:		%{name}-syslog.patch
 Patch7:		%{name}-fast.patch
 Patch8:		%{name}-pidfile.patch
 Patch9:		%{name}-cldap.patch
-Patch10:	%{name}-norbert.patch
+Patch10:	%{name}-ac.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
+BuildRequires:	libtool
+BuildRequires:	automake
 BuildRequires:	ncurses-devel >= 5.2
 BuildRequires:	libwrap-devel
+BuildRequires:	readline-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl
 BuildRequires:	cyrus-sasl-devel
@@ -129,9 +132,12 @@ install %{SOURCE3} .
 #perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 %build
+#install %{_datadir}/automake/missing ./build
+#libtoolize --copy --force
+#aclocal
 autoconf
-CPPFLAGS="-I/usr/include/ncurses -I/usr/include/db3"
-CFLAGS="%{rpmcflags} -I/usr/include/db3"
+CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
+CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 %configure \
 	--enable-syslog \
 	--enable-proctitle \
@@ -180,7 +186,8 @@ CFLAGS="%{rpmcflags} -I/usr/include/db3"
 
 %Install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm,%{_datadir}/openldap/schema}
+install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm}
+install -d $RPM_BUILD_ROOT%{_datadir}/openldap/schema
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -218,10 +225,10 @@ gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
 
 %pre servers
 grep -q slapd %{_sysconfdir}/group || (
-	/usr/sbin/groupadd -g 93 -r -f slapd 1>&2 || :
+%attr(755,root,root) %{_sbindir}/groupadd -g 93 -r -f slapd 1>&2 || :
 )
 grep -q slapd %{_sysconfdir}/passwd || (
-	/usr/sbin/useradd -M -o -r -u 93 \
+%attr(755,root,root) %{_sbindir}/useradd -M -o -r -u 93 \
         -g slapd -c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2 || :
 )
 
