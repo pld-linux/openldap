@@ -19,15 +19,14 @@ Source5:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
-Patch3:		%{name}-db3.patch
-Patch4:		%{name}-sql.patch
-Patch5:		%{name}-sendbuf.patch
-Patch6:		%{name}-syslog.patch
-Patch7:		%{name}-fast.patch
-Patch8:		%{name}-cldap.patch
-Patch9:		%{name}-no_libnsl.patch
-Patch10:	%{name}-lt_fixes.patch
-Patch11:	%{name}-ldapi_FHS.patch
+Patch3:		%{name}-sql.patch
+Patch4:		%{name}-sendbuf.patch
+Patch5:		%{name}-syslog.patch
+Patch6:		%{name}-fast.patch
+Patch7:		%{name}-cldap.patch
+Patch8:		%{name}-no_libnsl.patch
+Patch9:		%{name}-lt_fixes.patch
+Patch10:	%{name}-ldapi_FHS.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -177,7 +176,6 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
 
 install %{SOURCE3} .
 
