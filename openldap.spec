@@ -5,8 +5,8 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	2.0.8
-Release:	2
+Version:	2.0.9
+Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -26,14 +26,9 @@ Patch6:		%{name}-syslog.patch
 Patch7:		%{name}-fast.patch
 Patch8:		%{name}-pidfile.patch
 Patch9:		%{name}-cldap.patch
-Patch10:	%{name}-ac.patch
 URL:		http://www.openldap.org/
-BuildRequires:	autoconf
-BuildRequires:	libtool
-BuildRequires:	automake
-BuildRequires:	ncurses-devel >= 5.2
 BuildRequires:	libwrap-devel
-BuildRequires:	readline-devel
+BuildRequires:	readline-devel >= 4.2
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl
 BuildRequires:	cyrus-sasl-devel
@@ -126,16 +121,10 @@ Serwery (daemons) które przychodz± z LDAPem.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
 
 install %{SOURCE3} .
-#perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 %build
-#install %{_datadir}/automake/missing ./build
-#libtoolize --copy --force
-#aclocal
-autoconf
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
 CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 %configure \
