@@ -7,7 +7,7 @@ Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(es):	Clientes y servidor para LDAP
 Name:		openldap
-Version:	2.0.13
+Version:	2.0.14
 Release:	1
 License:	Artistic
 Group:		Networking/Daemons
@@ -28,15 +28,19 @@ Patch6:		%{name}-syslog.patch
 Patch7:		%{name}-fast.patch
 Patch8:		%{name}-cldap.patch
 Patch9:		%{name}-no_libnsl.patch
+Patch10:	%{name}-ac_fixes.patch
 URL:		http://www.openldap.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	cyrus-sasl-devel
+BuildRequires:	db3-devel
+BuildRequires:	libltdl-devel >= 1.4
+BuildRequires:	libtool
 BuildRequires:	libwrap-devel
-BuildRequires:	readline-devel >= 4.2
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	perl
-BuildRequires:	cyrus-sasl-devel
+BuildRequires:	readline-devel >= 4.2
 BuildRequires:	unixODBC-devel
-BuildRequires:	libltdl-devel >= 1.4
-BuildRequires:	db3-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
@@ -174,14 +178,17 @@ Install this package if you want to setup an OpenLDAP server.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 install %{SOURCE3} .
 
 %build
-CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
-CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
+rm -f missing
+libtoolize --copy --force
 aclocal
 autoconf
+CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
+CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 %configure \
 	--enable-syslog \
 	--enable-proctitle \
