@@ -8,7 +8,7 @@ Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Name:		openldap
 Version:	2.0.18
-Release:	2
+Release:	3
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -347,8 +347,8 @@ fi
 %defattr(644,root,root,755)
 %doc guide.html
 %dir %{_sysconfdir}/openldap/schema
-%attr(640,root,slapd) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
-%attr(640,root,slapd) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
+%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
+%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
