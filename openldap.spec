@@ -16,12 +16,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.23
-Release:	2
+Version:	2.2.24
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	51d1cf0a8f77f5cd27a5aa2b82a344ec
+# Source0-md5:	383691dbabe05ee2b72a3e9db2042a82
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -43,7 +43,7 @@ URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
-BuildRequires:	db-devel >= 4.3
+BuildRequires:	db-devel >= 4.2
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
@@ -109,7 +109,7 @@ Summary(uk):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel >= 2.1.15}
-Requires:	db-devel >= 4.3
+Requires:	db-devel >= 4.2
 Requires:	openssl-devel >= 0.9.7c
 
 %description devel
@@ -786,6 +786,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/back_hdb*.so*
 %{_libdir}/openldap/back_hdb.la
+%{_mandir}/man5/slapd-hdb.5*
 
 %files backend-ldap
 %defattr(644,root,root,755)
