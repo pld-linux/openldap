@@ -97,7 +97,7 @@ Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Prereq:		chkconfig
-Requires:	rc-scripts
+Prereq:		rc-scripts
 
 %description servers
 The servers (daemons) that come with LDAP.
