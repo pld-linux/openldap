@@ -1,6 +1,7 @@
 #
 # Conditional build:
-# ldbm_type - set to needed value (btree<default> or hash)
+# ldbm_type	- set to needed value (btree<default> or hash)
+# _with_db4	- use new db 4.1 package instead of db3 [temporary]
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es):	Clientes y servidor para LDAP
@@ -10,7 +11,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.0.27
-Release:	1
+Release:	2
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -30,9 +31,11 @@ Patch7:		%{name}-cldap.patch
 Patch8:		%{name}-no_libnsl.patch
 Patch9:		%{name}-ldapi_FHS.patch
 Patch10:	%{name}-ac25x.patch
+Patch11:	%{name}-db41.patch
 URL:		http://www.openldap.org/
 BuildRequires:	cyrus-sasl-devel
-BuildRequires:	db3-devel
+%{!?_with_db4:BuildRequires:	db3-devel}
+%{?_with_db4:BuildRequires:	db-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
@@ -96,7 +99,8 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}
 Requires:	cyrus-sasl-devel
 Requires:	pam-devel
-Requires:	db3-devel
+%{!?_with_db4:Requires:	db3-devel}
+%{?_with_db4:Requires:	db-devel}
 Requires:	openssl-devel
 
 %description devel
@@ -158,9 +162,14 @@ Summary(pt_BR):	Arquivos para o servidor OpenLDAP
 Summary(ru):	Сервера LDAP
 Summary(uk):	Сервера LDAP
 Group:		Networking/Daemons
-Prereq:		shadow
-Prereq:		rc-scripts
-Prereq:		/sbin/chkconfig
+PreReq:		rc-scripts
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
+Requires(post,preun):	/sbin/chkconfig
 
 %description servers
 The openldap2-server package has the slapd daemon which is responsible
@@ -199,8 +208,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 Сервера (демони), що поставляються з LDAP.
 
 %prep
-%setup  -q
-%setup  -q -a 3
+%setup -q -a 3
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -212,6 +220,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
@@ -309,16 +318,26 @@ rm -rf $RPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 %pre servers
-grep -q slapd %{_sysconfdir}/group || (
-/usr/sbin/groupadd -g 93 -r -f slapd 1>&2 || :
-)
-grep -q slapd %{_sysconfdir}/passwd || (
-/usr/sbin/useradd -M -o -r -u 93 -s /bin/false \
-        -g slapd -c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2 || :
-)
+if [ -n "`getgid slapd`" ]; then
+	if [ "`getgid slapd`" != "93" ]; then
+		echo "Error: group slapd doesn't have gid=93. Correct this before installing openldap." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 93 -r -f slapd
+fi
+if [ -n "`id -u slapd 2>/dev/null`" ]; then
+	if [ "`id -u slapd`" != "93" ]; then
+		echo "Error: user slapd doesn't have uid=93. Correct this before installing openldap." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -M -r -u 93 -s /bin/false -g slapd \
+		-c "OpenLDAP server" -d /var/lib/openldap-ldbm slapd 1>&2
+fi
 
 %post servers
-chkconfig --add ldap
+/sbin/chkconfig --add ldap
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 else
@@ -330,7 +349,13 @@ if [ "$1" = "0" ] ; then
 	if [ -f /var/lock/subsys/ldap ]; then
 		/etc/rc.d/init.d/ldap stop >&2
 	fi
-	chkconfig --del ldap
+	/sbin/chkconfig --del ldap
+fi
+
+%postun servers
+if [ "$1" = "0" ]; then
+	/usr/sbin/userdel slapd
+	/usr/sbin/groupdel slapd
 fi
 
 %files
