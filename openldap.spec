@@ -19,6 +19,7 @@ Release:	0.1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
+# Source0-md5: e78402b3c0ef8b78aa00521a87f9f47b
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
