@@ -7,8 +7,8 @@ Summary(es):	Clientes y servidor para LDAP
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Name:		openldap
-Version:	2.0.21
-Release:	3
+Version:	2.0.23
+Release:	1
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -19,14 +19,14 @@ Source5:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
-Patch3:		%{name}-db3.patch
-Patch4:		%{name}-sql.patch
-Patch5:		%{name}-sendbuf.patch
-Patch6:		%{name}-syslog.patch
-Patch7:		%{name}-fast.patch
-Patch8:		%{name}-cldap.patch
-Patch9:		%{name}-no_libnsl.patch
-Patch10:	%{name}-lt_fixes.patch
+Patch3:		%{name}-sql.patch
+Patch4:		%{name}-sendbuf.patch
+Patch5:		%{name}-syslog.patch
+Patch6:		%{name}-fast.patch
+Patch7:		%{name}-cldap.patch
+Patch8:		%{name}-no_libnsl.patch
+Patch9:		%{name}-lt_fixes.patch
+Patch10:	%{name}-ldapi_FHS.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
