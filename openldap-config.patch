@@ -24,7 +24,7 @@
  
 -pidfile		%LOCALSTATEDIR%/run/slapd.pid
 -argsfile	%LOCALSTATEDIR%/run/slapd.args
-+pidfile	/var/run/slapd/slapd.pid
++pidfile		/var/run/slapd/slapd.pid
 +argsfile	/var/run/slapd/slapd.args
  
  # Load dynamic backend modules:
@@ -52,7 +52,7 @@
 -database	bdb
 +# A NULL database configuration follows. It is enough to run slapd, but it does
 +# nothing. You need to install one of the backends and configure a real database 
-+  
++
 +database	null
  suffix		"dc=my-domain,dc=com"
  rootdn		"cn=Manager,dc=my-domain,dc=com"
@@ -67,7 +67,7 @@
  directory	%LOCALSTATEDIR%/openldap-data
  # Indices to maintain
  index	objectClass	eq
-+ 
++
 +#database	bdb
 +#suffix		"dc=my-domain,dc=com"
 +#rootdn		"cn=Manager,dc=my-domain,dc=com"
