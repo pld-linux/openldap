@@ -61,7 +61,7 @@ The servers (daemons) that come with LDAP.
 autoconf
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 CPPFLAGS="-I%{_includedir}/ncurses" \
-./configure %{_target} \
+./configure %{_target_platform} \
 	--prefix=/usr \
 	--libexecdir=%{_sbindir} \
 	--sysconfdir=/etc/ldap \
@@ -358,7 +358,7 @@ rm -rf $RPM_BUILD_ROOT
 
 * Thu May  6 1999 Artur Frysiak <wiget@pld.org.pl>
 - fixes agains symlinks on man pages files,
-- added %%{_target} macro to ./configure parameters,
+- added %%{_target_platform} macro to ./configure parameters,
 - fixed strdup macro owerwriting (openldap-strdup.patch).
 
 * Thu Apr 22 1999 Arne Coucheron <arneco@online.no>
