@@ -42,6 +42,15 @@
  XXLIBS = $(SECURITY_LIBS) $(TLS_LIBS)
  
  LINKAGE = @LT_LIB_LINKAGE@
+@@ -44,7 +44,7 @@
+ 
+ NT_XXLIBS = $(SECURITY_LIBS)
+ 
+-UNIX_DYN_LIB_LIBS  = -llber $(AC_LIBS)
++UNIX_DYN_LIB_LIBS  = ../liblber/liblber.la $(AC_LIBS)
+ UNIX_XXLIBS = $(SECURITY_LIBS)
+ 
+ # Extras for building the library
 --- openldap-2.0.14/libraries/libldap_r/Makefile.in~	Sat Jul 21 21:01:40 2001
 +++ openldap-2.0.14/libraries/libldap_r/Makefile.in	Fri Sep 14 03:05:40 2001
 @@ -41,7 +41,7 @@
@@ -53,6 +62,15 @@
  XXLIBS = $(SECURITY_LIBS) $(LUTIL_LIBS)
  XXXLIBS = $(LTHREAD_LIBS)
  
+@@ -53,7 +53,7 @@
+ 
+ NT_XXLIBS = $(SECURITY_LIBS)
+ 
+-UNIX_DYN_LIB_LIBS  = -llber $(AC_LIBS)
++UNIX_DYN_LIB_LIBS  = ../liblber/liblber.la $(AC_LIBS)
+ UNIX_XXLIBS = $(SECURITY_LIBS)
+ 
+ # Extras for building the library
 --- openldap-2.0.14/libraries/libavl/Makefile.in~	Mon Oct  2 19:20:30 2000
 +++ openldap-2.0.14/libraries/libavl/Makefile.in	Fri Sep 14 03:07:25 2001
 @@ -14,7 +14,7 @@
@@ -241,3 +259,14 @@
  XXLIBS = $(SLAPD_LIBS) \
  	$(LDBM_LIBS) $(SECURITY_LIBS) \
  	$(LDIF_LIBS) $(LUTIL_LIBS)
+--- openldap-2.0.14/tests/progs/Makefile.in.orig	Tue Jun 13 19:57:43 2000
++++ openldap-2.0.14/tests/progs/Makefile.in	Tue Sep 18 20:43:56 2001
+@@ -12,7 +12,7 @@
+ LDAP_INCDIR= ../../include
+ LDAP_LIBDIR= ../../libraries
+ 
+-XLIBS    = -lldap -llber
++XLIBS    = ../../libraries/libldap/libldap.la ../../libraries/liblber/liblber.la
+ XXLIBS	= $(SECURITY_LIBS) $(LUTIL_LIBS)
+ 
+ # build-tools: FORCE
