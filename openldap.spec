@@ -53,8 +53,6 @@ Note that this does not include the slapd interface to X.500 and
 therefore does not require the ISODE package.
 
 The package includes:
-- stand-alone LDAP server (slapd),
-- stand-alone LDAP replication server (slurpd),
 - libraries implementing the LDAP protocol,
 - utilities, tools, and sample clients.
 
@@ -67,16 +65,14 @@ Serwery i klienci LDAP jak i interfejsy do innych protoko³ów. Wiedz,
 wymaga pakietu ISODE.
 
 Pakiet ten zawiera:
-- serwer LDAP (slapd)
-- serwer replikacji bazy LDAP (slurpd),
 - biblioteki implementuj±ce obs³ugê protoko³u LDAP,
 - dodatkowe narzedzia i przyk³adowe aplikacje klienckie LDAP.
 
 %description -l pt_BR
 OpenLDAP é um conjunto de ferramentas e aplicações para construir um
-servidor de diretórios. O conjunto completo contém:
-- servidor LDAP (slapd),
-- servidor de replicação (slurpd),
+servidor de diretórios.
+
+O conjunto completo contém:
 - bibliotecas implementando o protocolo LDAP utilitários,
 - ferramentas e clientes.
 
@@ -155,15 +151,29 @@ Prereq:		/sbin/chkconfig
 The openldap2-server package has the slapd daemon which is responsible
 for handling the database and client queries.
 
+The package includes:
+- stand-alone LDAP server (slapd),
+- stand-alone LDAP replication server (slurpd)
+
 Install this package if you want to setup an OpenLDAP-2.x server.
 
 %description -l pl servers
 Serwery (demony) które przychodz± z LDAPem.
 
+Pakiet ten zawiera:
+- serwer LDAP (slapd)
+- serwer replikacji bazy LDAP (slurpd)
+
+Zainstaluj ten pakiet je¿eli potrzebujesz server OpenLDAP-2.x.
+
 %description -l pt_BR servers
 O pacote openldap-server contém o servidor slapd que é responsável por
 receber as requisições dos clientes e por manter a base de dados do
 diretório.
+
+O conjunto completo contém:
+- servidor LDAP (slapd),
+- servidor de replicação (slurpd)
 
 Instale este pacote se você desejar executar um servidor OpenLDAP.
 
