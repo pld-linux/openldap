@@ -168,8 +168,10 @@ Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getent
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires(pre):	textutils
 Requires(post):	/usr/sbin/usermod
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
@@ -489,7 +491,7 @@ else
 fi
 
 %triggerpostun servers -- openldap-servers < 2.1.12
-if [ "`su - slapd -s /bin/sh -c pwd 2>/dev/null`" = "/var/lib/openldap-ldbm" ]; then
+if [ "`getend passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
 	/usr/sbin/usermod -d /var/lib/openldap-data slapd
 fi
 
