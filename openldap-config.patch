@@ -29,8 +29,8 @@ diff -urN openldap-2.0.8.org/servers/slapd/slapd.conf openldap-2.0.8/servers/sla
  
 -pidfile		%LOCALSTATEDIR%/slapd.pid
 -argsfile	%LOCALSTATEDIR%/slapd.args
-+pidfile		%LOCALSTATEDIR%/run/slapd.pid
-+argsfile	%LOCALSTATEDIR%/run/slapd.args
++pidfile		/var/run/slapd.pid
++argsfile	/var/run/slapd.args
  
  # Load dynamic backend modules:
 -# modulepath	%MODULEDIR%
@@ -38,7 +38,7 @@ diff -urN openldap-2.0.8.org/servers/slapd/slapd.conf openldap-2.0.8/servers/sla
  # moduleload	back_ldap.la
  # moduleload	back_ldbm.la
  # moduleload	back_passwd.la
-@@ -33,9 +46,9 @@
+@@ -33,7 +46,7 @@
  # Cleartext passwords, especially for the rootdn, should
  # be avoid.  See slappasswd(8) and slapd.conf(5) for details.
  # Use of strong authentication encouraged.
@@ -46,7 +46,4 @@ diff -urN openldap-2.0.8.org/servers/slapd/slapd.conf openldap-2.0.8/servers/sla
 +#rootpw		secret
  # The database directory MUST exist prior to running slapd AND 
  # should only be accessible by the slapd/tools. Mode 700 recommended.
--directory	%LOCALSTATEDIR%/openldap-ldbm
-+directory	%LOCALSTATEDIR%/lib/openldap-ldbm
- # Indices to maintain
- index	objectClass	eq
+ directory	%LOCALSTATEDIR%/openldap-ldbm
