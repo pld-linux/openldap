@@ -10,13 +10,14 @@ Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
 Version:	2.0.23
-Release:	5
+Release:	6
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
-Source3:	http://www.openldap.org/doc/admin/guide.html
+# Taken from http://www.openldap.org/doc/admin/guide.html. Tarball includes images.
+Source3:	ldap-guide.tar.gz
 Source5:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
@@ -40,6 +41,7 @@ BuildRequires:	libltdl-devel >= 1.4
 BuildRequires:	libtool
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
+BuildRequires:	pam-devel
 BuildRequires:	perl
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	unixODBC-devel
@@ -203,6 +205,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 
 %prep
 %setup  -q
+%setup  -q -a 3
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -216,8 +219,6 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-
-install %{SOURCE3} .
 
 %build
 rm -f build/missing
@@ -351,6 +352,7 @@ fi
 %defattr(644,root,root,755)
 %doc *.gz
 %doc doc/{drafts,rfc}
+%doc guide
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
