@@ -3,9 +3,9 @@
 # ldbm_type - set to needed value (btree<default> or hash)
 #
 Summary:	Lightweight Directory Access Protocol clients/servers
+Summary(es):	Clientes y servidor para LDAP
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
-Summary(es):	Clientes y servidor para LDAP
 Name:		openldap
 Version:	2.0.14
 Release:	1
@@ -29,6 +29,7 @@ Patch7:		%{name}-fast.patch
 Patch8:		%{name}-cldap.patch
 Patch9:		%{name}-no_libnsl.patch
 Patch10:	%{name}-ac_fixes.patch
+Patch11:	%{name}-lt_fixes.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -70,19 +71,20 @@ Pakiet ten zawiera:
 - dodatkowe narzedzia i przyk≥adowe aplikacje klienckie LDAP.
 
 %description -l pt_BR
-OpenLDAP È um conjunto de ferramentas e aplicaÁıes para construir um servidor
-de diretÛrios. O conjunto completo contÈm:
-        servidor LDAP (slapd)
-	servidor de replicaÁ„o (slurpd)
-	bibliotecas implementando o protocolo LDAP
-	utilit·rios, ferramentas e clientes
+OpenLDAP È um conjunto de ferramentas e aplicaÁıes para construir um
+servidor de diretÛrios. O conjunto completo contÈm:
+- servidor LDAP (slapd),
+- servidor de replicaÁ„o (slurpd),
+- bibliotecas implementando o protocolo LDAP utilit·rios,
+- ferramentas e clientes.
 
-Este pacote contÈm apenas as bibliotecas usadas por alguns programas. VocÍ
-provavelmente tambÈm vai querer instalar o pacote openldap-client.
+Este pacote contÈm apenas as bibliotecas usadas por alguns programas.
+VocÍ provavelmente tambÈm vai querer instalar o pacote
+openldap-client.
 
 %description -l es
-Cliente y servidor LDAP
-				
+Cliente y servidor LDAP.
+
 %package devel
 Summary:	LDAP development files
 Summary(pl):	Pliki dla developerÛw LDAP
@@ -90,25 +92,28 @@ Summary(pt_BR):	Bibliotecas de desenvolvimento e arquivos de inclus„o para o Ope
 Summary(es):	Bibliotecas de desarrollo y archivos de inclusiÛn para OpenLDAP
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Ú¡⁄“¡¬œ‘À¡/‚…¬Ã…œ‘≈À…
+Group(uk):	Úœ⁄“œ¬À¡/‚¶¬Ã¶œ‘≈À…
 Requires:	%{name} = %{version}
 
 %description devel
 Header files and libraries for developing applications that use LDAP.
+
+%description -l es devel
+Bibliotecas de desarrollo y archivos de inclusiÛn de OpenLDAP.
 
 %description -l pl devel
 Pliki nag≥Ûwkowe i biblioteki konieczne do rozwoju aplikacji
 uøywaj±cych LDAP.
 
 %description -l pt_BR devel
-Bibliotecas de desenvolvimento e arquivos de inclus„o do OpenLDAP. Instale este
-pacote se vocÍ for trabalhar com desenvolvimento em LDAP ou desejar compilar
-algum programa que utilize LDAP.
-
-%description -l es devel
-Bibliotecas de desarrollo y archivos de inclusiÛn de OpenLDAP
-
+Bibliotecas de desenvolvimento e arquivos de inclus„o do OpenLDAP.
+Instale este pacote se vocÍ for trabalhar com desenvolvimento em LDAP
+ou desejar compilar algum programa que utilize LDAP.
 
 %package static
 Summary:	LDAP static libraries
@@ -117,15 +122,19 @@ Summary(pt_BR):	Bibliotecas est·ticas para desenvolvimento com openldap
 Summary(es):	Static libraries for openldap development
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	Ú¡⁄“¡¬œ‘À¡/‚…¬Ã…œ‘≈À…
+Group(uk):	Úœ⁄“œ¬À¡/‚¶¬Ã¶œ‘≈À…
 Requires:	%{name}-devel = %{version}
 
 %description static
-This package includes the development libraries and header files needed for
-compilation of applications that are making use of the LDAP internals.
-Install this package only if you plan to develop or will need to compile
-cutomized LDAP clients.
+This package includes the development libraries and header files
+needed for compilation of applications that are making use of the LDAP
+internals. Install this package only if you plan to develop or will
+need to compile cutomized LDAP clients.
 
 %description -l pl static
 Biblioteki statyczne LDAP.
@@ -140,29 +149,28 @@ Summary(pt_BR):	Arquivos para o servidor OpenLDAP
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
-Prereq:		chkconfig
+Prereq:		shadow
 Prereq:		rc-scripts
 
 %description servers
-The openldap2-server package has the slapd daemon which
-is responsible for handling the database and client
-queries.
+The openldap2-server package has the slapd daemon which is responsible
+for handling the database and client queries.
 
-Install this package if you want to setup an OpenLDAP-2.x
-server.
+Install this package if you want to setup an OpenLDAP-2.x server.
 
 %description -l pl servers
 Serwery (demony) ktÛre przychodz± z LDAPem.
 
 %description -l pt_BR servers
-O pacote openldap-server contÈm o servidor slapd que È respons·vel por receber
-as requisiÁıes dos clientes e por manter a base de dados do diretÛrio.
+O pacote openldap-server contÈm o servidor slapd que È respons·vel por
+receber as requisiÁıes dos clientes e por manter a base de dados do
+diretÛrio.
 
 Instale este pacote se vocÍ desejar executar um servidor OpenLDAP.
 
 %description -l es servers
-The openldap-server package has the slapd daemon which is responsible for
-handling the database and client queries.
+The openldap-server package has the slapd daemon which is responsible
+for handling the database and client queries.
 
 Install this package if you want to setup an OpenLDAP server.
 
@@ -179,14 +187,16 @@ Install this package if you want to setup an OpenLDAP server.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 install %{SOURCE3} .
 
 %build
-rm -f missing
+rm -f build/missing
 libtoolize --copy --force
 aclocal
 autoconf
+automake -a -c || :
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
 CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
 %configure \
@@ -246,7 +256,7 @@ install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm} \
 mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
 
 # hack the default config files
-perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
+perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.conf
 
 perl -pi -e "s|^#! /bin/sh|#!/bin/sh|g" $RPM_BUILD_ROOT%{_sbindir}/xrpcomp 
 
