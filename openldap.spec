@@ -8,7 +8,7 @@ Summary(pl):	Klienci Lightweight Directory Access Protocol
 Summary(pt_BR):	Clientes e servidor para LDAP
 Name:		openldap
 Version:	2.0.14
-Release:	3
+Release:	4
 License:	Artistic
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
@@ -265,11 +265,11 @@ echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema/
 
 # create slapd.access.conf
-echo "# This is a good plase to put slapd access-control directives" > \
+echo "# This is a good place to put slapd access-control directives" > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/slapd.access.conf
 
 # create local.schema
-echo "# This is a good plase to put your schema definitions " > \
+echo "# This is a good place to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
 gzip -9nf ANNOUNCEMENT CHANGES COPYRIGHT README \
