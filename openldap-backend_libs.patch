@@ -22,15 +22,3 @@ diff -durN openldap-2.1.12.orig/servers/slapd/back-perl/Makefile.in openldap-2.1
  
  LIBBASE = back_perl
  
-diff -durN openldap-2.1.12.orig/servers/slapd/back-sql/Makefile.in openldap-2.1.12/servers/slapd/back-sql/Makefile.in
---- openldap-2.1.12.orig/servers/slapd/back-sql/Makefile.in	Fri Jun 21 03:15:10 2002
-+++ openldap-2.1.12/servers/slapd/back-sql/Makefile.in	Wed Jan 15 13:23:54 2003
-@@ -17,7 +17,7 @@
- 
- shared_LDAP_LIBS = $(LDAP_LIBLDAP_R_LA) $(LDAP_LIBLBER_LA)
- NT_LINK_LIBS = -L.. -lslapd $(@BUILD_LIBS_DYNAMIC@_LDAP_LIBS)
--UNIX_LINK_LIBS = $(@BUILD_LIBS_DYNAMIC@_LDAP_LIBS)
-+UNIX_LINK_LIBS = $(@BUILD_LIBS_DYNAMIC@_LDAP_LIBS) $(SLAPD_SQL_LIBS)
- 
- LIBBASE = back_sql
- 

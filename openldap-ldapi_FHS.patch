@@ -1,12 +1,11 @@
-diff -durN openldap-2.0.25.orig/include/ldap_defaults.h openldap-2.0.25/include/ldap_defaults.h
---- openldap-2.0.25.orig/include/ldap_defaults.h	Tue Jul  2 10:13:00 2002
-+++ openldap-2.0.25/include/ldap_defaults.h	Tue Jul  2 10:15:37 2002
-@@ -37,7 +37,7 @@
+--- openldap-2.2.6/include/ldap_defaults.h.orig	2004-02-28 15:44:29.478914536 +0100
++++ openldap-2.2.6/include/ldap_defaults.h	2004-02-28 15:47:15.816627360 +0100
+@@ -39,7 +39,7 @@
  #define LDAP_ENV_PREFIX "LDAP"
  
  /* default ldapi:// socket */
--#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "ldapi"
-+#define LDAPI_SOCK "/var/run/ldapi"
+-#define LDAPI_SOCK LDAP_RUNDIR LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"
++#define LDAPI_SOCK "var" LDAP_DIRSEP "run" LDAP_DIRSEP "ldapi"
  
- /* default file: URI prefix */
- #define LDAP_FILE_URI_PREFIX "file://" LDAP_TMPDIR LDAP_DIRSEP
+ /*
+  * SLAPD DEFINITIONS
