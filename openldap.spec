@@ -5,7 +5,7 @@
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(pl):	Klienci Lightweight Directory Access Protocol
 Name:		openldap
-Version:	2.0.6
+Version:	2.0.7
 Release:	1
 License:	Artistic
 Group:		Networking/Daemons
@@ -20,7 +20,7 @@ Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-db3.patch
-Patch4:		%{name}-DESTDIR.patch
+Patch4:		%{name}-sql.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
@@ -141,9 +141,9 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-dynamic \
 	--enable-modules \
 	--enable-dnssrv \
-	--with-dnssrv-module=static \
+	--with-dnssrv-module=dynamic \
 	--enable-ldap \
-	--with-ldap-module=static \
+	--with-ldap-module=dynamic \
 	--enable-ldbm \
 	--with-ldbm-module=static \
 	--with-ldbm-api=berkeley \
@@ -153,7 +153,7 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-shell \
 	--with-shell-module=static \
 	--enable-sql \
-	--with-sql-module=static \
+	--with-sql-module=dynamic \
 	--enable-slurpd \
 	--enable-shared \
 	--enable-static
@@ -243,12 +243,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 %dir %{_datadir}/openldap
+%{_datadir}/openldap/ldapfriendly
 %{_mandir}/man1/*
 %{_mandir}/man5/ldap.conf.5*
 %{_mandir}/man5/ldapfilter.conf.5*
 %{_mandir}/man5/ldapfriendly.5*
 %{_mandir}/man5/ldapsearchprefs.conf.5*
 %{_mandir}/man5/ldaptemplates.conf.5*
+%{_mandir}/man5/ldif.5*
 %{_mandir}/man5/ud.conf.5*
 
 %files devel
@@ -273,12 +275,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(770,root,slapd) %{_localstatedir}/lib/openldap-ldbm
 %{_datadir}/openldap/*.help
-%{_datadir}/openldap/ldapfriendly
-%{_datadir}/openldap/schema
+%dir %{_datadir}/openldap/schema
+%{_datadir}/openldap/schema/*.schema
 %dir %{_libdir}/openldap/
 %attr(755,root,root) %{_libdir}/openldap/*
 %attr(755,root,root) %{_sbindir}/*
-%{_mandir}/man5/ldif.5*
 %{_mandir}/man5/slapd.conf.5*
 %{_mandir}/man5/slapd.replog.5*
 %{_mandir}/man8/*
