@@ -12,6 +12,8 @@ Source2:	openldap.sysconfig
 Source3:	http://www.padl.com/download/MigrationTools.tgz
 Source4:	MigrationTools.txt
 Source5:	ldap.conf
+Source6:	slapd.at-rfc2307.conf
+Source7:	slapd.oc-rfc2307.conf
 Patch0:		openldap-man.patch
 Patch1:		openldap-make_man_link.patch
 Patch2:		openldap-migrate_passwd.patch
@@ -24,7 +26,7 @@ BuildRoot:	/tmp/%{name}-%{version}-root
 
 %define		_sysconfdir	/etc
 %define		_libexecdir	%{_sbindir}
-%define		_localstatedir	/var/run
+%define		_localstatedir	/var
 
 %description
 LDAP servers and clients, as well as interfaces to other protocols.
@@ -118,7 +120,7 @@ make
 
 %Install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/ldap,%{_datadir}/openldap/migration}
+install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/state/openldap,%{_datadir}/openldap/migration}
 
 make install TMPROOT=$RPM_BUILD_ROOT
 
@@ -138,6 +140,11 @@ install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT/etc/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap//ldapserver
 
+# move oc.conf and at.conf files to proper place
+install %{SOURCE6} %{SOURCE7} $RPM_BUILD_ROOT%{_datadir}/openldap
+mv $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{slapd.at.conf,slapd.oc.conf} \
+		$RPM_BUILD_ROOT%{_datadir}/openldap
+
 # deal with the migration tools
 install MigrationTools-*/migrate_* \
 	$RPM_BUILD_ROOT%{_datadir}/openldap/migration
@@ -148,6 +155,7 @@ strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/*.so.*.*
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 	ANNOUNCEMENT CHANGES COPYRIGHT INSTALL README \
 	README.migration MigrationTools.txt doc/rfc/rfc*
+
 
 %post   -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
@@ -209,13 +217,12 @@ rm -rf $RPM_BUILD_ROOT
 %files servers
 %defattr(644,root,root,755)
 %attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
-%config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.oc.conf
-%config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.at.conf
 %config %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
-%attr(700,root,root) /var/ldap
+%attr(700,root,root) %{_localstatedir}/state/openldap
 %{_datadir}/openldap/*.help
 %{_datadir}/openldap/ldapfriendly
+%{_datadir}/openldap/*.conf
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/ldif.5*
 %{_mandir}/man5/slapd.conf.5*
