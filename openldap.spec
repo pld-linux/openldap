@@ -43,7 +43,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
 %define		_libexecdir	%{_sbindir}
-%define		_localstatedir	/var
+%define		_localstatedir	/var/lib
 
 %description
 LDAP servers and clients, as well as interfaces to other protocols.
@@ -309,7 +309,7 @@ fi
 %defattr(644,root,root,755)
 %doc *.gz
 %doc doc/rfc doc/drafts
-%dir %{_sysconfdir}/openldap/
+%dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldaptemplates.conf
@@ -348,7 +348,8 @@ fi
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
-%attr(770,root,slapd) %{_localstatedir}/lib/openldap-ldbm
+%attr(770,root,slapd) %{_localstatedir}/openldap-ldbm
+%attr(770,root,slapd) %{_localstatedir}/openldap-slurp
 %{_datadir}/openldap/*.help
 %dir %{_datadir}/openldap/schema
 %{_datadir}/openldap/schema/*.schema
