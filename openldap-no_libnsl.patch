@@ -1,0 +1,13 @@
+--- openldap-2.0.12/configure.in~	Tue Aug 28 19:12:51 2001
++++ openldap-2.0.12/configure.in	Fri Aug 31 20:05:13 2001
+@@ -1710,10 +1710,6 @@
+ 	if test $have_wrappers = yes ; then
+ 		AC_DEFINE(HAVE_TCPD,1, [define if you have -lwrap])
+ 		WRAP_LIBS="-lwrap"
+-
+-		dnl We add another check for -lnsl since some libwrap's
+-		dnl need it, but it isn't always included from above
+-		AC_CHECK_LIB(nsl, main)
+ 	else
+ 		AC_MSG_WARN(could not find -lwrap)
+ 		if test $ol_enable_wrappers = yes ; then
