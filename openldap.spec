@@ -193,12 +193,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc {ANNOUNCEMENT,CHANGES,COPYRIGHT,INSTALL,README,README.migration}.gz
 %doc MigrationTools.txt.gz doc/rfc/rfc*
 %dir %{_sysconfdir}/openldap/
-%config(noreplace) %{_sysconfdir}/openldap/ldapfilter.conf
-%config(noreplace) %{_sysconfdir}/openldap/ldapserver
-%config(noreplace) %{_sysconfdir}/openldap/ldaptemplates.conf
-%config(noreplace) %{_sysconfdir}/openldap/ldapsearchprefs.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapfilter.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapserver
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldaptemplates.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapsearchprefs.conf
 %attr(700,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/secret
-%config(noreplace) %{_sysconfdir}/ldap.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_sbindir}/xrpcomp
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
