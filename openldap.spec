@@ -43,9 +43,9 @@ The package includes:
 - utilities, tools, and sample clients.
 
 %description -l pl
-Serwery i klienci LDAP jak i interfejsy do innych protoko³ów.
-Wiedz, ¿e pakiet ten nie zawiera interfejsu slapd to X.500 i dlatego
-nie wymaga pakietu ISODE.
+Serwery i klienci LDAP jak i interfejsy do innych protoko³ów. Wiedz,
+¿e pakiet ten nie zawiera interfejsu slapd to X.500 i dlatego nie
+wymaga pakietu ISODE.
 
 Pakiet ten zawiera:
 - serwer LDAP (slapd)
@@ -57,7 +57,8 @@ Pakiet ten zawiera:
 Summary:	LDAP development files
 Summary(pl):	Pliki dla developerów LDAP
 Group:		Development/Libraries
-Group(pl):      Programowanie/Biblioteki
+Group(fr):	Development/Librairies
+Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
 %description devel
@@ -71,6 +72,7 @@ u¿ywaj±cych LDAP.
 Summary:	LDAP static libraries
 Summary(pl):	Biblioteki statyczne LDAP
 Group:		Development/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
 
@@ -137,7 +139,7 @@ perl -pi -e "s|^#! /bin/sh|#!/bin/sh|g" $RPM_BUILD_ROOT%{_sbindir}/xrpcomp
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
-install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT/etc/ldap.conf
+install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap//ldapserver
 touch $RPM_BUILD_ROOT%{_sysconfdir}/openldap/secret
