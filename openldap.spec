@@ -214,7 +214,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 Сервера (демони), що поставляються з LDAP.
 
 %prep
-%setup -q -a 3
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
