@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# Startup script for the OpenLDAP server
+#
+# chkconfig: 345 80 10
+#
+# description: OpenLDAP is a Lightweight Directory Access Protocol server
+#
+# processname: slapd
+# pidfile: /var/run/slapd.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Customized setup
+[ -f /etc/sysconfig/ldap ] && . /etc/sysconfig/ldap
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+# See how we were called.
+case "$1" in
+  start)
+	show "Starting OpenLDAP"
+	daemon $SLDAPNICE slapd
+	if grep -q '^replogfile' /etc/ldap/slapd.conf; then
+		show "Starting slurpd"
+		daemon $SLURPNICE slurpd
+	fi
+	touch /var/lock/subsys/ldap
+	;;
+  stop)
+	show "Shutting down OpenLDAP"
+	killproc slapd
+	if grep -q '^replogfile' /etc/ldap/slapd.conf; then
+		show "Shutting down slurpd"
+		killproc slurpd
+ 	fi
+	rm -f /var/lock/subsys/ldap
+	;;
+  status)
+	status slapd
+	if grep -q '^replogfile' /etc/ldap/slapd.conf; then
+		status slurpd
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 1
+esac
+
+exit 0
