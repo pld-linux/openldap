@@ -1,0 +1,89 @@
+--- openldap-2.0.0/doc/man/man8/go500.8.syslog	Sun Aug 20 17:14:31 2000
++++ openldap-2.0.0/doc/man/man8/go500.8	Fri Sep  1 15:21:06 2000
+@@ -130,7 +130,7 @@
+ .BR go500 .
+ .TP
+ .B \-l
+-Enable logging of various status and errors to the LOG_LOCAL3 facility via
++Enable logging of various status and errors to the LOG_DAEMON facility via
+ syslog(8).
+ .TP
+ .BI \-p " port"
+--- openldap-2.0.0/doc/man/man8/go500gw.8.syslog	Sun Aug 20 17:14:31 2000
++++ openldap-2.0.0/doc/man/man8/go500gw.8	Fri Sep  1 15:21:06 2000
+@@ -126,7 +126,7 @@
+ in the "About the Gopher to X.500 Gateway" menu item.
+ .TP
+ .B \-l
+-Enable logging of various status and errors to the LOG_LOCAL3 facility via
++Enable logging of various status and errors to the LOG_DAEMON facility via
+ .BR syslog (8).
+ .TP
+ .BI \-p " listenport"
+--- openldap-2.0.0/doc/man/man8/in.xfingerd.8.syslog	Sun Aug 20 17:14:31 2000
++++ openldap-2.0.0/doc/man/man8/in.xfingerd.8	Fri Sep  1 15:21:06 2000
+@@ -47,7 +47,7 @@
+ request from standard input.  This is useful for debugging.
+ .TP
+ .B \-l
+-Disable logging of various status and errors to the LOG_LOCAL4 facility via
++Disable logging of various status and errors to the LOG_DAEMON facility via
+ .BR syslog (8).
+ Note that this flag turns OFF logging.  The default is on.
+ .TP
+--- openldap-2.0.0/clients/finger/main.c.syslog	Wed Aug 16 15:28:59 2000
++++ openldap-2.0.0/clients/finger/main.c	Fri Sep  1 15:25:01 2000
+@@ -132,8 +132,8 @@
+ #endif
+ 
+ 	if ( dosyslog ) {
+-#ifdef LOG_LOCAL4
+-		openlog( myname, OPENLOG_OPTIONS, LOG_LOCAL4 );
++#ifdef LOG_DAEMON
++		openlog( myname, OPENLOG_OPTIONS, LOG_DAEMON );
+ #elif LOG_DEBUG
+ 		openlog( myname, OPENLOG_OPTIONS );
+ #endif
+--- openldap-2.0.0/clients/gopher/go500.c.syslog	Fri Jul 28 21:53:01 2000
++++ openldap-2.0.0/clients/gopher/go500.c	Fri Sep  1 15:25:15 2000
+@@ -107,7 +107,7 @@
+ 			filterfile = strdup( optarg );
+ 			break;
+ 
+-		case 'l':	/* log via LOG_LOCAL3 */
++		case 'l':	/* log via LOG_DAEMON */
+ 			dosyslog = 1;
+ 			break;
+ 
+@@ -180,8 +180,8 @@
+ #endif
+ 
+ 	if ( dosyslog ) {
+-#ifdef LOG_LOCAL3
+-		openlog( myname, OPENLOG_OPTIONS, LOG_LOCAL3 );
++#ifdef LOG_DAEMON
++		openlog( myname, OPENLOG_OPTIONS, LOG_DAEMON );
+ #elif LOG_DEBUG
+ 		openlog( myname, OPENLOG_OPTIONS );
+ #endif
+--- openldap-2.0.0/clients/gopher/go500gw.c.syslog	Fri Jul 28 21:53:01 2000
++++ openldap-2.0.0/clients/gopher/go500gw.c	Fri Sep  1 15:25:25 2000
+@@ -124,7 +124,7 @@
+ 			helpfile = strdup( optarg );
+ 			break;
+ 
+-		case 'l':	/* log to LOG_LOCAL3 */
++		case 'l':	/* log to LOG_DAEMON */
+ 			dosyslog = 1;
+ 			break;
+ 
+@@ -203,8 +203,8 @@
+ #endif
+ 
+ 	if ( dosyslog ) {
+-#ifdef LOG_LOCAL3
+-		openlog( myname, OPENLOG_OPTIONS, LOG_LOCAL3 );
++#ifdef LOG_DAEMON
++		openlog( myname, OPENLOG_OPTIONS, LOG_DAEMON );
+ #elif LOG_DEBUG
+ 		openlog( myname, OPENLOG_OPTIONS );

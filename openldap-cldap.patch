@@ -1,0 +1,10 @@
+--- openldap-1.2.11/servers/slapd/slap.h.cldap	Tue Aug  8 17:05:58 2000
++++ openldap-1.2.11/servers/slapd/slap.h	Tue Aug  8 17:06:03 2000
+@@ -10,6 +10,7 @@
+ #endif
+ 
+ #include <sys/types.h>
++#include <sys/socket.h>
+ #include <ac/syslog.h>
+ #include <ac/regex.h>
+ #include <ac/time.h>

@@ -1,0 +1,11 @@
+Our build machines must just be too fast....
+--- openldap-2.0.1/build/openldap.m4	Fri Sep  8 19:50:44 2000
++++ openldap-2.0.1/build/openldap.m4	Fri Sep  8 19:51:08 2000
+@@ -602,6 +602,7 @@
+ static void *task(p)
+ 	void *p;
+ {
++	sleep(30);
+ 	return (void *) (p == NULL);
+ }
+ ])

@@ -1,0 +1,80 @@
+--- openldap-2.0.0/servers/slapd/main.c.pidfile	Thu Aug 17 22:32:54 2000
++++ openldap-2.0.0/servers/slapd/main.c	Fri Sep  1 15:18:52 2000
+@@ -6,6 +6,7 @@
+ #include "portable.h"
+ 
+ #include <stdio.h>
++#include <fcntl.h>
+ 
+ #include <ac/signal.h>
+ #include <ac/socket.h>
+@@ -63,6 +64,7 @@
+ const char Versionstr[] =
+ 	OPENLDAP_PACKAGE " " OPENLDAP_VERSION " Standalone LDAP Server (slapd)";
+ #endif
++	int pidfd = -1;
+ 
+ #ifdef LOG_LOCAL4
+ 
+@@ -294,6 +296,15 @@
+ 	openlog( serverName, OPENLOG_OPTIONS );
+ #endif
+ 
++	if ( ! no_detach ) {
++		if ( (pidfd = open("/var/run/slapd.pid", O_WRONLY | O_EXCL | O_TRUNC | O_CREAT, 0600)) != -1 ) {
++			char pidbuf[128];
++			snprintf (pidbuf, sizeof(pidbuf), "%d\n", getpid());
++			write(pidfd, pidbuf, strlen(pidbuf) );
++			close(pidfd);
++		}
++	}
++
+ 	if( slapd_daemon_init( urls ) != 0 ) {
+ 		rc = 1;
+ 		SERVICE_EXIT( ERROR_SERVICE_SPECIFIC_ERROR, 16 );
+@@ -451,6 +462,9 @@
+ #endif
+ 
+ 	Debug( LDAP_DEBUG_ANY, "slapd stopped.\n", 0, 0, 0 );
++
++	if ( pidfd != -1 )
++	remove( "/var/run/slapd.pid" );
+ 
+ #ifdef HAVE_NT_SERVICE_MANAGER
+ 	ReportSlapdShutdownComplete();
+--- openldap-2.0.0/servers/slurpd/main.c.pidfile	Tue Jun 13 13:57:41 2000
++++ openldap-2.0.0/servers/slurpd/main.c	Fri Sep  1 15:19:51 2000
+@@ -21,6 +21,7 @@
+ #include <ac/stdlib.h>
+ 
+ #include <stdio.h>
++#include <fcntl.h>
+ 
+ #include "slurp.h"
+ #include "globals.h"
+@@ -41,6 +42,15 @@
+ 
+     int			i;
++     int			pidfd;
+ 
++    /* record our PID for others to use */
++    if ( (pidfd = open("/var/run/slurpd.pid", O_WRONLY | O_EXCL | O_TRUNC | O_CREAT, 0600)) != -1 ) {
++	    char pidbuf[128];
++	    snprintf (pidbuf, sizeof(pidbuf), "%d\n", getpid());
++	    write(pidfd, pidbuf, strlen(pidbuf) );
++	    close(pidfd);
++    } 
++
+     /* initialize thread package */
+     ldap_pvt_thread_initialize();
+ 
+@@ -144,6 +154,9 @@
+ 
+     /* destroy the thread package */
+     ldap_pvt_thread_destroy();
++
++    if ( pidfd != -1 )
++	    unlink("/var/run/slurpd.pid");
+ 
+     Debug( LDAP_DEBUG_ANY, "slurpd: terminated.\n", 0, 0, 0 );
+ 	return 0;

@@ -1,0 +1,57 @@
+From del@babel.com.au  Sat Dec  2 15:09:02 2000
+Return-Path: <del@babel.com.au>
+Received: from lacrosse.corp.redhat.com (IDENT:root@lacrosse.corp.redhat.com [207.175.42.154])
+	by devserv.devel.redhat.com (8.11.0/8.11.0) with ESMTP id eB2K91A27891
+	for <nalin@devserv.devel.redhat.com>; Sat, 2 Dec 2000 15:09:02 -0500
+Received: from mail.redhat.com (mail.redhat.com [199.183.24.239])
+	by lacrosse.corp.redhat.com (8.9.3/8.9.3) with ESMTP id PAA21543
+	for <nalin@lacrosse.redhat.com>; Sat, 2 Dec 2000 15:09:00 -0500
+Received: from nz.babel.com.au (210-55-118-212.adsl.xtra.co.nz [210.55.118.212])
+	by mail.redhat.com (8.11.0/8.8.7) with ESMTP id eB2K8wD27718
+	for <nalin@redhat.com>; Sat, 2 Dec 2000 15:08:59 -0500
+Received: (from del@localhost)
+	by nz.babel.com.au (8.9.3/8.9.3) id JAA15607
+	for nalin@redhat.com; Sun, 3 Dec 2000 09:08:45 +1300
+Date: Sun, 3 Dec 2000 09:08:45 +1300
+From: Del <del@babel.com.au>
+Message-Id: <200012022008.JAA15607@nz.babel.com.au>
+To: nalin@redhat.com
+Subject: SSL bug in OpenLDAP 2.0.7
+Status: RO
+Content-Length: 1021
+Lines: 33
+
+
+Hi,
+
+Can you please include the following patch in your next release of the
+OpenLDAP 2.0.x RPM.  It fixes a client library bug where the OpenLDAP
+clients won't work in LDAPS (ldap over SSL) mode, for example where the
+LDAP server doesn't do Start TLS.
+
+This fixes OpenLDAP issue # 889.
+
+I have verified that including this patch allows OpenLDAP clients to
+talk to Novell NDS and iPlanet directory server in SSL mode.
+
+Del
+--
+--- openldap-2.0.7/libraries/libldap/open.c     Tue Oct 31 06:35:00 2000
++++ openldap-2.0.7/libraries/libldap/open.c.norbert     Sat Dec  2 11:07:20 2000
+@@ -329,8 +329,15 @@
+ 	if (ld->ld_options.ldo_tls_mode == LDAP_OPT_X_TLS_HARD ||
+ 		strcmp( srv->lud_scheme, "ldaps" ) == 0 )
+ 	{
++		LDAPConn	*savedefconn = ld->ld_defconn;
++		++conn->lconn_refcnt;	/* avoid premature free */
++		ld->ld_defconn = conn;
++
+ 		rc = ldap_pvt_tls_start( ld, conn->lconn_sb,
+ 			ld->ld_options.ldo_tls_ctx );
++
++		ld->ld_defconn = savedefconn;
++		--conn->lconn_refcnt;
+ 
+ 		if (rc != LDAP_SUCCESS) {
+ 			return -1;
+
