@@ -144,9 +144,8 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man*/* \
 
 %post servers
 chkconfig --add ldap
-if test -r /var/run/ldap.pid; then
-	/etc/rc.d/init.d/ldap stop >&2
-	/etc/rc.d/init.d/ldap start >&2
+if test -r /var/lock/subsys/ldap; then
+	/etc/rc.d/init.d/ldap restart >&2
 else
 	echo "Run \"/etc/rc.d/init.d/ldap start\" to start sldap server."
 fi
