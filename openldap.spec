@@ -123,7 +123,7 @@ export CPPFLAGS LDFLAGS
 	--enable-shared
 
 %{__make} depend
-make
+%{__make}
 
 %Install
 rm -rf $RPM_BUILD_ROOT
