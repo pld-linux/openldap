@@ -20,6 +20,7 @@ Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-db3.patch
+Patch4:		%{name}-DESTDIR.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	libwrap-devel
@@ -109,8 +110,9 @@ Serwery (daemons) które przychodz± z LDAPem.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 install %{SOURCE3} .
-perl -pi -e 's/AC_PREREQ.*//' configure.in 
+#perl -pi -e 's/AC_PREREQ.*//' configure.in 
 
 %build
 autoconf
@@ -137,6 +139,7 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-aci \
 	--enable-wrappers \
 	--enable-dynamic \
+	--enable-modules \
 	--enable-dnssrv \
 	--with-dnssrv-module=static \
 	--enable-ldap \
@@ -155,8 +158,6 @@ CFLAGS="%{optflags} -I%{_includedir}/db3"
 	--enable-shared \
 	--enable-static
 
-# modules are disabled in 2.0.5 (why?)
-#	--enable-modules 
 # without this server won't start
 #echo "#undef HAVE_GETADDRINFO" >> include/portable.h
 
@@ -170,7 +171,7 @@ install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm,%{
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-#mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
+mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
 
 # hack the default config files
 perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
@@ -274,8 +275,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/openldap/*.help
 %{_datadir}/openldap/ldapfriendly
 %{_datadir}/openldap/schema
-#%dir %{_libdir}/openldap/
-#%attr(755,root,root) %{_libdir}/openldap/*
+%dir %{_libdir}/openldap/
+%attr(755,root,root) %{_libdir}/openldap/*
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/ldif.5*
 %{_mandir}/man5/slapd.conf.5*
