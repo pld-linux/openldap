@@ -159,7 +159,7 @@ install -d $RPM_BUILD_ROOT/{etc/{sysconfig,rc.d/init.d},var/lib/openldap-ldbm,%{
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f$RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
+mv -f $RPM_BUILD_ROOT%{_libexecdir}/openldap $RPM_BUILD_ROOT%{_libdir}
 
 # hack the default config files
 perl -pi -e "s|%{buildroot}||g" $RPM_BUILD_ROOT%{_sysconfdir}/openldap//slapd.conf
@@ -174,7 +174,7 @@ install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
 # Standard schemas should not be changed by users
-mv -f$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema/
+mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema/
 
 # create slapd.access.conf
 echo "# This is a good plase to put slapd access-control directives" > \
