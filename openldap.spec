@@ -42,7 +42,7 @@ BuildRequires:	automake
 BuildRequires:	libltdl-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
-BuildRequires:	openssl-devel >= 0.9.6a
+BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	pam-devel
 BuildRequires:	readline-devel >= 4.2
 %{!?_without_odbc:BuildRequires:	unixODBC-devel}
@@ -104,7 +104,7 @@ Requires:	%{name} = %{version}
 Requires:	pam-devel
 %{?_with_db3:Requires:	db3-devel}
 %{!?_with_db3:Requires:	db-devel}
-Requires:	openssl-devel
+Requires:	openssl-devel >= 0.9.7
 
 %description devel
 Header files and libraries for developing applications that use LDAP.
