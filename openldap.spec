@@ -7,6 +7,7 @@ Group(pl):	Sieciowe/Serwery
 Copyright:	Freely distributable
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 Source1:	ldap.init
+Source2:	openldap.sysconfig
 Patch0:		openldap-conf.patch
 Patch1:		openldap-strdup.patch
 URL:		http://www.openldap.org/
@@ -73,7 +74,7 @@ make
 %Install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/{etc/{ldap,rc.d/init.d},var/ldap}
+install -d $RPM_BUILD_ROOT/{etc/{ldap,sysconfig,rc.d/init.d},var/ldap}
 
 make install \
 	prefix=$RPM_BUILD_ROOT/usr \
@@ -259,6 +260,8 @@ echo ".so ldif2ldbm.8" > $RPM_BUILD_ROOT/usr/man/man8/ldif2index.8
 )
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
+
 echo "localhost" > $RPM_BUILD_ROOT/etc/ldap/ldapserver
 
 gzip -9nf $RPM_BUILD_ROOT/usr/man/man*/* \
@@ -319,9 +322,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files servers
 %defattr(644,root,root,755)
-%config /etc/ldap/slapd.conf
-%config /etc/ldap/slapd.oc.conf
-%config /etc/ldap/slapd.at.conf
+%attr(640,root,root) %config %verify(not size mtime md5) /etc/ldap/slapd.conf
+%config %verify(not size mtime md5) /etc/ldap/slapd.oc.conf
+%config %verify(not size mtime md5) /etc/ldap/slapd.at.conf
+%config %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(700,root,root) /var/ldap
 /usr/share/ldap
