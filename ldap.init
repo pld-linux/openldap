@@ -38,7 +38,7 @@ case "$1" in
 			ARGS="$ARGS -s $SLAPDSYSLOGLEVEL"
 		fi
 		if [ -n "$SLAPDURLLIST" ] ; then
-			ARGS="$ARGS -h $SLAPDURLLIST"
+			ARGS="$ARGS -h \"$SLAPDURLLIST\""
 		fi
 		daemon slapd $ARGS
 		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
