@@ -33,6 +33,7 @@ Patch10:	%{name}-ac25x.patch
 URL:		http://www.openldap.org/
 BuildRequires:	cyrus-sasl-devel
 BuildRequires:	db3-devel
+BuildRequires:	libltdl-devel
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	pam-devel
