@@ -19,6 +19,7 @@ Patch1:		openldap-make_man_link.patch
 Patch2:		openldap-migrate_passwd.patch
 Patch3:		openldap-config.patch
 Patch4:		openldap-conffile.patch
+Patch5:		openldap-secretfile.patch
 URL:		http://www.openldap.org/
 BuildRequires:	ncurses-devel
 BuildRequires:	libwrap-devel
@@ -98,6 +99,7 @@ Serwery (daemons) które przychodz± z LDAPem.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 install %{SOURCE4} .
 
@@ -139,6 +141,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 install $RPM_SOURCE_DIR/ldap.conf $RPM_BUILD_ROOT/etc/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap//ldapserver
+touch $RPM_BUILD_ROOT%{_sysconfdir}/openldap/secret
 
 # move oc.conf and at.conf files to proper place
 install %{SOURCE6} %{SOURCE7} $RPM_BUILD_ROOT%{_datadir}/openldap
@@ -182,11 +185,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc {ANNOUNCEMENT,CHANGES,COPYRIGHT,INSTALL,README,README.migration}.gz
 %doc MigrationTools.txt.gz doc/rfc/rfc*
 %dir %{_sysconfdir}/openldap/
-%config %{_sysconfdir}/openldap/ldapfilter.conf
-%config %{_sysconfdir}/openldap/ldapserver
-%config %{_sysconfdir}/openldap/ldaptemplates.conf
-%config %{_sysconfdir}/openldap/ldapsearchprefs.conf
-%config %{_sysconfdir}/ldap.conf
+%config(noreplace) %{_sysconfdir}/openldap/ldapfilter.conf
+%config(noreplace) %{_sysconfdir}/openldap/ldapserver
+%config(noreplace) %{_sysconfdir}/openldap/ldaptemplates.conf
+%config(noreplace) %{_sysconfdir}/openldap/ldapsearchprefs.conf
+%attr(700,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/secret
+%config(noreplace) %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_sbindir}/xrpcomp
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
@@ -217,7 +221,7 @@ rm -rf $RPM_BUILD_ROOT
 %files servers
 %defattr(644,root,root,755)
 %attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
-%config %verify(not size mtime md5) /etc/sysconfig/ldap
+%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(700,root,root) %{_localstatedir}/state/openldap
 %{_datadir}/openldap/*.help
