@@ -224,7 +224,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 rm -f build/missing
 libtoolize --copy --force
 aclocal
-autoconf
+%{__autoconf}
 automake -a -c || :
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
 CFLAGS="%{rpmcflags} -I%{_includedir}/db3"
