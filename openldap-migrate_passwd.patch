@@ -1,0 +1,33 @@
+
+Original MigrationTools don't work well with OpenLDAP 
+All "objectClass:" shuld be together in output
+This patch fixes it.
+			Jacek Konieczny <jajcus@pld.org.pl>
+
+diff -durN ldap.orig/MigrationTools-3.21/migrate_passwd.pl ldap/MigrationTools-3.21/migrate_passwd.pl
+--- ldap.orig/MigrationTools-3.21/migrate_passwd.pl	Tue Jun 22 03:10:05 1999
++++ ldap/MigrationTools-3.21/migrate_passwd.pl	Fri Sep 10 08:51:41 1999
+@@ -106,10 +106,9 @@
+ 	print $HANDLE "objectClass: account\n";
+ 	print $HANDLE "objectClass: posixAccount\n";
+ 	print $HANDLE "objectClass: top\n";
+-
++	
+ 	if ($DEFAULT_REALM) {
+ 		print $HANDLE "objectClass: kerberosSecurityObject\n";
+-		print $HANDLE "krbname: $user\@$DEFAULT_REALM\n";
+ 	}
+ 
+ 	if ($shadowUsers{$user} ne "") {
+@@ -117,6 +116,11 @@
+ 	} else {
+ 		print $HANDLE "userPassword: {crypt}$pwd\n";
+ 	}
++	
++	if ($DEFAULT_REALM) {
++		print $HANDLE "krbname: $user\@$DEFAULT_REALM\n";
++	}
++
+ 
+ 	if ($shell) {
+ 		print $HANDLE "loginShell: $shell\n";

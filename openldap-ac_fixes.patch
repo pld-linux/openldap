@@ -1,0 +1,11 @@
+--- openldap-2.0.14/configure.in~	Thu Sep 13 21:20:15 2001
++++ openldap-2.0.14/configure.in	Thu Sep 13 21:37:06 2001
+@@ -643,7 +643,7 @@
+ dnl Gotta check for winsock manually
+ if test $ac_cv_header_winsock_h = yes; then
+ 	AC_CACHE_CHECK([for winsock], [ol_cv_winsock], 
+-    	AC_TRY_LINK([#include <winsock.h>],[
++    	[AC_TRY_LINK([#include <winsock.h>],[
+ 			socket(0,0,0);
+ 			select(0,NULL,NULL,NULL,NULL);
+ 			closesocket(0);

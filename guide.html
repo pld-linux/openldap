@@ -1,0 +1,2838 @@
+<!doctype html public "-//W30//DTD W3 HTML 2.0//EN">
+
+<HTML>
+
+<!-- This file was generated using SDF 2.001 by
+     Ian Clatworthy (ianc@mincom.com). SDF is freely
+     available from http://www.mincom.com/mtr/sdf. -->
+
+<HEAD>
+<TITLE>OpenLDAP 2.0 Administrator's Guide</TITLE>
+</HEAD>
+<BODY>
+
+<DIV CLASS="header">
+<A HREF="http://www.OpenLDAP.org/">
+<P><IMG SRC="LDAPlogo.gif" ALIGN="Left" BORDER=0></P>
+</A>
+<DIV CLASS="navigate">
+<P ALIGN="Center"><A HREF="http://www.openldap.org/">Home</A> | <A HREF="../index.html">Catalog</A></P>
+</DIV>
+<BR CLEAR="Left">
+</DIV>
+<DIV CLASS="title">
+<H1 CLASS="doc-title">OpenLDAP 2.0 Administrator's Guide</H1>
+<ADDRESS CLASS="doc-author">The OpenLDAP Project &lt;<A HREF="http://www.openldap.org/">http://www.openldap.org/</A>&gt;</ADDRESS>
+<ADDRESS CLASS="doc-modified">15 September 2000</ADDRESS>
+<BR CLEAR="All">
+</DIV>
+<DIV CLASS="contents">
+<HR>
+<H2>Table of Contents</H2>
+<UL>
+<A HREF="#Preface">Preface</A>
+<BR>
+<A HREF="#Introduction to OpenLDAP Directory Services">1. Introduction to OpenLDAP Directory Services</A><UL>
+<A HREF="#What is a directory service">1.1. What is a directory service?</A>
+<BR>
+<A HREF="#What is LDAP">1.2. What is LDAP?</A>
+<BR>
+<A HREF="#How does LDAP work">1.3. How does LDAP work?</A>
+<BR>
+<A HREF="#What is slapd and what can it do">1.4. What is slapd and what can it do?</A>
+<BR>
+<A HREF="#What about X.500">1.5. What about X.500?</A>
+<BR>
+<A HREF="#What is slurpd and what can it do">1.6. What is slurpd and what can it do?</A></UL>
+<BR>
+<A HREF="#A Quick-Start Guide">2. A Quick-Start Guide</A>
+<BR>
+<A HREF="#The Big Picture - Configuration Choices">3. The Big Picture - Configuration Choices</A><UL>
+<A HREF="#Local Directory Service">3.1. Local Directory Service</A>
+<BR>
+<A HREF="#Local Directory Service with Referrals">3.2. Local Directory Service with Referrals</A>
+<BR>
+<A HREF="#Replicated Directory Service">3.3. Replicated Directory Service</A>
+<BR>
+<A HREF="#Distributed Local Directory Service">3.4. Distributed Local Directory Service</A></UL>
+<BR>
+<A HREF="#Building and Installing OpenLDAP Software">4. Building and Installing OpenLDAP Software</A><UL>
+<A HREF="#Obtaining and Extracting the Software">4.1. Obtaining and Extracting the Software</A>
+<BR>
+<A HREF="#Prerequisite software">4.2. Prerequisite software</A>
+<BR>
+<A HREF="#Running configure">4.3. Running configure</A>
+<BR>
+<A HREF="#Building the Software">4.4. Building the Software</A>
+<BR>
+<A HREF="#Testing the Software">4.5. Testing the Software</A>
+<BR>
+<A HREF="#Installing the Software">4.6. Installing the Software</A></UL>
+<BR>
+<A HREF="#The slapd Configuration File">5. The slapd Configuration File</A><UL>
+<A HREF="#Configuration File Format">5.1. Configuration File Format</A>
+<BR>
+<A HREF="#Configuration File Directives">5.2. Configuration File Directives</A>
+<BR>
+<A HREF="#Access Control">5.3. Access Control</A>
+<BR>
+<A HREF="#Configuration File Example">5.4. Configuration File Example</A></UL>
+<BR>
+<A HREF="#Running slapd">6. Running slapd</A><UL>
+<A HREF="#Command-Line Options">6.1. Command-Line Options</A>
+<BR>
+<A HREF="#Starting slapd">6.2. Starting slapd</A>
+<BR>
+<A HREF="#Stopping slapd">6.3. Stopping slapd</A></UL>
+<BR>
+<A HREF="#Database Creation and Maintenance Tools">7. Database Creation and Maintenance Tools</A><UL>
+<A HREF="#Creating a database over LDAP">7.1. Creating a database over LDAP</A>
+<BR>
+<A HREF="#Creating a database off-line">7.2. Creating a database off-line</A>
+<BR>
+<A HREF="#The LDIF text entry format">7.3. The LDIF text entry format</A></UL>
+<BR>
+<A HREF="#Schema Specification">8. Schema Specification</A><UL>
+<A HREF="#Distributed Schema Files">8.1. Distributed Schema Files</A>
+<BR>
+<A HREF="#Extending Schema">8.2. Extending Schema</A></UL>
+<BR>
+<A HREF="#Constructing a Distributed Directory Service">9. Constructing a Distributed Directory Service</A><UL>
+<A HREF="#Subordinate Knowledge Information">9.1. Subordinate Knowledge Information</A>
+<BR>
+<A HREF="#Superior Knowledge Information">9.2. Superior Knowledge Information</A>
+<BR>
+<A HREF="#The ManageDsaIT Control">9.3. The ManageDsaIT Control</A></UL>
+<BR>
+<A HREF="#Replication with slurpd">10. Replication with slurpd</A><UL>
+<A HREF="#Overview">10.1. Overview</A>
+<BR>
+<A HREF="#Replication Logs">10.2. Replication Logs</A>
+<BR>
+<A HREF="#Command-Line Options">10.3. Command-Line Options</A>
+<BR>
+<A HREF="#Configuring slurpd and a slave slapd instance">10.4. Configuring slurpd and a slave slapd instance</A>
+<BR>
+<A HREF="#Advanced slurpd Operation">10.5. Advanced slurpd Operation</A></UL>
+<BR>
+<A HREF="#Generic configure Instructions">A. Generic configure Instructions</A>
+<BR>
+<A HREF="#OpenLDAP Software Copyright Notices">B. OpenLDAP Software Copyright Notices</A><UL>
+<A HREF="#OpenLDAP Copyright Notice">B.1. OpenLDAP Copyright Notice</A>
+<BR>
+<A HREF="#University of Michigan Copyright Notice">B.2. University of Michigan Copyright Notice</A></UL>
+<BR>
+<A HREF="#The OpenLDAP Public License">C. The OpenLDAP Public License</A></UL>
+</DIV>
+<DIV CLASS="main">
+<P></P>
+<HR>
+<H1><A NAME="Preface">Preface</A></H1>
+<H2>Copyright</H2>
+<P>Copyright 1998-2000, The <A HREF="http://www.openldap.org/foundation/">OpenLDAP Foundation</A>, <EM>All Rights Reserved</EM>.</P>
+<P>Copyright 1992-1996, Regents of the <A HREF="http://www.umich.edu/">University of Michigan</A>, <EM>All Rights Reserved</EM>.</P>
+<H2>Scope of this Document</H2>
+<P>This document provides a guide for installing OpenLDAP 2.0 Software on <TERM>UNIX</TERM> (and UNIX-like) systems.  The document is aimed at experienced system administrators but who may not have prior experience operating <TERM>LDAP</TERM>-based directory software.</P>
+<P>This document is meant to be used in conjunction with other OpenLDAP information resources provided with the software package and on the project's extensive site (<A HREF="http://www.OpenLDAP.org/">http://www.OpenLDAP.org/</A>) on the World Wide Web.  The site makes available a number of resources.</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>OpenLDAP Resources</CAPTION>
+<TR CLASS="heading">
+<TD>
+<STRONG>Resource</STRONG>
+</TD>
+<TD>
+<STRONG>URL</STRONG>
+</TD>
+</TR>
+<TR>
+<TD>
+Document Catalog
+</TD>
+<TD>
+<A HREF="http://www.OpenLDAP.org/doc/">http://www.OpenLDAP.org/doc/</A>
+</TD>
+</TR>
+<TR>
+<TD>
+Frequently Asked Questions
+</TD>
+<TD>
+<A HREF="http://www.OpenLDAP.org/faq/">http://www.OpenLDAP.org/faq/</A>
+</TD>
+</TR>
+<TR>
+<TD>
+Issue Tracking System
+</TD>
+<TD>
+<A HREF="http://www.OpenLDAP.org/its/">http://www.OpenLDAP.org/its/</A>
+</TD>
+</TR>
+<TR>
+<TD>
+Mailing Lists
+</TD>
+<TD>
+<A HREF="http://www.OpenLDAP.org/lists/">http://www.OpenLDAP.org/lists/</A>
+</TD>
+</TR>
+<TR>
+<TD>
+Software Pages
+</TD>
+<TD>
+<A HREF="http://www.OpenLDAP.org/software/">http://www.OpenLDAP.org/software/</A>
+</TD>
+</TR>
+<TR>
+<TD>
+Support Pages
+</TD>
+<TD>
+<A HREF="http://www.OpenLDAP.org/support/">http://www.OpenLDAP.org/support/</A>
+</TD>
+</TR>
+</TABLE>
+
+<H2>Acknowledgments</H2>
+<P>The <A HREF="http://www.openldap.org/project/">OpenLDAP Project</A> is comprised of a team of volunteers.  This document would not be possible without their contribution of time and energy.</P>
+<P>The OpenLDAP Project would also like to thank the <A HREF="http://www.umich.edu/~dirsvcs/ldap/">University of Michigan LDAP</A> for building the foundation of LDAP software and information to which OpenLDAP Software is built upon.</P>
+<H2>Amendments</H2>
+<P>Suggested enhancements and corrections to this document should be submitted using the <A HREF="http://www.openldap.org/">OpenLDAP</A> <EM><TERM>Issue Tracking System</TERM></EM> (<A HREF="http://www.openldap.org/its/">http://www.openldap.org/its/</A>).</P>
+<H2>About this document</H2>
+<P>This document was produced using the <EM>Simple Document Format</EM> (<A HREF="http://www.mincom.com/mtr/sdf/">http://www.mincom.com/mtr/sdf/</A>) documentation system developed by <EM>Ian Clatworthy</EM>.</P>
+<P></P>
+<HR>
+<H1><A NAME="Introduction to OpenLDAP Directory Services">1. Introduction to OpenLDAP Directory Services</A></H1>
+<P>This document describes how to build, configure, and operate OpenLDAP software to provide directory services.  This includes details on how to configure and run the stand-alone <TERM>LDAP</TERM> daemon, <EM>slapd</EM>(8) and the stand-alone LDAP update replication daemon, <EM>slurpd</EM>(8). It is intended for newcomers and experienced administrators alike. This section provides a basic introduction to directory services and, in particular, the directory services provided by <EM>slapd</EM>(8).</P>
+<H2><A NAME="What is a directory service">1.1. What is a directory service?</A></H2>
+<P>A directory is specialized database optimized for reading, browsing and searching.  Directories tend to contain descriptive, attribute-based information and support sophisticated filtering capabilities.  Directories generally do not support complicated transaction or roll-back schemes found in database management systems designed for handling high-volume complex updates.  Directory updates are typically simple all-or-nothing changes, if they are allowed at all.  Directories are tuned to give quick-response to high-volume lookup or search operations. They may have the ability to replicate information widely in order to increase availability and reliability, while reducing response time.  When directory information is replicated, temporary inconsistencies between the replicas may be okay, as long as they get in sync eventually.</P>
+<P>There are many different ways to provide a directory service. Different methods allow different kinds of information to be stored in the directory, place different requirements on how that information can be referenced, queried and updated, how it is protected from unauthorized access, etc. Some directory services are <EM>local</EM>, providing service to a restricted context (e.g., the finger service on a single machine). Other services are global, providing service to a much broader context (e.g., the entire Internet). Global services are usually <EM>distributed</EM>, meaning that the data they contain is spread across many machines, all of which cooperate to provide the directory service. Typically a global service defines a uniform <EM>namespace</EM> which gives the same view of the data no matter where you are in relation to the data itself.  The Internet <TERM>Domain Name System</TERM> is an example of a globally distributed directory service.</P>
+<H2><A NAME="What is LDAP">1.2. What is LDAP?</A></H2>
+<P><EM>slapd</EM>'s model for directory service is based on a global directory model called <TERM>LDAP</TERM>.  LDAP stands for <TERM>Lightweight Directory Access Protocol</TERM>. LDAP is a directory access protocol that runs over <TERM>TCP</TERM>/<TERM>IP</TERM>. The nitty-gritty details of LDAP are defined in <A HREF="ftp://ftp.isi.edu/in-notes/rfc2251.txt">RFC2251</A> &quot;The Lightweight Directory Access Protocol (v3).&quot; This section gives an overview of LDAP from a user's perspective.</P>
+<P><EM>What kind of information can be stored in the directory?</EM> The LDAP information model is based on <EM>entries</EM>. An entry is a collection of attributes that has a globally-unique <TERM>Distinguished Name</TERM> (DN). The DN is used to refer to the entry unambiguously. Each of the entry's attributes has a <EM>type</EM> and one or more <EM>values</EM>. The types are typically mnemonic strings, like &quot;<TT>cn</TT>&quot; for common name, or &quot;<TT>mail</TT>&quot; for email address. The syntax of values depend on the attribute type is.  For example, <TT>cn</TT> attribute might be the value <TT>Babs Jensen</TT>.  A <TT>mail</TT> attribute might contain the value &quot;<TT>babs@example.com</TT>&quot;. A <TT>jpegPhoto</TT> attribute would contain a photograph in the JPEG (binary) format.</P>
+<P><EM>How is the information arranged?</EM> In LDAP, directory entries are arranged in a hierarchical tree-like structure.  Traditionally, this structure reflected the geographic and/or organizational boundaries.  Entries representing countries appeared at the top of the tree. Below them are entries representing states and national organizations. Below them might be entries representing organizational units, people, printers, documents, or just about anything else you can think of.  Figure 1.1 shows an example LDAP directory tree using traditional naming.</P>
+<P><CENTER><IMG SRC="intro_tree.gif" ALIGN="center"></CENTER></P>
+<P ALIGN="Center">Figure 1.1: LDAP directory tree (traditional naming)</P>
+<P>The tree may also be arranged based upon Internet domain names.  This naming approach is becoming increasing popular as it allows for directory services to be locating using the <TERM>Domain Name System</TERM>. Figure 1.2 shows an example LDAP directory tree using domain-based naming.</P>
+<P><CENTER><IMG SRC="intro_dctree.gif" ALIGN="center"></CENTER></P>
+<P ALIGN="Center">Figure 1.2: LDAP directory tree (Internet naming)</P>
+<P>In addition, LDAP allows you to control which attributes are required and allowed in an entry through the use of a special attribute called <TT>objectClass</TT>.  The values of the <TT>objectClass</TT> attribute determine the <EM>schema</EM> rules the entry must obey.</P>
+<P><EM>How is the information referenced?</EM> An entry is referenced by its distinguished name, which is constructed by taking the name of the entry itself (called the <TERM>Relative Distinguished Name</TERM> or RDN) and concatenating the names of its ancestor entries. For example, the entry for Barbara Jensen in the Internet naming example above has an RDN of <TT>uid=babs</TT> and a DN of <TT>uid=babs,ou=People,dc=example,dc=com</TT>&quot;. The full DN format is described in <A HREF="ftp://ftp.isi.edu/in-notes/rfc2253.txt">RFC2253</A>, &quot;Lightweight Directory Access Protocol (v3): UTF-8 String Representation of Distinguished Names.&quot;</P>
+<P><EM>How is the information accessed?</EM> LDAP defines operations for interrogating and updating the directory. Operations are provided for adding and deleting an entry from the directory, changing an existing entry, and changing the name of an entry. Most of the time, though, LDAP is used to search for information in the directory. The LDAP search operation allows some portion of the directory to be searched for entries that match some criteria specified by a search filter. Information can be requested from each entry that matches the criteria.</P>
+<P>For example, you might want to search the entire directory subtree at and below <TT>dc=example,dc=com</TT> for people with the name <TT>Barbara Jensen</TT>, retrieving the email address of each entry found. LDAP lets you do this easily.  Or you might want to search the entries directly below the <TT>st=California,c=US</TT> entry for organizations with the string <TT>Acme</TT> in their name, and that have a fax number. LDAP lets you do this too. The next section describes in more detail what you can do with LDAP and how it might be useful to you.</P>
+<P><EM>How is the information protected from unauthorized access?</EM> Some directory services provide no protection, allowing anyone to see the information. LDAP provides a mechanisms for a client to authenticate, or prove its identity to a directory server, paving the way for rich access control to protect the information the server contains.  LDAP also supports privacy and integrity security services.</P>
+<H2><A NAME="How does LDAP work">1.3. How does LDAP work?</A></H2>
+<P>LDAP directory service is based on a <EM>client-server</EM> model. One or more LDAP servers contain the data making up the LDAP directory tree. An LDAP client connects to an LDAP server and asks it a question. The server responds with the answer and/or with a pointer to where the client can get additional information (typically, another LDAP server). No matter which LDAP server a client connects to, it sees the same view of the directory; a name presented to one LDAP server references the same entry it would at another LDAP server. This is an important feature of a global directory service, like LDAP.</P>
+<H2><A NAME="What is slapd and what can it do">1.4. What is slapd and what can it do?</A></H2>
+<P><EM>slapd</EM> is an LDAP directory server that runs on many different platforms. You can use it to provide a directory service of your very own. Your directory can contain pretty much anything you want to put in it. You can connect it to the global LDAP directory service, or run a service all by yourself. Some of slapd's more interesting features and capabilities include:</P>
+<P><B>LDAPv2</B> and <B>LDAPv3</B>: <EM>slapd</EM> supports both version 2 and 3 of the <TERM>Lightweight Directory Access Protocol</TERM>.  <EM>slapd</EM> provides support for the latest features while maintaining interoperability with existing clients.  <EM>slapd</EM> supports both IPv4 and IPv6.</P>
+<P><B><TERM>Simple Authentication and Security Layer</TERM></B>: <EM>slapd</EM> supports strong authentication services through the use of SASL.  <EM>slapd</EM>'s SASL implementation utilizes <A HREF="http://asg.web.cmu.edu/cyrus/">Cyrus</A> <A HREF="http://asg.web.cmu.edu/sasl/">SASL</A> software which supports a number of mechanisms including DIGEST-MD5, EXTERNAL, and GSSAPI.</P>
+<P><B><TERM>Transport Layer Security</TERM></B>: <EM>slapd</EM> provides privacy and integrity protections through the use of TLS (or SSL).  <EM>slapd</EM>'s TLS implementation utilizes <A HREF="http://www.openssl.org/">OpenSSL</A> software.</P>
+<P><B>Access control</B>: <EM>slapd</EM> provides a rich and powerful access control facility, allowing you to control access to the information in your database(s). You can control access to entries based on LDAP authorization information, <TERM>IP</TERM> address, domain name and other criteria. <EM>slapd</EM> supports both <EM>static</EM> and <EM>dynamic</EM> access control information.</P>
+<P><B>Internationalization</B>: <EM>slapd</EM> supports Unicode and language tags.</P>
+<P><B>Choice of databases</B>: <EM>slapd</EM> comes with a variety of different backend databases you can choose from. They include <TERM>LDBM</TERM>, a high-performance disk-based embedded database; SHELL, a database interface to arbitrary shell scripts; and PASSWD, a simple password file database.  LDBM utilizes either <A HREF="http://www.sleepycat.com/">BerkeleyDB</A> or <A HREF="http://www.gnu.org/software/gdbm/">GDBM</A>.</P>
+<P><B>Multiple database instances</B>: <EM>slapd</EM> can be configured to serve multiple databases at the same time. This means that a single <EM>slapd</EM> server can respond to requests for many logically different portions of the LDAP tree, using the same or different backend databases.</P>
+<P><B>Generic modules API</B>: If you require even more customization, <EM>slapd</EM> lets you write your own modules easily. <EM>slapd</EM> consists of two distinct parts: a front end that handles protocol communication with LDAP clients; and modules which handle specific tasks such as database operations. Because these two pieces communicate via a well-defined <TERM>C</TERM> <TERM>API</TERM>, you can write your own customized modules which extend <EM>slapd</EM> in numerous ways.  Also, a number of <EM>programmable database</EM> modules are provided.  These allow you to expose external data sources to <EM>slapd</EM> using popular programming languages (<A HREF="http://www.perl.com/">Perl</A>, <EM>Shell</EM>, <A HREF="http://www.sql.com/">SQL</A>, and <A HREF="http://www.tcl.com/">TCL</A>).</P>
+<P><B>Threads</B>: <EM>slapd</EM> is threaded for high performance. A single multi-threaded <EM>slapd</EM> process handles all incoming requests, reducing the amount of system overhead required.</P>
+<P><B>Replication</B>: <EM>slapd</EM> can be configured to maintain replica copies of its database. This <EM>single-master/multiple-slave</EM> replication scheme is vital in high-volume environments where a single <EM>slapd</EM> just doesn't provide the necessary availability or reliability.  <EM>slapd</EM> also includes experimental support for <EM>multi-master</EM> replication.</P>
+<P><B>Configuration</B>: <EM>slapd</EM> is highly configurable through a single configuration file which allows you to change just about everything you'd ever want to change.  Configuration options have reasonable defaults, making your job much easier.</P>
+<P><EM>slapd</EM> also has its limitations, of course. The main LDBM database backend does not handle range queries or negation queries very well. These features and more will be coming in a future release.</P>
+<H2><A NAME="What about X.500">1.5. What about X.500?</A></H2>
+<P>Technically, LDAP is a directory access protocol to an <TERM>X.500</TERM> directory service, the <TERM>OSI</TERM> directory service.  Initial LDAP servers were gateways between LDAP and the X.500 <TERM>Directory Access Protocol</TERM> (<TERM>DAP</TERM>).  DAP is a heavyweight protocol that operates over a full OSI protocol stack and requires a significant amount of computing resources.  LDAP is designed to operate over <TERM>TCP</TERM>/<TERM>IP</TERM> and provides most of the functionality of DAP at a much lower cost.</P>
+<P>This use of LDAP makes it easy to access the X.500 directory, but still requires a full X.500 service to make data available to the many LDAP clients being developed. As with full X.500 DAP clients, a full X.500 DAP server is no small piece of software to operate.</P>
+<P>The stand-alone LDAP daemon, or <EM>slapd</EM>(8), is meant to remove much of the burden from the server side just as LDAP itself removed much of the burden from clients. If you are already running a X.500 DAP service and you want to continue to do so, you can probably stop reading this guide, which is all about running LDAP via <EM>slapd</EM>, without running X.500 DAP. If you are not running X.500 DAP, want to stop running X.500 DAP, or have no immediate plans to run X.500 DAP, read on.</P>
+<P>It is possible to replicate data from an LDAP directory server to a X.500 DAP <TERM>DSA</TERM>.  This requires an LDAP/DAP gateway.  OpenLDAP does not provide such a gateway, but our replication daemon can be used to replicate to such a gateway. See the <A HREF="#Replication with slurpd">Replication with slurpd</A> chapter of this document for information regarding replication.</P>
+<H2><A NAME="What is slurpd and what can it do">1.6. What is slurpd and what can it do?</A></H2>
+<P><EM>slurpd</EM>(8) is a daemon that helps <EM>slapd</EM> provide replicated service. It is responsible for distributing changes made to the master <EM>slapd</EM> database out to the various <EM>slapd</EM> replicas. It frees <EM>slapd</EM> from having to worry that some replicas might be down or unreachable when a change comes through; <EM>slurpd</EM> handles retrying failed requests automatically. <EM>slapd</EM> and <EM>slurpd</EM> communicate through a simple text file that is used to log changes.</P>
+<P>See the <A HREF="#Replication with slurpd">Replication with slurpd</A> chapter for information about how to configure and run <EM>slurpd</EM>(8).</P>
+<P></P>
+<HR>
+<H1><A NAME="A Quick-Start Guide">2. A Quick-Start Guide</A></H1>
+<P>The following is a quick start guide to OpenLDAP 2.0 software, including the stand-alone LDAP daemon, <EM>slapd</EM>(8).</P>
+<P>It is meant to step you through the basic steps needed to install and configure OpenLDAP software. It should be used in conjunction with the other chapters of this document, manual pages, and other materials provided with the distribution (e.g. the <TT>INSTALL</TT> document) or on the OpenLDAP web site (in particular, the OpenLDAP Software FAQ).</P>
+<P>If you intend to run OpenLDAP seriously, you should review the all of this document before attempt to install the software.</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>This quick start guide does not use strong authentication nor any privacy and integrity protection services.  These services are described in other chapters of the OpenLDAP Administrator's Guide.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<UL>
+&nbsp;</UL><OL>
+<LI><B>Get the software</B>
+<BR>
+You can obtain a copy of the software by following the instructions on the OpenLDAP download page (<A HREF="http://www.openldap.org/software/download/">http://www.openldap.org/software/download/</A>). It is recommended that new users start with the (latest) <EM>release</EM>.
+<BR>
+&nbsp;
+<LI><B>Unpack the distribution</B>
+<BR>
+Pick a directory for the LDAP source to live under, change directory to there, and unpack the distribution using the following commands:<UL>
+<TT>gunzip -c openldap-VERSION.tgz | tar xvfB -</TT></UL>
+<BR>
+then relocate yourself into the distribution directory:<UL>
+<TT>cd openldap-VERSION</TT></UL>
+<BR>
+You'll have to replace <TT>VERSION</TT> with the version name of the release.
+<BR>
+&nbsp;
+<LI><B>Review documentation</B>
+<BR>
+You should now review the <TT>COPYRIGHT</TT>, <TT>LICENSE</TT>, <TT>README</TT> and <TT>INSTALL</TT> documents provided with the distribution. The <TT>COPYRIGHT</TT> and <TT>LICENSE</TT> provide information on acceptable use, copying, and limitation of warranty of OpenLDAP software.
+<BR>
+&nbsp;
+<BR>
+You should also review other chapters of this document. In particular, the <A HREF="#Building and Installing OpenLDAP Software">Building and Installing OpenLDAP Software</A> chapter of this document provides detailed information on prerequisite software and installation procedures.
+<BR>
+&nbsp;
+<LI><B>Run <TT>configure</TT></B>
+<BR>
+You will need to run the provided <TT>configure</TT> script to <EM>configure</EM> to the distribution for building on your system.  The <TT>configure</TT> script accepts many command line options that enable or disable optional software features.  Usually the defaults are okay, but you may want to change them.  To get a complete list of options that <TT>configure</TT> accepts, use the <TT>--help</TT> option:<UL>
+<TT>./configure --help</TT></UL>
+<BR>
+However, given that you using this guide, we'll assume you'll are brave enough to just let <TT>configure</TT> to determine what's best:<UL>
+<TT>./configure</TT></UL>
+<BR>
+Assuming <TT>configure</TT> doesn't dislike your system, you can proceed with building the software.  If <TT>configure</TT> did complain, well, you'll likely need to go to the FAQ Installation Section (<A HREF="http://www.openldap.org/faq/">http://www.openldap.org/faq/</A> and/or actually read the <A HREF="#Building and Installing OpenLDAP Software">Building and Installing OpenLDAP Software</A> chapter of this document.
+<BR>
+&nbsp;
+<LI><B>Build the software</B>.
+<BR>
+The next step is to build the software.  This step has two parts, first we construct dependencies and then we compile the software:<UL>
+<TT>make depend</TT>
+<BR>
+<TT>make</TT></UL>
+<BR>
+Both makes should complete without error.
+<BR>
+&nbsp;
+<LI><B>Test the build</B>.
+<BR>
+To ensure a correct build, you should run the test suite (it only takes a few minutes):<UL>
+<TT>make test</TT></UL>
+<BR>
+Tests which apply to your configuration will run and they should pass.  Some tests, such as the replication test, may be skipped.
+<BR>
+&nbsp;
+<LI><B>Install the software</B>.
+<BR>
+You are now ready to install the software, this usually requires <EM>super-user</EM> privledges:<UL>
+<TT>su root -c 'make install'</TT></UL>
+<BR>
+Everything should now be installed under <TT>/usr/local</TT> (or whatever installation prefix was used by <TT>configure</TT>.
+<BR>
+&nbsp;
+<LI><B>Edit the configuration file</B>.
+<BR>
+Use your favorite editor to edit the provided <EM>slapd.conf</EM>(5) example (usually installed as <TT>/usr/local/etc/openldap/slapd.conf</TT>) to contain an LDBM database definition of the form:<UL>
+<TT>database        ldbm</TT>
+<BR>
+<TT>suffix          &quot;dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;&quot;</TT>
+<BR>
+<TT>rootdn          &quot;cn=Manager,dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;&quot;</TT>
+<BR>
+<TT>rootpw          secret</TT>
+<BR>
+<TT>directory       /usr/local/var/openldap-ldbm</TT></UL>
+<BR>
+Be sure to replace <TT>&lt;MY-DOMAIN&gt;</TT> and <TT>&lt;COM&gt;</TT> with the appropriate domain components of your domain name.  For example, for <TT>example.com</TT>, use:<UL>
+<TT>database        ldbm</TT>
+<BR>
+<TT>suffix          &quot;dc=example,dc=com&quot;</TT>
+<BR>
+<TT>rootdn          &quot;cn=Manager,dc=example,dc=com&quot;</TT>
+<BR>
+<TT>rootpw          secret</TT>
+<BR>
+<TT>directory       /usr/local/var/openldap-ldbm</TT></UL>
+<BR>
+If your domain contains additional components, such as <TT>eng.uni.edu.eu</TT>, use:<UL>
+<TT>database        ldbm</TT>
+<BR>
+<TT>suffix          &quot;dc=eng,dc=uni,dc=edu,dc=eu&quot;</TT>
+<BR>
+<TT>rootdn          &quot;cn=Manager,dc=eng,dc=uni,dc=edu,dc=eu&quot;</TT>
+<BR>
+<TT>rootpw          secret</TT>
+<BR>
+<TT>directory       /usr/local/var/openldap-ldbm</TT></UL>
+<BR>
+Details regarding configuring <EM>slapd</EM>(8) can be found in the <EM>slapd.conf</EM>(5) manual page and the <A HREF="#The slapd Configuration File">The slapd Configuration File</A> chapter of this document.
+<BR>
+&nbsp;
+<LI><B>Start SLAPD</B>.
+<BR>
+You are now ready to start the stand-alone LDAP server, slapd(8), by running the command:<UL>
+<TT>su root -c /usr/local/libexec/slapd</TT></UL>
+<BR>
+To check to see if the server is running and configured correctly, you can run a search against it with <EM>ldapsearch</EM>(1).  By default, ldapsearch is installed as <TT>/usr/local/bin/ldapsearch</TT>:<UL>
+<TT>ldapsearch -x -b '' -s base '(objectclass=*)' namingContexts</TT></UL>
+<BR>
+Note the use of single quotes around command parameters to prevent special characters from being interpreted by the shell.  This should return:<UL>
+<TT>dn:</TT>
+<BR>
+<TT>namingContexts: dc=example,dc=com</TT></UL>
+<BR>
+Details regarding running <EM>slapd</EM>(8) can be found in the <EM>slapd</EM>(8) manual page and the <A HREF="#Running slapd">Running slapd</A> chapter of this document.
+<BR>
+&nbsp;
+<LI><B>Add initial entries to your directory</B>.
+<BR>
+You can use <EM>ldapadd</EM>(1) to add entries to your LDAP directory. <EM>ldapadd</EM> expects input in LDIF form. We'll do it in two steps:<OL>
+<LI>create an LDIF file
+<LI>run ldapadd</OL>
+<BR>
+Use your favorite editor and create an LDIF file that contains:<UL>
+<TT>dn: dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;</TT>
+<BR>
+<TT>objectclass: dcObject</TT>
+<BR>
+<TT>objectclass: organization</TT>
+<BR>
+<TT>o: &lt;MY ORGANIZATION&gt;</TT>
+<BR>
+<TT>dc: &lt;MY-DOMAIN&gt;</TT>
+<BR>
+<TT></TT>
+<BR>
+<TT>dn: cn=Manager,dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;</TT>
+<BR>
+<TT>objectclass: organizationalRole</TT>
+<BR>
+<TT>cn: Manager</TT></UL>
+<BR>
+Be sure to replace &lt;MY-DOMAIN&gt; and &lt;COM&gt; with the appropriate domain components of your domain name.  &lt;MY ORGANIZATION&gt; should be replaced with the name of your organization.  If you cut and paste, be sure to trim any leading and trailing whitespace from the example.<UL>
+<TT>dn: dc=example,dc=com</TT>
+<BR>
+<TT>objectclass: dcObject</TT>
+<BR>
+<TT>objectclass: organization</TT>
+<BR>
+<TT>o: Example Company</TT>
+<BR>
+<TT>dc: example</TT>
+<BR>
+<TT></TT>
+<BR>
+<TT>dn: cn=Manager,dc=example,dc=com</TT>
+<BR>
+<TT>objectclass: organizationalRole</TT>
+<BR>
+<TT>cn: Manager</TT></UL>
+<BR>
+Now, you may run <EM>ldapadd</EM>(1) to insert these entries into your directory.<UL>
+<TT>ldapadd -x -D &quot;cn=Manager,dc=&lt;MY-DOMAIN&gt;,dc=&lt;COM&gt;&quot; -W -f example.ldif</TT></UL>
+<BR>
+Be sure to replace <TT>&lt;MY-DOMAIN&gt;</TT> and <TT>&lt;COM&gt;</TT> with the appropriate domain components of your domain name.  You will be prompted for the &quot;<TT>secret</TT>&quot; specified in <TT>slapd.conf</TT>. For example, for <TT>example.com</TT>, use:<UL>
+<TT>ldapadd -x -D &quot;cn=Manager,dc=example,dc=com&quot; -W -f example.ldif</TT></UL>
+<BR>
+where <TT>example.ldif</TT> is the file you created above.<UL>
+<TT> </TT></UL>
+<BR>
+Additional informaton regarding directory creation can be found in the <A HREF="#Database Creation and Maintenance Tools">Database Creation and Maintenance Tools</A> chapter of this document.
+<BR>
+&nbsp;
+<LI><B>See if it works</B>.
+<BR>
+Now we're ready to verify the added entries are in your directory. You can use any LDAP client to do this, but our example uses the <EM>ldapsearch</EM>(1) tool.  Remember to replace <TT>dc=example,dc=com</TT> with the correct values for your site:<UL>
+<TT>ldapsearch -x -b 'dc=example,dc=com' '(objectclass=*)'</TT></UL>
+<BR>
+This command will search for and retrieve every entry in the database.</OL>
+<P>You are now ready to add more entries using <EM>ldapadd</EM>(1) or another LDAP client, experiment with various configuration options, backend arrangements, etc.</P>
+<P>Note that by default, the <EM>slapd</EM>(8) database grants <EM>read access to everybody</EM> excepting the <EM>super-user</EM> (as specified by the <TT>rootdn</TT> configuration directive).  It is highly recommended that you establish controls to restrict access to authorized users.  Access controls are discussed in the <A HREF="#Access Control">Access Control</A> section of the <A HREF="#The slapd Configuration File">The slapd Configuration File</A> chapter.</P>
+<P>The following chapters provide more detailed information on making, installing, and running <EM>slapd</EM>(8).</P>
+<P></P>
+<HR>
+<H1><A NAME="The Big Picture - Configuration Choices">3. The Big Picture - Configuration Choices</A></H1>
+<P>This section gives a brief overview of various <TERM>LDAP</TERM> directory configurations, and how your stand-alone LDAP server <EM>slapd</EM>(8) fits in with the rest of the world.</P>
+<H2><A NAME="Local Directory Service">3.1. Local Directory Service</A></H2>
+<P>In this configuration, you run a <EM>slapd</EM> which provides directory service for your local domain only. It does not interact with other directory servers in any way. This configuration is shown in Figure 3.1.</P>
+<P><CENTER><IMG SRC="config_local.gif" ALIGN="center"></CENTER></P>
+<P ALIGN="Center">Figure 3.1: Local service configuration.</P>
+<P>Use this configuration if you are just starting out (it's the one the quick-start guide makes for you) or if you want to provide a local service and are not interested in connecting to the rest of the world. It's easy to upgrade to another configuration later if you want.</P>
+<H2><A NAME="Local Directory Service with Referrals">3.2. Local Directory Service with Referrals</A></H2>
+<P>In this configuration, you run a slapd which provides directory service for your local domain and configure it to return referrals to a <EM>superior</EM> service capable of requests outside your local domain. You may run this service yourself or use one provided to you. This configuration is shown in Figure 3.2.</P>
+<P><CENTER><IMG SRC="config_ref.gif" ALIGN="center"></CENTER></P>
+<P ALIGN="Center">Figure 3.2: Local service with referrals</P>
+<P>Use this configuration if you want to provide local service and participate in the Global Directory.</P>
+<H2><A NAME="Replicated Directory Service">3.3. Replicated Directory Service</A></H2>
+<P>The slurpd daemon is used to propagate changes from a master slapd to one or more slave slapds. An example master-slave configuration is shown in figure 3.3.</P>
+<P><CENTER><IMG SRC="config_repl.gif" ALIGN="center"></CENTER></P>
+<P ALIGN="Center">Figure 3.3: Replicated Directory Services</P>
+<P>This configuration can be used in conjunction with either of first two configurations in situations where a single slapd does not provide the required reliability or availability.</P>
+<H2><A NAME="Distributed Local Directory Service">3.4. Distributed Local Directory Service</A></H2>
+<P>In this configuration, the local service is partitioned into smaller services, each which may be replicated, and <EM>glued</EM> together with <EM>superior</EM> and <EM>subordinate</EM> referrals.</P>
+<P></P>
+<HR>
+<H1><A NAME="Building and Installing OpenLDAP Software">4. Building and Installing OpenLDAP Software</A></H1>
+<P>This chapter details how to build and install the <A HREF="http://www.openldap.org/">OpenLDAP</A> Software package including <EM>slapd</EM>(8), the stand-alone LDAP daemon and <EM>slurpd</EM>(8), the stand-alone update replication daemon. Building and installing OpenLDAP requires several steps: installing prerequisite software, configuring OpenLDAP itself, making, and finally installing.  The following sections describe this process in detail.</P>
+<H2><A NAME="Obtaining and Extracting the Software">4.1. Obtaining and Extracting the Software</A></H2>
+<P>You can obtain OpenLDAP Software from the project's download page at <A HREF="http://www.openldap.org/software/download/">http://www.openldap.org/software/download/</A> or directly from the project's <TERM>FTP</TERM> service at <A HREF="ftp://ftp.openldap.org/pub/OpenLDAP/">ftp://ftp.openldap.org/pub/OpenLDAP/</A>.</P>
+<P>The project makes available two series of packages for <EM>general use</EM>.  The project makes <EM>releases</EM> as new features and bug fixes come available.  Though the project takes steps to improve stablity of these releases, it is common for problems to arise only after <EM>release</EM>.  The latest <EM>release</EM> which has demonstrated stability through general use.</P>
+<P>Users of OpenLDAP Software can choose, depending on their desire for the <EM>latest features</EM> versus <EM>demonstrated stability</EM>, the most appropriate series to install.</P>
+<P>After downloading OpenLDAP Software, you need to extract the distribution from the compressed archive file and change your working directory to the top directory of the distribution:</P>
+<UL>
+<TT>gunzip -c openldap-VERSION.tgz | tar xf -</TT>
+<BR>
+<TT>cd openldap-VERSION</TT></UL>
+<P>You'll have to replace <TT>VERSION</TT> with the version name of the release.</P>
+<P>You should now review the <TT>COPYRIGHT</TT>, <TT>LICENSE</TT>, <TT>README</TT> and <TT>INSTALL</TT> documents provided with the distribution.  The <TT>COPYRIGHT</TT> and <TT>LICENSE</TT> provide information on acceptable use, copying, and limitation of warranty of OpenLDAP software. The <TT>README</TT> and <TT>INSTALL</TT> documents provide detailed information on prerequisite software and installation procedures.</P>
+<H2><A NAME="Prerequisite software">4.2. Prerequisite software</A></H2>
+<P>OpenLDAP Software relies upon a number of software packages distributed by third parties.  Depending on the features you intend to use, you may have to download and install a number of additional software packages.  This section details commonly needed third party software packages you might have to install.  Note that some of these third party packages may depend on additional software packages.  Install each package per installation instructions provided with it.</P>
+<H3><A NAME="{{TERM[expand]TLS}}">4.2.1. <TERM>Transport Layer Security</TERM></A></H3>
+<P>OpenLDAP clients and servers require installation of <A HREF="http://www.openssl.org/">OpenSSL</A> <TERM>TLS</TERM> libraries to provide <TERM>Transport Layer Security</TERM> services.  Though some operating systems may provide these libraries as part of the base system or as an optional software component, OpenSSL often requires separate installation.</P>
+<P>OpenSSL is available from <A HREF="http://www.openssl.org/">http://www.openssl.org/</A>.</P>
+<P>OpenLDAP will not be fully LDAPv3 compliant unless OpenLDAP's <TT>configure</TT> detects a usable OpenSSL installation.</P>
+<H3><A NAME="Kerberos Authentication Services">4.2.2. Kerberos Authentication Services</A></H3>
+<P>OpenLDAP clients and servers support Kerberos-based authentication services. In particular, OpenLDAP supports <TERM>SASL</TERM>/<TERM>GSSAPI</TERM> authentication mechanism using either <A HREF="http://www.pdc.kth.se/heimdal/">Heimdal</A> or <A HREF="http://web.mit.edu/kerberos/www/">MIT Kerberos</A> V packages. If you desire to use Kerberos-based SASL/GSSAPI authentication, you should install either Heimdal or MIT Kerberos V.</P>
+<P>Heimdal Kerberos is available from <A HREF="http://www.pdc.kth.se/heimdal/">http://www.pdc.kth.se/heimdal/</A>. MIT Kerberos is available from <A HREF="http://web.mit.edu/kerberos/www/">http://web.mit.edu/kerberos/www/</A>.</P>
+<P>Use of strong authentication services, such as those provided by Kerberos, is highly recommended.</P>
+<H3><A NAME="{{TERM[expand]SASL}}">4.2.3. <TERM>Simple Authentication and Security Layer</TERM></A></H3>
+<P>OpenLDAP clients and servers require installation of <A HREF="http://asg.web.cmu.edu/cyrus/">Cyrus</A>'s <A HREF="http://asg.web.cmu.edu/sasl/">SASL</A> libraries to provide <TERM>Simple Authentication and Security Layer</TERM> services.  Though some operating systems may provide this library as part of the base system or as an optional software component, Cyrus SASL often requires separate installation.</P>
+<P>Cyrus SASL is available from <A HREF="http://asg.web.cmu.edu/sasl/sasl-library.html">http://asg.web.cmu.edu/sasl/sasl-library.html</A>. Cyrus SASL will make use of OpenSSL and Kerberos/GSSAPI libraries if preinstalled.</P>
+<P>OpenLDAP will not be fully LDAPv3 compliant unless OpenLDAP's configure detects a usable Cyrus SASL installation.</P>
+<H3><A NAME="Database Software">4.2.4. Database Software</A></H3>
+<P>OpenLDAP's <EM>slapd</EM>(8) primary database backend, <TERM>LDBM</TERM>, requires a compatible database package for entry storage.  LDBM is compatible with <A HREF="http://www.sleepycat.com/">Sleepycat Software</A>'s <A HREF="http://www.sleepycat.com/">BerkeleyDB</A> (recommended) or the <A HREF="http://www.fsf.org/">Free Software Foundation</A>'s <A HREF="http://www.gnu.org/software/">GNU</A> Database Manager (<A HREF="http://www.gnu.org/software/gdbm/">GDBM</A>). If neither of these packages are available at configure time, you will not be able build <EM>slapd</EM>(8) with primary database backend.</P>
+<P>Your operating system may provide one of these two packages in the base system or as an optional software component.  You may need may need to obtain the software and install it yourself.</P>
+<P><A HREF="http://www.sleepycat.com/">BerkeleyDB</A> is available from <A HREF="http://www.sleepycat.com/">Sleepycat Software</A>'s download page <A HREF="http://www.sleepycat.com/download.html">http://www.sleepycat.com/download.html</A>. There are several versions available.  At the time of this writing, the latest release, version 3.1, is recommended.</P>
+<P><A HREF="http://www.gnu.org/software/gdbm/">GDBM</A> is available from <A HREF="http://www.fsf.org/">FSF</A>'s download site <A HREF="ftp://ftp.gnu.org/pub/gnu/gdbm/">ftp://ftp.gnu.org/pub/gnu/gdbm/</A>. At the time of this writing, version 1.8 is the latest release.</P>
+<H3><A NAME="Threads">4.2.5. Threads</A></H3>
+<P>OpenLDAP is designed to take advantage of threads.  OpenLDAP supports POSIX <EM>pthreads</EM>, Mach <EM>CThreads</EM>, and a number of other varieties.  <TT>configure</TT> will complain if it cannot find a suitable thread subsystem.   If this occurs, please consult the <TT>Software|Installation|Platform Hints</TT> section of the OpenLDAP FAQ <A HREF="http://www.openldap.org/faq/">http://www.openldap.org/faq/</A>.</P>
+<H3><A NAME="TCP Wrappers">4.2.6. TCP Wrappers</A></H3>
+<P><EM>slapd</EM>(8) supports TCP wrappers (IP level access control filters) if preinstalled.  Use of TCP wrappers or other IP-level access filters (such as those provided by an IP-level firewall) is recommended for servers containing non-public information.</P>
+<H2><A NAME="Running configure">4.3. Running configure</A></H2>
+<P>Now you should probably run the <TT>configure</TT> script with the <TT>--help</TT> option. This will give you a list of options that you can change when building OpenLDAP.  Many of the features of OpenLDAP can be enabled or disabled using this method.</P>
+<PRE>
+        ./configure --help
+</PRE>
+<P>The <TT>configure</TT> script will also look at various environment variables for certain settings.  These environment variables include:</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 4.1: Environment Variables</CAPTION>
+<TR CLASS="heading">
+<TD>
+<STRONG>Variable</STRONG>
+</TD>
+<TD>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>CC</TT>
+</TD>
+<TD>
+Specify alternative C Compiler
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>CFLAGS</TT>
+</TD>
+<TD>
+Specify additional compiler flags
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>CPPFLAGS</TT>
+</TD>
+<TD>
+Specify C Preprocessor flags
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>LDFLAGS</TT>
+</TD>
+<TD>
+Specify linker flags
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>LIBS</TT>
+</TD>
+<TD>
+Specify additional libraries
+</TD>
+</TR>
+</TABLE>
+
+<P>Now run the configure script with any desired configuration options or environment variables.</P>
+<PRE>
+        [[env] settings] ./configure [options]
+</PRE>
+<P>As an example, let's assume that we want install OpenLDAP with LDBM backend and TCP wrapper support.  By default, LDBM is enabled and TCP wrappers is not.  So, we just need to specify <TT>--with-wrappers</TT> to include TCP wrapper support:</P>
+<PRE>
+        ./configure --with-wrappers
+</PRE>
+<P>However, this will fail to locate dependent software not installed in system directories.  For example, if TCP Wrappers headers and libraries are installed in <TT>/usr/local/include</TT> and <TT>/usr/local/lib</TT> respectively, the <TT>configure</TT> script should be called as follows:</P>
+<PRE>
+        env CPPFLAGS=&quot;-I/usr/local/include&quot; LDFLAGS=&quot;-L/usr/local/lib&quot; \
+                ./configure --with-wrappers
+</PRE>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>Some shells, such as those derived from the Bourne <EM>sh</EM>(1), do not require use of the <EM>env</EM>(1) command.  In some cases, environmental variables have to be specified using alternative syntaxes.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<P>The <TT>configure</TT> script will normally auto-detect appropriate settings.  If you have problems at this stage, consult any platform specific hints and check your <TT>configure</TT> options, if any.</P>
+<H2><A NAME="Building the Software">4.4. Building the Software</A></H2>
+<P>Once you have run the <TT>configure</TT> script the last line of output should be:</P>
+<PRE>
+        Please &quot;make depend&quot; to build dependencies
+</PRE>
+<P>If the last line of output does not match, <TT>configure</TT> has failed, and you will need to review its output to determine what went wrong. You should not proceed until <TT>configure</TT> completes successfully.</P>
+<P>To build dependencies, run:</P>
+<PRE>
+        make depend
+</PRE>
+<P>Now build the software, this step will actually compile OpenLDAP.</P>
+<PRE>
+        make
+</PRE>
+<P>You should examine the output of this command carefully to make sure everything is built correctly. Note that this command builds the LDAP libraries and associated clients as well as <EM>slapd</EM>(8) and <EM>slurpd</EM>(8).</P>
+<H2><A NAME="Testing the Software">4.5. Testing the Software</A></H2>
+<P>Once the software has been properly configured and successfully made, you should run the test suite to verify the build.</P>
+<PRE>
+        make test
+</PRE>
+<P>Tests which apply to your configuration will run and they should pass. Some tests, such as the replication test, may be skipped if not supported by your configuration.</P>
+<H2><A NAME="Installing the Software">4.6. Installing the Software</A></H2>
+<P>One you have successfully tested the software, you are ready to install it. You will need to have write permission to the installation directories you specified when you ran configure. By default OpenLDAP is installed in <TT>/usr/local</TT>.  If you changed this setting with the <TT>--prefix</TT> configure option, it will be installed in the location you provided.</P>
+<P>Typically, the installation typically requires super-user priviledges. From the top level OpenLDAP source directory, type:</P>
+<PRE>
+        su root -c 'make install'
+</PRE>
+<P>You should examine the output of this command carefully to make sure everything is installed correctly. You will find the configuration files for <EM>slapd</EM>(8) in <TT>/usr/local/etc/openldap</TT> by default.  See the <A HREF="#The slapd Configuration File">The slapd Configuration File</A> chapter for additional information.</P>
+<P></P>
+<HR>
+<H1><A NAME="The slapd Configuration File">5. The slapd Configuration File</A></H1>
+<P>Once the software has been built and installed, you are ready to configure <EM>slapd</EM>(8) for use at your site. The slapd runtime configuration is primarily accomplished through the <EM>slapd.conf</EM>(5) file, normally installed in the <TT>/usr/local/etc/openldap</TT> directory.</P>
+<P>An alternate configuration file can be specified via a command-line option to <EM>slapd</EM>(8) or <EM>slurpd</EM>(8). This chapter describes the general format of the config file, followed by a detailed description of commonly used config file directives.</P>
+<H2><A NAME="Configuration File Format">5.1. Configuration File Format</A></H2>
+<P>The <EM>slapd.conf</EM>(5) file consists of three types of configuration information: global, backend specific, and database specific.  Global information is specified first, followed by information associated with a particular backend type, which is then followed by information associated with a particular database instance.  Global directives can be overridden in a backend and/or database directives, backend directives can be overridden by database directives.</P>
+<P>Blank lines and comment lines beginning with a '<TT>#</TT>' character are ignored.  If a line begins with white space, it is considered a continuation of the previous line. The general format of slapd.conf is as follows:</P>
+<PRE>
+        # global configuration directives
+        &lt;global config directives&gt;
+
+        # backend definition
+        backend &lt;typeA&gt;
+        &lt;backend-specific directives&gt;
+
+        # first database definition &amp; config directives
+        database &lt;typeA&gt;
+        &lt;database-specific directives&gt;
+
+        # second database definition &amp; config directives
+        database &lt;typeB&gt;
+        &lt;database-specific directives&gt;
+
+        # second database definition &amp; config directives
+        database &lt;typeA&gt;
+        &lt;database-specific directives&gt;
+
+        # subsequent backend &amp; database definitions &amp; config directives
+        ...
+</PRE>
+<P>A configuration directive may take arguments.  If so, they are separated by white space.  If an argument contains white space, the argument should be enclosed in double quotes <TT>&quot;like this&quot;</TT>. If an argument contains a double quote or a backslash character `<TT>\</TT>', the character should be preceded by a backslash character `<TT>\</TT>'.</P>
+<P>The distribution contains an example configuration file that will be installed in the <TT>/usr/local/etc/openldap</TT> directory. A number of files containing schema definitions (attribute types and object classes) are also provided in the <TT>/usr/local/etc/openldap/schema</TT> directory.</P>
+<H2><A NAME="Configuration File Directives">5.2. Configuration File Directives</A></H2>
+<P>This section details commonly used configuration directives.  For a complete list, see <EM>slapd.conf</EM>(5) manual page.  This section separates the configuration file directives into global, backend-specific and data-specific categories, describing each directive and its default value (if any), and giving an example of its use.</P>
+<H3><A NAME="Global Directives">5.2.1. Global Directives</A></H3>
+<P>Directives described in this section apply to all backends and databases unless specifically overridden in a backend or database definition.  Arguments that should be replaced by actual text are shown in brackets <TT>&lt;&gt;</TT>.</P>
+<H4><A NAME="access to &lt;what&gt; [ by &lt;who&gt; &lt;accesslevel&gt; &lt;control&gt; ]+">5.2.1.1. access to &lt;what&gt; [ by &lt;who&gt; &lt;accesslevel&gt; &lt;control&gt; ]+</A></H4>
+<P>This directive grants access (specified by &lt;accesslevel&gt;) to a set of entries and/or attributes (specified by &lt;what&gt;) by one or more requesters (specified by &lt;who&gt;). See the <A HREF="#Access Control">Access Control</A> section of this chapter for a summary of basic usage.</P>
+<H4><A NAME="attributetype &lt;{{REF:RFC2252}} Attribute Type Description&gt;"> </A>5.2.1.2. attributetype &lt;<A HREF="ftp://ftp.isi.edu/in-notes/rfc2252.txt">RFC2252</A> Attribute Type Description&gt;</H4>
+<P>This directive defines an attribute type. Please see the <A HREF="#Schema Specification">Schema Specification</A> chapter for information regarding how to use this directive.</P>
+<H4><A NAME="defaultaccess { none | compare | search | read | write }">5.2.1.3. defaultaccess { none | compare | search | read | write }</A></H4>
+<P>This directive specifies the default access to grant requesters when no <TT>access</TT> directives have been specified.  Any given access level implies all lesser access levels (e.g., read access implies search and compare but not write).</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>It is recommend that the <TT>access</TT> directive be used to specify access control.  See the <A HREF="#Access Control">Access Control</A> section of this chapter for information regarding the <TT>access</TT> directive.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<P>Default:</P>
+<PRE>
+ defaultaccess read
+</PRE>
+<H4><A NAME="idletimeout &lt;integer&gt;">5.2.1.4. idletimeout &lt;integer&gt;</A></H4>
+<P>Specify the number of seconds to wait before forcibly closing an idle client connection.  An idletimeout of 0, the default, disables this feature.</P>
+<H4><A NAME="include &lt;filename&gt;">5.2.1.5. include &lt;filename&gt;</A></H4>
+<P>This directive specifies that slapd should read additional configuration information from the given file before continuing with the next line of the current file. The included file should follow the normal slapd config file format.  The file is commonly used to include files containing schema specifications.</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>You should be careful when using this directive - there is no small limit on the number of nested include directives, and no loop detection is done.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<H4><A NAME="loglevel &lt;integer&gt;">5.2.1.6. loglevel &lt;integer&gt;</A></H4>
+<P>This directive specifies the level at which debugging statements and operation statistics should be syslogged (currently logged to the <EM>syslogd</EM>(8) {EX:LOG_LOCAL4}} facility). You must have configured OpenLDAP <TT>--enable-debug</TT> (the default) for this to work (except for the two statistics levels, which are always enabled).  Log levels are additive. To display what numbers correspond to what kind of debugging, invoke slapd with <TT>-?</TT> or consult the table below. The possible values for &lt;integer&gt; are:</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 5.1: Debugging Levels</CAPTION>
+<TR CLASS="heading">
+<TD ALIGN='Right'>
+<STRONG>Level</STRONG>
+</TD>
+<TD ALIGN='Left'>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+-1
+</TD>
+<TD ALIGN='Left'>
+enable all debugging
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+0
+</TD>
+<TD ALIGN='Left'>
+no debugging
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+1
+</TD>
+<TD ALIGN='Left'>
+trace function calls
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+2
+</TD>
+<TD ALIGN='Left'>
+debug packet handling
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+4
+</TD>
+<TD ALIGN='Left'>
+heavy trace debugging
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+8
+</TD>
+<TD ALIGN='Left'>
+connection management
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+16
+</TD>
+<TD ALIGN='Left'>
+print out packets sent and received
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+32
+</TD>
+<TD ALIGN='Left'>
+search filter processing
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+64
+</TD>
+<TD ALIGN='Left'>
+configuration file processing
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+128
+</TD>
+<TD ALIGN='Left'>
+access control list processing
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+256
+</TD>
+<TD ALIGN='Left'>
+stats log connections/operations/results
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+512
+</TD>
+<TD ALIGN='Left'>
+stats log entries sent
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+1024
+</TD>
+<TD ALIGN='Left'>
+print communication with shell backends
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+2048
+</TD>
+<TD ALIGN='Left'>
+print entry parsing debugging
+</TD>
+</TR>
+</TABLE>
+
+<P>Example:</P>
+<PRE>
+ loglevel -1
+</PRE>
+<P>This will cause lots and lots of debugging information to be logged.</P>
+<P>Default:</P>
+<PRE>
+ loglevel 256
+</PRE>
+<H4><A NAME="objectclass &lt;{{REF:RFC2252}} Object Class Description&gt;"> </A>5.2.1.7. objectclass &lt;<A HREF="ftp://ftp.isi.edu/in-notes/rfc2252.txt">RFC2252</A> Object Class Description&gt;</H4>
+<P>This directive defines an object class. Please see the <A HREF="#Schema Specification">Schema Specification</A> chapter for information regarding how to use this directive.</P>
+<H4><A NAME="referral &lt;URI&gt;">5.2.1.8. referral &lt;URI&gt;</A></H4>
+<P>This directive specifies the referral to pass back when slapd cannot find a local database to handle a request.</P>
+<P>Example:</P>
+<PRE>
+        referral ldap://root.openldap.org
+</PRE>
+<P>This will refer non-local queries to the global root LDAP server at the OpenLDAP Project. Smart LDAP clients can re-ask their query at that server, but note that most of these clients are only going to know how to handle simple LDAP URLs that contain a host part and optionally a distinguished name part.</P>
+<H4><A NAME="sizelimit &lt;integer&gt;">5.2.1.9. sizelimit &lt;integer&gt;</A></H4>
+<P>This directive specifies the maximum number of entries to return from a search operation.</P>
+<P>Default:</P>
+<PRE>
+        sizelimit 500
+</PRE>
+<H4><A NAME="timelimit &lt;integer&gt;">5.2.1.10. timelimit &lt;integer&gt;</A></H4>
+<P>This directive specifies the maximum number of seconds (in real time) slapd will spend answering a search request. If a request is not finished in this time, a result indicating an exceeded timelimit will be returned.</P>
+<P>Default:</P>
+<PRE>
+        timelimit 3600
+</PRE>
+<H3><A NAME="General Backend Directives">5.2.2. General Backend Directives</A></H3>
+<P>Directives in this section apply only to the backend in which they are defined. They are supported by every type of backend. Backend directives apply to all databases instances of the same type and, depending on the directive, may be overridden by database directives.</P>
+<H4><A NAME="backend &lt;type&gt;">5.2.2.1. backend &lt;type&gt;</A></H4>
+<P>This directive marks the beginning of a backend definition. <TT>&lt;type&gt;</TT> should be one of <TT>ldbm</TT>, <TT>shell</TT>, <TT>passwd</TT>, or other supported backend type.</P>
+<H3><A NAME="General Database Directives">5.2.3. General Database Directives</A></H3>
+<P>Directives in this section apply only to the database in which they are defined. They are supported by every type of database.</P>
+<H4><A NAME="database &lt;type&gt;">5.2.3.1. database &lt;type&gt;</A></H4>
+<P>This directive marks the beginning of a new database instance definition. <TT>&lt;type&gt;</TT> should be one of <TT>ldbm</TT>, <TT>shell</TT>, <TT>passwd</TT>, or other supported database type.</P>
+<P>Example:</P>
+<PRE>
+        database ldbm
+</PRE>
+<P>This marks the beginning of a new LDBM backend database instance definition.</P>
+<H4><A NAME="readonly { on | off }">5.2.3.2. readonly { on | off }</A></H4>
+<P>This directive puts the database into &quot;read-only&quot; mode. Any attempts to modify the database will return an &quot;unwilling to perform&quot; error.</P>
+<P>Default:</P>
+<PRE>
+        readonly off
+</PRE>
+<H4><A NAME="replica">5.2.3.3. replica</A></H4>
+<PRE>
+        replica host=&lt;hostname&gt;[:&lt;port&gt;]
+                [bindmethod={ simple | kerberos | sasl }]
+                [&quot;binddn=&lt;DN&gt;&quot;]
+                [mech=&lt;mech&gt;]
+                [authcid=&lt;identity&gt;]
+                [authzid=&lt;identity&gt;]
+                [credentials=&lt;password&gt;]
+                [srvtab=&lt;filename&gt;]
+</PRE>
+<P>This directive specifies a replication site for this database. The <TT>host=</TT> parameter specifies a host and optionally a port where the slave slapd instance can be found. Either a domain name or IP address may be used for &lt;hostname&gt;. If &lt;port&gt; is not given, the standard LDAP port number (389) is used.</P>
+<P>The <TT>binddn=</TT> parameter gives the DN to bind as for updates to the slave slapd. It should be a DN which has read/write access to the slave slapd's database, typically given as a <TT>rootdn</TT> in the slave's config file. It must also match the <TT>updatedn</TT> directive in the slave slapd's config file. Since DNs are likely to contain embedded spaces, the entire <TT>&quot;binddn=&lt;DN&gt;&quot;</TT> string should be enclosed in double quotes.</P>
+<P>The <TT>bindmethod</TT> is <TT>simple</TT> or <TT>kerberos</TT> or <TT>sasl</TT>, depending on whether simple password-based authentication or Kerberos authentication or <TERM>SASL</TERM> authentication is to be used when connecting to the slave slapd.</P>
+<P>Simple authentication should not be used unless adequate integrity and privacy protections are in place (e.g. TLS or IPSEC).  Simple authentication requires specification of <TT>binddn</TT> and <TT>credentials</TT> parameters.</P>
+<P>Kerberos authentication is deprecated in favor of SASL authentication mechanisms, in particular the <TT>KERBEROS_V4</TT> and <TT>GSSAPI</TT> mechanisms.  Kerberos authentication requires <TT>binddn</TT> and <TT>srvtab</TT> parameters.</P>
+<P>SASL authentication is generally recommended.  SASL authentication requires specification of a mechanism using the <TT>mech</TT> parameter. Depending on the mechanism, an authentication identity and/or credentials can be specified using <TT>authcid</TT> and <TT>credentials</TT> respectively.  The <TT>authzid</TT> parameter may be used to specify an authorization identity.</P>
+<P>See the chapter entitled <A HREF="#Replication with slurpd">Replication with slurpd</A> for more information on how to use this directive.</P>
+<H4><A NAME="replogfile &lt;filename&gt;">5.2.3.4. replogfile &lt;filename&gt;</A></H4>
+<P>This directive specifies the name of the replication log file to which slapd will log changes. The replication log is typically written by slapd and read by slurpd. Normally, this directive is only used if slurpd is being used to replicate the database. However, you can also use it to generate a transaction log, if slurpd is not running. In this case, you will need to periodically truncate the file, since it will grow indefinitely otherwise.</P>
+<P>See the chapter entitled <A HREF="#Replication with slurpd">Replication with slurpd</A> for more information on how to use this directive.</P>
+<H4><A NAME="rootdn &lt;dn&gt;">5.2.3.5. rootdn &lt;dn&gt;</A></H4>
+<P>This directive specifies the DN that is not subject to access control or administrative limit restrictions for operations on this database.  The DN need not refer to an entry in the directory. The DN may refer to a SASL identity.</P>
+<P>Entry-based Example:</P>
+<PRE>
+        rootdn &quot;cn=Manager,dc=example,dc=com&quot;
+</PRE>
+<P>SASL-based Example:</P>
+<PRE>
+        rootdn &quot;uid=root@EXAMPLE.COM&quot;
+</PRE>
+<H4><A NAME="rootpw &lt;password&gt;">5.2.3.6. rootpw &lt;password&gt;</A></H4>
+<P>This directive specifies a password for the DN given above that will always work, regardless of whether an entry with the given DN exists or has a password. This directive is deprecated in favor of SASL based authentication.</P>
+<P>Example:</P>
+<PRE>
+        rootpw secret
+</PRE>
+<H4><A NAME="suffix &lt;dn suffix&gt;">5.2.3.7. suffix &lt;dn suffix&gt;</A></H4>
+<P>This directive specifies the DN suffix of queries that will be passed to this backend database. Multiple suffix lines can be given, and at least one is required for each database definition.</P>
+<P>Example:</P>
+<PRE>
+        suffix &quot;dc=example,dc=com&quot;
+</PRE>
+<P>Queries with a DN ending in &quot;dc=example,dc=com&quot; will be passed to this backend.</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>When the backend to pass a query to is selected, slapd looks at the suffix line(s) in each database definition in the order they appear in the file. Thus, if one database suffix is a prefix of another, it must appear after it in the config file.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<H4><A NAME="updatedn &lt;dn&gt;">5.2.3.8. updatedn &lt;dn&gt;</A></H4>
+<P>This directive is only applicable in a slave slapd. It specifies the DN allowed to make changes to the replica.  This may be the DN <EM>slurpd</EM>(8) binds as when making changes to the replica or the DN associated with a SASL identity.</P>
+<P>Entry-based Example:</P>
+<PRE>
+        updatedn &quot;cn=Update Daemon,dc=example,dc=com&quot;
+</PRE>
+<P>SASL-based Example:</P>
+<PRE>
+        updatedn &quot;uid=slurpd@EXAMPLE.COM&quot;
+</PRE>
+<P>See the <A HREF="#Replication">Replication</A> chapter for more information on how to use this directive.</P>
+<H4><A NAME="updateref &lt;URL&gt;">5.2.3.9. updateref &lt;URL&gt;</A></H4>
+<P>This directive is only applicable in a slave slapd. It specifies the URL to return to clients which submit update requests upon the replica. If specified multiple times, each <TERM>URL</TERM> is provided.</P>
+<P>Example:</P>
+<PRE>
+        updateref       ldap://master.example.net
+</PRE>
+<H3><A NAME="LDBM Backend-Specific Directives">5.2.4. LDBM Backend-Specific Directives</A></H3>
+<P>Directives in this category only apply to the LDBM backend database. That is, they must follow a &quot;database ldbm&quot; line and come before any other &quot;database&quot; line.</P>
+<H4><A NAME="cachesize &lt;integer&gt;">5.2.4.1. cachesize &lt;integer&gt;</A></H4>
+<P>This directive specifies the size in entries of the in-memory cache maintained by the LDBM backend database instance.</P>
+<P>Default:</P>
+<PRE>
+        cachesize 1000
+</PRE>
+<H4><A NAME="dbcachesize &lt;integer&gt;">5.2.4.2. dbcachesize &lt;integer&gt;</A></H4>
+<P>This directive specifies the size in bytes of the in-memory cache associated with each open index file. If not supported by the underlying database method, this directive is ignored without comment. Increasing this number uses more memory but can cause a dramatic performance increase, especially during modifies or when building indexes.</P>
+<P>Default:</P>
+<PRE>
+        dbcachesize 100000
+</PRE>
+<H4><A NAME="dbnolocking">5.2.4.3. dbnolocking</A></H4>
+<P>This option, if present, disables database locking. Enabling this option may improve performance at the expense of data security.</P>
+<H4><A NAME="dbnosync">5.2.4.4. dbnosync</A></H4>
+<P>This option causes on-disk database contents not be immediately synchronized with in memory changes upon change.  Enabling this option may improve performance at the expense of data security.</P>
+<H4><A NAME="directory &lt;directory&gt;">5.2.4.5. directory &lt;directory&gt;</A></H4>
+<P>This directive specifies the directory where the LDBM files containing the database and associated indexes live.</P>
+<P>Default:</P>
+<PRE>
+        directory /usr/local/var/openldap-ldbm
+</PRE>
+<H4><A NAME="index {&lt;attrlist&gt; | default} [pres,eq,approx,sub,none]">5.2.4.6. index {&lt;attrlist&gt; | default} [pres,eq,approx,sub,none]</A></H4>
+<P>This directive specifies the indexes to maintain for the given attribute. If only an <TT>&lt;attrlist&gt;</TT> is given, the default indexes are maintained.</P>
+<P>Example:</P>
+<PRE>
+        index default pres,eq
+        index objectClass,uid
+        index cn,sn eq,sub,approx
+</PRE>
+<P>The first line sets the default set of indices to maintain to present and equality.  The second line causes the default (pres,eq) set of indices to be maintained for <TT>objectClass</TT> and <TT>uid</TT> attribute types.  The third line causes equality, substring, and approximate indices to be maintained for <TT>cn</TT> and <TT>sn</TT> attribute types.</P>
+<H4><A NAME="mode &lt;integer&gt;">5.2.4.7. mode &lt;integer&gt;</A></H4>
+<P>This directive specifies the file protection mode that newly created database index files should have.</P>
+<P>Default:</P>
+<PRE>
+        mode 0600
+</PRE>
+<H3><A NAME="Other Backend Databases">5.2.5. Other Backend Databases</A></H3>
+<P><EM>slapd</EM>(8) supports a number of backend database types besides the default LDBM.</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 5.2: Backend Database Types</CAPTION>
+<TR CLASS="heading">
+<TD>
+<STRONG>Types</STRONG>
+</TD>
+<TD>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>ldbm</TT>
+</TD>
+<TD>
+Berkeley or GNU DBM compatible backend
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>passwd</TT>
+</TD>
+<TD>
+Provides read-only access to <TT>/etc/passwd</TT>
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>shell</TT>
+</TD>
+<TD>
+Shell (extern program) backend
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>sql</TT>
+</TD>
+<TD>
+SQL Programmable backend
+</TD>
+</TR>
+</TABLE>
+
+<P>See <EM>slapd.conf</EM>(5) for details.</P>
+<H2><A NAME="Access Control">5.3. Access Control</A></H2>
+<P>Access to slapd entries and attributes is controlled by the access configuration file directive. The general form of an access line is:</P>
+<PRE>
+        &lt;access directive&gt; ::= access to &lt;what&gt;
+                [by &lt;who&gt; &lt;access&gt; &lt;control&gt;]+
+        &lt;what&gt; ::= * | [ dn[.&lt;target style&gt;]=&lt;regex&gt;]
+                [filter=&lt;ldapfilter&gt;] [attrs=&lt;attrlist&gt;]
+        &lt;target style&gt; ::= regex | base | one | subtree | children
+        &lt;attrlist&gt; ::= &lt;attr&gt; | &lt;attr&gt; , &lt;attrlist&gt;
+        &lt;attr&gt; ::= &lt;attrname&gt; | entry | children
+        &lt;who&gt; ::= [* | anonymous | users | self |
+                dn[.&lt;subject style&gt;]=&lt;regex&gt;]
+                [dnattr=&lt;attrname&gt; ]
+                [group[/&lt;objectclass&gt;[/&lt;attrname&gt;][.&lt;basic style&gt;]]=&lt;regex&gt; ]
+                [peername[.&lt;basic style&gt;]=&lt;regex&gt;]
+                [sockname[.&lt;basic style&gt;]=&lt;regex&gt;]
+                [domain[.&lt;basic style&gt;]=&lt;regex&gt;]
+                [sockurl[.&lt;basic style&gt;]=&lt;regex&gt;]
+                [set=&lt;setspec&gt;]
+                [aci=&lt;attrname&gt;]
+        &lt;subject style&gt; ::= regex | exact | base | one | subtree | children
+        &lt;basic style&gt; ::= regex | exact
+        &lt;access&gt; ::= [self]{&lt;level&gt;|&lt;priv&gt;}
+        &lt;level&gt; ::= none | auth | compare | search | read | write
+        &lt;priv&gt; ::= {=|+|-}{w|r|s|c|x}+
+        &lt;control&gt; ::= [stop | continue | break]
+</PRE>
+<P>where the &lt;what&gt; part selects the entries and/or attributes to which the access applies, the <TT>&lt;who&gt;</TT> part specifies which entities are granted access, and the <TT>&lt;access&gt;</TT> part specifies the access granted. Multiple <TT>&lt;who&gt; &lt;access&gt; &lt;control&gt;</TT> triplets are supported, allowing many entities to be granted different access to the same set of entries and attributes.</P>
+<H3><A NAME="What to control access to">5.3.1. What to control access to</A></H3>
+<P>The &lt;what&gt; part of an access specification determines the entries and attributes to which the access control applies. Entries can be selected in two ways: by a regular expression matching the entry's distinguished name:</P>
+<PRE>
+        dn=&lt;regular expression&gt;
+</PRE>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>The DN pattern specified should be &quot;normalized&quot; to the RFC2253 restricted DN form.  In particular, there should be no extra spaces and commas should be used to separate components.  An example normalized DN is &quot;<TT>cn=Babs Jensen,dc=example,dc=com</TT>&quot;.  An example of a non-normalized DN is &quot;<TT>cn=Babs Jensen; dc=example; dc=com</TT>&quot;.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<P>Or, entries may be selected by a filter matching some attribute(s) in the entry:</P>
+<PRE>
+        filter=&lt;ldap filter&gt;
+</PRE>
+<P>where &lt;ldap filter&gt; is a string representation of an LDAP search filter, as described in <A HREF="ftp://ftp.isi.edu/in-notes/rfc2254.txt">RFC2254</A>.</P>
+<P>Attributes within an entry are selected by including a comma-separated list of attribute names in the &lt;what&gt; selector:</P>
+<PRE>
+        attrs=&lt;attribute list&gt;
+</PRE>
+<P>Access to the entry itself must be granted or denied using the special attribute name &quot;<TT>entry</TT>&quot;. Note that giving access to an attribute is not enough; access to the entry itself through the <TT>entry</TT> attribute is also required. The complete examples at the end of this section should help clear things up.</P>
+<P>Lastly, there is a special entry selector <TT>&quot;*&quot;</TT> that is used to select any entry.  It is used when no other <TT>&lt;what&gt;</TT> selector has been provided.  It's equivalent to &quot;<TT>dn=.*</TT>&quot;</P>
+<H3><A NAME="Who to grant access to">5.3.2. Who to grant access to</A></H3>
+<P>The &lt;who&gt; part identifies the entity or entities being granted access. Note that access is granted to &quot;entities&quot; not &quot;entries.&quot; The following table summarizes entity specifiers:</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 5.3: Access Entity Specifiers</CAPTION>
+<TR CLASS="heading">
+<TD>
+<STRONG>Specifier</STRONG>
+</TD>
+<TD>
+<STRONG>Entities</STRONG>
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>*</TT>
+</TD>
+<TD>
+All, including anonymous and authenticated users
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>anonymous</TT>
+</TD>
+<TD>
+Anonymous (non-authenticated) users
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>users</TT>
+</TD>
+<TD>
+Authenticated users
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>self</TT>
+</TD>
+<TD>
+User associated with target entry
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>dn=&lt;regex&gt;</TT>
+</TD>
+<TD>
+Users matching regular expression
+</TD>
+</TR>
+</TABLE>
+
+<P>The DN specifier takes a regular expression which is used to match against the &quot;normalized&quot; DN of the current entity.</P>
+<PRE>
+        dn=&lt;regular expression&gt;
+</PRE>
+<P>By &quot;normalized&quot;, we mean that all extra spaces have been removed from the entity's DN and commas are used to separate RDN components.</P>
+<P>Other control factors are also supported. For example, a <TT>&lt;what&gt;</TT> can be restricted by a regular expression matching the client's domain name:</P>
+<PRE>
+        domain=&lt;regular expression&gt;
+</PRE>
+<P>or by an entry listed in a DN-valued attribute in the entry to which the access applies:</P>
+<PRE>
+        dnattr=&lt;dn-valued attribute name&gt;
+</PRE>
+<P>The dnattr specification is used to give access to an entry whose DN is listed in an attribute of the entry (e.g., give access to a group entry to whoever is listed as the owner of the group entry).</P>
+<H3><A NAME="The access to grant">5.3.3. The access to grant</A></H3>
+<P>The kind of &lt;access&gt; granted can be one of the following:</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 5.4: Access Levels</CAPTION>
+<TR CLASS="heading">
+<TD ALIGN='Left'>
+<STRONG>Level</STRONG>
+</TD>
+<TD ALIGN='Right'>
+<STRONG>Privileges</STRONG>
+</TD>
+<TD ALIGN='Left'>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>none</TT>
+</TD>
+<TD ALIGN='Right'>
+<TT>&nbsp;</TT>
+</TD>
+<TD ALIGN='Left'>
+no access
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>auth</TT>
+</TD>
+<TD ALIGN='Right'>
+<TT>=x</TT>
+</TD>
+<TD ALIGN='Left'>
+needed to bind
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>compare</TT>
+</TD>
+<TD ALIGN='Right'>
+<TT>=cx</TT>
+</TD>
+<TD ALIGN='Left'>
+needed to compare
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>search</TT>
+</TD>
+<TD ALIGN='Right'>
+<TT>=scx</TT>
+</TD>
+<TD ALIGN='Left'>
+needed to apply search filters
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>read</TT>
+</TD>
+<TD ALIGN='Right'>
+<TT>=rscx</TT>
+</TD>
+<TD ALIGN='Left'>
+needed to read search results
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>write</TT>
+</TD>
+<TD ALIGN='Right'>
+<TT>=wrscx</TT>
+</TD>
+<TD ALIGN='Left'>
+needed to modify/rename
+</TD>
+</TR>
+</TABLE>
+
+<P>Each level implies all lower levels of access. So, for example, granting someone <TT>write</TT> access to an entry also grants them <TT>read</TT>, <TT>search</TT>, <TT>compare</TT>, and <TT>auth</TT> access.  However, one may use the privileges specifier to grant specific permissions.</P>
+<H3><A NAME="Access Control Evaluation">5.3.4. Access Control Evaluation</A></H3>
+<P>When evaluating whether some requester should be given access to an entry and/or attribute, slapd compares the entry and/or attribute to the <TT>&lt;what&gt;</TT> selectors given in the configuration file. Access directives local to the current database are examined first, followed by global access directives. Within this priority, access directives are examined in the order in which they appear in the config file. Slapd stops with the first <TT>&lt;what&gt;</TT> selector that matches the entry and/or attribute. The corresponding access directive is the one slapd will use to evaluate access.</P>
+<P>Next, slapd compares the entity requesting access to the <TT>&lt;who&gt;</TT> selectors within the access directive selected above in the order in which they appear. It stops with the first <TT>&lt;who&gt;</TT> selector that matches the requester. This determines the access the entity requesting access has to the entry and/or attribute.</P>
+<P>Finally, slapd compares the access granted in the selected <TT>&lt;access&gt;</TT> clause to the access requested by the client. If it allows greater or equal access, access is granted. Otherwise, access is denied.</P>
+<P>The order of evaluation of access directives makes their placement in the configuration file important. If one access directive is more specific than another in terms of the entries it selects, it should appear first in the config file. Similarly, if one <TT>&lt;who&gt;</TT> selector is more specific than another it should come first in the access directive. The access control examples given below should help make this clear.</P>
+<H3><A NAME="Access Control Examples">5.3.5. Access Control Examples</A></H3>
+<P>The access control facility described above is quite powerful. This section shows some examples of its use. First, some simple examples:</P>
+<PRE>
+        access to * by * read
+</PRE>
+<P>This access directive grants read access to everyone.</P>
+<PRE>
+        access to *
+                by self write
+                by anonymous auth
+                by * read
+</PRE>
+<P>This directive allows users to modify their own entries, allows authenticate, and allows authenticated users to read. Note that only the first <TT>by &lt;who&gt;</TT> clause which matches applies. Hence, the anonymous users are granted <TT>auth</TT>, not <TT>read</TT>. The last clause could just as well have been &quot;<TT>by users read</TT>&quot;.</P>
+<P>The following example shows the use of a regular expression to select the entries by DN in two access directives where ordering is significant.</P>
+<PRE>
+        access to dn=&quot;.*,dc=example,dc=com&quot;
+                by * search
+        access to dn=&quot;.*,dc=com&quot;
+                by * read
+</PRE>
+<P>Read access is granted to entries under the <TT>dc=com</TT> subtree, except for those entries under the <TT>dc=example,dc=com</TT> subtree, to which search access is granted.  No access is granted to <TT>dc=com</TT> as neither access directive matches this DN. If the order of these access directives was reversed, the trailing directive would never be reached, since all <TT>dc=example,dc=com</TT> entries are also <TT>dc=com</TT> entries.</P>
+<P>Also note that if no <TT>access to</TT> directive matches or no <TT>by &lt;who&gt;</TT> clause, <B>access is denied</B>.  That is, every <TT>access to</TT> directive ends with an implicit <TT>by * none</TT> clause and every access list ends with an implicit <TT>access to * by * none</TT> directive.  Only if no access controls are specified is the <TT>defaultaccess</TT> granted.</P>
+<P>The next example again shows the importance of ordering, both of the access directives and the <TT>by &lt;who&gt;</TT> clauses. It also shows the use of an attribute selector to grant access to a specific attribute and various <TT>&lt;who&gt;</TT> selectors.</P>
+<PRE>
+        access to dn=&quot;(.*,)?dc=example,dc=com&quot; attr=homePhone
+                by self write
+                by dn=&quot;(.*,)?dc=example,dc=com&quot; search
+                by domain=.*\.example\.com read
+        access to dn=&quot;(.*,)?dc=example,dc=com&quot;
+                by self write
+                by dn=&quot;.*,dc=example,dc=com&quot; search
+                by anonymous auth
+</PRE>
+<P>This example applies to entries in the &quot;<TT>dc=example,dc=com</TT>&quot; subtree. To all attributes except <TT>homePhone</TT>, the entry itself can write them, other <TT>example.com</TT> entries can search by them, anybody else has no access ((implicit <TT>by * none</TT>) excepting for authentication/authorization (which is always done anonymously). The <TT>homePhone</TT> attribute is writable by the entry, searchable by other <TT>example.com</TT> entries, readable by clients connecting from somewhere in the <TT>example.com</TT> domain, and otherwise not readable (implicit <TT>by * none</TT>).  All other access is denied by the implicit <TT>access to * by * none</TT>.</P>
+<P>Sometimes it is useful to permit a particular DN to add or remove itself from an attribute. For example, if you would like to create a group and allow people to add and remove only their own DN from the member attribute, you could accomplish it with an access directive like this:</P>
+<PRE>
+        access to attr=member,entry
+                by dnattr=member selfwrite
+</PRE>
+<P>The dnattr <TT>&lt;who&gt;</TT> selector says that the access applies to entries listed in the <TT>member</TT> attribute. The <TT>selfwrite</TT> access selector says that such members can only add or delete their own DN from the attribute, not other values. The addition of the entry attribute is required because access to the entry is required to access any of the entry's attributes.</P>
+<H2><A NAME="Configuration File Example">5.4. Configuration File Example</A></H2>
+<P>The following is an example configuration file, interspersed with explanatory text. It defines two databases to handle different parts of the <TERM>X.500</TERM> tree; both are <TERM>LDBM</TERM> database instances. The line numbers shown are provided for reference only and are not included in the actual file. First, the global configuration section:</P>
+<PRE>
+  1.    # example config file - global configuration section
+  2.    include /usr/local/etc/schema/core.schema
+  3.    referral ldap://root.openldap.org
+  4.    access to * by * read
+</PRE>
+<P>Line 1 is a comment. Line 2 includes another config file which containing <EM>core</EM> schema definitions. The <TT>referral</TT> directive on line 3 means that queries not local to one of the databases defined below will be referred to the LDAP server running on the standard port (389) at the host <TT>root.openldap.org</TT>.</P>
+<P>Line 4 is a global access control.  It is used only if no database access controls match or when the target objects are not under the control of any database (such as the Root DSE).</P>
+<P>The next section of the configuration file defines an LDBM backend that will handle queries for things in the &quot;dc=example,dc=com&quot; portion of the tree. The database is to be replicated to two slave slapds, one on truelies, the other on judgmentday. Indexes are to be maintained for several attributes, and the <TT>userPassword</TT> attribute is to be protected from unauthorized access.</P>
+<PRE>
+  5.    # ldbm definition for the example.com
+  6.    database ldbm
+  7.    suffix &quot;dc=example,dc=com&quot;
+  8.    directory /usr/local/var/openldap
+  9.    rootdn &quot;cn=Manager,dc=example,dc=com&quot;
+ 10.    rootpw secret
+ 11.    # replication directives
+ 12.    replogfile /usr/local/var/openldap/slapd.replog
+ 13.    replica host=slave1.example.com:389
+ 14.            binddn=&quot;cn=Replicator,dc=example,dc=com&quot;
+ 15.            bindmethod=simple credentials=secret
+ 16.    replica host=slave2.example.com
+ 17.            binddn=&quot;cn=Replicator,dc=example,dc=com&quot;
+ 18.            bindmethod=simple credentials=secret
+ 19.    # indexed attribute definitions
+ 20.    index uid pres,eq
+ 21.    index cn,sn,uid pres,eq,approx,sub
+ 22.    index objectClass eq
+ 23.    # ldbm access control definitions
+ 24.    access to attr=userPassword
+ 25.            by self write
+ 26.            by anonymous auth
+ 27.            by dn=&quot;cn=Admin,dc=example,dc=com&quot; write
+ 28.            by * none
+ 29.    access to *
+ 30.            by self write
+ 31.            by dn=&quot;cn=Admin,dc=example,dc=com&quot; write
+ 32.            by users read
+</PRE>
+<P>Line 5 is a comment. The start of the database definition is marked by the database keyword on line 6. Line 7 specifies the DN suffix for queries to pass to this database. Line 8 specifies the directory in which the database files will live.</P>
+<P>Lines 9 and 10 identify the database &quot;super user&quot; entry and associated password. This entry is not subject to access control or size or time limit restrictions.</P>
+<P>Lines 11 through 18 are for replication. Line 11 specifies the replication log file (where changes to the database are logged - this file is written by slapd and read by slurpd). Lines 12 through 14 specify the hostname and port for a replicated host, the DN to bind as when performing updates, the bind method (simple) and the credentials (password) for the binddn. Lines 15 through 18 specify a second replication site. See the <A HREF="#Replication with slurpd">Replication with slurpd</A> chapter for more information on these directives.</P>
+<P>Lines 20 through 22 indicate the indexes to maintain for various attributes.</P>
+<P>Lines 24 through 32 specify access control for entries in the database. For all entries, the <TT>userPassword</TT> attribute is writable by the entry itself and by the &quot;admin&quot; entry.  It may be used for authentication/authorization purposes, but is otherwise not readable.  All other attributes are writable by the entry and the &quot;admin&quot; entry, but may be read by authenticated users.</P>
+<P>The next section of the example configuration file defines another LDBM database. This one handles queries involving the <TT>dc=example,dc=net</TT> subtree.  Note that without line 38, the read access would be allowed due to the global access rule at line 4.</P>
+<PRE>
+ 33.    # ldbm definition for example.net
+ 34.    database ldbm
+ 35.    suffix &quot;dc=example,dc=net&quot;
+ 36.    directory /usr/local/var/ldbm-example-net
+ 37.    rootdn &quot;cn=Manager,dc=example,dc=com&quot;
+ 38.    access to * by users read
+</PRE>
+<P></P>
+<HR>
+<H1><A NAME="Running slapd">6. Running slapd</A></H1>
+<P><EM>slapd</EM>(8) is designed to be run as a stand-alone server.  This allows the server to take advantage of caching, manage concurrency issues with underlying databases, and conserve system resources.  Running from <EM>inetd</EM>(8) is <EM>NOT</EM> an option.</P>
+<H2><A NAME="Command-Line Options">6.1. Command-Line Options</A></H2>
+<P><EM>slapd</EM>(8) supports a number of command-line options as detailed in the manual page.  This section details a few commonly used options.</P>
+<PRE>
+        -f &lt;filename&gt;
+</PRE>
+<P>This option specifies an alternate configuration file for slapd. The default is normally <TT>/usr/local/etc/openldap/slapd.conf</TT>.</P>
+<PRE>
+        -h &lt;URLs&gt;
+</PRE>
+<P>This option specifies alternative listener configurations.  The default is <TT>ldap:///</TT> which implies LDAP over TCP on all interfaces on the default LDAP port 389.  You can specify specific host-port pairs or other protocol schemes (such as ldaps:// or ldapi://).  For example, <TT>-h &quot;ldaps:// ldap://127.0.0.1:666&quot;</TT> will create two listeners: one for LDAP over SSL on all interfaces on the default LDAP/SSL port 636, and one for LDAP over TCP on the <TT>localhost</TT> (<EM>loopback</EM>) interface on port 666. Hosts may be specified using IPv4 dotted-decimal form or using host names.  Port values must be numeric.</P>
+<PRE>
+        -n &lt;service-name&gt;
+</PRE>
+<P>This option specifies the service name used for logging and other purposes.  The default service name is <TT>slapd</TT>.</P>
+<PRE>
+        -l &lt;syslog-local-user&gt;
+</PRE>
+<P>This option specifies the local user for the <EM>syslog</EM>(8) facility.  Values can be <TT>LOCAL0</TT>, <TT>LOCAL1</TT>, <TT>LOCAL2</TT>, ..., and <TT>LOCAL7</TT>.  The default is <TT>LOCAL4</TT>.  This option may not be supported on all systems.</P>
+<PRE>
+        -u user -g group
+</PRE>
+<P>These options specify the user and group, respectively, to run as.  <TT>user</TT> can be either a user name or uid.  <TT>group</TT> can be either a group name or gid.</P>
+<PRE>
+        -r directory
+</PRE>
+<P>This option specifies a run-time directory.  slapd will <EM>chroot</EM>(2) to this directory after opening listeners but before reading any configuration files or initializing any backends.</P>
+<UL>
+</UL>
+<PRE>
+        -d &lt;level&gt; | ?
+</PRE>
+<P>This option sets the slapd debug level to &lt;level&gt;. When level is a `?' character, the various debugging levels are printed and slapd exits, regardless of any other options you give it. Current debugging levels are</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 6.1: Debugging Levels</CAPTION>
+<TR CLASS="heading">
+<TD ALIGN='Right'>
+<STRONG>Level</STRONG>
+</TD>
+<TD ALIGN='Left'>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+-1
+</TD>
+<TD ALIGN='Left'>
+enable all debugging
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+0
+</TD>
+<TD ALIGN='Left'>
+no debugging
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+1
+</TD>
+<TD ALIGN='Left'>
+trace function calls
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+2
+</TD>
+<TD ALIGN='Left'>
+debug packet handling
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+4
+</TD>
+<TD ALIGN='Left'>
+heavy trace debugging
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+8
+</TD>
+<TD ALIGN='Left'>
+connection management
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+16
+</TD>
+<TD ALIGN='Left'>
+print out packets sent and received
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+32
+</TD>
+<TD ALIGN='Left'>
+search filter processing
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+64
+</TD>
+<TD ALIGN='Left'>
+configuration file processing
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+128
+</TD>
+<TD ALIGN='Left'>
+access control list processing
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+256
+</TD>
+<TD ALIGN='Left'>
+stats log connections/operations/results
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+512
+</TD>
+<TD ALIGN='Left'>
+stats log entries sent
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+1024
+</TD>
+<TD ALIGN='Left'>
+print communication with shell backends
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+2048
+</TD>
+<TD ALIGN='Left'>
+print entry parsing debugging
+</TD>
+</TR>
+</TABLE>
+
+<P>You may enable multiple levels by specifying the debug option once for each desired level.  Or, since debugging levels are additive, you can do the math yourself. That is, if you want to trace function calls and watch the config file being processed, you could set level to the sum of those two levels (in this case, <TT> -d 65</TT>).  Or, you can let slapd do the math, (e.g. <TT> -d 1 -d 64</TT>).  Consult <TT>&lt;ldap.h&gt;</TT> for more details.</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>slapd must have been compiled with <TT>-DLDAP_DEBUG</TT> defined for any debugging information beyond the two stats levels to be available.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<H2><A NAME="Starting slapd">6.2. Starting slapd</A></H2>
+<P>In general, slapd is run like this:</P>
+<PRE>
+        /usr/local/etc/libexec/slapd [&lt;option&gt;]*
+</PRE>
+<P>where <TT>/usr/local/etc/libexec</TT> is determined by <TT>configure</TT> and &lt;option&gt; is one of the options described above (or in <EM>slapd</EM>(8)). Unless you have specified a debugging level (including level <TT>0</TT>), slapd will automatically fork and detach itself from its controlling terminal and run in the background.</P>
+<H2><A NAME="Stopping slapd">6.3. Stopping slapd</A></H2>
+<P>To kill off slapd safely, you should give a command like this</P>
+<PRE>
+        kill -INT `cat /usr/local/var/slapd.pid`
+</PRE>
+<P>where <TT>/usr/local/var</TT> is determined by <TT>configure</TT>.</P>
+<P>Killing slapd by a more drastic method may cause information loss or database corruption.</P>
+<P></P>
+<HR>
+<H1><A NAME="Database Creation and Maintenance Tools">7. Database Creation and Maintenance Tools</A></H1>
+<P>This section tells you how to create a slapd database from scratch, and how to do trouble shooting if you run into problems. There are two ways to create a database. First, you can create the database on-line using LDAP. With this method, you simply start up slapd and add entries using the LDAP client of your choice. This method is fine for relatively small databases (a few hundred or thousand entries, depending on your requirements). This method works for database types which support updates.</P>
+<P>The second method of database creation is to do it off-line using special utilities provided with slapd. This method is best if you have many thousands of entries to create, which would take an unacceptably long time using the LDAP method, or if you want to ensure the database is not accessed while it is being created. Note that not all database types support these utilitites.</P>
+<H2><A NAME="Creating a database over LDAP">7.1. Creating a database over LDAP</A></H2>
+<P>With this method, you use the LDAP client of your choice (e.g., the <EM>ldapadd</EM>(1)) to add entries, just like you would once the database is created.  You should be sure to set the following options in the configuration file before starting <EM>slapd</EM>(8).</P>
+<PRE>
+        suffix &lt;dn&gt;
+</PRE>
+<P>As described in the <A HREF="#General Database Directives">General Database Directives</A> section, this option defines which entries are to be held by this database. You should set this to the DN of the root of the subtree you are trying to create.  For example:</P>
+<PRE>
+        suffix &quot;dc=example,dc=com&quot;
+</PRE>
+<P>You should be sure to specify a directory where the index files should be created:</P>
+<PRE>
+        directory &lt;directory&gt;
+</PRE>
+<P>For example:</P>
+<PRE>
+        directory /usr/local/var/openldap-ldbm
+</PRE>
+<P>You need to create this directory with appropriate permissions such that slapd can write to it.</P>
+<P>You need to configure slapd so that you can connect to it as a directory user with permission to add entries. You can configure the directory to support a special <EM>super-user</EM> or <EM>root</EM> user just for this purpose. This is done through the following two options in the database definition:</P>
+<PRE>
+        rootdn &lt;dn&gt;
+        rootpw &lt;passwd&gt;
+</PRE>
+<P>For example:</P>
+<PRE>
+        rootdn &quot;cn=Manager,dc=example,dc=com&quot;
+        rootpw secret
+</PRE>
+<P>These options specify a DN and password that can be used to authenticate as the <EM>super-user</EM> entry of the database (i.e., the entry allowed to do anything). The DN and password specified here will always work, regardless of whether the entry named actually exists or has the password given. This solves the chicken-and-egg problem of how to authenticate and add entries before any entries yet exist.</P>
+<P>Finally, you should make sure that the database definition contains the index definitions you want:</P>
+<PRE>
+        index {&lt;attrlist&gt; | default} [pres,eq,approx,sub,none]
+</PRE>
+<P>For example, to index the <TT>cn</TT>, <TT>sn</TT>, <TT>uid</TT> and <TT>objectclass</TT> attributes, the following <TT>index</TT> directives could be used:</P>
+<PRE>
+        index cn,sn,uid
+        index objectClass pres,eq
+</PRE>
+<P>See <A HREF="#The slapd Configuration File">The slapd Configuration File</A> section for more details on this option. Once you have configured things to your liking, start up slapd, connect with your LDAP client, and start adding entries.  For example, to add an organization entry and an organizational role entry using the <I>ldapadd</I> tool, you could create an <TERM>LDIF</TERM> file called <TT>entries.ldif</TT> with the contents:</P>
+<PRE>
+        # Organization for Example Corporation
+        dn: dc=example,dc=com
+        objectClass: dcObject
+        objectClass: organization
+        dc: example
+        o: Example Corporation
+        description: The Example Corporation
+
+        # Organizational Role for Directory Manager
+        dn: cn=Manager,dc=example,dc=com
+        objectClass: organizationalRole
+        cn: Manager
+        description: Directory Manager
+</PRE>
+<P>and then use a command like this to actually create the entry:</P>
+<PRE>
+        ldapadd -f entries.ldif -x -D &quot;cn=Manager,dc=example,dc=com&quot; -w secret
+</PRE>
+<P>The above command assumes settings provided in the above examples.</P>
+<H2><A NAME="Creating a database off-line">7.2. Creating a database off-line</A></H2>
+<P>The second method of database creation is to do it off-line, using the slapd database tools described below. This method is best if you have many thousands of entries to create, which would take an unacceptably long time to add using the LDAP method described above. These tools read the slapd configuration file and an input file containing a text representation of the entries to add. For database types which support the tools, they produce the database files directly (otherwise you must use the on-line method above). There are several important configuration options you will want to be sure and set in the config file database definition first:</P>
+<PRE>
+        suffix &lt;dn&gt;
+</PRE>
+<P>As described in the <A HREF="#General Database Directives">General Database Directives</A> section, this option defines which entries are to be held by this database. You should set this to the DN of the root of the subtree you are trying to create.  For example:</P>
+<PRE>
+        suffix &quot;dc=example,dc=com&quot;
+</PRE>
+<P>You should be sure to specify a directory where the index files should be created:</P>
+<PRE>
+        directory &lt;directory&gt;
+</PRE>
+<P>For example:</P>
+<PRE>
+        directory /usr/local/var/openldap-ldbm
+</PRE>
+<P>Finally, you need to specify which indexes you want to build.  This is done by one or more index options.</P>
+<PRE>
+        index {&lt;attrlist&gt; | default} [pres,eq,approx,sub,none]
+</PRE>
+<P>For example:</P>
+<PRE>
+        index cn,sn,uid pres,eq,approx
+        index objectClass eq
+</PRE>
+<P>This would create presence, equality and approximate indexes for the <TT>cn</TT>, <TT>sn</TT>, and <TT>uid</TT> attributes and an equality index for the <TT>objectClass</TT> attribute. See the configuration file section for more information on this option.</P>
+<H3><A NAME="The {{EX:slapadd}} program">7.2.1. The <TT>slapadd</TT> program</A></H3>
+<P>Once you've configured things to your liking, you create the primary database and associated indexes by running the <EM>slapadd</EM>(8) program:</P>
+<PRE>
+        slapadd -l &lt;inputfile&gt; -f &lt;slapdconfigfile&gt;
+                [-d &lt;debuglevel&gt;] [-n &lt;integer&gt;|-b &lt;suffix&gt;]
+</PRE>
+<P>The arguments have the following meanings:</P>
+<PRE>
+        -l &lt;inputfile&gt;
+</PRE>
+<P>Specifies the LDIF input file containing the entries to add in text form (described below in the <A HREF="#The LDIF text entry format">The LDIF text entry format</A> section).</P>
+<PRE>
+        -f &lt;slapdconfigfile&gt;
+</PRE>
+<P>Specifies the slapd configuration file that tells where to create the indexes, what indexes to create, etc.</P>
+<PRE>
+        -d &lt;debuglevel&gt;
+</PRE>
+<P>Turn on debugging, as specified by <TT>&lt;debuglevel&gt;</TT>. The debug levels are the same as for slapd.  See the <A HREF="#Command-Line Options">Command-Line Options</A> section in <A HREF="#Running slapd">Running slapd</A>.</P>
+<PRE>
+        -n &lt;databasenumber&gt;
+</PRE>
+<P>An optional argument that specifies which database to modify.  The first database listed in the configuration file is <TT>1</TT>, the second <TT>2</TT>, etc. By default, the first ldbm database in the configuration file is used. Should not be used in conjunction with <TT>-b</TT>.</P>
+<PRE>
+        -b &lt;suffix&gt;
+</PRE>
+<P>An optional argument that specifies which database to modify.  The provided suffix is matched against a database <TT>suffix</TT> directive to determine the database number. Should not be used in conjunction with <TT>-n</TT>.</P>
+<H3><A NAME="The {{EX:slapindex}} program">7.2.2. The <TT>slapindex</TT> program</A></H3>
+<P>Sometimes it may be necessary to regenerate indices (such as after modifying <EM>slapd.conf</EM>(5)). This is possible using the <EM>slapindex</EM>(8) program.  <EM>slapindex</EM> is invoked like this</P>
+<PRE>
+        slapindex -f &lt;slapdconfigfile&gt;
+                [-d &lt;debuglevel&gt;] [-n &lt;databasenumber&gt;|-b &lt;suffix&gt;]
+</PRE>
+<P>Where the <TT>-f</TT>, <TT>-d</TT>, <TT>-n</TT> and <TT>-b</TT> options are the same as for the <EM>slapadd</EM>(1) program.  <EM>slapindex</EM> rebuilds all indices based upon the current database contents.</P>
+<H3><A NAME="The {{EX:slapcat}} program">7.2.3. The <TT>slapcat</TT> program</A></H3>
+<P>The <TT>slapcat</TT> program is used to dump the database to an <TERM>LDIF</TERM> file.  This can be useful when you want to make a human-readable backup of your database or when you want to edit your database off-line.  The program is invoked like this:</P>
+<PRE>
+        slapcat -l &lt;filename&gt; -f &lt;slapdconfigfile&gt;
+                [-d &lt;debuglevel&gt;] [-n &lt;databasenumber&gt;|-b &lt;suffix&gt;]
+</PRE>
+<P>where <TT>-n</TT> or <TT>-b</TT> is used to select the database in the <EM>slapd.conf</EM>(5) specified using <TT>-f</TT>.  The corresponding LDIF output is written to standard output or to the file specified using the <TT>-l</TT> option.</P>
+<H2><A NAME="The LDIF text entry format">7.3. The LDIF text entry format</A></H2>
+<P>The <TERM>LDAP Data Interchange Format</TERM> (LDIF) is used to represent LDAP entries in a simple text format.  This section provides a brief description of the LDIF entry format which complements <EM>ldif</EM>(5) and the technical specification <A HREF="ftp://ftp.isi.edu/in-notes/rfc2849.txt">RFC2849</A>.</P>
+<P>The basic form of an entry is:</P>
+<PRE>
+        # comment
+        dn: &lt;distinguished name&gt;
+        &lt;attrdesc&gt;: &lt;attrvalue&gt;
+        &lt;attrdesc&gt;: &lt;attrvalue&gt;
+
+        ...
+</PRE>
+<P>Lines starting with a '<TT>#</TT>' character are comments.  An attribute description may be a simple attribute type like <TT>cn</TT> or <TT>objectClass</TT> or <TT>1.2.3</TT> (an <TERM>OID</TERM> associated with an attribute type) or may include options such as <TT>cn;lang_en_US</TT> or <TT>userCertificate;binary</TT>.</P>
+<P>A line may be continued by starting the next line with a <EM>single</EM> space or tab character.  For example:</P>
+<PRE>
+        dn: cn=Barbara J Jensen,dc=example,dc=
+         com
+        cn: Barbara J
+          Jensen
+</PRE>
+<P>is equivalent to:</P>
+<PRE>
+        dn: cn=Barbara J Jensen,dc=example,dc=com
+        cn: Barbara J Jensen
+</PRE>
+<P>Multiple attribute values are specified on separate lines. e.g.,</P>
+<PRE>
+        cn: Barbara J Jensen
+        cn: Babs Jensen
+</PRE>
+<P>If an <TT>&lt;attrvalue&gt;</TT> contains non-printing characters or begins with a space, a colon ('<TT>:</TT>'), or a less than ('<TT>&lt;</TT>'), the <TT>&lt;attrdesc&gt;</TT> is followed by a double colon and the base64 encoding of the value.  For example, the value &quot;<TT> begins with a space</TT>&quot; would be encoded like this:</P>
+<PRE>
+        cn:: IGJlZ2lucyB3aXRoIGEgc3BhY2U=
+</PRE>
+<P>You can also specify a <TERM>URL</TERM> containing the attribute value. For example, the following specifies the <TT>jpegPhoto</TT> value should be obtained from the file <TT>/path/to/file.jpeg</TT>.</P>
+<PRE>
+        cn:&lt; file:///path/to/file.jpeg
+</PRE>
+<P>Multiple entries within the same LDIF file are separated by blank lines. Here's an example of an LDIF file containing three entries.</P>
+<PRE>
+        # Barbara's Entry
+        dn: cn=Barbara J Jensen,dc=example,dc=com
+        cn: Barbara J Jensen
+        cn: Babs Jensen
+        objectClass: person
+        sn: Jensen
+
+        # Bjorn's Entry
+        dn: cn=Bjorn J Jensen,dc=example,dc=com
+        cn: Bjorn J Jensen
+        cn: Bjorn Jensen
+        objectClass: person
+        sn: Jensen
+        # Base64 encoded JPEG photo
+        jpegPhoto:: /9j/4AAQSkZJRgABAAAAAQABAAD/2wBDABALD
+         A4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQ
+         ERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVG
+
+        # Jennifer's Entry
+        dn: cn=Jennifer J Jensen,dc=example,dc=com
+        cn: Jennifer J Jensen
+        cn: Jennifer Jensen
+        objectClass: person
+        sn: Jensen
+        # JPEG photo from file
+        jpegPhoto:&lt; file:///path/to/file.jpeg
+</PRE>
+<P>Notice that the <TT>jpegPhoto</TT> in Bjorn's entry is base 64 encoded and the <TT>jpegPhoto</TT> in Jennifer's entry is obtained from the location indicated by the URL.</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>Trailing spaces are not trimmed from values in an LDIF file. Nor are multiple internal spaces compressed. If you don't want them in your data, don't put them there.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<P></P>
+<HR>
+<H1><A NAME="Schema Specification">8. Schema Specification</A></H1>
+<P>This chapter describes how to extend the schema used by <EM>slapd</EM>(8). The first section, <A HREF="#Distributed Schema Files">Distributed Schema Files</A> details optional schema definitions provided in the distribution and where to obtain other definitions. The second section, <A HREF="#Extending Schema">Extending Schema</A>, details how to define new schema items.</P>
+<H2><A NAME="Distributed Schema Files">8.1. Distributed Schema Files</A></H2>
+<P>OpenLDAP is distributed with a set of schema specifications for your use.  Each set is defined in a file suitable for inclusion (using the <TT>include</TT> directive) in your <EM>slapd.conf</EM>(5) file.  These schema files are normally installed in the <TT>/usr/local/etc/openldap/schema</TT> directory.</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 6.1: Provided Schema Specifications</CAPTION>
+<TR CLASS="heading">
+<TD ALIGN='Left'>
+<STRONG>File</STRONG>
+</TD>
+<TD ALIGN='Right'>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>core.schema</TT>
+</TD>
+<TD ALIGN='Right'>
+OpenLDAP <EM>core</EM> (required)
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>cosine.schema</TT>
+</TD>
+<TD ALIGN='Right'>
+Cosine and Internet X.500 (useful)
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>inetorgperson.schema</TT>
+</TD>
+<TD ALIGN='Right'>
+InetOrgPerson (useful)
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>misc.schema</TT>
+</TD>
+<TD ALIGN='Right'>
+Assorted (experimental)
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>nadf.schema</TT>
+</TD>
+<TD ALIGN='Right'>
+North American Directory Forum (FYI)
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>nis.schema</TT>
+</TD>
+<TD ALIGN='Right'>
+Network Information Services (FYI)
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>openldap.schema</TT>
+</TD>
+<TD ALIGN='Right'>
+OpenLDAP Project (experimental)
+</TD>
+</TR>
+</TABLE>
+
+<P>To use any of these schema files, you only need to include the the desired file in the global definitions portion of your <EM>slapd.conf</EM>(5) file.  For example:</P>
+<PRE>
+        # include schema
+        include /usr/local/etc/openldap/schema/core.schema
+        include /usr/local/etc/openldap/schema/cosine.schema
+        include /usr/local/etc/openldap/schema/inetorgperson.schema
+</PRE>
+<P>Additional files may be available.  Please consult the OpenLDAP FAQ (<A HREF="http://www.openldap.org/faq/">http://www.openldap.org/faq/</A>).</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>You should not modify any of the schema items defined in provided files.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<H2><A NAME="Extending Schema">8.2. Extending Schema</A></H2>
+<P>Schema used by <EM>slapd</EM>(8) may be extended to support additional syntaxes, matching rules, attribute types, and object classes. This chapter details how to add attribute types and object classes using the syntaxes and matching rules already supported by slapd. slapd can also be extended to support additional syntaxes and matching rules, but this requires some programming and hence is not discussed here.</P>
+<P>There are five steps to defining new schema:</P>
+<OL>
+<LI>obtain Object Identifer
+<LI>choose a name prefix
+<LI>create local schema file
+<LI>define custom attribute types (if necessary)
+<LI>define custom object classes</OL>
+<H3><A NAME="Object Identifiers">8.2.1. Object Identifiers</A></H3>
+<P>Each schema element is identified by a globally unique <TERM>Object Identifier</TERM> (OID).  OIDs are also used to identify other objects. They are commonly found in protocols described by <TERM>ASN.1</TERM>.  In particular, they are heavily used by the <TERM>Simple Network Management Protocol</TERM> (SNMP). As OIDs are hierarchical, your organization can obtain one OID and branch it as needed.  For example, if your organization were assigned OID <TT>1.1</TT>, you could branch the tree as follows:</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 6.2: Example OID hierarchy</CAPTION>
+<TR CLASS="heading">
+<TD ALIGN='Left'>
+<STRONG>OID</STRONG>
+</TD>
+<TD ALIGN='Right'>
+<STRONG>Assignment</STRONG>
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>1.1</TT>
+</TD>
+<TD ALIGN='Right'>
+Organization's OID
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>1.1.1</TT>
+</TD>
+<TD ALIGN='Right'>
+SNMP Elements
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>1.1.2</TT>
+</TD>
+<TD ALIGN='Right'>
+LDAP Elements
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>1.1.2.1</TT>
+</TD>
+<TD ALIGN='Right'>
+AttributeTypes
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>1.1.2.1.1</TT>
+</TD>
+<TD ALIGN='Right'>
+myAttribute
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>1.1.2.2</TT>
+</TD>
+<TD ALIGN='Right'>
+ObjectClasses
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Left'>
+<TT>1.1.2.2.1</TT>
+</TD>
+<TD ALIGN='Right'>
+myObjectClass
+</TD>
+</TR>
+</TABLE>
+
+<P>You are, of course, free to design a hierarchy suitable to your organizational needs under your organization's OID.  No matter what hierarchy you choose, you should maintain a registry of assignments you make.  This can be a simple flat file or a something more sophisticated such as the <EM>OpenLDAP OID Registry</EM> (<A HREF="http://www.openldap.org/faq/index.cgi?file=197">http://www.openldap.org/faq/index.cgi?file=197</A>).</P>
+<P>For more information about Object Identifers (and a listing service) see <A HREF="http://www.alvestrand.no/harald/objectid/">http://www.alvestrand.no/harald/objectid/</A>.</P>
+<UL>
+<EM>Under no circumstances should you use a fictious OID!</EM></UL>
+<P>To obtain a fully registered OID at <EM>no cost</EM>, apply for an OID under <A HREF="http://www.iana.org/">Internet Assigned Numbers Authority</A> (IANA) maintained <EM>Private Enterprise</EM> arch.  Any private enterprise (organization) may request an OID to be assigned under this arch.  Just fill out the <A HREF="http://www.iana.org/">IANA</A> form at <A HREF="http://www.iana.org/cgi-bin/enterprise.pl">http://www.iana.org/cgi-bin/enterprise.pl</A> and your official OID will be sent to you usually within a few days. Your base OID will be something like <TT>1.3.6.1.4.1.X</TT> were <TT>X</TT> is an integer.</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>Don't let the &quot;MIB/SNMP&quot; statement on the IANA page confuse you. OIDs obtained using this form may be used for any purpose including identifying LDAP schema elements.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<H3><A NAME="Name Prefix">8.2.2. Name Prefix</A></H3>
+<P>In addition to assigning a unique object identifier to each schema element, you should provide a least one textual name for each element.  The name should be both descriptive and not likely to clash with names of other schema elements.  In particular, any name you choose should not clash with present or future Standard Track names.</P>
+<P>To reduce (but not eliminate) the potential for name clashes, the convention is to prefix names of non-Standard Track with a few letters to localize the changes to your organization. The smaller the organization, the longer your prefix should be.</P>
+<P>In the examples below, we have choosen a short prefix '<TT>my</TT>' (to save space).  Such a short prefix would only be suitable for a very large, global organization.  For a small, local organization, we recommend something like '<TT>deFirm</TT>' (German company) or '<TT>comExample</TT>' (elements associated with organization associated with <TT>example.com</TT>).</P>
+<H3><A NAME="Local schema file">8.2.3. Local schema file</A></H3>
+<P>The <TT>objectclass</TT> and <TT>attributeTypes</TT> configuration file directives can be used to define schema rules on entries in the directory.  It is customary to create a file to contain definitions of your custom schema items.  We recommend you create a file <TT>local.schema</TT> in <TT>/usr/local/etc/openldap/schema/local.schema</TT> and then include this file in your <EM>slapd.conf</EM>(5) file immediately after other schema <TT>include</TT> directives.</P>
+<PRE>
+        # include schema
+        include /usr/local/etc/openldap/schema/core.schema
+        include /usr/local/etc/openldap/schema/cosine.schema
+        include /usr/local/etc/openldap/schema/inetorgperson.schema
+        # include local schema
+        include /usr/local/etc/openldap/schema/local.schema
+</PRE>
+<H3><A NAME="Attribute Type Specification">8.2.4. Attribute Type Specification</A></H3>
+<P>The <EM>attributetype</EM> directive is used to define a new attribute type.  The directive uses the same Attribute Type Description (as defined in <A HREF="ftp://ftp.isi.edu/in-notes/rfc2252.txt">RFC2252</A>) used by the attributeTypes attribute found in the subschema subentry, e.g.:</P>
+<PRE>
+        attributetype &lt;<A HREF="ftp://ftp.isi.edu/in-notes/rfc2252.txt">RFC2252</A> Attribute Type Description&gt;
+</PRE>
+<P>where Attribute Type Description is defined by the following <TERM>BNF</TERM>:</P>
+<PRE>
+      AttributeTypeDescription = &quot;(&quot; whsp
+            numericoid whsp              ; AttributeType identifier
+          [ &quot;NAME&quot; qdescrs ]             ; name used in AttributeType
+          [ &quot;DESC&quot; qdstring ]            ; description
+          [ &quot;OBSOLETE&quot; whsp ]
+          [ &quot;SUP&quot; woid ]                 ; derived from this other
+                                         ; AttributeType
+          [ &quot;EQUALITY&quot; woid              ; Matching Rule name
+          [ &quot;ORDERING&quot; woid              ; Matching Rule name
+          [ &quot;SUBSTR&quot; woid ]              ; Matching Rule name
+          [ &quot;SYNTAX&quot; whsp noidlen whsp ] ; see section 4.3
+          [ &quot;SINGLE-VALUE&quot; whsp ]        ; default multi-valued
+          [ &quot;COLLECTIVE&quot; whsp ]          ; default not collective
+          [ &quot;NO-USER-MODIFICATION&quot; whsp ]; default user modifiable
+          [ &quot;USAGE&quot; whsp AttributeUsage ]; default userApplications
+          whsp &quot;)&quot;
+
+      AttributeUsage =
+          &quot;userApplications&quot;     /
+          &quot;directoryOperation&quot;   /
+          &quot;distributedOperation&quot; / ; DSA-shared
+          &quot;dSAOperation&quot;          ; DSA-specific, value depends on server
+
+</PRE>
+<P>where whsp is a space ('<TT> </TT>'), numericoid is a globally unique OID in numeric form (e.g. <TT>1.2.3</TT>), qdescrs is one or more names, woid is either the name or OID, and noidlen is an optional length specifier (e.g <TT>{10</TT>}).</P>
+<P>For example, the attribute types <TT>name</TT> and <TT>cn</TT> are defined in <TT>core.schema</TT> as:</P>
+<PRE>
+        attributeType ( 2.5.4.41 NAME 'name'
+                EQUALITY caseIgnoreMatch
+                SUBSTR caseIgnoreSubstringsMatch
+                SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32768} )
+        attributeType ( 2.5.4.3 NAME
+                ( 'cn' $ 'commonName' ) SUP name )
+</PRE>
+<P>Notice that each defines the attribute's OID and descriptive names.  Each name is an alias for the OID.  <EM>slapd</EM>(8) returns the first listed name when returning results.</P>
+<P>The first attribute, <TT>name</TT>, has a syntax of <TT>directoryString</TT> (a UTF-8 encoded Unicode string) with a recommend maximun length. Note that syntaxes are specified by OID.  In addition, the equality and substring matching uses case ignore rules.  Below are tables listing commonly used supported syntax and matching rules.</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 6.3: Supported Syntaxes</CAPTION>
+<TR CLASS="heading">
+<TD>
+<STRONG>Name</STRONG>
+</TD>
+<TD>
+<STRONG>OID</STRONG>
+</TD>
+<TD>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>binary</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.5</TT>
+</TD>
+<TD>
+BER/DER data
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>boolean</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.7</TT>
+</TD>
+<TD>
+boolean value
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>distinguishedName</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.12</TT>
+</TD>
+<TD>
+DN
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>directoryString</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.15</TT>
+</TD>
+<TD>
+UTF-8 string
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>IA5String</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.26</TT>
+</TD>
+<TD>
+ASCII string
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>Integer</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.27</TT>
+</TD>
+<TD>
+integer
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>Name and Optional UID</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.34</TT>
+</TD>
+<TD>
+DN plus UID
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>Numeric String</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.36</TT>
+</TD>
+<TD>
+numeric string
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>OID</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.38</TT>
+</TD>
+<TD>
+object identifier
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>Octet String</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.40</TT>
+</TD>
+<TD>
+arbitary octets
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>Printable String</TT>
+</TD>
+<TD>
+<TT>1.3.6.1.4.1.1466.115.121.1.44</TT>
+</TD>
+<TD>
+printable string
+</TD>
+</TR>
+</TABLE>
+
+<PRE>
+
+</PRE>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 6.4: Supported Matching Rules</CAPTION>
+<TR CLASS="heading">
+<TD>
+<STRONG>Name</STRONG>
+</TD>
+<TD>
+<STRONG>Type</STRONG>
+</TD>
+<TD>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>booleanMatch</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+boolean
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>objectIdentiferMatch</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+OID
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>distinguishedNameMatch</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+DN
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>uniqueMemberMatch</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+DN with optional UID
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>numericStringMatch</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+numerical
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>numericStringOrderingMatch</TT>
+</TD>
+<TD>
+ordering
+</TD>
+<TD>
+numerical
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>numericStringSubstringsMatch</TT>
+</TD>
+<TD>
+substrings
+</TD>
+<TD>
+numerical
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseIgnoreMatch</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+case insensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseIgnoreOrderingMatch</TT>
+</TD>
+<TD>
+ordering
+</TD>
+<TD>
+case insensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseIgnoreSubstringsMatch</TT>
+</TD>
+<TD>
+substrings
+</TD>
+<TD>
+case insensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseExactMatch</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+case sensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseExactOrderingMatch</TT>
+</TD>
+<TD>
+ordering
+</TD>
+<TD>
+case sensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseExactSubstringsMatch</TT>
+</TD>
+<TD>
+substrings
+</TD>
+<TD>
+case sensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseIgnoreIA5Match</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+case insensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseIgnoreIA5OrderingMatch</TT>
+</TD>
+<TD>
+ordering
+</TD>
+<TD>
+case insensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseIgnoreIA5SubstringsMatch</TT>
+</TD>
+<TD>
+substrings
+</TD>
+<TD>
+case insensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseExactIA5Match</TT>
+</TD>
+<TD>
+equality
+</TD>
+<TD>
+case sensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseExactIA5OrderingMatch</TT>
+</TD>
+<TD>
+ordering
+</TD>
+<TD>
+case sensitive, space insensitive
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>caseExactIA5SubstringsMatch</TT>
+</TD>
+<TD>
+substrings
+</TD>
+<TD>
+case sensitive, space insensitive
+</TD>
+</TR>
+</TABLE>
+
+<P>The second attribute, <TT>cn</TT>, is a subtype of <TT>name</TT> hence it inherits the syntax, matching rules, and usage of <TT>name</TT>. <TT>commonName</TT> is an alternative name.</P>
+<P>Neither attribute is restricted to a single value and both are meant for usage by user applications.  You likely won't need to specify other parameters such as <TT>OBSOLETE</TT>.</P>
+<P>The following subsections provide a couple of examples.</P>
+<H4><A NAME="myUniqueName">8.2.4.1. myUniqueName</A></H4>
+<P>Many organizations maintain a single unique name for each user. Though one could use <TT>displayName</TT> (<A HREF="ftp://ftp.isi.edu/in-notes/rfc2798.txt">RFC2798</A>), this attribute is really meant to be controlled by the user, not the organization.  We could just copy the definition of <TT>displayName</TT> from <TT>inetorgperson.schema</TT> and replace the OID, name, and description, e.g:</P>
+<PRE>
+        attributetype ( 1.1.2.1.1 NAME 'myUniqueName'
+                DESC 'unique name with my organization'
+                EQUALITY caseIgnoreMatch
+                SUBSTR caseIgnoreSubstringsMatch
+                SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+                SINGLE-VALUE )
+</PRE>
+<P>However, if we want this name to be included in <TT>name</TT> assertions [e.g. <TT>(name=*Jane*)</TT>], the attribute could alternatively be defined as a subtype of <TT>name</TT>, e.g.:</P>
+<PRE>
+        attributetype ( 1.1.2.1.1 NAME 'myUniqueName'
+                DESC 'unique name with my organization'
+                SUP name )
+</PRE>
+<H4><A NAME="myPhoto">8.2.4.2. myPhoto</A></H4>
+<P>Many organizations maintain a photo of each each user.  A <TT>myPhoto</TT> attribute type could be defined to hold a photo. Of course, one could use just use <TT>jpegPhoto</TT> (<A HREF="ftp://ftp.isi.edu/in-notes/rfc2798.txt">RFC2798</A>) (or a subtype) to hold the photo.  However, you can only do this if the photo is in <EM>JPEG File Interchange Format</EM>. Alternatively, an attribute type which uses the <EM>Octet String</EM> syntax can be defined, e.g.:</P>
+<PRE>
+        attributetype ( 1.1.2.1.2 NAME 'myPhoto'
+                DESC 'a photo (application defined format)'
+                SYNTAX 1.3.6.1.4.1.1466.115.121.1.40
+                SINGLE-VALUE )
+</PRE>
+<P>As noted in the description, LDAP has no knowledge of the format of the photo.  It's assumed that all applications accessing this attribute agree on the handling of values.</P>
+<P>If you wanted to support multiple photo formats, you could define a separate attribute type for each format, prefix the photo with some typing information, or describe the value using <TERM>ASN.1</TERM> and use the <TT>;binary</TT> transfer option.</P>
+<P>Another alternative is for the attribute to hold a <TERM>URI</TERM> pointing to the photo.  You can model such an attribute after <TT>labeledURI</TT> (<A HREF="ftp://ftp.isi.edu/in-notes/rfc2079.txt">RFC2079</A>).</P>
+<H3><A NAME="Object Class Specification">8.2.5. Object Class Specification</A></H3>
+<P>The <EM>objectclasses</EM> directive is used to define a new object class.  The directive uses the same Object Class Description (as defined in <A HREF="ftp://ftp.isi.edu/in-notes/rfc2252.txt">RFC2252</A>) used by the objectClasses attribute found in the subschema subentry, e.g.:</P>
+<PRE>
+        objectclass &lt;<A HREF="ftp://ftp.isi.edu/in-notes/rfc2252.txt">RFC2252</A> Object Class Description&gt;
+</PRE>
+<P>where Object Class Description is defined by the following <TERM>BNF</TERM>:</P>
+<PRE>
+        ObjectClassDescription = &quot;(&quot; whsp
+                numericoid whsp      ; ObjectClass identifier
+                [ &quot;NAME&quot; qdescrs ]
+                [ &quot;DESC&quot; qdstring ]
+                [ &quot;OBSOLETE&quot; whsp ]
+                [ &quot;SUP&quot; oids ]       ; Superior ObjectClasses
+                [ ( &quot;ABSTRACT&quot; / &quot;STRUCTURAL&quot; / &quot;AUXILIARY&quot; ) whsp ]
+                        ; default structural
+                [ &quot;MUST&quot; oids ]      ; AttributeTypes
+                [ &quot;MAY&quot; oids ]       ; AttributeTypes
+                whsp &quot;)&quot;
+</PRE>
+<P>where whsp is a space ('<TT> </TT>'), numericoid is a globally unique OID in numeric form (e.g. <TT>1.2.3</TT>), qdescrs is one or more names, and oids is one or more names and/or OIDs.</P>
+<H4><A NAME="myPhotoObject">8.2.5.1. myPhotoObject</A></H4>
+<P>To define an <EM>auxiliary</EM> object class which allows myPhoto to be added to any existing entry.</P>
+<PRE>
+        objectclass ( 1.1.2.2.1 NAME 'myPhotoObject'
+                DESC 'mixin myPhoto'
+                AUXILIARY
+                MAY myPhoto )
+</PRE>
+<H4><A NAME="myPerson">8.2.5.2. myPerson</A></H4>
+<P>If your organization would like have a private <EM>structural</EM> object class to instantiate users, you can subclass one of the existing person classes, such as <TT>inetOrgPerson</TT> (<A HREF="ftp://ftp.isi.edu/in-notes/rfc2798.txt">RFC2798</A>), and add any additional attributes which you desire.</P>
+<PRE>
+        objectclass ( 1.1.2.2.2 NAME 'myPerson'
+                DESC 'my person'
+                SUP inetOrgPerson
+                MUST ( 'myUniqueName' $ 'givenName' )
+                MAY 'myPhoto' )
+</PRE>
+<P>The object class inherits the required/allowed attribute types of <TT>inetOrgPerson</TT> but requires <TT>myUniqueName</TT> and <TT>givenName</TT> and allows <TT>myPhoto</TT>.</P>
+<P></P>
+<HR>
+<H1><A NAME="Constructing a Distributed Directory Service">9. Constructing a Distributed Directory Service</A></H1>
+<P>For many sites, running one or more <EM>slapd</EM>(8) that hold an entire subtree of data is sufficient. But often it is desirable to have one <EM>slapd</EM> refer to other directory services for a certain part of the tree (which may or may not be running <EM>slapd</EM>).</P>
+<P><EM>slapd</EM> supports <EM>subordinate</EM> and <EM>superior</EM> knowledge information.</P>
+<H2><A NAME="Subordinate Knowledge Information">9.1. Subordinate Knowledge Information</A></H2>
+<P>Subordinate knowledge information may be provided to delegate a subtree. Subordinate knowledge information is maintained in the directory as a special <EM>referral</EM> object at the delegate point. The referral object acts as a delegation point, gluing two services together. This mechanism allows for hierarchical directory services to to be constructed.</P>
+<P>A referral object has a structural object class of <TT>referral</TT> and has the same <TERM>Distinguished Name</TERM> as the delegated subtree.  Generally, the referral object will also provide the auxiliary object class <TT>extensibleObject</TT>. This allows the entry to contain appropriate <TERM>Relative Distinguished Name</TERM> values.  This is best demonstrated by example.</P>
+<P>If the server <TT>a.example.net</TT> holds <TT>dc=example,dc=net</TT> and wished to delegate the subtree <TT>ou=subtree,dc=example,dc=net</TT> to another server <TT>b.example.net</TT>, the following named referral object would be added to <TT>a.example.net</TT>:</P>
+<PRE>
+        dn: dc=subtree,dc=example,dc=net
+        objectClass: referral
+        objectClass: extensibleObject
+        dc: subtree
+        ref: ldap://b.example.net/dc=subtree,dc=example,dc=net
+</PRE>
+<P>The server uses this information to generate referrals and search continuations to subordinate servers.</P>
+<P>For those familiar with X.500, a <EM>named referral</EM> object is similar to an X.500 knowledge reference held in a <EM>subr</EM> <TERM>DSE</TERM>.</P>
+<H2><A NAME="Superior Knowledge Information">9.2. Superior Knowledge Information</A></H2>
+<P>Superior knowledge information may be specified using the <TT>referral</TT> directive.  The value is a list of <TERM>URI</TERM>s referring to superior directory services.  For servers without immediate superiors, such as for <TT>a.example.net</TT> in the example above, the server can be configured to use directory service with <EM>global knowledge</EM>, such as the <EM>OpenLDAP Root Service</EM> (<A HREF="http://www.openldap.org/faq/index.cgi?file=393">http://www.openldap.org/faq/index.cgi?file=393</A>).</P>
+<PRE>
+        referral        ldap://root.openldap.org/
+</PRE>
+<P>However, as <TT>a.example.net</TT> is the <EM>immediate superior</EM> to <TT>b.example.net</TT>, <EM>b.example.net</EM> would be configured as follows:</P>
+<PRE>
+        referral        ldap://a.example.net/
+</PRE>
+<P>The server uses this information to generate referrals to operations acting upon operations not within or subordinate to any of the naming contexts held by the server.</P>
+<P>For those familiar with X.500, this use of the <TT>ref</TT> attribute is similar to an X.500 knowledge reference held in a <EM>Supr</EM> <TERM>DSE</TERM>.</P>
+<H2><A NAME="The ManageDsaIT Control">9.3. The ManageDsaIT Control</A></H2>
+<P>Adding, modifying, and deleting referral objects is generally done using <EM>ldapmodify</EM>(1) or similar tools which support the ManageDsaIT control.  The ManageDsaIT control informs the server that you intend to manage the referral object as a regular entry.  This keeps the server from sending a referral result for requests which interrogate or update referral objects. The -M option of <EM>ldapmodify</EM>(1) (and other tools) enables ManageDsaIT.  For example:</P>
+<PRE>
+        ldapmodify -M -f referral.ldif -x -D &quot;cn=Manager,dc=example,dc=net&quot; -W
+</PRE>
+<P>or with <EM>ldapsearch</EM>(1):</P>
+<PRE>
+        ldapsearch -M -b &quot;dc=example,dc=net&quot; -x &quot;(objectclass=referral)&quot; '*' ref
+</PRE>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>the <TT>ref</TT> attribute is operational and must be explicitly requested when desired in search results.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<P></P>
+<HR>
+<H1><A NAME="Replication with slurpd">10. Replication with slurpd</A></H1>
+<P>In certain configurations, a single <EM>slapd</EM>(8) instance may be insufficient to handle the number of clients requiring directory service via LDAP. It may become necessary to run more than one slapd instance.  At many sites, for instance, there are multiple slapd servers: one master and one or more slaves.  <TERM>DNS</TERM> can be setup such that a lookup of <TT>ldap.example.com</TT> returns the <TERM>IP</TERM> addresses of these servers, distributing the load among them (or just the slaves). This master/slave arrangement provides a simple and effective way to increase capacity, availability and reliability.</P>
+<P><EM>slurpd</EM>(8) provides the capability for a master slapd to propagate changes to slave slapd instances, implementing the master/slave replication scheme described above.  slurpd runs on the same host as the master slapd instance.</P>
+<H2><A NAME="Overview">10.1. Overview</A></H2>
+<P><EM>slurpd</EM>(8) provides replication services &quot;in band&quot;. That is, it uses the LDAP protocol to update a slave database from the master. Perhaps the easiest way to illustrate this is with an example. In this example, we trace the propagation of an LDAP modify operation from its initiation by the LDAP client to its distribution to the slave slapd instance.</P>
+<P><B>Sample replication scenario:</B></P>
+<OL>
+<LI>The LDAP client submits an LDAP modify operation to the slave slapd.
+<LI>The slave slapd returns a referral to the LDAP client referring the client to the master slapd.
+<LI>The LDAP client submits the LDAP modify operation to the master slapd.
+<LI>The master slapd performs the modify operation, writes out the change to its replication log file and returns a success code to the client.
+<LI>The slurpd process notices that a new entry has been appended to the replication log file, reads the replication log entry, and sends the change to the slave slapd via LDAP.
+<LI>The slave slapd performs the modify operation and returns a success code to the slurpd process.</OL>
+<H2><A NAME="Replication Logs">10.2. Replication Logs</A></H2>
+<P>When slapd is configured to generate a replication logfile, it writes out a file containing <TERM>LDIF</TERM> change records. The replication log gives the replication site(s), a timestamp, the DN of the entry being modified, and a series of lines which specify the changes to make. In the example below, Barbara (<TT>uid=bjensen</TT>) has replaced the <TT>description</TT> value.  The change is to be propagated to the slapd instance running on <TT>slave.example.net</TT> Changes to various operational attributes, such as <TT>modifiersName</TT> and <TT>modifyTimestamp</TT>, are included in the change record and will be propagated to the slave slapd.</P>
+<PRE>
+        replica: slave.example.com:389
+        time: 809618633
+        dn: uid=bjensen,dc=example,dc=com
+        changetype: modify
+        replace: multiLineDescription
+        description: A dreamer...
+        -
+        replace: modifiersName
+        modifiersName: uid=bjensen,dc=example,dc=com
+        -
+        replace: modifyTimestamp
+        modifyTimestamp: 20000805073308Z
+        -
+</PRE>
+<P>The modifications to <TT>modifiersName</TT> and <TT>modifyTimestamp</TT> operational attributes were added by the master <EM>slapd</EM>.</P>
+<H2><A NAME="Command-Line Options">10.3. Command-Line Options</A></H2>
+<P>This section details commonly used <EM>slurpd</EM>(8) command-line options.</P>
+<PRE>
+        -d &lt;level&gt; | ?
+</PRE>
+<P>This option sets the slurpd debug level to <TT> &lt;level&gt;</TT>. When level is a `?' character, the various debugging levels are printed and slapd exits, regardless of any other options you give it. Current debugging levels (a subset of slapd's debugging levels) are</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 10.1: Debugging Levels</CAPTION>
+<TR CLASS="heading">
+<TD ALIGN='Right'>
+<STRONG>Level</STRONG>
+</TD>
+<TD ALIGN='Left'>
+<STRONG>Description</STRONG>
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+4
+</TD>
+<TD ALIGN='Left'>
+heavy trace debugging
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+64
+</TD>
+<TD ALIGN='Left'>
+configuration file processing
+</TD>
+</TR>
+<TR>
+<TD ALIGN='Right'>
+65535
+</TD>
+<TD ALIGN='Left'>
+enable all debugging
+</TD>
+</TR>
+</TABLE>
+
+<P>Debugging levels are additive. That is, if you want heavy trace debugging and want to watch the config file being processed, you would set level to the sum of those two levels (in this case, 68).</P>
+<PRE>
+        -f &lt;filename&gt;
+</PRE>
+<P>This option specifies an alternate slapd configuration file. Slurpd does not have its own configuration file. Instead, all configuration information is read from the slapd configuration file.</P>
+<PRE>
+        -r &lt;filename&gt;
+</PRE>
+<P>This option specifies an alternate slapd replication log file. Under normal circumstances, slurpd reads the name of the slapd replication log file from the slapd configuration file. However, you can override this with the -r flag, to cause slurpd to process a different replication log file. See the <A HREF="#Advanced slurpd Operation">Advanced slurpd Operation</A> section for a discussion of how you might use this option.</P>
+<PRE>
+        -o
+</PRE>
+<P>Operate in &quot;one-shot&quot; mode. Under normal circumstances, when slurpd finishes processing a replication log, it remains active and periodically checks to see if new entries have been added to the replication log. In one-shot mode, by comparison, slurpd processes a replication log and exits immediately. If the -o option is given, the replication log file must be explicitly specified with the -r option.  See the <A HREF="#One-shot mode and reject files">One-shot mode and reject files</A> section for  a discussion of this mode.</P>
+<PRE>
+        -t &lt;directory&gt;
+</PRE>
+<P>Specify an alternate directory for slurpd's temporary copies of replication logs. The default location is /usr/tmp.</P>
+<H2><A NAME="Configuring slurpd and a slave slapd instance">10.4. Configuring slurpd and a slave slapd instance</A></H2>
+<P>To bring up a replica slapd instance, you must configure the master and slave slapd instances for replication, then shut down the master slapd so you can copy the database. Finally, you bring up the master slapd instance, the slave slapd instance, and the slurpd instance. These steps are detailed in the following sections. You can set up as many slave slapd instances as you wish.</P>
+<H3><A NAME="Set up the master {{slapd}}">10.4.1. Set up the master <EM>slapd</EM></A></H3>
+<P>The following section assumes you have a properly working <EM>slapd</EM>(8) instance. To configure your working <EM>slapd</EM>(8) server as a replication master, you need to make the following changes to your <EM>slapd.conf</EM>(5).</P>
+<OL>
+<LI>Add a <TT>replica</TT> directive for each replica. The <TT>binddn=</TT> parameter should match the <TT>updatedn</TT> option in the corresponding slave slapd configuration file, and should name an entry with write permission to the slave database (e.g., an entry listed as <TT>rootdn</TT>, or allowed access via <TT>access</TT> directives in the slave slapd configuration file).
+<LI>Add a <TT>replogfile</TT> directive, which tells slapd where to log changes. This file will be read by slurpd.</OL>
+<H3><A NAME="Set up the slave {{slapd}}">10.4.2. Set up the slave <EM>slapd</EM></A></H3>
+<P>Install the slapd software on the host which is to be the slave slapd server. The configuration of the slave server should be identical to that of the master, with the following exceptions:</P>
+<OL>
+<LI>Do not include a <TT>replica</TT> directive. While it is possible to create &quot;chains&quot; of replicas, in most cases this is inappropriate.
+<LI>Do not include a <TT>replogfile</TT> directive.
+<LI>Do include an <TT>updatedn</TT> line. The DN given should match the DN given in the <TT>binddn=</TT> parameter of the corresponding <TT>replica=</TT> directive in the master slapd config file.
+<LI>Make sure the DN given in the <TT>updatedn</TT> directive has permission to write the database (e.g., it is listed as <TT>rootdn</TT> or is allowed <TT>access</TT> by one or more access directives).
+<LI>Use the <TT>updateref</TT> directive to define the URL the slave should return if an update request is received.</OL>
+<H3><A NAME="Shut down the master {{slapd}}">10.4.3. Shut down the master <EM>slapd</EM></A></H3>
+<P>In order to ensure that the slave starts with an exact copy of the master's data, you must shut down the master slapd. Do this by sending the master slapd process an interrupt signal with <TT>kill -INT &lt;pid&gt;</TT>, where <TT>&lt;pid&gt;</TT> is the process-id of the master slapd process.</P>
+<P>If you like, you may restart the master slapd in read-only mode while you are replicating the database. During this time, the master slapd will return an &quot;unwilling to perform&quot; error to clients that attempt to modify data.</P>
+<H3><A NAME="Copy the master slapd\'s database to the slave">10.4.4. Copy the master slapd's database to the slave</A></H3>
+<P>Copy the master's database(s) to the slave. For an <TERM>LDBM</TERM>-based database, you must copy all database files located in the database <TT>directory</TT> specified in <EM>slapd.conf</EM>(5).  Database files will have a different suffix depending on the underlying database package used. The current possibilities are</P>
+<TABLE CLASS="columns" BORDER ALIGN='Center'>
+<CAPTION ALIGN=top>Table 10.2: Database File Suffixes</CAPTION>
+<TR CLASS="heading">
+<TD>
+<STRONG>Suffix</STRONG>
+</TD>
+<TD>
+<STRONG>Database</STRONG>
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>dbb</TT>
+</TD>
+<TD>
+Berkeley DB B-tree backend
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>dbh</TT>
+</TD>
+<TD>
+Berkeley DB hash backend
+</TD>
+</TR>
+<TR>
+<TD>
+<TT>gdbm</TT>
+</TD>
+<TD>
+GNU DBM backend
+</TD>
+</TR>
+</TABLE>
+
+<P>In general, you should copy each file found in the database <TT> directory</TT> unless you know it is not used by <EM>slapd</EM>(8).</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>The copy process assumes homogeneous servers with identically configured OpenLDAP installations.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<H3><A NAME="Configure the master slapd for replication">10.4.5. Configure the master slapd for replication</A></H3>
+<P>To configure slapd to generate a replication logfile, you add a &quot;<TT> replica</TT>&quot; configuration option to the master slapd's config file. For example, if we wish to propagate changes to the slapd instance running on host <TT>slave.example.com</TT>:</P>
+<PRE>
+        replica host=slave.example.com:389
+                binddn=&quot;cn=Replicator,dc=example,dc=com&quot;
+                bindmethod=simple credentials=secret
+</PRE>
+<P>In this example, changes will be sent to port 389 (the standard LDAP port) on host slave.example.com. The slurpd process will bind to the slave slapd as &quot;<TT>cn=Replicator,dc=example,dc=com</TT>&quot; using simple authentication with password &quot;<TT>secret</TT>&quot;.  Note that the DN given by the <TT>binddn=</TT> directive must exist in the slave slapd's database (or be the rootdn specified in the slapd config file) in order for the bind operation to succeed.  The DN should also be listed as the <TT>updatedn</TT> for the database in the slave's slapd.conf(5).</P>
+<P><HR WIDTH="80%" ALIGN="Left">
+<STRONG>Note: </STRONG>The use of strong authentication and transport security is highly recommended.
+<HR WIDTH="80%" ALIGN="Left"></P>
+<H3><A NAME="Restart the master slapd and start the slave slapd">10.4.6. Restart the master slapd and start the slave slapd</A></H3>
+<P>Restart the master slapd process. To check that it is generating replication logs, perform a modification of any entry in the database, and check that data has been written to the log file.</P>
+<H3><A NAME="Start slurpd">10.4.7. Start slurpd</A></H3>
+<P>Start the slurpd process. Slurpd should immediately send the test modification you made to the slave slapd. Watch the slave slapd's logfile to be sure that the modification was sent.</P>
+<PRE>
+        slurpd -f &lt;masterslapdconfigfile&gt;
+</PRE>
+<H2><A NAME="Advanced slurpd Operation">10.5. Advanced slurpd Operation</A></H2>
+<H3><A NAME="Replication errors">10.5.1. Replication errors</A></H3>
+<P>When slurpd propagates a change to a slave slapd and receives an error return code, it writes the reason for the error and the replication record to a reject file. The reject file is located in the same directory as the per-replica replication logfile, and has the same name, but with the string &quot;<TT>.rej</TT>&quot; appended. For example, for a replica running on host <TT>slave.example.com</TT>, port 389, the reject file, if it exists, will be named</P>
+<PRE>
+        /usr/local/var/openldap/replog.slave.example.com:389.rej
+</PRE>
+<P>A sample rejection log entry follows:</P>
+<PRE>
+        ERROR: No such attribute
+        replica: slave.example.com:389
+        time: 809618633
+        dn: uid=bjensen,dc=example,dc=com
+        changetype: modify
+        replace: description
+        description: A dreamer...
+        -
+        replace: modifiersName
+        modifiersName: uid=bjensen,dc=example,dc=com
+        -
+        replace: modifyTimestamp
+        modifyTimestamp: 20000805073308Z
+        -
+</PRE>
+<P>Note that this is precisely the same format as the original replication log entry, but with an <TT>ERROR</TT> line prepended to the entry.</P>
+<H3><A NAME="One-shot mode and reject files">10.5.2. One-shot mode and reject files</A></H3>
+<P>It is possible to use slurpd to process a rejection log with its &quot;one-shot mode.&quot; In normal operation, slurpd watches for more replication records to be appended to the replication log file. In one-shot mode, by contrast, slurpd processes a single log file and exits. Slurpd ignores <TT>ERROR</TT> lines at the beginning of replication log entries, so it's not necessary to edit them out before feeding it the rejection log.</P>
+<P>To use one-shot mode, specify the name of the rejection log on the command line as the argument to the -r flag, and specify one-shot mode with the -o flag. For example, to process the rejection log file <TT>/usr/local/var/openldap/replog.slave.example.com:389</TT> and exit, use the command</P>
+<PRE>
+        slurpd -r /usr/tmp/replog.slave.example.com:389 -o
+</PRE>
+<P></P>
+<HR>
+<H1><A NAME="Generic configure Instructions">A. Generic configure Instructions</A></H1>
+<PRE>
+Basic Installation
+==================
+
+   These are generic installation instructions.
+
+   The `configure' shell script attempts to guess correct values for
+various system-dependent variables used during compilation.  It uses
+those values to create a `Makefile' in each directory of the package.
+It may also create one or more `.h' files containing system-dependent
+definitions.  Finally, it creates a shell script `config.status' that
+you can run in the future to recreate the current configuration, a file
+`config.cache' that saves the results of its tests to speed up
+reconfiguring, and a file `config.log' containing compiler output
+(useful mainly for debugging `configure').
+
+   If you need to do unusual things to compile the package, please try
+to figure out how `configure' could check whether to do them, and mail
+diffs or instructions to the address given in the `README' so they can
+be considered for the next release.  If at some point `config.cache'
+contains results you don't want to keep, you may remove or edit it.
+
+   The file `configure.in' is used to create `configure' by a program
+called `autoconf'.  You only need `configure.in' if you want to change
+it or regenerate `configure' using a newer version of `autoconf'.
+
+The simplest way to compile this package is:
+
+  1. `cd' to the directory containing the package's source code and type
+     `./configure' to configure the package for your system.  If you're
+     using `csh' on an old version of System V, you might need to type
+     `sh ./configure' instead to prevent `csh' from trying to execute
+     `configure' itself.
+
+     Running `configure' takes awhile.  While running, it prints some
+     messages telling which features it is checking for.
+
+  2. Type `make' to compile the package.
+
+  3. Optionally, type `make check' to run any self-tests that come with
+     the package.
+
+  4. Type `make install' to install the programs and any data files and
+     documentation.
+
+  5. You can remove the program binaries and object files from the
+     source code directory by typing `make clean'.  To also remove the
+     files that `configure' created (so you can compile the package for
+     a different kind of computer), type `make distclean'.  There is
+     also a `make maintainer-clean' target, but that is intended mainly
+     for the package's developers.  If you use it, you may have to get
+     all sorts of other programs in order to regenerate files that came
+     with the distribution.
+
+Compilers and Options
+=====================
+
+   Some systems require unusual options for compilation or linking that
+the `configure' script does not know about.  You can give `configure'
+initial values for variables by setting them in the environment.  Using
+a Bourne-compatible shell, you can do that on the command line like
+this:
+     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
+
+Or on systems that have the `env' program, you can do it like this:
+     env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
+
+Compiling For Multiple Architectures
+====================================
+
+   You can compile the package for more than one kind of computer at the
+same time, by placing the object files for each architecture in their
+own directory.  To do this, you must use a version of `make' that
+supports the `VPATH' variable, such as GNU `make'.  `cd' to the
+directory where you want the object files and executables to go and run
+the `configure' script.  `configure' automatically checks for the
+source code in the directory that `configure' is in and in `..'.
+
+   If you have to use a `make' that does not supports the `VPATH'
+variable, you have to compile the package for one architecture at a time
+in the source code directory.  After you have installed the package for
+one architecture, use `make distclean' before reconfiguring for another
+architecture.
+
+Installation Names
+==================
+
+   By default, `make install' will install the package's files in
+`/usr/local/bin', `/usr/local/man', etc.  You can specify an
+installation prefix other than `/usr/local' by giving `configure' the
+option `--prefix=PATH'.
+
+   You can specify separate installation prefixes for
+architecture-specific files and architecture-independent files.  If you
+give `configure' the option `--exec-prefix=PATH', the package will use
+PATH as the prefix for installing programs and libraries.
+Documentation and other data files will still use the regular prefix.
+
+   In addition, if you use an unusual directory layout you can give
+options like `--bindir=PATH' to specify different values for particular
+kinds of files.  Run `configure --help' for a list of the directories
+you can set and what kinds of files go in them.
+
+   If the package supports it, you can cause programs to be installed
+with an extra prefix or suffix on their names by giving `configure' the
+option `--program-prefix=PREFIX' or `--program-suffix=SUFFIX'.
+
+Optional Features
+=================
+
+   Some packages pay attention to `--enable-FEATURE' options to
+`configure', where FEATURE indicates an optional part of the package.
+They may also pay attention to `--with-PACKAGE' options, where PACKAGE
+is something like `gnu-as' or `x' (for the X Window System).  The
+`README' should mention any `--enable-' and `--with-' options that the
+package recognizes.
+
+   For packages that use the X Window System, `configure' can usually
+find the X include and library files automatically, but if it doesn't,
+you can use the `configure' options `--x-includes=DIR' and
+`--x-libraries=DIR' to specify their locations.
+
+Specifying the System Type
+==========================
+
+   There may be some features `configure' can not figure out
+automatically, but needs to determine by the type of host the package
+will run on.  Usually `configure' can figure that out, but if it prints
+a message saying it can not guess the host type, give it the
+`--host=TYPE' option.  TYPE can either be a short name for the system
+type, such as `sun4', or a canonical name with three fields:
+     CPU-COMPANY-SYSTEM
+
+See the file `config.sub' for the possible values of each field.  If
+`config.sub' isn't included in this package, then this package doesn't
+need to know the host type.
+
+   If you are building compiler tools for cross-compiling, you can also
+use the `--target=TYPE' option to select the type of system they will
+produce code for and the `--build=TYPE' option to select the type of
+system on which you are compiling the package.
+
+Sharing Defaults
+================
+
+   If you want to set default values for `configure' scripts to share,
+you can create a site shell script called `config.site' that gives
+default values for variables like `CC', `cache_file', and `prefix'.
+`configure' looks for `PREFIX/share/config.site' if it exists, then
+`PREFIX/etc/config.site' if it exists.  Or, you can set the
+`CONFIG_SITE' environment variable to the location of the site script.
+A warning: not all `configure' scripts look for a site script.
+
+Operation Controls
+==================
+
+   `configure' recognizes the following options to control how it
+operates.
+
+`--cache-file=FILE'
+     Use and save the results of the tests in FILE instead of
+     `./config.cache'.  Set FILE to `/dev/null' to disable caching, for
+     debugging `configure'.
+
+`--help'
+     Print a summary of the options to `configure', and exit.
+
+`--quiet'
+`--silent'
+`-q'
+     Do not print messages saying which checks are being made.  To
+     suppress all normal output, redirect it to `/dev/null' (any error
+     messages will still be shown).
+
+`--srcdir=DIR'
+     Look for the package's source code in directory DIR.  Usually
+     `configure' can determine that directory automatically.
+
+`--version'
+     Print the version of Autoconf used to generate the `configure'
+     script, and exit.
+
+`configure' also accepts some other, not widely useful, options.
+
+</PRE>
+<P></P>
+<HR>
+<H1><A NAME="OpenLDAP Software Copyright Notices">B. OpenLDAP Software Copyright Notices</A></H1>
+<H2><A NAME="OpenLDAP Copyright Notice">B.1. OpenLDAP Copyright Notice</A></H2>
+<P>Copyright 1998-2000 The OpenLDAP Foundation, Redwood City, California, USA All rights reserved.</P>
+<P>Redistribution and use in source and binary forms are permitted <EM>only as authorized</EM> by the OpenLDAP Public License.  A copy of this license is available at <A HREF="http://www.OpenLDAP.org/license.html">http://www.OpenLDAP.org/license.html</A> or in file <TT>LICENSE</TT> in the top-level directory of the distribution.</P>
+<P>Individual files and/or contributed packages may be copyright by other parties and their use subject to additional restrictions.</P>
+<P>This work is derived from the University of Michigan LDAP v3.3 distribution.  Information concerning this software is available at:</P>
+<UL>
+<A HREF="http://www.umich.edu/~dirsvcs/ldap/">http://www.umich.edu/~dirsvcs/ldap/</A>.</UL>
+<P>This work also contains materials derived from public sources.</P>
+<P>Additional Information about OpenLDAP can be obtained at:</P>
+<UL>
+<A HREF="http://www.OpenLDAP.org/">http://www.OpenLDAP.org/</A></UL>
+<P>or by sending e-mail to:</P>
+<UL>
+<A HREF="mailto:info@OpenLDAP.org">info@OpenLDAP.org</A></UL>
+<H2><A NAME="University of Michigan Copyright Notice">B.2. University of Michigan Copyright Notice</A></H2>
+<P>Portions Copyright 1992-1996 Regents of the University of Michigan. All rights reserved.</P>
+<P>Redistribution and use in source and binary forms are permitted provided that this notice is preserved and that due credit is given to the University of Michigan at Ann Arbor. The name of the University may not be used to endorse or promote products derived from this software without specific prior written permission. This software is provided ``as is'' without express or implied warranty.</P>
+<P></P>
+<HR>
+<H1><A NAME="The OpenLDAP Public License">C. The OpenLDAP Public License</A></H1>
+<PRE>
+The OpenLDAP Public License
+  Version 2.4, 8 December 2000
+
+Redistribution and use of this software and associated documentation
+(&quot;Software&quot;), with or without modification, are permitted provided
+that the following conditions are met:
+
+1. Redistributions of source code must retain copyright statements
+and notices.
+
+2. Redistributions in binary form must reproduce applicable copyright
+statements and notices, this list of conditions, and the following
+disclaimer in the documentation and/or other materials provided
+with the distribution.
+
+3. Redistributions must contain a verbatim copy of this document.
+
+4. The names and trademarks of the authors and copyright holders
+must not be used in advertising or otherwise to promote the sale,
+use or other dealing in this Software without specific, written
+prior permission.
+
+5. Due credit should be given to the OpenLDAP Project.
+
+6. The OpenLDAP Foundation may revise this license from time to
+time.  Each revision is distinguished by a version number.  You
+may use the Software under terms of this license revision or under
+the terms of any subsequent revision of the license.
+
+THIS SOFTWARE IS PROVIDED BY THE OPENLDAP FOUNDATION AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT
+NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL
+THE OPENLDAP FOUNDATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+OpenLDAP is a trademark of the OpenLDAP Foundation.
+
+Copyright 1999-2000 The OpenLDAP Foundation, Redwood City,
+California, USA.  All Rights Reserved.  Permission to copy and
+distributed verbatim copies of this document is granted.
+</PRE>
+</DIV>
+<DIV CLASS="footer">
+<HR>
+<DIV CLASS="navigate">
+<P ALIGN="Center"><A HREF="http://www.openldap.org/">Home</A> | <A HREF="../index.html">Catalog</A></P>
+</DIV>
+<P>
+<FONT COLOR="#808080" FACE="Arial,Verdana,Helvetica" SIZE="1"><B>
+______________<BR>
+<SMALL>&copy; Copyright 2000, <A HREF="http://www.OpenLDAP.org/foundation/">OpenLDAP Foundation</A>, <A HREF="mailto:info@OpenLDAP.org">info@OpenLDAP.org</A></SMALL></B></FONT>
+
+</DIV>
+
+</BODY>
+</HTML>
