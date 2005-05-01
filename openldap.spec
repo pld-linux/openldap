@@ -51,7 +51,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_perl:BuildRequires:	perl-devel}
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	openldap-clients
@@ -497,23 +497,8 @@ rm -rf $RPM_BUILD_ROOT
 %postun	libs	-p /sbin/ldconfig
 
 %pre servers
-if [ -n "`/usr/bin/getgid slapd`" ]; then
-	if [ "`/usr/bin/getgid slapd`" != "93" ]; then
-		echo "Error: group slapd doesn't have gid=93. Correct this before installing openldap." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 93 slapd
-fi
-if [ -n "`/bin/id -u slapd 2>/dev/null`" ]; then
-	if [ "`/bin/id -u slapd`" != "93" ]; then
-		echo "Error: user slapd doesn't have uid=93. Correct this before installing openldap." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 93 -s /bin/false -g slapd \
-		-c "OpenLDAP server" -d /var/lib/openldap-data slapd 1>&2
-fi
+%groupadd -P %{name}-servers -g 93 slapd
+%useradd -P %{name}-servers -u 93 -s /bin/false -g slapd -c "OpenLDAP server" -d /var/lib/openldap-data slapd
 
 %post servers
 /sbin/chkconfig --add ldap
