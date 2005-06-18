@@ -422,6 +422,8 @@ CPPFLAGS="-I/usr/include/ncurses"
 %if %{with sasl}
 	--with-cyrus-sasl \
 	--enable-spasswd \
+%else
+	--without-cyrus-sasl \
 %endif
 	--enable-modules \
 	--enable-phonetic \
