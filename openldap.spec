@@ -318,6 +318,10 @@ Requires:	%{name}-servers = %{version}-%{release}
 The proxy cache overlay allows caching of LDAP search requests
 (queries) in a local database.
 
+%description overlay-pcache -l pl
+Nak³adka proxy cache pozwalaj±ca buforowaæ zapytania LDAP w lokalnej
+bazie.
+
 %package libs
 Summary:	LDAP shared libraries
 Summary(pl):	Biblioteki wspó³dzielone LDAP
@@ -416,7 +420,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
-CPPFLAGS="-I%{_includedir}/ncurses"
+CPPFLAGS="-I/usr/include/ncurses"
 %configure \
 	--enable-syslog \
 	--enable-referrals \
