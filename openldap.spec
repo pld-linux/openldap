@@ -308,6 +308,16 @@ SQL backend to slapd, the OpenLDAP server.
 %description backend-sql -l pl
 Backend SQL do slapd - serwera OpenLDAP.
 
+%package overlay-pcache
+Summary:	Proxy cache overlay for OpenLDAP server
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-pcache
+The proxy cache overlay allows caching of LDAP search requests
+(queries) in a local database.
+
 %package libs
 Summary:	LDAP shared libraries
 Summary(pl):	Biblioteki wspó³dzielone LDAP
@@ -406,7 +416,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
-CPPFLAGS="-I/usr/include/ncurses"
+CPPFLAGS="-I%{_includedir}/ncurses"
 %configure \
 	--enable-syslog \
 	--enable-referrals \
@@ -439,6 +449,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-dnssrv=mod \
 	--enable-hdb=mod \
 	--enable-ldap=mod \
+	--enable-proxycache=mod \
 	--enable-ldbm=mod \
 	--with-ldbm-api=berkeley \
 	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
@@ -732,13 +743,31 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 %endif
 
+%post overlay-pcache
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+pcache.la[[:blank:]]*$/moduleload    pcache.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun overlay-pcache
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    pcache.la[[:blank:]]*$/# moduleload    pcache.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc ANNOUNCEMENT CHANGES COPYRIGHT README LICENSE
 %doc doc/{drafts,rfc}
 %dir %{_sysconfdir}/openldap
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/ldapserver
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/ldap.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldapserver
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
 %{_datadir}/openldap/ucdata
@@ -831,6 +860,11 @@ fi
 %{_mandir}/man5/slapd-sql.5*
 %endif
 
+%files overlay-pcache
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/pcache*.so*
+%{_libdir}/openldap/pcache.la
+
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so.*.*.*
@@ -838,10 +872,10 @@ fi
 %files servers
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/openldap/schema
-%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.conf
-%attr(640,root,slapd) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/slapd.access.conf
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/openldap/schema/*.schema
-%config(noreplace) %verify(not size mtime md5) /etc/sysconfig/ldap
+%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.conf
+%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.access.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(770,root,slapd) %{_var}/run/slapd
 %attr(770,root,slapd) %{_localstatedir}/openldap-data
