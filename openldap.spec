@@ -310,6 +310,7 @@ Backend SQL do slapd - serwera OpenLDAP.
 
 %package overlay-pcache
 Summary:	Proxy cache overlay for OpenLDAP server
+Summary(pl):	Nak³adka proxy cache dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,pre):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
