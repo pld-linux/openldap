@@ -2,7 +2,8 @@
 # TODO:
 # - package contribs?
 # - separate relay backend?
-# - build more overlays? would dynamic glue,syncprov make sense?
+# - complete & validate descriptions
+# - preun/post for overlays
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -19,7 +20,7 @@ Summary(ru):	Ô¬“¡⁄√Ÿ ÀÃ…≈Œ‘œ◊ LDAP
 Summary(uk):	˙“¡⁄À… ÀÃ¶§Œ‘¶◊ LDAP
 Name:		openldap
 Version:	2.3.4
-Release:	1
+Release:	1.1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -309,6 +310,89 @@ SQL backend to slapd, the OpenLDAP server.
 %description backend-sql -l pl
 Backend SQL do slapd - serwera OpenLDAP.
 
+%package overlay-accesslog
+Summary:	Accesslog overlay for OpenLDAP server
+Summary(pl):	Nak≥adka acesslog dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-accesslog
+%description overlay-accesslog -l pl
+
+%package overlay-denyop
+Summary:	Denyop overlay for OpenLDAP server
+Summary(pl):	Nak≥adka zabraniaj±ca wykonania operacji dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-denyop
+This overlay provides a quick'n'easy way to deny selected operations
+for a database whose backend implements the operations. It is intended
+to be less expensive than ACLs because its evaluation occurs before
+any backend specific operation is actually even initiated.
+
+%description overlay-denyop -l pl
+
+%package overlay-dyngroup
+Summary:	Dyngroup overlay for OpenLDAP server
+Summary(pl):	Nak≥adka dynamicznych grup dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-dyngroup
+This overlay extends the Compare operation to detect members of a
+dynamic group. It has no effect on any other operations. It must be
+configured with a pair of attributes to trigger on, e.g. attrpair
+member memberURL will cause compares on "member" to trigger a compare
+on "memberURL".
+
+%description overlay-dyngroup -l pl
+
+%package overlay-dynlist
+Summary:	Dynnamic list overlay for OpenLDAP server
+Summary(pl):	Nak≥adka dymanicznych list dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-dynlist
+The dynlist overlay allows expansion of dynamic groups and more.
+
+%description overlay-dynlist -l pl
+
+%package overlay-glue
+Summary:	Backend Glue overlay for OpenLDAP server
+Summary(pl):	Nak≥adka sklejaj±ca dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-glue
+The Backend Glue overlay can be used to glue multiple databases into a
+single namingContext.
+
+%description overlay-glue -l pl
+Nak≥adka sklejaj±ca s≥uøy do ≥±czenia wielu baz w pojedynczy pieÒ
+nazw.
+
+%package overlay-lastmod
+Summary:	Last Modification overlay for OpenLDAP server
+Summary(pl):	---
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-lastmod
+The lastmod overlay creates a service entry rooted at the suffix of
+the database it's stacked onto, which holds the DN, the modification
+type, the modifiersName and the modifyTimestamp of the last write
+operation performed on that database.
+
+%description overlay-lastmod -l pl
+
 %package overlay-pcache
 Summary:	Proxy cache overlay for OpenLDAP server
 Summary(pl):	Nak≥adka proxy cache dla serwera OpenLDAP
@@ -323,6 +407,88 @@ The proxy cache overlay allows caching of LDAP search requests
 %description overlay-pcache -l pl
 Nak≥adka proxy cache pozwalaj±ca buforowaÊ zapytania LDAP w lokalnej
 bazie.
+
+%package overlay-ppolicy
+Summary:	Password Policy overlay for OpenLDAP server
+Summary(pl):	Nak≥adka do polityki hase≥ dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-ppolicy
+The ppolicy overlay is an implementation of the most recent IETF
+Password Policy proposal for LDAP. When instantiated, it intercepts,
+decodes and applies specific password policy controls to overall use
+of a backend database, changes to user password fields, etc.
+
+%description overlay-ppolicy -l pl
+
+%package overlay-refint
+Summary:	Referential Integrity overlay for OpenLDAP server
+Summary(pl):	Nak≥adka sprawdzaj± integralno∂Ê odwo≥aÒ dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-refint
+The Referential Integrity overlay can be used to maintain the
+cohesiveness of a schema which utilizes reference attributes.
+
+%description overlay-refint -l pl
+
+%package overlay-rwm
+Summary:	Rewrite/remap overlay for OpenLDAP server
+Summary(pl):	Nak≥adka mapuj±ca dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-rwm
+The rwm overlayperforms basic DN/data rewrite and
+object-Class/attributeType mapping. Its usage is mostly intended to
+provide virtual views of existing data either remotely, in conjunction
+with the proxy backend or locally, in conjunction with the relay
+backend.
+
+%description overlay-rwm -l pl
+
+%package overlay-syncprov
+Summary:	Rewrite/remap overlay for OpenLDAP server
+Summary(pl):	Nak≥adka mapuj±ca dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-syncprov
+
+%description overlay-syncprov -l pl
+
+
+%package overlay-translucent
+Summary:	Translucent Proxy overlay for OpenLDAP server
+Summary(pl):	Nak≥adka ??? dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-translucent
+
+%description overlay-translucent -l pl
+
+%package overlay-unique
+Summary:	Uniqueness overlay for OpenLDAP server
+Summary(pl):	Nak≥adka sprawdzaj±ca unikatowo∂Ê dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,pre):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-unique
+The Attribute Uniqueness overlay can be used to enforce the uniqueness
+of some or all attributes within a subtree.
+
+%description overlay-unique -l pl
+Nak≥adka sprawdzaj±ca unikatowo∂Ê s≥uøy do wymuszania unikatowo∂ci
+atrybutÛw w poddrzewie LDAP.
 
 %package libs
 Summary:	LDAP shared libraries
@@ -454,7 +620,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-dnssrv=mod \
 	--enable-hdb=mod \
 	--enable-ldap=mod \
-	--enable-proxycache=mod \
+	--enable-overlays=mod \
 	--enable-ldbm=mod \
 	--with-ldbm-api=berkeley \
 	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
@@ -475,6 +641,8 @@ CPPFLAGS="-I/usr/include/ncurses"
 
 %{__make} depend
 %{__make}
+%{__make} -C servers/slapd/overlays glue.la
+%{__make} -C servers/slapd/overlays syncprov.la
 
 rm -f doc/rfc/rfc*
 
@@ -488,6 +656,8 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} 
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
+
+install servers/slapd/overlays/.libs/{glue,syncprov}{.la,*.so*} $RPM_BUILD_ROOT%{_libdir}/openldap
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -865,11 +1035,81 @@ fi
 %{_mandir}/man5/slapd-sql.5*
 %endif
 
+%files overlay-accesslog
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/accesslog*.so*
+%{_libdir}/openldap/accesslog.la
+%{_mandir}/man5/slapo-accesslog.5*
+
+%files overlay-denyop
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/denyop*.so*
+%{_libdir}/openldap/denyop.la
+
+%files overlay-dyngroup
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/dyngroup*.so*
+%{_libdir}/openldap/dyngroup.la
+
+%files overlay-dynlist
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/dynlist*.so*
+%{_libdir}/openldap/dynlist.la
+%{_mandir}/man5/slapo-dynlist.5*
+
+%files overlay-glue
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/glue*.so*
+%{_libdir}/openldap/glue.la
+%{_mandir}/man5/slapo-glue.5*
+
+%files overlay-lastmod
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/lastmod*.so*
+%{_libdir}/openldap/lastmod.la
+%{_mandir}/man5/slapo-lastmod.5*
+
 %files overlay-pcache
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/pcache*.so*
 %{_libdir}/openldap/pcache.la
 %{_mandir}/man5/slapo-pcache.5*
+
+%files overlay-ppolicy
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/ppolicy*.so*
+%{_libdir}/openldap/ppolicy.la
+%{_mandir}/man5/slapo-ppolicy.5*
+
+%files overlay-refint
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/refint*.so*
+%{_libdir}/openldap/refint.la
+%{_mandir}/man5/slapo-refint.5*
+
+%files overlay-rwm
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/rwm*.so*
+%{_libdir}/openldap/rwm.la
+%{_mandir}/man5/slapo-rwm.5*
+
+%files overlay-syncprov
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/syncprov*.so*
+%{_libdir}/openldap/syncprov.la
+%{_mandir}/man5/slapo-syncprov.5*
+
+%files overlay-translucent
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/translucent*.so*
+%{_libdir}/openldap/translucent.la
+%{_mandir}/man5/slapo-translucent.5*
+
+%files overlay-unique
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/unique*.so*
+%{_libdir}/openldap/unique.la
+%{_mandir}/man5/slapo-unique.5*
 
 %files libs
 %defattr(644,root,root,755)
@@ -893,8 +1133,6 @@ fi
 %{_mandir}/man5/slapd.*.5*
 %{_mandir}/man5/slapd-ldif.5*
 %{_mandir}/man5/slapd-null.5*
-%{_mandir}/man5/slapo-glue.5*
-%{_mandir}/man5/slapo-syncprov.5*
 %{_mandir}/man8/*
 
 %attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
