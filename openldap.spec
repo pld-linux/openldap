@@ -1,6 +1,8 @@
 #
 # TODO:
 # - package contribs?
+# - separate relay backend?
+# - build more overlays? would dynamic glue,syncprov make sense?
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -16,29 +18,28 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.2.27
+Version:	2.3.4
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	51c053cc0ec82ff20b453f49ce78bb89
+# Source0-md5:	6201b5c1c5e1bc3ba68c3bfeda9c8e48
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
-Patch3:		%{name}-nolibbind.patch
-Patch5:		%{name}-fast.patch
-Patch6:		%{name}-cldap.patch
-Patch7:		%{name}-ldapi_FHS.patch
-Patch8:		%{name}-ac25x.patch
-Patch9:		%{name}-install.patch
-Patch10:	%{name}-backend_libs.patch
-Patch11:	%{name}-perl.patch
-Patch12:	%{name}-pic.patch
-Patch13:	%{name}-ltinstall-mode.patch
-#Patch14:	%{name}-sendbuf.patch
+Patch3:		%{name}-fast.patch
+Patch4:		%{name}-cldap.patch
+Patch5:		%{name}-ldapi_FHS.patch
+Patch6:		%{name}-ac25x.patch
+Patch7:		%{name}-install.patch
+Patch8:		%{name}-backend_libs.patch
+Patch9:		%{name}-perl.patch
+Patch10:	%{name}-pic.patch
+Patch11:	%{name}-ltinstall-mode.patch
+#Patch12:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -407,6 +408,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
@@ -414,8 +416,6 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
-%patch12 -p1
-%patch13 -p1
 
 %build
 %{__libtoolize}
@@ -462,6 +462,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-monitor=mod \
 	--enable-null \
 	--enable-passwd=mod \
+	--enable-relay=mod \
 %if %{with perl}
 	--enable-perl=mod \
 %endif
@@ -775,7 +776,6 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ldap.conf
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
-%{_datadir}/openldap/ucdata
 %{_mandir}/man1/ldap*.1*
 %{_mandir}/man5/ldap.conf.5*
 %{_mandir}/man5/ldif.5*
@@ -869,6 +869,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/pcache*.so*
 %{_libdir}/openldap/pcache.la
+%{_mandir}/man5/slapo-pcache.5*
 
 %files libs
 %defattr(644,root,root,755)
@@ -890,5 +891,12 @@ fi
 %dir %{_libdir}/openldap/
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/slapd.*.5*
+%{_mandir}/man5/slapd-ldif.5*
 %{_mandir}/man5/slapd-null.5*
+%{_mandir}/man5/slapo-glue.5*
+%{_mandir}/man5/slapo-syncprov.5*
 %{_mandir}/man8/*
+
+%attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
+%{_libdir}/openldap/back_relay.la
+%{_mandir}/man5/slapd-relay.5*
