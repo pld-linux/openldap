@@ -101,6 +101,19 @@ openldap-client.
 %description -l uk
 úÒÁÚËÉ ËÌ¦¤ÎÔ¦×, ÝÏ ÐÏÓÔÁ×ÌÑÀÔØÓÑ Ú LDAP.
 
+%package libs
+Summary:	LDAP shared libraries
+Summary(pl):	Biblioteki wspó³dzielone LDAP
+Group:		Libraries
+%{?with_sasl:Requires:	cyrus-sasl >= 2.1.15}
+Conflicts:	openldap < 2.2.6-0.3
+
+%description libs
+LDAP shared libraries.
+
+%description libs -l pl
+Biblioteki wspó³dzielone LDAP.
+
 %package devel
 Summary:	LDAP development files
 Summary(es):	Bibliotecas de desarrollo y archivos de inclusión para OpenLDAP
@@ -312,19 +325,22 @@ Backend SQL do slapd - serwera OpenLDAP.
 
 %package overlay-accesslog
 Summary:	Accesslog overlay for OpenLDAP server
-Summary(pl):	Nak³adka acesslog dla serwera OpenLDAP
+Summary(pl):	Nak³adka accesslog dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-accesslog
+Accesslog overlay for OpenLDAP server.
+
 %description overlay-accesslog -l pl
+Nak³adka accesslog dla serwera OpenLDAP.
 
 %package overlay-denyop
 Summary:	Denyop overlay for OpenLDAP server
 Summary(pl):	Nak³adka zabraniaj±ca wykonania operacji dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-denyop
@@ -334,12 +350,16 @@ to be less expensive than ACLs because its evaluation occurs before
 any backend specific operation is actually even initiated.
 
 %description overlay-denyop -l pl
+Ta nak³adka udostêpnia szybki i ³atwy sposób na blokowanie wybranych
+operacji dla bazy danych, której backend implementuje te operacje. Ma
+byæ mniej kosztowna ni¿ ACL-e, poniewa¿ obliczenia zachodz± przed
+rozpoczêciem jakichkolwiek operacji specyficznych dla backendu.
 
 %package overlay-dyngroup
 Summary:	Dyngroup overlay for OpenLDAP server
 Summary(pl):	Nak³adka dynamicznych grup dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-dyngroup
@@ -350,24 +370,31 @@ member memberURL will cause compares on "member" to trigger a compare
 on "memberURL".
 
 %description overlay-dyngroup -l pl
+Ta nak³adka rozszerza operacjê Compare, aby wykrywa³a cz³oników grupy
+dynamicznej. Nie wp³ywa na ¿adne inne operacje. Musi byæ
+skonfigurowana par± atrybutów, które maj± j± wyzwalaæ, np. attrpair
+member memberURL spowoduje, ¿e porównania na "memberu" wyzwol±
+porównania na "memberURL".
 
 %package overlay-dynlist
 Summary:	Dynnamic list overlay for OpenLDAP server
-Summary(pl):	Nak³adka dymanicznych list dla serwera OpenLDAP
+Summary(pl):	Nak³adka dynamicznych list dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-dynlist
 The dynlist overlay allows expansion of dynamic groups and more.
 
 %description overlay-dynlist -l pl
+Nak³adka dynlist pozwala na rozwijanie dynamicznych grup i inne
+operacje.
 
 %package overlay-glue
 Summary:	Backend Glue overlay for OpenLDAP server
 Summary(pl):	Nak³adka sklejaj±ca dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-glue
@@ -380,9 +407,9 @@ nazw.
 
 %package overlay-lastmod
 Summary:	Last Modification overlay for OpenLDAP server
-Summary(pl):	---
+Summary(pl):	Nak³adka Last Modification dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-lastmod
@@ -392,12 +419,16 @@ type, the modifiersName and the modifyTimestamp of the last write
 operation performed on that database.
 
 %description overlay-lastmod -l pl
+Nak³adka lastmod tworzy wpis us³ugi zaczynaj±cy siê od przyrostka
+bazy danych, na której jest oparty, trzymaj±cy DN, rodzaj modyfikacji,
+modifiersName i modifyTimestamp dla ostatniej operacji zapisu
+wykonywanej na tej bazie.
 
 %package overlay-pcache
 Summary:	Proxy cache overlay for OpenLDAP server
 Summary(pl):	Nak³adka proxy cache dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-pcache
@@ -412,7 +443,7 @@ bazie.
 Summary:	Password Policy overlay for OpenLDAP server
 Summary(pl):	Nak³adka do polityki hase³ dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-ppolicy
@@ -422,12 +453,16 @@ decodes and applies specific password policy controls to overall use
 of a backend database, changes to user password fields, etc.
 
 %description overlay-ppolicy -l pl
+Nak³adka ppolicy jest implementacj± najnowszej propozycji IETF
+Password Policy dla LDAP. Kiedy zostanie u¿yta, przechwytuje, dekoduje
+i aplikuje okre¶lone regulacje polityki hase³ do ogólnego u¿ywania
+bazy danych, zmiany pól hase³ u¿ytkowników itp.
 
 %package overlay-refint
 Summary:	Referential Integrity overlay for OpenLDAP server
 Summary(pl):	Nak³adka sprawdzaj± integralno¶æ odwo³añ dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-refint
@@ -435,51 +470,77 @@ The Referential Integrity overlay can be used to maintain the
 cohesiveness of a schema which utilizes reference attributes.
 
 %description overlay-refint -l pl
+Nak³adka Referential Integrity mo¿e byæ u¿ywana do utrzymywania
+spójno¶ci schematu wykorzystuj±cego atrybuty referencji.
 
 %package overlay-rwm
 Summary:	Rewrite/remap overlay for OpenLDAP server
 Summary(pl):	Nak³adka mapuj±ca dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-rwm
-The rwm overlayperforms basic DN/data rewrite and
+The rwm overlay performs basic DN/data rewrite and
 object-Class/attributeType mapping. Its usage is mostly intended to
 provide virtual views of existing data either remotely, in conjunction
 with the proxy backend or locally, in conjunction with the relay
 backend.
 
 %description overlay-rwm -l pl
+Nak³adka rwm wykonuje podstawowe przepisywanie DN na dane i
+odwzorowywanie klas obiektów na attributeType. Jej zastosowania to
+przede wszystkim dostarczanie wirtualnych widoków danych istniej±cych
+albo zdalnie, w po³±czeniu z backendem proxy, albo lokalnie, w
+po³±czeniu z backendem relay.
 
 %package overlay-syncprov
-Summary:	Rewrite/remap overlay for OpenLDAP server
-Summary(pl):	Nak³adka mapuj±ca dla serwera OpenLDAP
+Summary:	Syncrepl Provider overlay for OpenLDAP server
+Summary(pl):	Nak³adka Syncrepl Provider dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-syncprov
+The Syncrepl Provider overlay implements the provider-side support for
+syncrepl replication, including persistent search functionality. The
+overlay can be used with any backend that maintains entryCSN and
+entryUUID attributes for its entries. It also creates a contextCSN
+attribute in the root entry of the database.
 
 %description overlay-syncprov -l pl
-
+Nak³adka SyncRepl Provider implementuje obs³ugê replikacji syncrepl
+po stronie dostarczyciela, w³±cznie z ci±g³o¶ci± funkcjonalno¶ci
+wyszukiwania. Nak³adka mo¿e byæ u¿ywana z dowolnym backendem
+utrzymuj±cym atrybuty entryCSN i entryUUID dla swoich wpisów. Tworzy
+tak¿e atrybut contextCSN w g³ównym elemencie bazy.
 
 %package overlay-translucent
 Summary:	Translucent Proxy overlay for OpenLDAP server
-Summary(pl):	Nak³adka ??? dla serwera OpenLDAP
+Summary(pl):	Nak³adka Translucent Proxy dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-translucent
+The Translucent Proxy overlay can be used with a backend database such
+as slapd-bdb(5) to create a "translucent proxy". Entries retrieved
+from a remote LDAP server may have some or all attributes overridden,
+or new attributes added, by entries in the local database before being
+presented to the client.
 
 %description overlay-translucent -l pl
+Nak³adka Translucent Proxy mo¿e byæ u¿ywana wraz z baz± danych tak±
+jak slapd-bdb(5) do stworzenia "przezroczystego proxy". Wpisy
+otrzymane ze zdalnego serwera LDAP mog± mieæ nadpisane niektóre lub
+wszystkie atrybuty, albo dodane nowe atrybuty poprzez wpisy w lokalnej
+bazie danych przed przekazaniem do klienta.
 
 %package overlay-unique
 Summary:	Uniqueness overlay for OpenLDAP server
 Summary(pl):	Nak³adka sprawdzaj±ca unikatowo¶æ dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-unique
@@ -489,19 +550,6 @@ of some or all attributes within a subtree.
 %description overlay-unique -l pl
 Nak³adka sprawdzaj±ca unikatowo¶æ s³u¿y do wymuszania unikatowo¶ci
 atrybutów w poddrzewie LDAP.
-
-%package libs
-Summary:	LDAP shared libraries
-Summary(pl):	Biblioteki wspó³dzielone LDAP
-Group:		Libraries
-%{?with_sasl:Requires:	cyrus-sasl >= 2.1.15}
-Conflicts:	openldap < 2.2.6-0.3
-
-%description libs
-LDAP shared libraries.
-
-%description libs -l pl
-Biblioteki wspó³dzielone LDAP.
 
 %package servers
 Summary:	LDAP servers
@@ -950,6 +998,10 @@ fi
 %{_mandir}/man5/ldap.conf.5*
 %{_mandir}/man5/ldif.5*
 
+%files libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
@@ -1110,10 +1162,6 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/unique*.so*
 %{_libdir}/openldap/unique.la
 %{_mandir}/man5/slapo-unique.5*
-
-%files libs
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
 
 %files servers
 %defattr(644,root,root,755)
