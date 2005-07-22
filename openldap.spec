@@ -1,7 +1,6 @@
 #
 # TODO:
 # - package contribs?
-# - separate relay backend?
 # - complete & validate descriptions
 # - preun/post for overlays
 #
@@ -183,7 +182,7 @@ LDAP.
 Summary:	BDB backend to OpenLDAP server
 Summary(pl):	Backend BDB do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-bdb
@@ -196,7 +195,7 @@ Backend BDB do slapd - serwera OpenLDAP.
 Summary:	DNS SRV backend to OpenLDAP server
 Summary(pl):	Backend DNS SRV do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-dnssrv
@@ -209,7 +208,7 @@ Backend DNS SRV do slapd - serwera OpenLDAP.
 Summary:	HDB (Hierarchical DB) backend to OpenLDAP server
 Summary(pl):	Backend HDB (Hierarchical DB) do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-hdb
@@ -222,7 +221,7 @@ Backend HDB (Hierarchical DB) do slapd - serwera OpenLDAP.
 Summary:	LDAP backend to OpenLDAP server
 Summary(pl):	Backend LDAP do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-ldap
@@ -235,7 +234,7 @@ Backend LDAP do slapd - serwera OpenLDAP.
 Summary:	LDBM backend to OpenLDAP server
 Summary(pl):	Backend LDBM do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-ldbm
@@ -248,7 +247,7 @@ Backend LDBM do slapd - serwera OpenLDAP.
 Summary:	Meta backend to OpenLDAP server
 Summary(pl):	Backend Meta do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-meta
@@ -261,7 +260,7 @@ Backend Meta do slapd - serwera OpenLDAP.
 Summary:	Monitor backend to OpenLDAP server
 Summary(pl):	Backend Monitor do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-monitor
@@ -274,7 +273,7 @@ Backend Meta do slapd - serwera OpenLDAP.
 Summary:	/etc/passwd backend to OpenLDAP server
 Summary(pl):	Backend /etc/passwd do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-passwd
@@ -287,7 +286,7 @@ Backend /etc/passwd do slapd - serwera OpenLDAP.
 Summary:	Perl backend to OpenLDAP server
 Summary(pl):	Backend Perl do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 Requires:	perl(DynaLoader) = %(%{__perl} -MDynaLoader -e 'print DynaLoader->VERSION')
 
@@ -297,11 +296,31 @@ Perl backend to slapd, the OpenLDAP server.
 %description backend-perl -l pl
 Backend Perl do slapd - serwera OpenLDAP.
 
+%package backend-relay
+Summary:	Relay backend to OpenLDAP server
+Summary(pl):	Backend przekazuj±cy do serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	/bin/ed
+Requires:	%{name}-overlay-rwm = %{version}-%{release}
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description backend-relay
+The primary purpose of this slapd(8) backend is to map a naming
+context defined in a database running in the same slapd(8) instance
+into a virtual naming context, with attributeType and objectClass
+manipulation, if required. It requires the rwm overlay.
+
+%description backend-relay -l pl
+G³ównym celem tego backendu slapd(8) jest odwzorowywanie kontekstów
+nazw zdefiniowanych w bazie danych dzia³aj±cej w tej samej instancji
+slapd(8) na konteksty nazw wirtualnych z modyfikowaniem attributeType
+i objectClass w razie potrzeby. Wymaga nak³adki rwm.
+
 %package backend-shell
 Summary:	Shell backend to OpenLDAP server
 Summary(pl):	Backend Shell do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-shell
@@ -314,7 +333,7 @@ Backend Shell do slapd - serwera OpenLDAP.
 Summary:	SQL backend to OpenLDAP server
 Summary(pl):	Backend SQL do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,pre):	/bin/ed
+Requires(post,preun):	/bin/ed
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-sql
@@ -929,6 +948,24 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 %endif
 
+%post backend-relay
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_relay.la[[:blank:]]*$/moduleload    back_relay.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2
+fi
+
+%preun backend-relay
+ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
+,s/^# moduleload    back_relay.la[[:blank:]]*$/# moduleload    back_relay.la/
+wq
+EOF
+if [ -f /var/lock/subsys/ldap ]; then
+	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
+
 %post backend-shell
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/moduleload    back_shell.la/
@@ -1071,6 +1108,12 @@ fi
 %{_mandir}/man5/slapd-perl.5*
 %endif
 
+%files backend-relay
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
+%{_libdir}/openldap/back_relay.la
+%{_mandir}/man5/slapd-relay.5*
+
 %files backend-shell
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/back_shell*.so*
@@ -1182,7 +1225,3 @@ fi
 %{_mandir}/man5/slapd-ldif.5*
 %{_mandir}/man5/slapd-null.5*
 %{_mandir}/man8/*
-
-%attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
-%{_libdir}/openldap/back_relay.la
-%{_mandir}/man5/slapd-relay.5*
