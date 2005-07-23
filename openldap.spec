@@ -785,7 +785,7 @@ fi
 
 %post backend-bdb
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/moduleload    back_bdb.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/moduleload	back_bdb.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -794,7 +794,7 @@ fi
 
 %preun backend-bdb
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_bdb.la[[:blank:]]*$/# moduleload    back_bdb.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/# moduleload	back_bdb.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -803,7 +803,7 @@ fi
 
 %post backend-dnssrv
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_dnssrv.la[[:blank:]]*$/moduleload    back_dnssrv.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_dnssrv.la[[:blank:]]*$/moduleload	back_dnssrv.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -812,7 +812,7 @@ fi
 
 %preun backend-dnssrv
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_dnssrv.la[[:blank:]]*$/# moduleload    back_dnssrv.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_dnssrv.la[[:blank:]]*$/# moduleload	back_dnssrv.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -821,7 +821,7 @@ fi
 
 %post backend-hdb
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_hdb.la[[:blank:]]*$/moduleload    back_hdb.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_hdb.la[[:blank:]]*$/moduleload	back_hdb.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -830,7 +830,7 @@ fi
 
 %preun backend-hdb
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_hdb.la[[:blank:]]*$/# moduleload    back_hdb.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_hdb.la[[:blank:]]*$/# moduleload	back_hdb.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -839,7 +839,7 @@ fi
 
 %post backend-ldap
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/moduleload    back_ldap.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/moduleload	back_ldap.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -848,7 +848,7 @@ fi
 
 %preun backend-ldap
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_ldap.la[[:blank:]]*$/# moduleload    back_ldap.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/# moduleload	back_ldap.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -857,7 +857,7 @@ fi
 
 %post backend-ldbm
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldbm.la[[:blank:]]*$/moduleload    back_ldbm.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_ldbm.la[[:blank:]]*$/moduleload	back_ldbm.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -866,7 +866,7 @@ fi
 
 %preun backend-ldbm
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_ldbm.la[[:blank:]]*$/# moduleload    back_ldbm.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_ldbm.la[[:blank:]]*$/# moduleload	back_ldbm.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -875,7 +875,7 @@ fi
 
 %post backend-meta
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_meta.la[[:blank:]]*$/moduleload    back_meta.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_meta.la[[:blank:]]*$/moduleload	back_meta.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -884,7 +884,7 @@ fi
 
 %preun backend-meta
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_meta.la[[:blank:]]*$/# moduleload    back_meta.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_meta.la[[:blank:]]*$/# moduleload	back_meta.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -893,7 +893,7 @@ fi
 
 %post backend-monitor
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_monitor.la[[:blank:]]*$/moduleload    back_monitor.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_monitor.la[[:blank:]]*$/moduleload	back_monitor.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -902,7 +902,7 @@ fi
 
 %preun backend-monitor
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_monitor.la[[:blank:]]*$/# moduleload    back_monitor.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_monitor.la[[:blank:]]*$/# moduleload	back_monitor.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -911,7 +911,7 @@ fi
 
 %post backend-passwd
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_passwd.la[[:blank:]]*$/moduleload    back_passwd.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_passwd.la[[:blank:]]*$/moduleload	back_passwd.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -920,18 +920,17 @@ fi
 
 %preun backend-passwd
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-
-,s/^# moduleload    back_passwd.la[[:blank:]]*$/# moduleload    back_passwd.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_passwd.la[[:blank:]]*$/# moduleload	back_passwd.la/
 wq
 EOF
-if [ -f /var/lock/subsys/ldap ]; then
+if[ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
 
 %if %{with perl}
 %post backend-perl
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/moduleload    back_perl.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/moduleload	back_perl.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -940,7 +939,7 @@ fi
 
 %preun backend-perl
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_perl.la[[:blank:]]*$/# moduleload    back_perl.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/# moduleload	back_perl.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -950,7 +949,7 @@ fi
 
 %post backend-relay
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_relay.la[[:blank:]]*$/moduleload    back_relay.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_relay.la[[:blank:]]*$/moduleload	back_relay.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -959,7 +958,7 @@ fi
 
 %preun backend-relay
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_relay.la[[:blank:]]*$/# moduleload    back_relay.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_relay.la[[:blank:]]*$/# moduleload	back_relay.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -968,7 +967,7 @@ fi
 
 %post backend-shell
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/moduleload    back_shell.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/moduleload	back_shell.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -977,7 +976,7 @@ fi
 
 %preun backend-shell
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_shell.la[[:blank:]]*$/# moduleload    back_shell.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/# moduleload	back_shell.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -987,7 +986,7 @@ fi
 %if %{with odbc}
 %post backend-sql
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/moduleload    back_sql.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/moduleload	back_sql.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -996,7 +995,7 @@ fi
 
 %preun backend-sql
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    back_sql.la[[:blank:]]*$/# moduleload    back_sql.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/# moduleload	back_sql.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -1006,7 +1005,7 @@ fi
 
 %post overlay-pcache
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^#[[:blank:]]*moduleload[[:blank:]]\\+pcache.la[[:blank:]]*$/moduleload    pcache.la/
+,s/^#[[:blank:]]*moduleload[[:blank:]]\\+pcache.la[[:blank:]]*$/moduleload	pcache.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
@@ -1015,7 +1014,7 @@ fi
 
 %preun overlay-pcache
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
-,s/^# moduleload    pcache.la[[:blank:]]*$/# moduleload    pcache.la/
+,s/^[[:blank:]]*moduleload[[:blank:]]\\+pcache.la[[:blank:]]*$/# moduleload	pcache.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
