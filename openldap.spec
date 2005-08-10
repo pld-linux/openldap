@@ -15,7 +15,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.0.27
-Release:	3
+Release:	4
 License:	Artistic
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -39,6 +39,7 @@ Patch9:		%{name}-ldapi_FHS.patch
 Patch10:	%{name}-ac25x.patch
 Patch11:	%{name}-db41.patch
 Patch12:	%{name}-secpatch.patch
+Patch13:	%{name}-CAN-2005-2069.patch
 URL:		http://www.openldap.org/
 %{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?_with_db3:BuildRequires:	db3-devel}
@@ -229,6 +230,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch10 -p1
 %patch11 -p1
 %patch12 -p0
+%patch13 -p1
 
 %build
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
