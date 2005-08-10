@@ -38,7 +38,8 @@ Patch10:	%{name}-backend_libs.patch
 Patch11:	%{name}-perl.patch
 Patch12:	%{name}-pic.patch
 Patch13:	%{name}-ltinstall-mode.patch
-#Patch14:	%{name}-sendbuf.patch
+Patch14:	%{name}-CAN-2005-2069.patch
+#Patch15:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -416,6 +417,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 
 %build
 %{__libtoolize}
