@@ -18,12 +18,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
-Version:	2.3.4
-Release:	1.1
+Version:	2.3.5
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	6201b5c1c5e1bc3ba68c3bfeda9c8e48
+# Source0-md5:	732b5ac8c638155f1f27196ac9e0b9e2
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -491,6 +491,24 @@ cohesiveness of a schema which utilizes reference attributes.
 %description overlay-refint -l pl
 Nak³adka Referential Integrity mo¿e byæ u¿ywana do utrzymywania
 spójno¶ci schematu wykorzystuj±cego atrybuty referencji.
+
+%package overlay-retcode
+Summary:	Return code overlay for OpenLDAP server
+Summary(pl):	Nak³adka obs³uguj±ca zwracane warto¶ci dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-retcode
+The retcode overlay to slapd is useful to test the behavior of clients
+when server-generated erroneous and/or unusual responses occur, e.g.
+error codes, referrals, excessive response times and so on.
+
+%description overlay-retcode -l pl
+Nak³adka retcode dla slapd jest przydatna do sprawdzania zachowania
+klientów w przypadku wyst±pienia wygenerowanych przez serwer b³êdnych
+i/lub nienormalnych odpowiedzi, np. kodów b³êdów, odniesieñ, d³ugich
+czasów odpowiedzi itp.
 
 %package overlay-rwm
 Summary:	Rewrite/remap overlay for OpenLDAP server
@@ -1181,6 +1199,12 @@ fi
 %{_libdir}/openldap/refint.la
 %{_mandir}/man5/slapo-refint.5*
 
+%files overlay-retcode
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/retcode*.so*
+%{_libdir}/openldap/retcode.la
+%{_mandir}/man5/slapo-retcode.5*
+
 %files overlay-rwm
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/rwm*.so*
@@ -1217,6 +1241,7 @@ fi
 %attr(770,root,slapd) %{_localstatedir}/openldap-data
 %attr(770,root,slapd) %{_localstatedir}/openldap-slurp
 %dir %{_datadir}/openldap/schema
+%{_datadir}/openldap/schema/*.ldif
 %{_datadir}/openldap/schema/*.schema
 %dir %{_libdir}/openldap/
 %attr(755,root,root) %{_sbindir}/*
