@@ -3,6 +3,7 @@
 # - package contribs?
 # - complete & validate descriptions
 # - preun/post for overlays
+# - update ldap.conf for current pam_ldap and co.
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -18,12 +19,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Ô¬“¡⁄√Ÿ ÀÃ…≈Œ‘œ◊ LDAP
 Summary(uk):	˙“¡⁄À… ÀÃ¶§Œ‘¶◊ LDAP
 Name:		openldap
-Version:	2.3.6
+Version:	2.3.7
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	672ec287ce61a7dba56762e95252fd28
+# Source0-md5:	36672e0cb632f8e7ff86d29e583ecabc
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -33,12 +34,11 @@ Patch2:		%{name}-config.patch
 Patch3:		%{name}-fast.patch
 Patch4:		%{name}-cldap.patch
 Patch5:		%{name}-ldapi_FHS.patch
-Patch6:		%{name}-ac25x.patch
-Patch7:		%{name}-install.patch
-Patch8:		%{name}-backend_libs.patch
-Patch9:		%{name}-perl.patch
-Patch10:	%{name}-pic.patch
-Patch11:	%{name}-ltinstall-mode.patch
+Patch6:		%{name}-install.patch
+Patch7:		%{name}-backend_libs.patch
+Patch8:		%{name}-perl.patch
+Patch9:		%{name}-pic.patch
+Patch10:	%{name}-ltinstall-mode.patch
 #Patch12:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
@@ -409,21 +409,6 @@ The dynlist overlay allows expansion of dynamic groups and more.
 Nak≥adka dynlist pozwala na rozwijanie dynamicznych grup i inne
 operacje.
 
-%package overlay-glue
-Summary:	Backend Glue overlay for OpenLDAP server
-Summary(pl):	Nak≥adka sklejaj±ca dla serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description overlay-glue
-The Backend Glue overlay can be used to glue multiple databases into a
-single namingContext.
-
-%description overlay-glue -l pl
-Nak≥adka sklejaj±ca s≥uøy do ≥±czenia wielu baz w pojedynczy pieÒ
-nazw.
-
 %package overlay-lastmod
 Summary:	Last Modification overlay for OpenLDAP server
 Summary(pl):	Nak≥adka Last Modification dla serwera OpenLDAP
@@ -588,6 +573,21 @@ of some or all attributes within a subtree.
 Nak≥adka sprawdzaj±ca unikatowo∂Ê s≥uøy do wymuszania unikatowo∂ci
 atrybutÛw w poddrzewie LDAP.
 
+%package overlay-valsort
+Summary:	Valsort overlay for OpenLDAP server
+Summary(pl):	Nak≥adka valsort dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	/bin/ed
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-valsort
+This overlay sorts the values of multi-valued attributes when
+returning them in a search response.
+
+%description overlay-valsort -l pl
+Ta nak≥adka sortuje warto∂ci wielowarto∂ciowych atrybutÛw przy
+zwracaniu ich jako odpowiedº przy wyszukiwaniu.
+
 %package servers
 Summary:	LDAP servers
 Summary(pl):	Serwery LDAP
@@ -609,6 +609,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
 Provides:	group(slapd)
 Provides:	user(slapd)
+Obsoletes:	openldap-overlay-glue
 
 %description servers
 The openldap2-server package has the slapd daemon which is responsible
@@ -666,7 +667,6 @@ Instale este pacote se vocÍ desejar executar um servidor OpenLDAP.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-%patch11 -p1
 
 %build
 %{__libtoolize}
@@ -726,7 +726,6 @@ CPPFLAGS="-I/usr/include/ncurses"
 
 %{__make} depend
 %{__make}
-%{__make} -C servers/slapd/overlays glue.la
 %{__make} -C servers/slapd/overlays syncprov.la
 
 rm -f doc/rfc/rfc*
@@ -742,7 +741,7 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} 
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 
-install servers/slapd/overlays/.libs/{glue,syncprov}{.la,*.so*} $RPM_BUILD_ROOT%{_libdir}/openldap
+install servers/slapd/overlays/.libs/syncprov{.la,*.so*} $RPM_BUILD_ROOT%{_libdir}/openldap
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -1169,12 +1168,6 @@ fi
 %{_libdir}/openldap/dynlist.la
 %{_mandir}/man5/slapo-dynlist.5*
 
-%files overlay-glue
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/glue*.so*
-%{_libdir}/openldap/glue.la
-%{_mandir}/man5/slapo-glue.5*
-
 %files overlay-lastmod
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/lastmod*.so*
@@ -1228,6 +1221,11 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/unique*.so*
 %{_libdir}/openldap/unique.la
 %{_mandir}/man5/slapo-unique.5*
+
+%files overlay-valsort
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/valsort*.so*
+%{_libdir}/openldap/valsort.la
 
 %files servers
 %defattr(644,root,root,755)
