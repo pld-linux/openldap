@@ -4,10 +4,10 @@ SLAPDNICE="+2"
 # debug level for slapd
 SLAPDSYSLOGLEVEL=""
 
-# SLAPD URL list 
+# SLAPD URL list
 SLAPDURLLIST="ldap:/// ldapi:///"
 
-# ldapi:/// socket access permisions 
+# ldapi:/// socket access permissions
 LDAPI_SOCKET_MODE=600
 LDAPI_SOCKET_OWNER=root
 LDAPI_SOCKET_GROUP=root
