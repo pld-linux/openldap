@@ -19,12 +19,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.3.7
-Release:	2
+Version:	2.3.11
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	36672e0cb632f8e7ff86d29e583ecabc
+# Source0-md5:	fbde128a8421b8d2ea587a25057a281e
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -1226,6 +1226,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/valsort*.so*
 %{_libdir}/openldap/valsort.la
+%{_mandir}/man5/slapo-valsort.5*
 
 %files servers
 %defattr(644,root,root,755)
