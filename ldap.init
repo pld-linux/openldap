@@ -2,7 +2,7 @@
 #
 # ldap		Startup script for the OpenLDAP server
 #
-# chkconfig:	345 80 10
+# chkconfig:	345 20 80
 #
 # description:	OpenLDAP is a Lightweight Directory Access Protocol server
 #
