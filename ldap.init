@@ -33,7 +33,7 @@ if is_yes "${NETWORKING}"; then
 else
 	exit 0
 fi
-			
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -65,7 +65,7 @@ case "$1" in
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
 		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
 			chown "$LDAPI_SOCKET_OWNER":"$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
-			chmod "$LDAPI_SOCKET_MODE" /var/run/ldapi 
+			chmod "$LDAPI_SOCKET_MODE" /var/run/ldapi
 		fi
 	else
 		msg_already_running "OpenLDAP"
