@@ -19,12 +19,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.3.16
+Version:	2.3.17
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	adb793bea93db1a56840e5c0c7a647f2
+# Source0-md5:	e9da8944a1902bf7b08c877b92fb7a4c
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
