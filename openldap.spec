@@ -2,7 +2,6 @@
 # TODO:
 # - package contribs?
 # - complete & validate descriptions
-# - update ldap.conf for current pam_ldap and co.
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -19,7 +18,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.3.17
-Release:	1.1
+Release:	1.2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
