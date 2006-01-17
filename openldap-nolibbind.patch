@@ -39,10 +39,10 @@
  
  if test $ac_cv_func_res_query = no ; then 
 -	echo $ac_n "checking for res_query in -lbind""... $ac_c" 1>&6
--echo "configure:10146: checking for res_query in -lbind" >&5
+-echo "configure:5452: checking for res_query in -lbind" >&5
 -ac_lib_var=`echo bind'_'res_query | sed 'y%./+-:%__p__%'`
 +	echo $ac_n "checking for res_query in -lresolv""... $ac_c" 1>&6
-+echo "configure:10248: checking for res_query in -lresolv" >&5
++echo "configure:5452: checking for res_query in -lresolv" >&5
 +ac_lib_var=`echo resolv'_'res_query | sed 'y%./+-:%__p__%'`
  if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
    echo $ac_n "(cached) $ac_c" 1>&6
@@ -51,8 +51,8 @@
 -LIBS="-lbind  $LIBS"
 +LIBS="-lresolv  $LIBS"
  cat > conftest.$ac_ext <<EOF
--#line 10154 "configure"
-+#line 10256 "configure"
+-#line 5460 "configure"
++#line 5460 "configure"
  #include "confdefs.h"
  /* Override any gcc2 internal prototype to avoid an error.  */
  /* We use char because int might match the return type of a gcc2
@@ -60,8 +60,8 @@
  res_query()
  ; return 0; }
  EOF
--if { (eval echo configure:10165: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+if { (eval echo configure:10267: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+-if { (eval echo configure:5471: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:5471: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
    rm -rf conftest*
    eval "ac_cv_lib_$ac_lib_var=yes"
  else
@@ -89,10 +89,10 @@
  
  if test $ac_cv_func_res_query = no ; then 
 -	echo $ac_n "checking for __res_query in -lbind""... $ac_c" 1>&6
--echo "configure:10197: checking for __res_query in -lbind" >&5
+-echo "configure:5503: checking for __res_query in -lbind" >&5
 -ac_lib_var=`echo bind'_'__res_query | sed 'y%./+-:%__p__%'`
 +	echo $ac_n "checking for __res_query in -lresolv""... $ac_c" 1>&6
-+echo "configure:10299: checking for __res_query in -lresolv" >&5
++echo "configure:5503: checking for __res_query in -lresolv" >&5
 +ac_lib_var=`echo resolv'_'__res_query | sed 'y%./+-:%__p__%'`
  if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
    echo $ac_n "(cached) $ac_c" 1>&6
@@ -101,8 +101,8 @@
 -LIBS="-lbind  $LIBS"
 +LIBS="-lresolv  $LIBS"
  cat > conftest.$ac_ext <<EOF
--#line 10205 "configure"
-+#line 10307 "configure"
+-#line 5511 "configure"
++#line 5511 "configure"
  #include "confdefs.h"
  /* Override any gcc2 internal prototype to avoid an error.  */
  /* We use char because int might match the return type of a gcc2
@@ -110,8 +110,8 @@
  __res_query()
  ; return 0; }
  EOF
--if { (eval echo configure:10216: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+if { (eval echo configure:10318: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+-if { (eval echo configure:5522: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:5522: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
    rm -rf conftest*
    eval "ac_cv_lib_$ac_lib_var=yes"
  else
@@ -139,10 +139,10 @@
  
  if test $ac_cv_func_res_query = no ; then 
 -	echo $ac_n "checking for res_query in -lresolv""... $ac_c" 1>&6
--echo "configure:10248: checking for res_query in -lresolv" >&5
+-echo "configure:5554: checking for res_query in -lresolv" >&5
 -ac_lib_var=`echo resolv'_'res_query | sed 'y%./+-:%__p__%'`
 +	echo $ac_n "checking for res_query in -lbind""... $ac_c" 1>&6
-+echo "configure:10146: checking for res_query in -lbind" >&5
++echo "configure:5454: checking for res_query in -lbind" >&5
 +ac_lib_var=`echo bind'_'res_query | sed 'y%./+-:%__p__%'`
  if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
    echo $ac_n "(cached) $ac_c" 1>&6
@@ -151,8 +151,8 @@
 -LIBS="-lresolv  $LIBS"
 +LIBS="-lbind  $LIBS"
  cat > conftest.$ac_ext <<EOF
--#line 10256 "configure"
-+#line 10154 "configure"
+-#line 5562 "configure"
++#line 5562 "configure"
  #include "confdefs.h"
  /* Override any gcc2 internal prototype to avoid an error.  */
  /* We use char because int might match the return type of a gcc2
@@ -160,8 +160,8 @@
  res_query()
  ; return 0; }
  EOF
--if { (eval echo configure:10267: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+if { (eval echo configure:10165: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+-if { (eval echo configure:5573: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:5573: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
    rm -rf conftest*
    eval "ac_cv_lib_$ac_lib_var=yes"
  else
@@ -189,10 +189,10 @@
  
  if test $ac_cv_func_res_query = no ; then 
 -	echo $ac_n "checking for __res_query in -lresolv""... $ac_c" 1>&6
--echo "configure:10299: checking for __res_query in -lresolv" >&5
+-echo "configure:5605: checking for __res_query in -lresolv" >&5
 -ac_lib_var=`echo resolv'_'__res_query | sed 'y%./+-:%__p__%'`
 +	echo $ac_n "checking for __res_query in -lbind""... $ac_c" 1>&6
-+echo "configure:10197: checking for __res_query in -lbind" >&5
++echo "configure:5605: checking for __res_query in -lbind" >&5
 +ac_lib_var=`echo bind'_'__res_query | sed 'y%./+-:%__p__%'`
  if eval "test \"\${ac_cv_lib_$ac_lib_var+set}\" = set"; then
    echo $ac_n "(cached) $ac_c" 1>&6
@@ -201,8 +201,8 @@
 -LIBS="-lresolv  $LIBS"
 +LIBS="-lbind  $LIBS"
  cat > conftest.$ac_ext <<EOF
--#line 10307 "configure"
-+#line 10205 "configure"
+-#line 5613 "configure"
++#line 5613 "configure"
  #include "confdefs.h"
  /* Override any gcc2 internal prototype to avoid an error.  */
  /* We use char because int might match the return type of a gcc2
@@ -210,8 +210,8 @@
  __res_query()
  ; return 0; }
  EOF
--if { (eval echo configure:10318: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+if { (eval echo configure:10216: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+-if { (eval echo configure:5624: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++if { (eval echo configure:5624: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
    rm -rf conftest*
    eval "ac_cv_lib_$ac_lib_var=yes"
  else
