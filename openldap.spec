@@ -40,6 +40,7 @@ Patch10:	%{name}-ac25x.patch
 Patch11:	%{name}-db41.patch
 Patch12:	%{name}-secpatch.patch
 Patch13:	%{name}-CAN-2005-2069.patch
+Patch14:	%{name}-nolibbind.patch
 URL:		http://www.openldap.org/
 %{!?_without_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?_with_db3:BuildRequires:	db3-devel}
@@ -231,6 +232,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch11 -p1
 %patch12 -p0
 %patch13 -p1
+%patch14 -p1
 
 %build
 CPPFLAGS="-I%{_includedir}/ncurses -I%{_includedir}/db3"
