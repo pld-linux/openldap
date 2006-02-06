@@ -1,0 +1,1 @@
+- If you don't like btree then build openldap with --define 'ldbm_api hash'
