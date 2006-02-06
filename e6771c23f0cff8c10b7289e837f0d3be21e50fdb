@@ -1,0 +1,1 @@
+- fixed %files (no need 755 for *.la)
