@@ -18,7 +18,7 @@ Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
 Version:	2.3.19
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -50,7 +50,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_perl:BuildRequires:	perl-devel}
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	openldap-clients
@@ -179,7 +179,7 @@ LDAP.
 Summary:	BDB backend to OpenLDAP server
 Summary(pl):	Backend BDB do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-bdb
@@ -192,7 +192,7 @@ Backend BDB do slapd - serwera OpenLDAP.
 Summary:	DNS SRV backend to OpenLDAP server
 Summary(pl):	Backend DNS SRV do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-dnssrv
@@ -205,7 +205,7 @@ Backend DNS SRV do slapd - serwera OpenLDAP.
 Summary:	HDB (Hierarchical DB) backend to OpenLDAP server
 Summary(pl):	Backend HDB (Hierarchical DB) do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-hdb
@@ -218,7 +218,7 @@ Backend HDB (Hierarchical DB) do slapd - serwera OpenLDAP.
 Summary:	LDAP backend to OpenLDAP server
 Summary(pl):	Backend LDAP do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-ldap
@@ -231,7 +231,7 @@ Backend LDAP do slapd - serwera OpenLDAP.
 Summary:	LDBM backend to OpenLDAP server
 Summary(pl):	Backend LDBM do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-ldbm
@@ -244,7 +244,7 @@ Backend LDBM do slapd - serwera OpenLDAP.
 Summary:	Meta backend to OpenLDAP server
 Summary(pl):	Backend Meta do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-meta
@@ -257,7 +257,7 @@ Backend Meta do slapd - serwera OpenLDAP.
 Summary:	Monitor backend to OpenLDAP server
 Summary(pl):	Backend Monitor do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-monitor
@@ -270,7 +270,7 @@ Backend Meta do slapd - serwera OpenLDAP.
 Summary:	/etc/passwd backend to OpenLDAP server
 Summary(pl):	Backend /etc/passwd do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-passwd
@@ -283,7 +283,7 @@ Backend /etc/passwd do slapd - serwera OpenLDAP.
 Summary:	Perl backend to OpenLDAP server
 Summary(pl):	Backend Perl do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 Requires:	perl(DynaLoader) = %(%{__perl} -MDynaLoader -e 'print DynaLoader->VERSION')
 
@@ -297,7 +297,7 @@ Backend Perl do slapd - serwera OpenLDAP.
 Summary:	Relay backend to OpenLDAP server
 Summary(pl):	Backend przekazuj±cy do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-overlay-rwm = %{version}-%{release}
 Requires:	%{name}-servers = %{version}-%{release}
 
@@ -317,7 +317,7 @@ i objectClass w razie potrzeby. Wymaga nak³adki rwm.
 Summary:	Shell backend to OpenLDAP server
 Summary(pl):	Backend Shell do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-shell
@@ -330,7 +330,7 @@ Backend Shell do slapd - serwera OpenLDAP.
 Summary:	SQL backend to OpenLDAP server
 Summary(pl):	Backend SQL do serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-sql
@@ -343,7 +343,7 @@ Backend SQL do slapd - serwera OpenLDAP.
 Summary:	Accesslog overlay for OpenLDAP server
 Summary(pl):	Nak³adka accesslog dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-accesslog
@@ -356,7 +356,7 @@ Nak³adka accesslog dla serwera OpenLDAP.
 Summary:	Denyop overlay for OpenLDAP server
 Summary(pl):	Nak³adka zabraniaj±ca wykonania operacji dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-denyop
@@ -375,7 +375,7 @@ rozpoczêciem jakichkolwiek operacji specyficznych dla backendu.
 Summary:	Dyngroup overlay for OpenLDAP server
 Summary(pl):	Nak³adka dynamicznych grup dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-dyngroup
@@ -396,7 +396,7 @@ porównania na "memberURL".
 Summary:	Dynnamic list overlay for OpenLDAP server
 Summary(pl):	Nak³adka dynamicznych list dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-dynlist
@@ -410,7 +410,7 @@ operacje.
 Summary:	Last Modification overlay for OpenLDAP server
 Summary(pl):	Nak³adka Last Modification dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-lastmod
@@ -429,7 +429,7 @@ wykonywanej na tej bazie.
 Summary:	Proxy cache overlay for OpenLDAP server
 Summary(pl):	Nak³adka proxy cache dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-pcache
@@ -444,7 +444,7 @@ bazie.
 Summary:	Password Policy overlay for OpenLDAP server
 Summary(pl):	Nak³adka do polityki hase³ dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-ppolicy
@@ -463,7 +463,7 @@ bazy danych, zmiany pól hase³ u¿ytkowników itp.
 Summary:	Referential Integrity overlay for OpenLDAP server
 Summary(pl):	Nak³adka sprawdzaj± integralno¶æ odwo³añ dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-refint
@@ -478,7 +478,7 @@ spójno¶ci schematu wykorzystuj±cego atrybuty referencji.
 Summary:	Return code overlay for OpenLDAP server
 Summary(pl):	Nak³adka obs³uguj±ca zwracane warto¶ci dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-retcode
@@ -496,7 +496,7 @@ czasów odpowiedzi itp.
 Summary:	Rewrite/remap overlay for OpenLDAP server
 Summary(pl):	Nak³adka mapuj±ca dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-rwm
@@ -517,7 +517,7 @@ po³±czeniu z backendem relay.
 Summary:	Syncrepl Provider overlay for OpenLDAP server
 Summary(pl):	Nak³adka Syncrepl Provider dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-syncprov
@@ -538,7 +538,7 @@ tak¿e atrybut contextCSN w g³ównym elemencie bazy.
 Summary:	Translucent Proxy overlay for OpenLDAP server
 Summary(pl):	Nak³adka Translucent Proxy dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-translucent
@@ -559,7 +559,7 @@ bazie danych przed przekazaniem do klienta.
 Summary:	Uniqueness overlay for OpenLDAP server
 Summary(pl):	Nak³adka sprawdzaj±ca unikatowo¶æ dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-unique
@@ -574,7 +574,7 @@ atrybutów w poddrzewie LDAP.
 Summary:	Valsort overlay for OpenLDAP server
 Summary(pl):	Nak³adka valsort dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post,preun):	/bin/ed
+Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-valsort
@@ -607,9 +607,11 @@ Requires:	rc-scripts
 Provides:	group(slapd)
 Provides:	user(slapd)
 Obsoletes:	openldap-overlay-glue
+# for the posttrans scriptlet, conflicts because in vserver environment rpm package is not installed.
+Conflicts:	rpm < 4.4.2-0.2
 
 %description servers
-The openldap2-server package has the slapd daemon which is responsible
+The openldap-server package has the slapd daemon which is responsible
 for handling the database and client queries.
 
 The package includes:
@@ -772,22 +774,22 @@ rm -rf $RPM_BUILD_ROOT
 
 %post servers
 /sbin/chkconfig --add ldap
-if [ -f /var/lock/subsys/ldap ]; then
-	/etc/rc.d/init.d/ldap restart >&2
-else
-	echo "Run '/etc/rc.d/init.d/ldap start' to start OpenLDAP server." >&2
-fi
 
-%triggerpostun servers -- openldap-servers < 2.1.12
-if [ "`/usr/bin/getent passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
-	/usr/sbin/usermod -d /var/lib/openldap-data slapd
-fi
+# minimizing restarts logics. we restart server:
+#
+# 1. at the end of transaction. (posttrans, feature from rpm 4.4.2)
+# 2. first install of module (post: $1 == 1)
+# 2. uninstall of module (postun: $1 == 0)
+#
+# the strict internal deps between modules and
+# server package are very important for all this to work.
+
+%posttrans servers
+%service ldap restart "OpenLDAP server"
 
 %preun servers
 if [ "$1" = "0" ] ; then
-	if [ -f /var/lock/subsys/ldap ]; then
-		/etc/rc.d/init.d/ldap stop >&2 || :
-	fi
+	%service ldap stop
 	/sbin/chkconfig --del ldap || :
 fi
 
@@ -799,15 +801,15 @@ fi
 
 %define	ldap_module_add() \
 %{__sed} -i -e 's/^#[[:blank:]]*moduleload[[:blank:]]\\+%1[[:blank:]]*$/moduleload	%1/' %{_sysconfdir}/openldap/slapd.conf \
-if [ -f /var/lock/subsys/ldap ]; then \
-	/etc/rc.d/init.d/ldap restart >&2 \
+if [ "$1" = "1" ]; then \
+	%service ldap restart "OpenLDAP server" \
 fi \
 %{nil}
 
 %define	ldap_module_remove() \
 %{__sed} -i -e 's/^[[:blank:]]*moduleload[[:blank:]]\\+%1[[:blank:]]*$/# moduleload   %1/' %{_sysconfdir}/openldap/slapd.conf \
-if [ -f /var/lock/subsys/ldap ]; then \
-	/etc/rc.d/init.d/ldap restart >&2 \
+if [ "$1" = "0" ]; then \
+	%service ldap restart "OpenLDAP server" \
 fi \
 %{nil}
 
@@ -815,212 +817,165 @@ fi \
 %ldap_module_add back_bdb.la
 
 %preun backend-bdb
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_bdb.la
-fi
+%ldap_module_remove back_bdb.la
 
 %post backend-dnssrv
 %ldap_module_add back_dnssrv.la
 
 %preun backend-dnssrv
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_dnssrv.la
-fi
+%ldap_module_remove back_dnssrv.la
 
 %post backend-hdb
 %ldap_module_add back_hdb.la
 
 %preun backend-hdb
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_hdb.la
-fi
+%ldap_module_remove back_hdb.la
 
 %post backend-ldap
 %ldap_module_add back_ldap.la
 
 %preun backend-ldap
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_ldap.la
-fi
+%ldap_module_remove back_ldap.la
 
 %post backend-ldbm
 %ldap_module_add back_ldbm.la
 
 %preun backend-ldbm
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_ldbm.la
-fi
+%ldap_module_remove back_ldbm.la
 
 %post backend-meta
 %ldap_module_add back_meta.la
 
 %preun backend-meta
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_meta.la
-fi
+%ldap_module_remove back_meta.la
 
 %post backend-monitor
 %ldap_module_add back_monitor.la
 
 %preun backend-monitor
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_monitor.la
-fi
+%ldap_module_remove back_monitor.la
 
 %post backend-passwd
 %ldap_module_add back_passwd.la
 
 %preun backend-passwd
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_passwd.la
-fi
+%ldap_module_remove back_passwd.la
 
 %if %{with perl}
 %post backend-perl
 %ldap_module_add back_perl.la
 
 %preun backend-perl
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_perl.la
-fi
+%ldap_module_remove back_perl.la
 %endif
 
 %post backend-relay
 %ldap_module_add back_relay.la
 
 %preun backend-relay
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_relay.la
-fi
+%ldap_module_remove back_relay.la
 
 %post backend-shell
 %ldap_module_add back_shell.la
 
 %preun backend-shell
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_shell.la
-fi
+%ldap_module_remove back_shell.la
 
 %if %{with odbc}
 %post backend-sql
 %ldap_module_add back_sql.la
 
 %preun backend-sql
-if [ "$1" = 0 ]; then
-	%ldap_module_remove back_sql.la
-fi
+%ldap_module_remove back_sql.la
 %endif
 
 %post overlay-pcache
 %ldap_module_add pcache.la
 
 %preun overlay-pcache
-if [ "$1" = 0 ]; then
-	%ldap_module_remove pcache.la
-fi
+%ldap_module_remove pcache.la
 
 %post overlay-accesslog
 %ldap_module_add accesslog.la
 
 %preun overlay-accesslog
-if [ "$1" = 0 ]; then
-	%ldap_module_remove accesslog.la
-fi
+%ldap_module_remove accesslog.la
 
 %post overlay-denyop
 %ldap_module_add denyop.la
 
 %preun overlay-denyop
-if [ "$1" = 0 ]; then
-	%ldap_module_remove denyop.la
-fi
+%ldap_module_remove denyop.la
 
 %post overlay-dyngroup
 %ldap_module_add dyngroup.la
 
 %preun overlay-dyngroup
-if [ "$1" = 0 ]; then
-	%ldap_module_remove dyngroup.la
-fi
+%ldap_module_remove dyngroup.la
 
 %post overlay-dynlist
 %ldap_module_add dynlist.la
 
 %preun overlay-dynlist
-if [ "$1" = 0 ]; then
-	%ldap_module_remove dynlist.la
-fi
+%ldap_module_remove dynlist.la
 
 %post overlay-lastmod
 %ldap_module_add lastmod.la
 
 %preun overlay-lastmod
-if [ "$1" = 0 ]; then
-	%ldap_module_remove lastmod.la
-fi
+%ldap_module_remove lastmod.la
 
 %post overlay-ppolicy
 %ldap_module_add ppolicy.la
 
 %preun overlay-ppolicy
-if [ "$1" = 0 ]; then
-	%ldap_module_remove ppolicy.la
-fi
+%ldap_module_remove ppolicy.la
 
 %post overlay-refint
 %ldap_module_add refint.la
 
 %preun overlay-refint
-if [ "$1" = 0 ]; then
-	%ldap_module_remove refint.la
-fi
+%ldap_module_remove refint.la
 
 %post overlay-retcode
 %ldap_module_add retcode.la
 
 %preun overlay-retcode
-if [ "$1" = 0 ]; then
-	%ldap_module_remove retcode.la
-fi
+%ldap_module_remove retcode.la
 
 %post overlay-rwm
 %ldap_module_add rwm.la
 
 %preun overlay-rwm
-if [ "$1" = 0 ]; then
-	%ldap_module_remove rwm.la
-fi
+%ldap_module_remove rwm.la
 
 %post overlay-syncprov
 %ldap_module_add syncprov.la
 
 %preun overlay-syncprov
-if [ "$1" = 0 ]; then
-	%ldap_module_remove syncprov.la
-fi
+%ldap_module_remove syncprov.la
 
 %post overlay-translucent
 %ldap_module_add translucent.la
 
 %preun overlay-translucent
-if [ "$1" = 0 ]; then
-	%ldap_module_remove translucent.la
-fi
+%ldap_module_remove translucent.la
 
 %post overlay-unique
 %ldap_module_add unique.la
 
 %preun overlay-unique
-if [ "$1" = 0 ]; then
-	%ldap_module_remove unique.la
-fi
+%ldap_module_remove unique.la
 
 %post overlay-valsort
 %ldap_module_add valsort.la
 
 %preun overlay-valsort
-if [ "$1" = 0 ]; then
-	%ldap_module_remove valsort.la
+%ldap_module_remove valsort.la
+
+%triggerpostun servers -- openldap-servers < 2.1.12
+if [ "`/usr/bin/getent passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
+	/usr/sbin/usermod -d /var/lib/openldap-data slapd
 fi
 
 %files
