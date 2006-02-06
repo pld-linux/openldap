@@ -420,8 +420,8 @@ type, the modifiersName and the modifyTimestamp of the last write
 operation performed on that database.
 
 %description overlay-lastmod -l pl
-Nak³adka lastmod tworzy wpis us³ugi zaczynaj±cy siê od przyrostka
-bazy danych, na której jest oparty, trzymaj±cy DN, rodzaj modyfikacji,
+Nak³adka lastmod tworzy wpis us³ugi zaczynaj±cy siê od przyrostka bazy
+danych, na której jest oparty, trzymaj±cy DN, rodzaj modyfikacji,
 modifiersName i modifyTimestamp dla ostatniej operacji zapisu
 wykonywanej na tej bazie.
 
@@ -528,8 +528,8 @@ entryUUID attributes for its entries. It also creates a contextCSN
 attribute in the root entry of the database.
 
 %description overlay-syncprov -l pl
-Nak³adka SyncRepl Provider implementuje obs³ugê replikacji syncrepl
-po stronie dostarczyciela, w³±cznie z ci±g³o¶ci± funkcjonalno¶ci
+Nak³adka SyncRepl Provider implementuje obs³ugê replikacji syncrepl po
+stronie dostarczyciela, w³±cznie z ci±g³o¶ci± funkcjonalno¶ci
 wyszukiwania. Nak³adka mo¿e byæ u¿ywana z dowolnym backendem
 utrzymuj±cym atrybuty entryCSN i entryUUID dla swoich wpisów. Tworzy
 tak¿e atrybut contextCSN w g³ównym elemencie bazy.
@@ -592,18 +592,18 @@ Summary(pt_BR):	Arquivos para o servidor OpenLDAP
 Summary(ru):	óÅÒ×ÅÒÁ LDAP
 Summary(uk):	óÅÒ×ÅÒÁ LDAP
 Group:		Networking/Daemons
-PreReq:		rc-scripts
+Requires(post):	/usr/sbin/usermod
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getent
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	textutils
-Requires(post):	/usr/sbin/usermod
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
+Requires:	rc-scripts
 Provides:	group(slapd)
 Provides:	user(slapd)
 Obsoletes:	openldap-overlay-glue
