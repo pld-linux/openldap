@@ -1,0 +1,6 @@
+- Upgrade to 2.1.12 (major change 2.0.x -> 2.1.x) NFY
+  Most important changes:
+  - several patches removed/commented-out
+  - backends in subpackages
+- administration guide removed (I am not sure about copyrights and the
+  documentation included in the package seems good enough)
