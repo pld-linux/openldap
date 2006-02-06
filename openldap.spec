@@ -807,12 +807,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-bdb
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_bdb.la[[:blank:]]*$/# moduleload	back_bdb.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-dnssrv
@@ -825,12 +827,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-dnssrv
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_dnssrv.la[[:blank:]]*$/# moduleload	back_dnssrv.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-hdb
@@ -843,12 +847,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-hdb
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_hdb.la[[:blank:]]*$/# moduleload	back_hdb.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-ldap
@@ -861,12 +867,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-ldap
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_ldap.la[[:blank:]]*$/# moduleload	back_ldap.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-ldbm
@@ -879,12 +887,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-ldbm
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_ldbm.la[[:blank:]]*$/# moduleload	back_ldbm.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-meta
@@ -897,12 +907,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-meta
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_meta.la[[:blank:]]*$/# moduleload	back_meta.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-monitor
@@ -915,12 +927,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-monitor
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_monitor.la[[:blank:]]*$/# moduleload	back_monitor.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-passwd
@@ -933,12 +947,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-passwd
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_passwd.la[[:blank:]]*$/# moduleload	back_passwd.la/
 wq
 EOF
 if[ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %if %{with perl}
@@ -952,12 +968,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-perl
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_perl.la[[:blank:]]*$/# moduleload	back_perl.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 %endif
 
@@ -971,12 +989,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-relay
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_relay.la[[:blank:]]*$/# moduleload	back_relay.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post backend-shell
@@ -989,12 +1009,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-shell
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_shell.la[[:blank:]]*$/# moduleload	back_shell.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %if %{with odbc}
@@ -1008,12 +1030,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun backend-sql
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+back_sql.la[[:blank:]]*$/# moduleload	back_sql.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 %endif
 
@@ -1027,12 +1051,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-pcache
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+pcache.la[[:blank:]]*$/# moduleload	pcache.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-accesslog
@@ -1045,12 +1071,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-accesslog
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+accesslog.la[[:blank:]]*$/# moduleload	accesslog.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-denyop
@@ -1063,12 +1091,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-denyop
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+denyop.la[[:blank:]]*$/# moduleload	denyop.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-dyngroup
@@ -1081,12 +1111,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-dyngroup
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+dyngroup.la[[:blank:]]*$/# moduleload	dyngroup.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-dynlist
@@ -1099,12 +1131,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-dynlist
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+dynlist.la[[:blank:]]*$/# moduleload	dynlist.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-lastmod
@@ -1117,12 +1151,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-lastmod
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+lastmod.la[[:blank:]]*$/# moduleload	lastmod.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-ppolicy
@@ -1135,12 +1171,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-ppolicy
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+ppolicy.la[[:blank:]]*$/# moduleload	ppolicy.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-refint
@@ -1153,6 +1191,7 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-refint
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+refint.la[[:blank:]]*$/# moduleload	refint.la/
 wq
@@ -1160,8 +1199,10 @@ EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
 fi
+fi
 
 %post overlay-retcode
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^#[[:blank:]]*moduleload[[:blank:]]\\+retcode.la[[:blank:]]*$/moduleload	retcode.la/
 wq
@@ -1169,14 +1210,17 @@ EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2
 fi
+fi
 
 %preun overlay-retcode
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+retcode.la[[:blank:]]*$/# moduleload	retcode.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-rwm
@@ -1189,12 +1233,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-rwm
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+rwm.la[[:blank:]]*$/# moduleload	rwm.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-syncprov
@@ -1207,12 +1253,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-syncprov
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+syncprov.la[[:blank:]]*$/# moduleload	syncprov.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-translucent
@@ -1225,12 +1273,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-translucent
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+translucent.la[[:blank:]]*$/# moduleload	translucent.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-unique
@@ -1243,12 +1293,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-unique
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+unique.la[[:blank:]]*$/# moduleload	unique.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %post overlay-valsort
@@ -1261,12 +1313,14 @@ if [ -f /var/lock/subsys/ldap ]; then
 fi
 
 %preun overlay-valsort
+if [ "$1" = 0 ]; then
 ed -s %{_sysconfdir}/openldap/slapd.conf << EOF || :
 ,s/^[[:blank:]]*moduleload[[:blank:]]\\+valsort.la[[:blank:]]*$/# moduleload	valsort.la/
 wq
 EOF
 if [ -f /var/lock/subsys/ldap ]; then
 	/etc/rc.d/init.d/ldap restart >&2 || :
+fi
 fi
 
 %files
