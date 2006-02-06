@@ -807,8 +807,8 @@ fi \
 %{nil}
 
 %define	ldap_module_remove() \
-%{__sed} -i -e 's/^[[:blank:]]*moduleload[[:blank:]]\\+%1[[:blank:]]*$/# moduleload   %1/' %{_sysconfdir}/openldap/slapd.conf \
 if [ "$1" = "0" ]; then \
+	%{__sed} -i -e 's/^[[:blank:]]*moduleload[[:blank:]]\\+%1[[:blank:]]*$/# moduleload	%1/' %{_sysconfdir}/openldap/slapd.conf \
 	%service ldap restart "OpenLDAP server" \
 fi \
 %{nil}
