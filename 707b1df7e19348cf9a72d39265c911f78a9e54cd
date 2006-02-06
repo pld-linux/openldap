@@ -1,0 +1,3 @@
+- added db41 patch with db 4.1 compatibility fix (shouldn't break db3)
+- fixed %pre servers, added %postun servers; more specific Requires()
+- release 2
