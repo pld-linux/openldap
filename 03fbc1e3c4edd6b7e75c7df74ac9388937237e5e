@@ -1,0 +1,6 @@
+- For devel subpackage:
+  Requires:       cyrus-sasl-devel
+  Requires:       pam-devel
+  Requires:       db-devel
+  Requires:       openssl-devel
+  (see libldap.la)
