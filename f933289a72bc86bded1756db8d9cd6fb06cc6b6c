@@ -1,0 +1,1 @@
+- dirty fix for MD5 {CRYPT} passwords problems (%{name}-crypt_lib_order.patch)
