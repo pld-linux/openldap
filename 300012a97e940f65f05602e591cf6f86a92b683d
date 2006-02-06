@@ -1,0 +1,3 @@
+- Version 2.0.25
+- ldapi_FHS patch fixed
+- new %doc compression
