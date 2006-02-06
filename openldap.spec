@@ -798,16 +798,18 @@ if [ "$1" = "0" ]; then
 fi
 
 %define	ldap_module_add() \
-%{__sed} -i -e 's/^#[[:blank:]]*moduleload[[:blank:]]\+%1[[:blank:]]*$/moduleload	%1/' %{_sysconfdir}/openldap/slapd.conf \
+%{__sed} -i -e 's/^#[[:blank:]]*moduleload[[:blank:]]\\+%1[[:blank:]]*$/moduleload	%1/' %{_sysconfdir}/openldap/slapd.conf \
 if [ -f /var/lock/subsys/ldap ]; then \
 	/etc/rc.d/init.d/ldap restart >&2 \
-fi
+fi \
+%{nil}
 
 %define	ldap_module_remove() \
-%{__sed} -i -e 's/^[[:blank:]]*moduleload[[:blank:]]\+%1[[:blank:]]*$/# moduleload   %1/' %{_sysconfdir}/openldap/slapd.conf \
+%{__sed} -i -e 's/^[[:blank:]]*moduleload[[:blank:]]\\+%1[[:blank:]]*$/# moduleload   %1/' %{_sysconfdir}/openldap/slapd.conf \
 if [ -f /var/lock/subsys/ldap ]; then \
 	/etc/rc.d/init.d/ldap restart >&2 \
-fi
+fi \
+%{nil}
 
 %post backend-bdb
 %ldap_module_add back_bdb.la
@@ -901,7 +903,7 @@ fi
 
 %if %{with odbc}
 %post backend-sql
-%ldap_module_add back_sql.la/
+%ldap_module_add back_sql.la
 
 %preun backend-sql
 if [ "$1" = 0 ]; then
