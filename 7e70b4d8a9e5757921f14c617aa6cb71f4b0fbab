@@ -1,0 +1,4 @@
+- updated to 2.0.13,
+- added no_nsl patch (remove checking for libnsl if enabled use libwrap),
+- added regenerate ac/am files.
+  NOTE: somewhere in ac suit is bug which causes fail on run configure script.
