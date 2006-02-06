@@ -1,0 +1,8 @@
+- updated to 1.2.6,
+- added migrations tools (%{_datadir}/openldap/migration) which allow move
+  some databases lik passwod, shadow and other to LDAP database,
+- much beter fix for linked man pages (ldap-make_man_link.patch),
+- added usung %configure macro,
+- fixed sysconfigdir (in binaries; perious version have /etc/ldap/ldap),
+- added --enable-passwd and --enable-shell to ./configure parameters,
+- more %description for main.
