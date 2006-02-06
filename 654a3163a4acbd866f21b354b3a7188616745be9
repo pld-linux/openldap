@@ -1,0 +1,2 @@
+- s/%Install/%install/
+  It looks like rpm doesn't care about case, but ./builder does.
