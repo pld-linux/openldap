@@ -1,4 +1,3 @@
-#
 # TODO:
 # - package contribs?
 # - complete & validate descriptions
@@ -18,7 +17,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.3.20
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -749,7 +748,7 @@ install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
-rm -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.default,ldap.conf}
+rm -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.{default,example},ldap.conf,schema/README}
 
 # Standard schemas should not be changed by users
 mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema
