@@ -17,7 +17,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.3.20
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -37,6 +37,9 @@ Patch8:		%{name}-perl.patch
 Patch9:		%{name}-pic.patch
 Patch10:	%{name}-ltinstall-mode.patch
 Patch11:	%{name}-whowhere.patch
+Patch12:	%{name}-ldaprc.patch
+Patch13:	%{name}-setugid.patch
+Patch14:	%{name}-nosql.patch
 #Patch12:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
@@ -667,6 +670,9 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
 
 %build
 %{__libtoolize}
@@ -724,7 +730,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-slurpd \
 	--enable-dynamic
 
-%{__make} depend
+%{__make} -j1 depend
 %{__make}
 %{__make} -C servers/slapd/overlays syncprov.la
 
