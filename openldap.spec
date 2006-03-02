@@ -714,7 +714,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-overlays=mod \
 	--enable-ldbm=mod \
 	--with-ldbm-api=berkeley \
-	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
+	--enable-ldbm-type%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
 	--enable-meta=mod \
 	--enable-monitor=mod \
 	--enable-null \
