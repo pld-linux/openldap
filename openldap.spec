@@ -868,13 +868,11 @@ fi \
 %preun backend-passwd
 %ldap_module_remove back_passwd.la
 
-%if %{with perl}
 %post backend-perl
 %ldap_module_add back_perl.la
 
 %preun backend-perl
 %ldap_module_remove back_perl.la
-%endif
 
 %post backend-relay
 %ldap_module_add back_relay.la
@@ -888,13 +886,11 @@ fi \
 %preun backend-shell
 %ldap_module_remove back_shell.la
 
-%if %{with odbc}
 %post backend-sql
 %ldap_module_add back_sql.la
 
 %preun backend-sql
 %ldap_module_remove back_sql.la
-%endif
 
 %post overlay-pcache
 %ldap_module_add pcache.la
