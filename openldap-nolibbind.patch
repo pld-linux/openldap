@@ -1,0 +1,35 @@
+--- openldap-2.1.12/configure.in.orig	Thu Jan  9 08:01:18 2003
++++ openldap-2.1.12/configure.in	Thu Jan  9 08:13:29 2003
+@@ -960,23 +960,23 @@
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(bind, res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_bind_res_query
++	AC_CHECK_LIB(resolv, res_query)
++	ac_cv_func_res_query=$ac_cv_lib_resolv_res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(bind, __res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_bind___res_query
++	AC_CHECK_LIB(resolv, __res_query)
++	ac_cv_func_res_query=$ac_cv_lib_resolv___res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(resolv, res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_resolv_res_query
++	AC_CHECK_LIB(bind, res_query)
++	ac_cv_func_res_query=$ac_cv_lib_bind_res_query
+ fi
+ 
+ if test $ac_cv_func_res_query = no ; then 
+-	AC_CHECK_LIB(resolv, __res_query)
+-	ac_cv_func_res_query=$ac_cv_lib_resolv___res_query
++	AC_CHECK_LIB(bind, __res_query)
++	ac_cv_func_res_query=$ac_cv_lib_bind___res_query
+ fi
+ 
+ if test "$ac_cv_func_res_query" = yes ; then
+
