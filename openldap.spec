@@ -16,12 +16,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
-Version:	2.3.20
-Release:	4
+Version:	2.3.21
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	49d2c5b9378a7b57e1fb03948acb8e32
+# Source0-md5:	37ef142fc05abd088a4bb2d30dc4c679
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -354,6 +354,25 @@ Accesslog overlay for OpenLDAP server.
 
 %description overlay-accesslog -l pl
 Nak³adka accesslog dla serwera OpenLDAP.
+
+%package overlay-auditlog
+Summary:	Auditlog overlay for OpenLDAP server
+Summary(pl):	Nak³adka auditog dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-auditlog
+The Audit Logging overlay can be used to record all changes on a given
+backend database to a specified log file. Changes are logged as
+standard LDIF, with an additional comment header giving the timestamp
+of the change and the identity of the user making the change.
+
+%description overlay-auditlog -l pl
+Nak³adka Audit Logging mo¿e byæ u¿ywana do zapisywania wszystkich
+zmian w danej bazie danych do podanego pliki loga. Zmiany s± logowane
+jako standardowy LDIF z dodatkowym nag³ówkiem komentarza podaj±cym
+czas zmiany i identyfikuj±cym u¿ytkownika, który dokona³ zmiany.
 
 %package overlay-denyop
 Summary:	Denyop overlay for OpenLDAP server
@@ -904,6 +923,12 @@ fi \
 %preun overlay-accesslog
 %ldap_module_remove accesslog.la
 
+%post overlay-auditlog
+%ldap_module_add auditlog.la
+
+%preun overlay-auditlog
+%ldap_module_remove auditlog.la
+
 %post overlay-denyop
 %ldap_module_add denyop.la
 
@@ -1094,6 +1119,12 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/accesslog*.so*
 %{_libdir}/openldap/accesslog.la
 %{_mandir}/man5/slapo-accesslog.5*
+
+%files overlay-auditlog
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/auditlog*.so*
+%{_libdir}/openldap/auditlog.la
+%{_mandir}/man5/slapo-auditlog.5*
 
 %files overlay-denyop
 %defattr(644,root,root,755)
