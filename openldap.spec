@@ -54,6 +54,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_perl:BuildRequires:	perl-devel}
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	uname(release) >= 2.6
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	openldap-clients
@@ -626,9 +627,12 @@ Requires(pre):	/usr/sbin/useradd
 Requires(pre):	textutils
 Requires:	%{name} = %{version}-%{release}
 Requires:	rc-scripts
+Requires:	uname(release) >= 2.6
 Provides:	group(slapd)
 Provides:	user(slapd)
 Obsoletes:	openldap-overlay-glue
+Conflicts:	kernel24
+Conflicts:	kernel24-smp
 # for the posttrans scriptlet, conflicts because in vserver environment rpm package is not installed.
 Conflicts:	rpm < 4.4.2-0.2
 
