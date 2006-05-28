@@ -17,7 +17,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.3.23
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -699,7 +699,7 @@ Instale este pacote se vocЙ desejar executar um servidor OpenLDAP.
 %{__autoconf}
 CPPFLAGS="-I/usr/include/ncurses"
 %configure \
-	ac_cv_header_sys_epoll_h \
+	ac_cv_header_sys_epoll_h=no \
 	--enable-syslog \
 	--enable-referrals \
 	--enable-ipv6 \
