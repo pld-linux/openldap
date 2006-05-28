@@ -16,12 +16,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	ïÂÒÁÚÃÙ ËÌÉÅÎÔÏ× LDAP
 Summary(uk):	úÒÁÚËÉ ËÌ¦¤ÎÔ¦× LDAP
 Name:		openldap
-Version:	2.3.20
+Version:	2.3.23
 Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	49d2c5b9378a7b57e1fb03948acb8e32
+# Source0-md5:	46b5a2f92c798d542f7bb545f118b04a
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -37,6 +37,9 @@ Patch8:		%{name}-perl.patch
 Patch9:		%{name}-pic.patch
 Patch10:	%{name}-ltinstall-mode.patch
 Patch11:	%{name}-whowhere.patch
+Patch12:	%{name}-ldaprc.patch
+Patch13:	%{name}-setugid.patch
+Patch14:	%{name}-nosql.patch
 #Patch12:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
@@ -351,6 +354,25 @@ Accesslog overlay for OpenLDAP server.
 
 %description overlay-accesslog -l pl
 Nak³adka accesslog dla serwera OpenLDAP.
+
+%package overlay-auditlog
+Summary:	Auditlog overlay for OpenLDAP server
+Summary(pl):	Nak³adka auditog dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-auditlog
+The Audit Logging overlay can be used to record all changes on a given
+backend database to a specified log file. Changes are logged as
+standard LDIF, with an additional comment header giving the timestamp
+of the change and the identity of the user making the change.
+
+%description overlay-auditlog -l pl
+Nak³adka Audit Logging mo¿e byæ u¿ywana do zapisywania wszystkich
+zmian w danej bazie danych do podanego pliki loga. Zmiany s± logowane
+jako standardowy LDIF z dodatkowym nag³ówkiem komentarza podaj±cym
+czas zmiany i identyfikuj±cym u¿ytkownika, który dokona³ zmiany.
 
 %package overlay-denyop
 Summary:	Denyop overlay for OpenLDAP server
@@ -667,6 +689,9 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
 
 %build
 %{__libtoolize}
@@ -674,6 +699,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %{__autoconf}
 CPPFLAGS="-I/usr/include/ncurses"
 %configure \
+	ac_cv_header_sys_epoll_h=no \
 	--enable-syslog \
 	--enable-referrals \
 	--enable-ipv6 \
@@ -708,7 +734,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-overlays=mod \
 	--enable-ldbm=mod \
 	--with-ldbm-api=berkeley \
-	--with-ldbm-type=%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
+	--enable-ldbm-type%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
 	--enable-meta=mod \
 	--enable-monitor=mod \
 	--enable-null \
@@ -724,7 +750,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-slurpd \
 	--enable-dynamic
 
-%{__make} depend
+%{__make} -j1 depend
 %{__make}
 %{__make} -C servers/slapd/overlays syncprov.la
 
@@ -862,13 +888,11 @@ fi \
 %preun backend-passwd
 %ldap_module_remove back_passwd.la
 
-%if %{with perl}
 %post backend-perl
 %ldap_module_add back_perl.la
 
 %preun backend-perl
 %ldap_module_remove back_perl.la
-%endif
 
 %post backend-relay
 %ldap_module_add back_relay.la
@@ -882,13 +906,11 @@ fi \
 %preun backend-shell
 %ldap_module_remove back_shell.la
 
-%if %{with odbc}
 %post backend-sql
 %ldap_module_add back_sql.la
 
 %preun backend-sql
 %ldap_module_remove back_sql.la
-%endif
 
 %post overlay-pcache
 %ldap_module_add pcache.la
@@ -901,6 +923,12 @@ fi \
 
 %preun overlay-accesslog
 %ldap_module_remove accesslog.la
+
+%post overlay-auditlog
+%ldap_module_add auditlog.la
+
+%preun overlay-auditlog
+%ldap_module_remove auditlog.la
 
 %post overlay-denyop
 %ldap_module_add denyop.la
@@ -1092,6 +1120,12 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/accesslog*.so*
 %{_libdir}/openldap/accesslog.la
 %{_mandir}/man5/slapo-accesslog.5*
+
+%files overlay-auditlog
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/auditlog*.so*
+%{_libdir}/openldap/auditlog.la
+%{_mandir}/man5/slapo-auditlog.5*
 
 %files overlay-denyop
 %defattr(644,root,root,755)
