@@ -43,6 +43,8 @@ Patch14:	%{name}-nosql.patch
 #Patch12:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
+BuildRequires:	broken:http://www.openldap.org/lists/openldap-software/200605/msg00294.html
+BuildRequires:	http://www.openldap.org/its/index.cgi/Software Bugs?id=4503
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
 BuildRequires:	db-devel >= 4.2
