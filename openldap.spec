@@ -16,12 +16,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.3.23
+Version:	2.3.24
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	46b5a2f92c798d542f7bb545f118b04a
+# Source0-md5:	3e58de30abc959ec88730123cecdb6d1
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -43,8 +43,6 @@ Patch14:	%{name}-nosql.patch
 #Patch12:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
-BuildRequires:	broken:http://www.openldap.org/lists/openldap-software/200605/msg00294.html
-BuildRequires:	http://www.openldap.org/its/index.cgi/Software Bugs?id=4503
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
 BuildRequires:	db-devel >= 4.2
