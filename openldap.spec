@@ -1,6 +1,8 @@
 # TODO:
 # - package contribs?
 # - complete & validate descriptions
+#   /usr/share/man/man5/slapd-tcl.5.gz
+#   /usr/share/man/man5/slapo-chain.5.gz
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -16,12 +18,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.3.23
-Release:	2
+Version:	2.3.24
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	46b5a2f92c798d542f7bb545f118b04a
+# Source0-md5:	3e58de30abc959ec88730123cecdb6d1
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
