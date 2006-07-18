@@ -1,6 +1,6 @@
---- openldap-2.2.6/servers/slapd/slapd.conf.orig	2003-12-29 19:10:40.000000000 +0100
-+++ openldap-2.2.6/servers/slapd/slapd.conf	2004-02-28 15:42:39.692604592 +0100
-@@ -2,24 +2,39 @@
+--- openldap-2.2.6/servers/slapd/slapd.conf	2004-02-28 15:42:39.692604592 +0100
++++ openldap-2.3.24/servers/slapd/slapd.conf	2006-07-18 14:25:02.356103035 +0300
+@@ -2,24 +2,55 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
  #
@@ -39,20 +39,32 @@
 +# moduleload	back_monitor.la
  # moduleload	back_passwd.la
 +# moduleload	back_perl.la
++# moduleload	back_relay.la
  # moduleload	back_shell.la
 +# moduleload	back_sql.la
++# moduleload	accesslog.la
++# moduleload	auditlog.la
++# moduleload	denyop.la
++# moduleload	dyngroup.la
++# moduleload	dynlist.la
++# moduleload	lastmod.la
++# moduleload	pcache.la
++# moduleload	ppolicy.la
++# moduleload	refint.la
++# moduleload	retcode.la
++# moduleload	rwm.la
++# moduleload	syncprov.la
++# moduleload	translucent.la
++# moduleload	unique.la
++# moduleload	valsort.la
  
  # Sample security restrictions
  #	Require integrity protection (prevent hijacking)
-@@ -51,17 +66,26 @@
- #######################################################################
- # ldbm database definitions
- #######################################################################
--
--database	bdb
+@@ -54,14 +85,23 @@
 +# A NULL database configuration follows. It is enough to run slapd, but it does
 +# nothing. You need to install one of the backends and configure a real database 
-+
+ 
+-database	bdb
 +database	null
  suffix		"dc=my-domain,dc=com"
  rootdn		"cn=Manager,dc=my-domain,dc=com"
