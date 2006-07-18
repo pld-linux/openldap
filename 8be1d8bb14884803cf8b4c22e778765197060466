@@ -1,0 +1,3 @@
+- update from HEAD:
+  - updated to 2.3.24
+  - according to CHANGES slapd-ldif assert problem has been fixed (ITS#4568)
