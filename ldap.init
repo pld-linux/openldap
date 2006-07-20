@@ -74,7 +74,7 @@ case "$1" in
   stop)
 	if [ -f /var/lock/subsys/ldap ]; then
 		msg_stopping "OpenLDAP"
-		killproc --waitforname slapd --waitfortime 300 slapd -TERM
+		killproc slapd
 		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
 			msg_stopping "OpenLDAP Update Replication Daemon"
 			killproc slurpd
