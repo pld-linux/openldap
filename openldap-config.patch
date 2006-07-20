@@ -1,0 +1,99 @@
+--- openldap-2.2.6/servers/slapd/slapd.conf	2004-02-28 15:42:39.692604592 +0100
++++ openldap-2.3.24/servers/slapd/slapd.conf	2006-07-18 14:25:02.356103035 +0300
+@@ -2,24 +2,55 @@
+ # See slapd.conf(5) for details on configuration options.
+ # This file should NOT be world readable.
+ #
+-include		%SYSCONFDIR%/schema/core.schema
++include		/usr/share/openldap/schema/core.schema
++#include	/usr/share/openldap/schema/cosine.schema
++#include	/usr/share/openldap/schema/inetorgperson.schema
++#include	/usr/share/openldap/schema/java.schema
++#include	/usr/share/openldap/schema/misc.schema
++#include	/usr/share/openldap/schema/nis.schema
++#include	/usr/share/openldap/schema/corba.schema
++#include	/usr/share/openldap/schema/openldap.schema
++include		%SYSCONFDIR%/schema/local.schema
+ 
+ # Define global ACLs to disable default read access.
++include 	%SYSCONFDIR%/slapd.access.conf
+ 
+ # Do not enable referrals until AFTER you have a working directory
+ # service AND an understanding of referrals.
+ #referral	ldap://root.openldap.org
+ 
+-pidfile		%LOCALSTATEDIR%/run/slapd.pid
+-argsfile	%LOCALSTATEDIR%/run/slapd.args
++pidfile		/var/run/slapd/slapd.pid
++argsfile	/var/run/slapd/slapd.args
+ 
+ # Load dynamic backend modules:
+-# modulepath	%MODULEDIR%
++modulepath	%MODULEDIR%
+ # moduleload	back_bdb.la
++# moduleload	back_dnssrv.la
++# moduleload	back_hdb.la
+ # moduleload	back_ldap.la
+ # moduleload	back_ldbm.la
++# moduleload	back_meta.la
++# moduleload	back_monitor.la
+ # moduleload	back_passwd.la
++# moduleload	back_perl.la
++# moduleload	back_relay.la
+ # moduleload	back_shell.la
++# moduleload	back_sql.la
++# moduleload	accesslog.la
++# moduleload	auditlog.la
++# moduleload	denyop.la
++# moduleload	dyngroup.la
++# moduleload	dynlist.la
++# moduleload	lastmod.la
++# moduleload	pcache.la
++# moduleload	ppolicy.la
++# moduleload	refint.la
++# moduleload	retcode.la
++# moduleload	rwm.la
++# moduleload	syncprov.la
++# moduleload	translucent.la
++# moduleload	unique.la
++# moduleload	valsort.la
+ 
+ # Sample security restrictions
+ #	Require integrity protection (prevent hijacking)
+@@ -54,14 +85,23 @@
++# A NULL database configuration follows. It is enough to run slapd, but it does
++# nothing. You need to install one of the backends and configure a real database 
+ 
+-database	bdb
++database	null
+ suffix		"dc=my-domain,dc=com"
+ rootdn		"cn=Manager,dc=my-domain,dc=com"
+ # Cleartext passwords, especially for the rootdn, should
+ # be avoid.  See slappasswd(8) and slapd.conf(5) for details.
+ # Use of strong authentication encouraged.
+-rootpw		secret
++#rootpw		secret
+ # The database directory MUST exist prior to running slapd AND 
+ # should only be accessible by the slapd and slap tools.
+ # Mode 700 recommended.
+ directory	%LOCALSTATEDIR%/openldap-data
+ # Indices to maintain
+ index	objectClass	eq
++
++#database	bdb
++#suffix		"dc=my-domain,dc=com"
++#rootdn		"cn=Manager,dc=my-domain,dc=com"
++##rootpw		secret
++#directory	%LOCALSTATEDIR%/openldap-data
++#index	objectClass	eq
+--- openldap-2.2.6/build/top.mk.orig	2004-01-01 19:16:25.000000000 +0100
++++ openldap-2.2.6/build/top.mk	2004-02-28 15:43:38.579652400 +0100
+@@ -37,7 +37,7 @@
+ libexecdir = @libexecdir@
+ localstatedir = @localstatedir@
+ mandir = @mandir@
+-moduledir = @libexecdir@$(ldap_subdir)
++moduledir = @libdir@$(ldap_subdir)
+ sbindir = @sbindir@
+ sharedstatedir = @sharedstatedir@
+ sysconfdir = @sysconfdir@$(ldap_subdir)
