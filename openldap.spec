@@ -19,7 +19,7 @@ Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
 Version:	2.3.24
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -627,6 +627,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	textutils
 Requires:	%{name} = %{version}-%{release}
+Requires:	/sbin/chkconfig
 Requires:	rc-scripts
 Provides:	group(slapd)
 Provides:	user(slapd)
