@@ -18,12 +18,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.3.24
-Release:	3
+Version:	2.3.27
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	3e58de30abc959ec88730123cecdb6d1
+# Source0-md5:	0fbae4e9279aaa586adcd9f19b66a5ed
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -736,7 +736,7 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-ldap=mod \
 	--enable-overlays=mod \
 	--enable-ldbm=mod \
-	--with-ldbm-api=berkeley \
+	--enable-ldbm-api=berkeley \
 	--enable-ldbm-type%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
 	--enable-meta=mod \
 	--enable-monitor=mod \
