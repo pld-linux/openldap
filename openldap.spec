@@ -1026,18 +1026,29 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%attr(755,root,root) %{_libdir}/liblber-2.3.so.*.*.*
+%attr(755,root,root) %{_libdir}/libldap-2.3.so.*.*.*
+%attr(755,root,root) %{_libdir}/libldap_r-2.3.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblber-2.3.so.0
+%attr(755,root,root) %ghost %{_libdir}/libldap-2.3.so.0
+%attr(755,root,root) %ghost %{_libdir}/libldap_r-2.3.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
-%{_includedir}/*
+%attr(755,root,root) %{_libdir}/liblber.so
+%attr(755,root,root) %{_libdir}/libldap.so
+%attr(755,root,root) %{_libdir}/libldap_r.so
+%{_libdir}/liblber.la
+%{_libdir}/libldap.la
+%{_libdir}/libldap_r.la
+%{_includedir}/*.h
 %{_mandir}/man3/*
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/liblber.a
+%{_libdir}/libldap.a
+%{_libdir}/libldap_r.a
 
 %files backend-bdb
 %defattr(644,root,root,755)
