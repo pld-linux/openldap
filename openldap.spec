@@ -2,7 +2,6 @@
 # - package contribs?
 # - complete & validate descriptions
 #   /usr/share/man/man5/slapd-tcl.5.gz
-#   /usr/share/man/man5/slapo-chain.5.gz
 #
 # Conditional build:
 # ldbm_type	- set to needed value (btree<default> or hash)
@@ -18,12 +17,12 @@ Summary(pt_BR):	Clientes e servidor para LDAP
 Summary(ru):	Образцы клиентов LDAP
 Summary(uk):	Зразки кл╕╓нт╕в LDAP
 Name:		openldap
-Version:	2.3.32
+Version:	2.3.37
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	154d674cf95a8f8acc496cc6cb0671e1
+# Source0-md5:	f5c6cec07469ce8f64710eba3aeb58f8
 Source1:	ldap.init
 Source2:	%{name}.sysconfig
 Source3:	ldap.conf
@@ -1025,18 +1024,29 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%attr(755,root,root) %{_libdir}/liblber-2.3.so.*.*.*
+%attr(755,root,root) %{_libdir}/libldap-2.3.so.*.*.*
+%attr(755,root,root) %{_libdir}/libldap_r-2.3.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblber-2.3.so.0
+%attr(755,root,root) %ghost %{_libdir}/libldap-2.3.so.0
+%attr(755,root,root) %ghost %{_libdir}/libldap_r-2.3.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
-%{_includedir}/*
+%attr(755,root,root) %{_libdir}/liblber.so
+%attr(755,root,root) %{_libdir}/libldap.so
+%attr(755,root,root) %{_libdir}/libldap_r.so
+%{_libdir}/liblber.la
+%{_libdir}/libldap.la
+%{_libdir}/libldap_r.la
+%{_includedir}/*.h
 %{_mandir}/man3/*
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/liblber.a
+%{_libdir}/libldap.a
+%{_libdir}/libldap_r.a
 
 %files backend-bdb
 %defattr(644,root,root,755)
@@ -1061,6 +1071,7 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/back_ldap*.so*
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
+%{_mandir}/man5/slapo-chain.5*
 
 %files backend-ldbm
 %defattr(644,root,root,755)
