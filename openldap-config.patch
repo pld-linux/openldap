@@ -54,6 +54,7 @@
 +# moduleload	refint.la
 +# moduleload	retcode.la
 +# moduleload	rwm.la
++# moduleload	smbk5pwd.la
 +# moduleload	syncprov.la
 +# moduleload	translucent.la
 +# moduleload	unique.la
