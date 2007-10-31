@@ -1,9 +1,11 @@
 # TODO:
 # - package contribs?
 # - complete & validate descriptions
+# - trigger for removed ldbm backend
+# - trigger for removed overlays (denyop,lastmod)
+# - pl translations for new overlays (call me lazy - baggins)
 #
 # Conditional build:
-# ldbm_type	- set to needed value (btree<default> or hash)
 %bcond_without	odbc	# disable sql backend
 %bcond_without	perl	# disable perl backend
 %bcond_without	sasl 	# don't build cyrus sasl support
@@ -40,13 +42,16 @@ Patch11:	%{name}-whowhere.patch
 Patch12:	%{name}-ldaprc.patch
 Patch13:	%{name}-setugid.patch
 Patch14:	%{name}-nosql.patch
-#Patch12:	%{name}-sendbuf.patch
+Patch15:	%{name}-smbk5pwd.patch
+Patch16:	%{name}-ldapc++.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
 BuildRequires:	db-devel >= 4.2
+BuildRequires:	gmp-devel
 BuildRequires:	libltdl-devel
+BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
 BuildRequires:	libwrap-devel
 %{?with_slp:BuildRequires:	openslp-devel}
@@ -179,6 +184,42 @@ Bibliotecas estáticas para desenvolvimento com openldap.
 Статичні бібліотеки, необхідні для розробки програм, що використовують
 LDAP.
 
+%package ldapc++
+Summary:	LDAPv3 C++ Class Library
+Summary(pl.UTF-8):	Biblioteka klas C++ LDAPv3
+Group:		Libraries
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description ldapc++
+LDAPv3 C++ Class Library
+
+%description ldapc++ -l pl.UTF-8
+Biblioteka klas C++ LDAPv3.
+
+%package ldapc++-devel
+Summary:	LDAPv3 C++ Class Library development files
+Summary(pl.UTF-8):	Pliki dla developerów C++ LDAPv3
+Group:		Libraries
+Requires:	%{name}-ldapc++ = %{version}-%{release}
+
+%description ldapc++-devel
+LDAPv3 C++ Class Library development files.
+
+%description ldapc++-devel -l pl.UTF-8
+Pliki dla developerów C++ LDAPv3.
+
+%package ldapc++-static
+Summary:	Static LDAPv3 C++ Class Library
+Summary(pl.UTF-8):	Biblioteka statyczna klas C++ LDAPv3
+Group:		Libraries
+Requires:	%{name}-ldapc++-devel = %{version}-%{release}
+
+%description ldapc++-static
+Static LDAPv3 C++ Class Library.
+
+%description ldapc++-static -l pl.UTF-8
+Biblioteka statyczna klas C++ LDAPv3.
+
 %package backend-bdb
 Summary:	BDB backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend BDB do serwera OpenLDAP
@@ -230,19 +271,6 @@ LDAP backend to slapd, the OpenLDAP server.
 
 %description backend-ldap -l pl.UTF-8
 Backend LDAP do slapd - serwera OpenLDAP.
-
-%package backend-ldbm
-Summary:	LDBM backend to OpenLDAP server
-Summary(pl.UTF-8):	Backend LDBM do serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description backend-ldbm
-LDBM backend to slapd, the OpenLDAP server.
-
-%description backend-ldbm -l pl.UTF-8
-Backend LDBM do slapd - serwera OpenLDAP.
 
 %package backend-meta
 Summary:	Meta backend to OpenLDAP server
@@ -375,24 +403,34 @@ zmian w danej bazie danych do podanego pliki loga. Zmiany są logowane
 jako standardowy LDIF z dodatkowym nagłówkiem komentarza podającym
 czas zmiany i identyfikującym użytkownika, który dokonał zmiany.
 
-%package overlay-denyop
-Summary:	Denyop overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka zabraniająca wykonania operacji dla serwera OpenLDAP
+%package overlay-constraint
+Summary:	Constraint overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka constraint dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
-%description overlay-denyop
-This overlay provides a quick'n'easy way to deny selected operations
-for a database whose backend implements the operations. It is intended
-to be less expensive than ACLs because its evaluation occurs before
-any backend specific operation is actually even initiated.
+%description overlay-constraint
+This overlay limits the values which can be placed into an
+attribute, over and above the limits placed by the schema.
+It traps only LDAP adds and modify commands (and only seeks to
+control the add and modify value mods of a modify)
 
-%description overlay-denyop -l pl.UTF-8
-Ta nakładka udostępnia szybki i łatwy sposób na blokowanie wybranych
-operacji dla bazy danych, której backend implementuje te operacje. Ma
-być mniej kosztowna niż ACL-e, ponieważ obliczenia zachodzą przed
-rozpoczęciem jakichkolwiek operacji specyficznych dla backendu.
+%description overlay-constraint -l pl.UTF-8
+
+%package overlay-dds
+Summary:	Dynamic Directory Services overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka DDS dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-dds
+The dds overlay implements dynamic objects as per RFC 2589.
+The name dds stands for Dynamic Directory Services.  It allows to
+define dynamic objects, characterized by the dynamicObject objectClass.
+
+%description overlay-dds -l pl.UTF-8
 
 %package overlay-dyngroup
 Summary:	Dyngroup overlay for OpenLDAP server
@@ -429,24 +467,20 @@ The dynlist overlay allows expansion of dynamic groups and more.
 Nakładka dynlist pozwala na rozwijanie dynamicznych grup i inne
 operacje.
 
-%package overlay-lastmod
-Summary:	Last Modification overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka Last Modification dla serwera OpenLDAP
+%package overlay-memberof
+Summary:	Reverse Group Membership overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka memberof dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
-%description overlay-lastmod
-The lastmod overlay creates a service entry rooted at the suffix of
-the database it's stacked onto, which holds the DN, the modification
-type, the modifiersName and the modifyTimestamp of the last write
-operation performed on that database.
+%description overlay-memberof
+The memberof overlay allows automatic reverse group membership
+maintenance.  Any time a group entry is modified, its members
+are modified as appropriate in order to keep a DN-valued
+"is member of" attribute updated with the DN of the group.
 
-%description overlay-lastmod -l pl.UTF-8
-Nakładka lastmod tworzy wpis usługi zaczynający się od przyrostka bazy
-danych, na której jest oparty, trzymający DN, rodzaj modyfikacji,
-modifiersName i modifyTimestamp dla ostatniej operacji zapisu
-wykonywanej na tej bazie.
+%description overlay-memberof -l pl.UTF-8
 
 %package overlay-pcache
 Summary:	Proxy cache overlay for OpenLDAP server
@@ -535,6 +569,29 @@ odwzorowywanie klas obiektów na attributeType. Jej zastosowania to
 przede wszystkim dostarczanie wirtualnych widoków danych istniejących
 albo zdalnie, w połączeniu z backendem proxy, albo lokalnie, w
 połączeniu z backendem relay.
+
+%package overlay-seqmod
+Summary:	Sequenced modifies overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka seqmod dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-seqmod
+This overlay serializes concurrent attempts to modify a single entry
+
+%description overlay-seqmod -l pl.UTF-8
+
+%package overlay-smbk5pwd
+Summary:	smbk5pwd overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka smbk5pwd dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-smbk5pwd
+
+%description overlay-smbk5pwd -l pl.UTF-8
 
 %package overlay-syncprov
 Summary:	Syncrepl Provider overlay for OpenLDAP server
@@ -638,12 +695,8 @@ Conflicts:	kernel24-smp
 Conflicts:	rpm < 4.4.2-0.2
 
 %description servers
-The openldap-server package has the slapd daemon which is responsible
-for handling the database and client queries.
-
-The package includes:
-- stand-alone LDAP server (slapd),
-- stand-alone LDAP replication server (slurpd)
+The openldap-server package contains the slapd daemon which is
+responsible for handling the database and client queries.
 
 Install this package if you want to setup an OpenLDAP-2.x server.
 
@@ -655,7 +708,6 @@ Serwery (demony) które przychodzą z LDAPem.
 
 Pakiet ten zawiera:
 - serwer LDAP (slapd)
-- serwer replikacji bazy LDAP (slurpd)
 
 Zainstaluj ten pakiet jeżeli potrzebujesz server OpenLDAP-2.x.
 
@@ -670,7 +722,6 @@ diretório.
 
 O conjunto completo contém:
 - servidor LDAP (slapd),
-- servidor de replicação (slurpd)
 
 Instale este pacote se você desejar executar um servidor OpenLDAP.
 
@@ -697,6 +748,10 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
+%patch15 -p1
+%patch16 -p1
+
+ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 
 %build
 %{__libtoolize}
@@ -704,27 +759,23 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %{__autoconf}
 CPPFLAGS="-I/usr/include/ncurses"
 %configure \
+	--enable-dynamic \
 	--enable-syslog \
-	--enable-referrals \
 	--enable-ipv6 \
 	--enable-local \
-	--with-readline \
-	--with-threads \
-	--with-tls \
-	--with-yielding-select \
+	--enable-slapd \
 	--enable-aci \
 	--enable-crypt \
 	--enable-lmpasswd \
+	--enable-modules \
+	--enable-rewrite \
+	--enable-rlookups \
 %if %{with sasl}
 	--with-cyrus-sasl \
 	--enable-spasswd \
 %else
 	--without-cyrus-sasl \
 %endif
-	--enable-modules \
-	--enable-phonetic \
-	--enable-rewrite \
-	--enable-rlookups \
 %if %{with slp}
 	--enable-slp \
 %else
@@ -735,30 +786,45 @@ CPPFLAGS="-I/usr/include/ncurses"
 	--enable-dnssrv=mod \
 	--enable-hdb=mod \
 	--enable-ldap=mod \
-	--enable-overlays=mod \
-	--enable-ldbm=mod \
-	--enable-ldbm-api=berkeley \
-	--enable-ldbm-type%{?ldbm_type:%{ldbm_type}}%{!?ldbm_type:btree} \
 	--enable-meta=mod \
 	--enable-monitor=mod \
 	--enable-null \
 	--enable-passwd=mod \
-	--enable-relay=mod \
 %if %{with perl}
 	--enable-perl=mod \
 %endif
+	--enable-relay=mod \
 	--enable-shell=mod \
 %if %{with odbc}
 	--enable-sql=mod \
+	--with-odbc=unixodbc \
+%else
+	--with-odbc=no \
 %endif
-	--enable-slurpd \
-	--enable-dynamic
+	--enable-overlays=mod \
+	--with-threads \
+	--with-tls \
+	--with-yielding-select \
+	--with-mp=gmp
 
 %{__make} -j1 depend
 %{__make}
-%{__make} -C servers/slapd/overlays syncprov.la
 
-rm -f doc/rfc/rfc*
+mkdir libs
+for d in liblber libldap libldap_r ; do
+	ln -s ../libraries/$d/.libs/$d.la libs/$d.la
+	ln -s ../libraries/$d/.libs/$d.so libs/$d.so
+done
+
+__topdir=`pwd`
+cd contrib/ldapc++
+%{__aclocal}
+%{__automake}
+%{__autoconf}
+%configure \
+	--with-libldap=$__topdir/libs \
+	--with-ldap-includes=$__topdir/include
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -793,11 +859,18 @@ echo "# This is a good place to put slapd access-control directives" > \
 echo "# This is a good place to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
+cd contrib/ldapc++
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post	libs	-p /sbin/ldconfig
 %postun	libs	-p /sbin/ldconfig
+
+%post	ldapc++	-p /sbin/ldconfig
+%postun	ldapc++	-p /sbin/ldconfig
 
 %pre servers
 %groupadd -P %{name}-servers -g 93 slapd
@@ -868,12 +941,6 @@ fi \
 %preun backend-ldap
 %ldap_module_remove back_ldap.la
 
-%post backend-ldbm
-%ldap_module_add back_ldbm.la
-
-%preun backend-ldbm
-%ldap_module_remove back_ldbm.la
-
 %post backend-meta
 %ldap_module_add back_meta.la
 
@@ -934,11 +1001,17 @@ fi \
 %preun overlay-auditlog
 %ldap_module_remove auditlog.la
 
-%post overlay-denyop
-%ldap_module_add denyop.la
+%post overlay-constraint
+%ldap_module_add constraint.la
 
-%preun overlay-denyop
-%ldap_module_remove denyop.la
+%preun overlay-constraint
+%ldap_module_remove constraint.la
+
+%post overlay-dds
+%ldap_module_add dds.la
+
+%preun overlay-dds
+%ldap_module_remove dds.la
 
 %post overlay-dyngroup
 %ldap_module_add dyngroup.la
@@ -952,11 +1025,11 @@ fi \
 %preun overlay-dynlist
 %ldap_module_remove dynlist.la
 
-%post overlay-lastmod
-%ldap_module_add lastmod.la
+%post overlay-memberof
+%ldap_module_add memberof.la
 
-%preun overlay-lastmod
-%ldap_module_remove lastmod.la
+%preun overlay-memberof
+%ldap_module_remove memberof.la
 
 %post overlay-ppolicy
 %ldap_module_add ppolicy.la
@@ -981,6 +1054,18 @@ fi \
 
 %preun overlay-rwm
 %ldap_module_remove rwm.la
+
+%post overlay-smbk5pwd
+%ldap_module_add smbk5pwd.la
+
+%preun overlay-smbk5pwd
+%ldap_module_remove smbk5pwd.la
+
+%post overlay-seqmod
+%ldap_module_add seqmod.la
+
+%preun overlay-seqmod
+%ldap_module_remove seqmod.la
 
 %post overlay-syncprov
 %ldap_module_add syncprov.la
@@ -1026,12 +1111,27 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/liblber-2.3.so.*.*.*
-%attr(755,root,root) %{_libdir}/libldap-2.3.so.*.*.*
-%attr(755,root,root) %{_libdir}/libldap_r-2.3.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/liblber-2.3.so.0
-%attr(755,root,root) %ghost %{_libdir}/libldap-2.3.so.0
-%attr(755,root,root) %ghost %{_libdir}/libldap_r-2.3.so.0
+%attr(755,root,root) %{_libdir}/liblber-2.4.so.*.*.*
+%attr(755,root,root) %{_libdir}/libldap-2.4.so.*.*.*
+%attr(755,root,root) %{_libdir}/libldap_r-2.4.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblber-2.4.so.2
+%attr(755,root,root) %ghost %{_libdir}/libldap-2.4.so.2
+%attr(755,root,root) %ghost %{_libdir}/libldap_r-2.4.so.2
+
+%files ldapc++
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libldapcpp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libldapcpp.so.0
+
+%files ldapc++-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libldapcpp.so
+%{_libdir}/libldapcpp.la
+%{_includedir}/ldapc++
+
+%files ldapc++-static
+%defattr(644,root,root,755)
+%{_libdir}/libldapcpp.a
 
 %files devel
 %defattr(644,root,root,755)
@@ -1074,12 +1174,6 @@ fi
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
 %{_mandir}/man5/slapo-chain.5*
-
-%files backend-ldbm
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_ldbm*.so*
-%{_libdir}/openldap/back_ldbm.la
-%{_mandir}/man5/slapd-ldbm.5*
 
 %files backend-meta
 %defattr(644,root,root,755)
@@ -1143,15 +1237,23 @@ fi
 %{_libdir}/openldap/auditlog.la
 %{_mandir}/man5/slapo-auditlog.5*
 
-%files overlay-denyop
+%files overlay-constraint
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/denyop*.so*
-%{_libdir}/openldap/denyop.la
+%attr(755,root,root) %{_libdir}/openldap/constraint*.so*
+%{_libdir}/openldap/constraint.la
+%{_mandir}/man5/slapo-constraint.5*
+
+%files overlay-dds
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/dds*.so*
+%{_libdir}/openldap/dds.la
+%{_mandir}/man5/slapo-dds.5*
 
 %files overlay-dyngroup
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/dyngroup*.so*
 %{_libdir}/openldap/dyngroup.la
+%{_mandir}/man5/slapo-dyngroup.5*
 
 %files overlay-dynlist
 %defattr(644,root,root,755)
@@ -1159,11 +1261,11 @@ fi
 %{_libdir}/openldap/dynlist.la
 %{_mandir}/man5/slapo-dynlist.5*
 
-%files overlay-lastmod
+%files overlay-memberof
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/lastmod*.so*
-%{_libdir}/openldap/lastmod.la
-%{_mandir}/man5/slapo-lastmod.5*
+%attr(755,root,root) %{_libdir}/openldap/memberof*.so*
+%{_libdir}/openldap/memberof.la
+%{_mandir}/man5/slapo-memberof.5*
 
 %files overlay-pcache
 %defattr(644,root,root,755)
@@ -1194,6 +1296,17 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/rwm*.so*
 %{_libdir}/openldap/rwm.la
 %{_mandir}/man5/slapo-rwm.5*
+
+%files overlay-smbk5pwd
+%defattr(644,root,root,755)
+%doc contrib/slapd-modules/smbk5pwd/README
+%attr(755,root,root) %{_libdir}/openldap/smbk5pwd*.so*
+%{_libdir}/openldap/smbk5pwd.la
+
+%files overlay-seqmod
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/seqmod*.so*
+%{_libdir}/openldap/seqmod.la
 
 %files overlay-syncprov
 %defattr(644,root,root,755)
@@ -1229,13 +1342,14 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %attr(770,root,slapd) %{_var}/run/slapd
 %attr(770,root,slapd) %{_localstatedir}/openldap-data
-%attr(770,root,slapd) %{_localstatedir}/openldap-slurp
 %dir %{_datadir}/openldap/schema
 %{_datadir}/openldap/schema/*.ldif
 %{_datadir}/openldap/schema/*.schema
 %dir %{_libdir}/openldap/
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/slapd.*.5*
+%{_mandir}/man5/slapd-config.5*
+%{_mandir}/man5/slapd-ldbm.5*
 %{_mandir}/man5/slapd-ldif.5*
 %{_mandir}/man5/slapd-null.5*
 %{_mandir}/man8/*
