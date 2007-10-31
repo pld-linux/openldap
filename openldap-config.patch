@@ -1,6 +1,6 @@
 --- openldap-2.2.6/servers/slapd/slapd.conf	2004-02-28 15:42:39.692604592 +0100
 +++ openldap-2.3.24/servers/slapd/slapd.conf	2006-07-18 14:25:02.356103035 +0300
-@@ -2,22 +2,56 @@
+@@ -2,22 +2,57 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
  #
