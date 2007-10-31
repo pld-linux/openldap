@@ -54,14 +54,6 @@ case "$1" in
 		SERVICE_RUN_NICE_LEVEL="$SLAPDNICE"
 		daemon slapd $ARGS
 		RETVAL=$?
-		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
-			msg_starting "OpenLDAP Update Replication Daemon"
-			SERVICE_RUN_NICE_LEVEL="$SLURPNICE"
-			# slapd has /bin/false as shell, so -s must be passed to su
-			daemon --user 'slapd -s /bin/sh' slurpd
-			RET=$?
-			[ $RETVAL -eq 0 ] && RETVAL=$RET
-		fi
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
 		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
 			chown "$LDAPI_SOCKET_OWNER":"$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
@@ -75,10 +67,6 @@ case "$1" in
 	if [ -f /var/lock/subsys/ldap ]; then
 		msg_stopping "OpenLDAP"
 		killproc --waitforname slapd --waitfortime 300 slapd -TERM
-		if grep -q '^replogfile' /etc/openldap/slapd.conf; then
-			msg_stopping "OpenLDAP Update Replication Daemon"
-			killproc slurpd
- 		fi
 		rm -f /var/lock/subsys/ldap >/dev/null 2>&1
 	else
 		msg_not_running "OpenLDAP"
@@ -87,11 +75,6 @@ case "$1" in
   status)
 	status slapd
 	RETVAL=$?
-	if grep -q '^replogfile' /etc/openldap/slapd.conf; then
-		status slurpd
-		RET=$?
-		[ $RETVAL -eq 0 ] && RETVAL=$RET
-	fi
 	;;
   restart|force-reload)
 	$0 stop
