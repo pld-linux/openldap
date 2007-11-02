@@ -973,10 +973,10 @@ rm -rf $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
 install %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
 
 cd ../db-instroot
-install -m755 lib/libslapd_db-*.*.so $RPM_BUILD_ROOT/%{_libdir}/
+install -m755 %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT/%{_libdir}/
 cd bin
 for binary in db_* ; do
-	install ${binary} $RPM_BUILD_ROOT/%{_sbindir}/slapd_${binary}
+	install -m755 ${binary} $RPM_BUILD_ROOT/%{_sbindir}/slapd_${binary}
 done
 
 cd ../../%{name}-%{version}
