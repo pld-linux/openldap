@@ -1,4 +1,4 @@
-Build both slapd and slurpd as position-independent executables.  This really
+Build slapd as position-independent executable.  This really
 should be threaded into the various autotools, but I guess this is what we have
 until that happens, if it happens.
 
@@ -13,14 +13,3 @@ until that happens, if it happens.
  		$(WRAP_LIBS)
  	rm -f $(SLAPTOOLS)
  	for i in $(SLAPTOOLS); do \
---- openldap-2.2.13/servers/slurpd/Makefile.in	2004-01-01 13:16:42.000000000 -0500
-+++ openldap-2.2.13/servers/slurpd/Makefile.in	2004-06-15 13:44:45.000000000 -0400
-@@ -44,7 +44,7 @@
- XXXLIBS = $(LTHREAD_LIBS)
- 
- slurpd:	version.o
--	$(LTLINK) -o $@ $(OBJS) version.o $(LIBS)
-+	$(LTLINK) -pie -Wl,-z,defs -o $@ $(OBJS) version.o $(LIBS)
- 
- sslurpd:	version.o
- 	$(LTLINK) -static -o $@ $(OBJS) version.o $(LIBS)
