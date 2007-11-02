@@ -11,6 +11,14 @@
 %bcond_without	sasl 	# don't build cyrus sasl support
 %bcond_without	slp	# disable SLP support
 #
+# Never change or update Berkeley DB, it's there to isolate OpenLDAP
+# from any future changes to the system-wide Berkeley DB library.
+%define		db_version		4.6.21
+#
+%define evolution_exchange_prefix	%{_libdir}/evolution-openldap
+%define evolution_exchange_includedir	%{evolution_exchange_prefix}/include
+%define evolution_exchange_libdir	%{evolution_exchange_prefix}/%{_lib}
+
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es.UTF-8):	Clientes y servidor para LDAP
 Summary(pl.UTF-8):	Klienci Lightweight Directory Access Protocol
@@ -24,9 +32,12 @@ License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 # Source0-md5:	4418da48649297587a3d07c987808a5e
-Source1:	ldap.init
-Source2:	%{name}.sysconfig
-Source3:	ldap.conf
+Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
+# Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
+Source2:	ldap.init
+Source3:	%{name}.sysconfig
+Source4:	ldap.conf
+Source100:	%{name}-README.evolution
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-conffile.patch
 Patch2:		%{name}-config.patch
@@ -44,11 +55,12 @@ Patch13:	%{name}-setugid.patch
 Patch14:	%{name}-nosql.patch
 Patch15:	%{name}-smbk5pwd.patch
 Patch16:	%{name}-ldapc++.patch
+# Patch for the evolution library
+Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
-BuildRequires:	db-devel >= 4.2
 BuildRequires:	gmp-devel
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
@@ -183,6 +195,18 @@ Bibliotecas estáticas para desenvolvimento com openldap.
 %description static -l uk.UTF-8
 Статичні бібліотеки, необхідні для розробки програм, що використовують
 LDAP.
+
+%package	evolution-devel
+Summary:	LDAP NTLM hack for the evolution-exchange
+Summary(pl.UTF-8):	Hack NTLM dla pakietu evolution-exchange
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description evolution-devel
+LDAP NTLM hack for the evolution-exchange.
+
+%description evolution-devel -l pl.UTF-8
+Hack NTLM dla pakietu evolution-exchange.
 
 %package ldapc++
 Summary:	LDAPv3 C++ Class Library
@@ -732,7 +756,8 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 Сервера (демони), що поставляються з LDAP.
 
 %prep
-%setup -q
+%setup -q -c -a1
+cd %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -752,18 +777,136 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch16 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
+cd ..
+
+install -d db-%{db_version}/build-rpm
+
+# Set up a build tree for a static version of libldap with the hooks for the
+# non-standard NTLM bind type which is needed to connect to Win2k GC servers
+# (Win2k3 supports SASL with DIGEST-MD5, so this shouldn't be needed for those
+# servers, though as of version 1.4 the exchange doesn't try SASL first).
+if ! cp -al %{name}-%{version} evo-%{name}-%{version} ; then
+	rm -fr evo-%{name}-%{version}
+	cp -a %{name}-%{version} evo-%{name}-%{version}
+fi
+cd evo-%{name}-%{version}
+%patch100 -p0
 
 %build
+dbdir=`pwd`/db-instroot
+cd db-%{db_version}/build-rpm
+
+CC="%{__cc}"
+CXX="%{__cxx}"
+CFLAGS="%{rpmcflags}"
+CXXFLAGS="%{rpmcflags} -fno-implicit-templates"
+LDFLAGS="%{rpmcflags} %{rpmldflags}"
+export CC CXX CFLAGS CXXFLAGS LDFLAGS
+
+
+../dist/%configure \
+	--disable-java \
+	--disable-tcl \
+	--disable-cxx \
+	--with-pic \
+	--disable-static \
+	--enable-shared \
+	--with-uniquename=_openldap \
+	--prefix=${dbdir} \
+	--exec-prefix=${dbdir} \
+	--bindir=${dbdir}/bin \
+	--includedir=${dbdir}/include \
+	--libdir=${dbdir}/%{_lib}
+
+%{__make} libdb_base=libslapd_db libso_base=libslapd_db
+%{__make} install libdb_base=libslapd_db libso_base=libslapd_db strip="false"
+ln -sf libslapd_db.so ${dbdir}/%{_lib}/${subdir}/libdb.so
+
+cd ../../%{name}-%{version}
+
+CPPFLAGS="-I${dbdir}/include -I/usr/include/ncurses"
+CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
+CXXFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
+LDFLAGS="%{rpmcflags} %{rpmldflags} -L${dbdir}/%{_lib}"
+LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS LD_LIBRARY_PATH
+
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
-CPPFLAGS="-I/usr/include/ncurses"
 %configure \
 	--enable-dynamic \
 	--enable-syslog \
 	--enable-ipv6 \
 	--enable-local \
 	--enable-slapd \
+	--enable-aci \
+	--enable-crypt \
+	--enable-lmpasswd \
+	--enable-modules \
+	--enable-rewrite \
+	--enable-rlookups \
+%if %{with sasl}
+	--with-cyrus-sasl \
+	--enable-spasswd \
+%else
+	--without-cyrus-sasl \
+%endif
+%if %{with slp}
+	--enable-slp \
+%else
+	--disable-slp \
+%endif
+	--enable-wrappers \
+	--enable-backands=no \
+	--enable-overlays=no \
+%if %{with odbc}
+	--with-odbc=unixodbc \
+%else
+	--with-odbc=no \
+%endif
+	--with-threads \
+	--with-tls \
+	--with-yielding-select \
+	--with-mp=gmp
+
+%{__make} -j1 depend
+%{__make}
+
+mkdir libs
+for d in liblber libldap libldap_r ; do
+	ln -s ../libraries/$d/.libs/$d.la libs/$d.la
+	ln -s ../libraries/$d/.libs/$d.so libs/$d.so
+done
+
+__topdir=`pwd`
+cd contrib/ldapc++
+%{__aclocal}
+%{__automake}
+%{__autoconf}
+%configure \
+	--with-libldap=$__topdir/libs \
+	--with-ldap-includes=$__topdir/include
+%{__make}
+
+# Build evolution-specific clients just as we would normal clients,
+# except with a different installation directory in mind
+# and no shared libraries.
+cd ../../../evo-%{name}-%{version}
+
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%configure \
+	--includedir=%{evolution_exchange_includedir} \
+	--libdir=%{evolution_exchange_libdir} \
+	--disable-dynamic \
+	--disable-slapd \
+	--disable-shared \
+	--enable-static \
+	--enable-syslog \
+	--enable-ipv6 \
+	--enable-local \
 	--enable-aci \
 	--enable-crypt \
 	--enable-lmpasswd \
@@ -810,27 +953,28 @@ CPPFLAGS="-I/usr/include/ncurses"
 %{__make} -j1 depend
 %{__make}
 
-mkdir libs
-for d in liblber libldap libldap_r ; do
-	ln -s ../libraries/$d/.libs/$d.la libs/$d.la
-	ln -s ../libraries/$d/.libs/$d.so libs/$d.so
-done
-
-__topdir=`pwd`
-cd contrib/ldapc++
-%{__aclocal}
-%{__automake}
-%{__autoconf}
-%configure \
-	--with-libldap=$__topdir/libs \
-	--with-ldap-includes=$__topdir/include
-%{__make}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
 	$RPM_BUILD_ROOT/var/run/slapd \
-	$RPM_BUILD_ROOT%{_datadir}/openldap/schema
+	$RPM_BUILD_ROOT%{_datadir}/openldap/schema \
+	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir}}
+
+# Install evolution hack first and remove everything but devel stuff
+cd evo-%{name}-%{version}
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
+install %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
+
+cd ../db-instroot
+install -m755 lib/libslapd_db-*.*.so $RPM_BUILD_ROOT/%{_libdir}/
+cd bin
+for binary in db_* ; do
+	install ${binary} $RPM_BUILD_ROOT/%{_sbindir}/slapd_${binary}
+done
+
+cd ../../%{name}-%{version}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -839,10 +983,10 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 
 install servers/slapd/overlays/.libs/syncprov{.la,*.so*} $RPM_BUILD_ROOT%{_libdir}/openldap
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/ldap
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
-install %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
@@ -1098,8 +1242,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ANNOUNCEMENT CHANGES COPYRIGHT README LICENSE
-%doc doc/{drafts,rfc}
+%doc %{name}-%{version}/{ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
+%doc %{name}-%{version}/doc/{drafts,rfc}
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldapserver
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ldap.conf
@@ -1150,8 +1294,18 @@ fi
 %{_libdir}/libldap.a
 %{_libdir}/libldap_r.a
 
+%files evolution-devel
+%defattr(644,root,root,755)
+%dir %{evolution_exchange_prefix}
+%dir %{evolution_exchange_includedir}
+%dir %{evolution_exchange_libdir}
+%{evolution_exchange_prefix}/README*
+%{evolution_exchange_includedir}/*.h
+%{evolution_exchange_libdir}/*.a
+
 %files backend-bdb
 %defattr(644,root,root,755)
+%doc db-%{db_version}/LICENSE
 %attr(755,root,root) %{_libdir}/openldap/back_bdb*.so*
 %{_libdir}/openldap/back_bdb.la
 %{_mandir}/man5/slapd-bdb.5*
@@ -1164,6 +1318,7 @@ fi
 
 %files backend-hdb
 %defattr(644,root,root,755)
+%doc db-%{db_version}/LICENSE
 %attr(755,root,root) %{_libdir}/openldap/back_hdb*.so*
 %{_libdir}/openldap/back_hdb.la
 %{_mandir}/man5/slapd-hdb.5*
@@ -1183,7 +1338,7 @@ fi
 
 %files backend-monitor
 %defattr(644,root,root,755)
-%doc servers/slapd/back-monitor/README
+%doc %{name}-%{version}/servers/slapd/back-monitor/README
 %attr(755,root,root) %{_libdir}/openldap/back_monitor*.so*
 %{_libdir}/openldap/back_monitor.la
 %{_mandir}/man5/slapd-monitor.5*
@@ -1197,7 +1352,7 @@ fi
 %if %{with perl}
 %files backend-perl
 %defattr(644,root,root,755)
-%doc servers/slapd/back-perl/*.pm
+%doc %{name}-%{version}/servers/slapd/back-perl/*.pm
 %attr(755,root,root) %{_libdir}/openldap/back_perl*.so*
 %{_libdir}/openldap/back_perl.la
 %{_mandir}/man5/slapd-perl.5*
@@ -1218,8 +1373,8 @@ fi
 %if %{with odbc}
 %files backend-sql
 %defattr(644,root,root,755)
-%doc servers/slapd/back-sql/docs/*
-%doc servers/slapd/back-sql/rdbms_depend
+%doc %{name}-%{version}/servers/slapd/back-sql/docs/*
+%doc %{name}-%{version}/servers/slapd/back-sql/rdbms_depend
 %attr(755,root,root) %{_libdir}/openldap/back_sql*.so*
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
@@ -1299,7 +1454,7 @@ fi
 
 %files overlay-smbk5pwd
 %defattr(644,root,root,755)
-%doc contrib/slapd-modules/smbk5pwd/README
+%doc %{name}-%{version}/contrib/slapd-modules/smbk5pwd/README
 %attr(755,root,root) %{_libdir}/openldap/smbk5pwd*.so*
 %{_libdir}/openldap/smbk5pwd.la
 
@@ -1347,6 +1502,7 @@ fi
 %{_datadir}/openldap/schema/*.schema
 %dir %{_libdir}/openldap/
 %attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
 %{_mandir}/man5/slapd.*.5*
 %{_mandir}/man5/slapd-config.5*
 %{_mandir}/man5/slapd-ldbm.5*
