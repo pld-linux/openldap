@@ -55,6 +55,8 @@ Patch13:	%{name}-setugid.patch
 Patch14:	%{name}-nosql.patch
 Patch15:	%{name}-smbk5pwd.patch
 Patch16:	%{name}-ldapc++.patch
+Patch17:	%{name}-pie.patch
+Patch18:	%{name}-gethostbyXXXX_r.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -62,6 +64,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
 BuildRequires:	gmp-devel
+BuildRequires:	libicu-devel
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
@@ -775,6 +778,8 @@ cd %{name}-%{version}
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
+%patch17 -p1
+%patch18 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
@@ -805,6 +810,8 @@ export CC CXX CFLAGS CXXFLAGS LDFLAGS
 
 
 ../dist/%configure \
+	--disable-compat185 \
+	--disable-dump185 \
 	--disable-java \
 	--disable-tcl \
 	--disable-cxx \
@@ -858,13 +865,26 @@ export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS LD_LIBRARY_PATH
 	--disable-slp \
 %endif
 	--enable-wrappers \
-	--enable-backands=no \
-	--enable-overlays=no \
+	--enable-bdb=mod \
+	--enable-dnssrv=mod \
+	--enable-hdb=mod \
+	--enable-ldap=mod \
+	--enable-meta=mod \
+	--enable-monitor=mod \
+	--enable-null \
+	--enable-passwd=mod \
+%if %{with perl}
+	--enable-perl=mod \
+%endif
+	--enable-relay=mod \
+	--enable-shell=mod \
 %if %{with odbc}
+	--enable-sql=mod \
 	--with-odbc=unixodbc \
 %else
 	--with-odbc=no \
 %endif
+	--enable-overlays=mod \
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
@@ -925,26 +945,13 @@ cd ../../../evo-%{name}-%{version}
 	--disable-slp \
 %endif
 	--enable-wrappers \
-	--enable-bdb=mod \
-	--enable-dnssrv=mod \
-	--enable-hdb=mod \
-	--enable-ldap=mod \
-	--enable-meta=mod \
-	--enable-monitor=mod \
-	--enable-null \
-	--enable-passwd=mod \
-%if %{with perl}
-	--enable-perl=mod \
-%endif
-	--enable-relay=mod \
-	--enable-shell=mod \
+	--enable-backands=no \
+	--enable-overlays=no \
 %if %{with odbc}
-	--enable-sql=mod \
 	--with-odbc=unixodbc \
 %else
 	--with-odbc=no \
 %endif
-	--enable-overlays=mod \
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
