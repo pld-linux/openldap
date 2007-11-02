@@ -63,8 +63,6 @@ URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
-BuildRequires:	gmp-devel
-BuildRequires:	libicu-devel
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
@@ -888,7 +886,7 @@ export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS LD_LIBRARY_PATH
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
-	--with-mp=gmp
+	--with-mp=longlong
 
 %{__make} -j1 depend
 %{__make}
@@ -955,7 +953,7 @@ cd ../../../evo-%{name}-%{version}
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
-	--with-mp=gmp
+	--with-mp=longlong
 
 %{__make} -j1 depend
 %{__make}
