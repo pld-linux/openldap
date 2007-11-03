@@ -865,12 +865,14 @@ cd ../..
 
 cd %{name}-%{version}
 
-CPPFLAGS="-I${dbdir}/include -I/usr/include/ncurses"
+CPPFLAGS="%{!?with_system_db:-I${dbdir}/include }-I/usr/include/ncurses"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
 CXXFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
-LDFLAGS="%{rpmcflags} %{rpmldflags} -L${dbdir}/%{_lib}"
-LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS LD_LIBRARY_PATH
+LDFLAGS="%{rpmcflags} %{rpmldflags}%{!?with_system_db: -L${dbdir}/%{_lib}}"
+export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
+%if %{without system_db}
+export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+%endif
 
 %{__libtoolize}
 %{__aclocal}
