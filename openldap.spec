@@ -734,6 +734,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	/sbin/chkconfig
 Requires:	rc-scripts
 Requires:	uname(release) >= 2.6
+Suggests:	%{name}-backend-hdb = %{version}-%{release}
 Provides:	group(slapd)
 Provides:	user(slapd)
 Obsoletes:	openldap-backend-ldbm
