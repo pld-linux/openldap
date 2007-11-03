@@ -1,18 +1,18 @@
 --- openldap-2.2.6/servers/slapd/slapd.conf	2004-02-28 15:42:39.692604592 +0100
 +++ openldap-2.3.24/servers/slapd/slapd.conf	2006-07-18 14:25:02.356103035 +0300
-@@ -2,22 +2,57 @@
+@@ -2,22 +2,61 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
  #
 -include		%SYSCONFDIR%/schema/core.schema
 +include		/usr/share/openldap/schema/core.schema
-+#include	/usr/share/openldap/schema/cosine.schema
-+#include	/usr/share/openldap/schema/inetorgperson.schema
-+#include	/usr/share/openldap/schema/java.schema
-+#include	/usr/share/openldap/schema/misc.schema
-+#include	/usr/share/openldap/schema/nis.schema
-+#include	/usr/share/openldap/schema/corba.schema
-+#include	/usr/share/openldap/schema/openldap.schema
++include		/usr/share/openldap/schema/cosine.schema
++include		/usr/share/openldap/schema/inetorgperson.schema
++include		/usr/share/openldap/schema/nis.schema
++include		/usr/share/openldap/schema/misc.schema
++#include		/usr/share/openldap/schema/java.schema
++#include		/usr/share/openldap/schema/corba.schema
++#include		/usr/share/openldap/schema/openldap.schema
 +include		%SYSCONFDIR%/schema/local.schema
  
  # Define global ACLs to disable default read access.
@@ -59,35 +59,48 @@
 +# moduleload	translucent.la
 +# moduleload	unique.la
 +# moduleload	valsort.la
- 
++
++# TLSCACertificateFile /usr/share/ssl/ca-bundle.crt
++# TLSCertificateFile /etc/openldap/slapd.pem
++# TLSCertificateKeyFile /etc/openldap/slapd.key
+
  # Sample security restrictions
  #	Require integrity protection (prevent hijacking)
-@@ -54,14 +85,23 @@
-+# A NULL database configuration follows. It is enough to run slapd, but it does
-+# nothing. You need to install one of the backends and configure a real database 
+@@ -54,19 +85,30 @@
+ # rootdn can always read and write EVERYTHING!
+ 
+ #######################################################################
+-# BDB database definitions
++# BDB or HDB database definitions
+ #######################################################################
  
 -database	bdb
-+database	null
++database	hdb
  suffix		"dc=my-domain,dc=com"
  rootdn		"cn=Manager,dc=my-domain,dc=com"
  # Cleartext passwords, especially for the rootdn, should
  # be avoid.  See slappasswd(8) and slapd.conf(5) for details.
  # Use of strong authentication encouraged.
 -rootpw		secret
-+#rootpw		secret
++# rootpw               secret
++# rootpw               {crypt}ijFYNcSNctBYg
  # The database directory MUST exist prior to running slapd AND 
  # should only be accessible by the slapd and slap tools.
  # Mode 700 recommended.
  directory	%LOCALSTATEDIR%/openldap-data
  # Indices to maintain
- index	objectClass	eq
+-index	objectClass	eq
++index objectClass			eq,pres
++index ou,cn,mail,surname,givenname	eq,pres,sub
++index uidNumber,gidNumber,loginShell	eq,pres
++index uid,memberUid			eq,pres,sub
++index nisMapName,nisMapEntry		eq,pres,sub
 +
-+#database	bdb
-+#suffix		"dc=my-domain,dc=com"
-+#rootdn		"cn=Manager,dc=my-domain,dc=com"
-+##rootpw		secret
-+#directory	%LOCALSTATEDIR%/openldap-data
-+#index	objectClass	eq
++# Replicas of this database
++#replogfile %LOCALSTATEDIR%/openldap-data/openldap-master-replog
++#replica host=ldap-1.example.com:389 starttls=critical
++#	bindmethod=sasl saslmech=GSSAPI
++#	authcId=host/ldap-master.example.com@EXAMPLE.COM
 --- openldap-2.2.6/build/top.mk.orig	2004-01-01 19:16:25.000000000 +0100
 +++ openldap-2.2.6/build/top.mk	2004-02-28 15:43:38.579652400 +0100
 @@ -37,7 +37,7 @@
