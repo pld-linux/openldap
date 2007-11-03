@@ -65,6 +65,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
 %{?with_system_db:BuildRequires:	db-devel >= 4.2}
+BuildRequires:	gcc >= 5:3.4
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
