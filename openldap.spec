@@ -781,7 +781,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 Сервера (демони), що поставляються з LDAP.
 
 %prep
-%setup -q -c -a1
+%setup -q -c %{!?with_system_db:-a1}
 cd %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
@@ -1030,8 +1030,6 @@ cd %{name}-%{version}
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
-
-install servers/slapd/overlays/.libs/syncprov{.la,*.so*} $RPM_BUILD_ROOT%{_libdir}/openldap
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -1311,21 +1309,6 @@ fi
 %attr(755,root,root) %ghost %{_libdir}/libldap-2.4.so.2
 %attr(755,root,root) %ghost %{_libdir}/libldap_r-2.4.so.2
 
-%files ldapc++
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libldapcpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libldapcpp.so.0
-
-%files ldapc++-devel
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libldapcpp.so
-%{_libdir}/libldapcpp.la
-%{_includedir}/ldapc++
-
-%files ldapc++-static
-%defattr(644,root,root,755)
-%{_libdir}/libldapcpp.a
-
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblber.so
@@ -1343,6 +1326,7 @@ fi
 %{_libdir}/libldap.a
 %{_libdir}/libldap_r.a
 
+%if %{with exchange}
 %files evolution-devel
 %defattr(644,root,root,755)
 %dir %{evolution_exchange_prefix}
@@ -1351,10 +1335,25 @@ fi
 %{evolution_exchange_prefix}/README*
 %{evolution_exchange_includedir}/*.h
 %{evolution_exchange_libdir}/*.a
+%endif
+
+%files ldapc++
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libldapcpp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libldapcpp.so.0
+
+%files ldapc++-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libldapcpp.so
+%{_libdir}/libldapcpp.la
+%{_includedir}/ldapc++
+
+%files ldapc++-static
+%defattr(644,root,root,755)
+%{_libdir}/libldapcpp.a
 
 %files backend-bdb
 %defattr(644,root,root,755)
-%doc db-%{db_version}/LICENSE
 %attr(755,root,root) %{_libdir}/openldap/back_bdb*.so*
 %{_libdir}/openldap/back_bdb.la
 %{_mandir}/man5/slapd-bdb.5*
@@ -1367,7 +1366,6 @@ fi
 
 %files backend-hdb
 %defattr(644,root,root,755)
-%doc db-%{db_version}/LICENSE
 %attr(755,root,root) %{_libdir}/openldap/back_hdb*.so*
 %{_libdir}/openldap/back_hdb.la
 %{_mandir}/man5/slapd-hdb.5*
@@ -1538,6 +1536,11 @@ fi
 
 %files servers
 %defattr(644,root,root,755)
+%if %{without system_db}
+# not used by slapd directly, but by two different backends (bdb,hdb), so include here
+%doc db-%{db_version}/LICENSE
+%attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
+%endif
 %dir %{_sysconfdir}/openldap/schema
 %attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.conf
 %attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.access.conf
@@ -1550,12 +1553,11 @@ fi
 %dir %{_datadir}/openldap/schema
 %{_datadir}/openldap/schema/*.ldif
 %{_datadir}/openldap/schema/*.schema
-%dir %{_libdir}/openldap/
+%dir %{_libdir}/openldap
 %attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
 %{_mandir}/man5/slapd.*.5*
 %{_mandir}/man5/slapd-config.5*
 %{_mandir}/man5/slapd-ldbm.5*
 %{_mandir}/man5/slapd-ldif.5*
 %{_mandir}/man5/slapd-null.5*
-%{_mandir}/man8/*
+%{_mandir}/man8/slap*
