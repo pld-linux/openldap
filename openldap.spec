@@ -3,13 +3,14 @@
 # - complete & validate descriptions
 # - trigger for removed ldbm backend
 # - trigger for removed overlays (denyop,lastmod)
-# - pl translations for new overlays (call me lazy - baggins)
 #
 # Conditional build:
-%bcond_without	odbc	# disable sql backend
-%bcond_without	perl	# disable perl backend
-%bcond_without	sasl 	# don't build cyrus sasl support
-%bcond_without	slp	# disable SLP support
+%bcond_without	exchange	# hacked version of library for Evolution Exchange support
+%bcond_without	odbc		# disable sql backend
+%bcond_without	perl		# disable perl backend
+%bcond_without	sasl 		# don't build cyrus sasl support
+%bcond_without	slp		# disable SLP support
+%bcond_with	system_db	# system Berkeley DB
 #
 # Never change or update Berkeley DB, it's there to isolate OpenLDAP
 # from any future changes to the system-wide Berkeley DB library.
@@ -63,6 +64,7 @@ URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
+%{?with_system_db:BuildRequires:	db-devel >= 4.2}
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 1:1.4.2-9
@@ -197,7 +199,7 @@ Bibliotecas estáticas para desenvolvimento com openldap.
 Статичні бібліотеки, необхідні для розробки програм, що використовують
 LDAP.
 
-%package	evolution-devel
+%package evolution-devel
 Summary:	LDAP NTLM hack for the evolution-exchange
 Summary(pl.UTF-8):	Hack NTLM dla pakietu evolution-exchange
 Group:		Development/Libraries
@@ -223,7 +225,7 @@ Biblioteka klas C++ LDAPv3.
 
 %package ldapc++-devel
 Summary:	LDAPv3 C++ Class Library development files
-Summary(pl.UTF-8):	Pliki dla developerów C++ LDAPv3
+Summary(pl.UTF-8):	Pliki dla programistów C++ LDAPv3
 Group:		Libraries
 Requires:	%{name}-ldapc++ = %{version}-%{release}
 
@@ -231,13 +233,14 @@ Requires:	%{name}-ldapc++ = %{version}-%{release}
 LDAPv3 C++ Class Library development files.
 
 %description ldapc++-devel -l pl.UTF-8
-Pliki dla developerów C++ LDAPv3.
+Pliki dla programistów C++ LDAPv3.
 
 %package ldapc++-static
 Summary:	Static LDAPv3 C++ Class Library
 Summary(pl.UTF-8):	Biblioteka statyczna klas C++ LDAPv3
 Group:		Libraries
 Requires:	%{name}-ldapc++-devel = %{version}-%{release}
+Requires:	libstdc++-devel
 
 %description ldapc++-static
 Static LDAPv3 C++ Class Library.
@@ -442,6 +445,10 @@ It traps only LDAP adds and modify commands (and only seeks to
 control the add and modify value mods of a modify)
 
 %description overlay-constraint -l pl.UTF-8
+Ta nakładka ogranicza wartości, które można umieszczać w atrybucie,
+ponad limity umieszczone w schemacie. Przechwytuje jedynie polecenia
+dodawania i modyfikowania LDAP (i kontroluje tylko wartości dodawania
+i modyfikowania).
 
 %package overlay-dds
 Summary:	Dynamic Directory Services overlay for OpenLDAP server
@@ -451,11 +458,15 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-dds
-The dds overlay implements dynamic objects as per RFC 2589.
-The name dds stands for Dynamic Directory Services.  It allows to
-define dynamic objects, characterized by the dynamicObject objectClass.
+The dds overlay implements dynamic objects as per RFC 2589. The name
+dds stands for Dynamic Directory Services. It allows to define dynamic
+objects, characterized by the dynamicObject objectClass.
 
 %description overlay-dds -l pl.UTF-8
+Nakładka dds implementuje obiekty dynamicznie zgodnie z RFC 2589.
+Nazwa dds oznacza Dynamic Directory Services (dynamiczne usługi
+katalogowe). Pozwala definiować obiekty dynamiczne, opisywane przez
+klasę dynamicObject objectClass.
 
 %package overlay-dyngroup
 Summary:	Dyngroup overlay for OpenLDAP server
@@ -501,11 +512,15 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-memberof
 The memberof overlay allows automatic reverse group membership
-maintenance.  Any time a group entry is modified, its members
+maintenance. Any time a group entry is modified, its members
 are modified as appropriate in order to keep a DN-valued
 "is member of" attribute updated with the DN of the group.
 
 %description overlay-memberof -l pl.UTF-8
+Nakładka memberof pozwala automatycznie utrzymywać odwrotne
+członkostwo grup. Zawsze przy modyfikacji wpisu grupy jej członkowie
+są modyfikowani w odpowiedniej kolejności, aby utrzymać opisany w DN
+atrybut "jest członkiem grupy", uaktualniany wraz z DN grupy.
 
 %package overlay-pcache
 Summary:	Proxy cache overlay for OpenLDAP server
@@ -603,9 +618,11 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-seqmod
-This overlay serializes concurrent attempts to modify a single entry
+This overlay serializes concurrent attempts to modify a single entry.
 
 %description overlay-seqmod -l pl.UTF-8
+Ta nakładka serializuje jednoczesne próby zmodyfikowania tego samego
+wpisu.
 
 %package overlay-smbk5pwd
 Summary:	smbk5pwd overlay for OpenLDAP server
@@ -615,8 +632,13 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-smbk5pwd
+smbk5pwd overlay extends the PasswordModify Extended Operation to
+update Kerberos keys and Samba password hashes for an LDAP user.
 
 %description overlay-smbk5pwd -l pl.UTF-8
+Nakładka smbk5pwd rozszerza rozszerzoną operację PasswordModify o
+uaktualnianie kluczy Kerberosa i skrótów haseł Samby dla użytkownika
+LDAP.
 
 %package overlay-syncprov
 Summary:	Syncrepl Provider overlay for OpenLDAP server
@@ -713,7 +735,10 @@ Requires:	rc-scripts
 Requires:	uname(release) >= 2.6
 Provides:	group(slapd)
 Provides:	user(slapd)
+Obsoletes:	openldap-backend-ldbm
+Obsoletes:	openldap-overlay-denyop
 Obsoletes:	openldap-overlay-glue
+Obsoletes:	openldap-overlay-lastmod
 Conflicts:	kernel24
 Conflicts:	kernel24-smp
 # for the posttrans scriptlet, conflicts because in vserver environment rpm package is not installed.
@@ -729,12 +754,10 @@ You will also need some backend for server, so install some
 openldap-backend package. The bdb backend is recommended.
 
 %description servers -l pl.UTF-8
-Serwery (demony) które przychodzą z LDAPem.
+Ten pakiet zawiera demona slapd odpowiadającego za obsługę bazy danych
+i zapytania klientów.
 
-Pakiet ten zawiera:
-- serwer LDAP (slapd)
-
-Zainstaluj ten pakiet jeżeli potrzebujesz server OpenLDAP-2.x.
+Aby uruchomić serwer OpenLDAP 2.x należy zainstalować ten pakiet.
 
 Potrzebny też jest jakiś backend dla serwera, dlatego należy
 zainstalować odpowiedni pakiet openldap-backend. Zalecany jest backend
@@ -782,8 +805,11 @@ cd %{name}-%{version}
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
 
+%if %{without system_db}
 install -d db-%{db_version}/build-rpm
+%endif
 
+%if %{with exchange}
 # Set up a build tree for a static version of libldap with the hooks for the
 # non-standard NTLM bind type which is needed to connect to Win2k GC servers
 # (Win2k3 supports SASL with DIGEST-MD5, so this shouldn't be needed for those
@@ -794,8 +820,10 @@ if ! cp -al %{name}-%{version} evo-%{name}-%{version} ; then
 fi
 cd evo-%{name}-%{version}
 %patch100 -p0
+%endif
 
 %build
+%if %{without system_db}
 dbdir=`pwd`/db-instroot
 cd db-%{db_version}/build-rpm
 
@@ -805,7 +833,6 @@ CFLAGS="%{rpmcflags}"
 CXXFLAGS="%{rpmcflags} -fno-implicit-templates"
 LDFLAGS="%{rpmcflags} %{rpmldflags}"
 export CC CXX CFLAGS CXXFLAGS LDFLAGS
-
 
 ../dist/%configure \
 	--disable-compat185 \
@@ -823,11 +850,19 @@ export CC CXX CFLAGS CXXFLAGS LDFLAGS
 	--includedir=${dbdir}/include \
 	--libdir=${dbdir}/%{_lib}
 
-%{__make} libdb_base=libslapd_db libso_base=libslapd_db
-%{__make} install libdb_base=libslapd_db libso_base=libslapd_db strip="false"
+%{__make} \
+	libdb_base=libslapd_db \
+	libso_base=libslapd_db
+%{__make} install \
+	libdb_base=libslapd_db \
+	libso_base=libslapd_db \
+	strip="false"
 ln -sf libslapd_db.so ${dbdir}/%{_lib}/${subdir}/libdb.so
 
-cd ../../%{name}-%{version}
+cd ../..
+%endif
+
+cd %{name}-%{version}
 
 CPPFLAGS="-I${dbdir}/include -I/usr/include/ncurses"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
@@ -891,10 +926,10 @@ export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS LD_LIBRARY_PATH
 %{__make} -j1 depend
 %{__make}
 
-mkdir libs
+install -d libs
 for d in liblber libldap libldap_r ; do
-	ln -s ../libraries/$d/.libs/$d.la libs/$d.la
-	ln -s ../libraries/$d/.libs/$d.so libs/$d.so
+	ln -sf ../libraries/$d/.libs/$d.la libs/$d.la
+	ln -sf ../libraries/$d/.libs/$d.so libs/$d.so
 done
 
 __topdir=`pwd`
@@ -907,6 +942,7 @@ cd contrib/ldapc++
 	--with-ldap-includes=$__topdir/include
 %{__make}
 
+%if %{with exchange}
 # Build evolution-specific clients just as we would normal clients,
 # except with a different installation directory in mind
 # and no shared libraries.
@@ -957,6 +993,7 @@ cd ../../../evo-%{name}-%{version}
 
 %{__make} -j1 depend
 %{__make}
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -965,21 +1002,26 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} 
 	$RPM_BUILD_ROOT%{_datadir}/openldap/schema \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir}}
 
+%if %{with exchange}
 # Install evolution hack first and remove everything but devel stuff
-cd evo-%{name}-%{version}
-%{__make} install \
+%{__make} -C evo-%{name}-%{version} install \
 	DESTDIR=$RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
 install %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
+%endif
 
-cd ../db-instroot
-install -m755 %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT/%{_libdir}/
+%if %{without system_db}
+cd db-instroot
+install -m755 %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT%{_libdir}
 cd bin
 for binary in db_* ; do
-	install -m755 ${binary} $RPM_BUILD_ROOT/%{_sbindir}/slapd_${binary}
+	install -m755 ${binary} $RPM_BUILD_ROOT%{_sbindir}/slapd_${binary}
 done
 
-cd ../../%{name}-%{version}
+cd ../..
+%endif
+
+cd %{name}-%{version}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -1008,8 +1050,7 @@ echo "# This is a good place to put slapd access-control directives" > \
 echo "# This is a good place to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
-cd contrib/ldapc++
-%{__make} install \
+%{__make} -C contrib/ldapc++ install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
