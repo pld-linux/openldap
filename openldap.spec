@@ -918,8 +918,6 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %if %{with odbc}
 	--enable-sql=mod \
 	--with-odbc=unixodbc \
-%else
-	--with-odbc=no \
 %endif
 	--enable-overlays=mod \
 	--with-threads \
@@ -987,8 +985,6 @@ cd ../../../evo-%{name}-%{version}
 	--enable-overlays=no \
 %if %{with odbc}
 	--with-odbc=unixodbc \
-%else
-	--with-odbc=no \
 %endif
 	--with-threads \
 	--with-tls \
