@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.6
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -867,7 +867,7 @@ cd ../..
 
 cd %{name}-%{version}
 
-CPPFLAGS="%{!?with_system_db:-I${dbdir}/include }-I/usr/include/ncurses"
+CPPFLAGS="%{!?with_system_db:-I${dbdir}/include -D__lock_getlocker=__lock_getlocker_openldap }-I/usr/include/ncurses"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
 CXXFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
 LDFLAGS="%{rpmcflags} %{rpmldflags}%{!?with_system_db: -L${dbdir}/%{_lib}}"
