@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.6
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -37,27 +37,27 @@ Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
 Source3:	%{name}.sysconfig
-Source4:	ldap.conf
+Source4:	%{name}.conf
+Source5:	ldap.conf
 Source100:	%{name}-README.evolution
 Patch0:		%{name}-make_man_link.patch
-Patch1:		%{name}-conffile.patch
-Patch2:		%{name}-config.patch
-Patch3:		%{name}-fast.patch
-Patch4:		%{name}-cldap.patch
-Patch5:		%{name}-ldapi_FHS.patch
-Patch6:		%{name}-install.patch
-Patch7:		%{name}-backend_libs.patch
-Patch8:		%{name}-perl.patch
-Patch9:		%{name}-pic.patch
-Patch10:	%{name}-ltinstall-mode.patch
-Patch11:	%{name}-whowhere.patch
-Patch12:	%{name}-ldaprc.patch
-Patch13:	%{name}-setugid.patch
-Patch14:	%{name}-nosql.patch
-Patch15:	%{name}-smbk5pwd.patch
-Patch16:	%{name}-ldapc++.patch
-Patch17:	%{name}-pie.patch
-Patch18:	%{name}-gethostbyXXXX_r.patch
+Patch1:		%{name}-config.patch
+Patch2:		%{name}-fast.patch
+Patch3:		%{name}-cldap.patch
+Patch4:		%{name}-ldapi_FHS.patch
+Patch5:		%{name}-install.patch
+Patch6:		%{name}-backend_libs.patch
+Patch7:		%{name}-perl.patch
+Patch8:		%{name}-pic.patch
+Patch9:		%{name}-ltinstall-mode.patch
+Patch10:	%{name}-whowhere.patch
+Patch11:	%{name}-ldaprc.patch
+Patch12:	%{name}-setugid.patch
+Patch13:	%{name}-nosql.patch
+Patch14:	%{name}-smbk5pwd.patch
+Patch15:	%{name}-ldapc++.patch
+Patch16:	%{name}-pie.patch
+Patch17:	%{name}-gethostbyXXXX_r.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -123,6 +123,17 @@ openldap-client.
 
 %description -l uk.UTF-8
 Зразки клієнтів, що поставляються з LDAP.
+
+%package nss-config
+Summary:	Common configuration for nss_ldap and pam_ldap
+Summary(pl.UTF-8):	Wspólna konfiguracja dla nss_ldap i pam_ldap
+Group:		Base
+
+%description nss-config
+Common configuration for nss_ldap and pam_ldap.
+
+%description nss-config -l pl.UTF-8
+Wspólna konfiguracja dla nss_ldap i pam_ldap.
 
 %package libs
 Summary:	LDAP shared libraries
@@ -803,7 +814,6 @@ cd %{name}-%{version}
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
@@ -1032,11 +1042,14 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
+# Config for openldap library
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldap.conf
+# Config for nss_ldap and pam_ldap
+install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
-rm -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.{default,example},ldap.conf,schema/README}
+rm -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.{default,example},schema/README}
 
 # Standard schemas should not be changed by users
 mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema
@@ -1291,12 +1304,16 @@ fi
 %doc %{name}-%{version}/doc/{drafts,rfc}
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldapserver
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ldap.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldap.conf
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
 %{_mandir}/man5/ldap.conf.5*
 %{_mandir}/man5/ldif.5*
+
+%files nss-config
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ldap.conf
 
 %files libs
 %defattr(644,root,root,755)
