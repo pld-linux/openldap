@@ -1,4 +1,6 @@
 # TODO:
+# - fix *.la poisoning (when not using system db) with paths as:
+#   -L/home/users/builder/rpm/BUILD/openldap-2.4.7/db-instroot/lib64
 # - package contribs?
 # - complete & validate descriptions
 # - trigger for removed ldbm backend
