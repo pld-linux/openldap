@@ -1,16 +1,16 @@
 --- openldap-2.4.6/contrib/ldapc++/src/Makefile.am~	2005-10-05 17:30:05.000000000 +0200
 +++ openldap-2.4.6/contrib/ldapc++/src/Makefile.am	2007-10-31 18:51:32.000000000 +0100
 @@ -44,7 +44,9 @@
-                         LDAPUrlList.cpp \
-                         StringList.cpp 
+ 			SaslInteractionHandler.cpp \
+ 			StringList.cpp 
  
 -include_HEADERS = LDAPAsynConnection.h \
 +ldapcppincludedir = $(includedir)/ldapc++
 +
 +ldapcppinclude_HEADERS = LDAPAsynConnection.h \
-                         LDAPAttribute.h \
-                         LDAPAttributeList.h \
-                         LDAPAttrType.h \
+ 			LDAPAttribute.h \
+ 			LDAPAttributeList.h \
+ 			LDAPAttrType.h \
 --- openldap-2.4.6/contrib/ldapc++/configure.in~	2007-10-02 04:24:57.000000000 +0200
 +++ openldap-2.4.6/contrib/ldapc++/configure.in	2007-10-31 20:41:20.000000000 +0100
 @@ -22,13 +22,6 @@
