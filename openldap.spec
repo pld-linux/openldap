@@ -1,6 +1,4 @@
 # TODO:
-# - fix *.la poisoning (when not using system db) with paths as:
-#   -L/home/users/builder/rpm/BUILD/openldap-2.4.7/db-instroot/lib64
 # - package contribs?
 # - complete & validate descriptions
 # - trigger for removed ldbm backend
@@ -29,12 +27,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.7
-Release:	2
+Version:	2.4.8
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	4738ccb79215c027b857a6ea56e7351d
+# Source0-md5:	5ef2ea680479e0cee13fdf64a4ef548a
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -78,6 +76,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_perl:BuildRequires:	perl-devel}
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	sed >= 4.0
 BuildRequires:	uname(release) >= 2.6
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
@@ -400,6 +399,19 @@ Shell backend to slapd, the OpenLDAP server.
 
 %description backend-shell -l pl.UTF-8
 Backend Shell do slapd - serwera OpenLDAP.
+
+%package backend-sock
+Summary:	Socket backend to OpenLDAP server
+Summary(pl.UTF-8):	Backend Socket do serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description backend-sock
+Socket backend to slapd, the OpenLDAP server.
+
+%description backend-sock -l pl.UTF-8
+Backend Socket do slapd - serwera OpenLDAP.
 
 %package backend-sql
 Summary:	SQL backend to OpenLDAP server
@@ -928,6 +940,7 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %endif
 	--enable-relay=mod \
 	--enable-shell=mod \
+	--enable-sock=mod \
 %if %{with odbc}
 	--enable-sql=mod \
 	--with-odbc=unixodbc \
@@ -994,7 +1007,7 @@ cd ../../../evo-%{name}-%{version}
 	--disable-slp \
 %endif
 	--enable-wrappers \
-	--enable-backands=no \
+	--enable-backends=no \
 	--enable-overlays=no \
 %if %{with odbc}
 	--with-odbc=unixodbc \
@@ -1024,6 +1037,7 @@ install %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolutio
 %endif
 
 %if %{without system_db}
+dbdir=`pwd`/db-instroot
 cd db-instroot
 install -m755 %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT%{_libdir}
 cd bin
@@ -1066,6 +1080,10 @@ echo "# This is a good place to put your schema definitions " > \
 
 %{__make} -C contrib/ldapc++ install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+%if %{without system_db}
+find $RPM_BUILD_ROOT -name \*.la | xargs sed -i -e "s|-L${dbdir}/%{_lib}||g"
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -1180,6 +1198,12 @@ fi \
 
 %preun backend-shell
 %ldap_module_remove back_shell.la
+
+%post backend-sock
+%ldap_module_add back_sock.la
+
+%preun backend-sock
+%ldap_module_remove back_sock.la
 
 %post backend-sql
 %ldap_module_add back_sql.la
@@ -1433,6 +1457,12 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/back_shell*.so*
 %{_libdir}/openldap/back_shell.la
 %{_mandir}/man5/slapd-shell.5*
+
+%files backend-sock
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_sock*.so*
+%{_libdir}/openldap/back_sock.la
+%{_mandir}/man5/slapd-sock.5*
 
 %if %{with odbc}
 %files backend-sql
