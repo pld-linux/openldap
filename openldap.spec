@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.8
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -810,6 +810,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %prep
 %setup -q -c %{!?with_system_db:-a1}
 cd %{name}-%{version}
+rm -f contrib/ldapc++/ltmain.sh
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -962,6 +963,7 @@ done
 
 __topdir=`pwd`
 cd contrib/ldapc++
+%{__libtoolize}
 %{__aclocal}
 %{__automake}
 %{__autoconf}
