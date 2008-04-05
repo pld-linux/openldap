@@ -810,7 +810,6 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %prep
 %setup -q -c %{!?with_system_db:-a1}
 cd %{name}-%{version}
-rm -f contrib/ldapc++/ltmain.sh
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
