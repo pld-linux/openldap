@@ -892,7 +892,7 @@ cd ../..
 cd %{name}-%{version}
 
 CPPFLAGS="%{!?with_system_db:-I${dbdir}/include -D__lock_getlocker=__lock_getlocker_openldap }-I/usr/include/ncurses"
-CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
+CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC -D_GNU_SOURCE"
 CXXFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
 LDFLAGS="%{rpmcflags} %{rpmldflags}%{!?with_system_db: -L${dbdir}/%{_lib}}"
 export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
