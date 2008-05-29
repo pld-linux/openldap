@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.8
-Release:	3
+Release:	4
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -901,6 +901,7 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %endif
 
 %{__libtoolize}
+cp -f /usr/share/automake/config.sub ./build/
 %{__aclocal}
 %{__autoconf}
 %configure \
@@ -978,6 +979,7 @@ cd contrib/ldapc++
 cd ../../../evo-%{name}-%{version}
 
 %{__libtoolize}
+cp -f /usr/share/automake/config.sub ./build/
 %{__aclocal}
 %{__autoconf}
 %configure \
