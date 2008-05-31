@@ -1,0 +1,85 @@
+--- openldap-2.4.9/build/openldap.m4.orig	2008-05-31 14:32:46.228618000 +0200
++++ openldap-2.4.9/build/openldap.m4	2008-05-31 14:39:51.040820021 +0200
+@@ -487,7 +487,12 @@
+ ])
+ 
+ if test $ol_cv_bdb_major = 4 ; then
+-	if test $ol_cv_bdb_minor = 6 ; then
++	if test $ol_cv_bdb_minor = 7 ; then
++		OL_BERKELEY_DB_TRY(ol_cv_db_db_4_dot_7,[-ldb-4.7])
++		OL_BERKELEY_DB_TRY(ol_cv_db_db47,[-ldb47])
++		OL_BERKELEY_DB_TRY(ol_cv_db_db_47,[-ldb-47])
++		OL_BERKELEY_DB_TRY(ol_cv_db_db_4_7,[-ldb-4-7])
++	elif test $ol_cv_bdb_minor = 6 ; then
+ 		OL_BERKELEY_DB_TRY(ol_cv_db_db_4_dot_6,[-ldb-4.6])
+ 		OL_BERKELEY_DB_TRY(ol_cv_db_db46,[-ldb46])
+ 		OL_BERKELEY_DB_TRY(ol_cv_db_db_46,[-ldb-46])
+--- openldap-2.4.9/servers/slapd/back-bdb/init.c.orig	2008-02-12 00:26:45.000000000 +0100
++++ openldap-2.4.9/servers/slapd/back-bdb/init.c	2008-05-31 15:16:27.169969451 +0200
+@@ -503,7 +503,7 @@ shm_retry:
+ 	}
+ 
+ 	if ( !quick ) {
+-#if DB_VERSION_FULL >= 0x04060012
++#if (DB_VERSION_FULL >= 0x04060012) && (DB_VERSION_FULL < 0x04070000)
+ 		u_int32_t lid;
+ 		XLOCK_ID(bdb->bi_dbenv, &lid);
+ 		__lock_getlocker(bdb->bi_dbenv->lk_handle, lid, 0, &bdb->bi_cache.c_locker);
+@@ -601,7 +601,7 @@ bdb_db_close( BackendDB *be, ConfigReply
+ 	if( bdb->bi_dbenv ) {
+ 		/* Free cache locker if we enabled locking */
+ 		if ( !( slapMode & SLAP_TOOL_QUICK ) && bdb->bi_cache.c_locker ) {
+-#if DB_VERSION_FULL >= 0x04060012
++#if (DB_VERSION_FULL >= 0x04060012) && (DB_VERSION_FULL < 0x04070000)
+ 			XLOCK_ID_FREE(bdb->bi_dbenv, bdb->bi_cache.c_locker->id);
+ #else
+ 			XLOCK_ID_FREE(bdb->bi_dbenv, bdb->bi_cache.c_locker);
+--- openldap-2.4.9/servers/slapd/back-bdb/cache.c.orig	2008-05-01 23:39:35.000000000 +0200
++++ openldap-2.4.9/servers/slapd/back-bdb/cache.c	2008-05-31 15:16:11.689091436 +0200
+@@ -1444,7 +1444,7 @@ bdb_locker_id_free( void *key, void *dat
+ 	u_int32_t lockid;
+ 	int rc;
+ 
+-#if DB_VERSION_FULL >= 0x04060012
++#if (DB_VERSION_FULL >= 0x04060012) && (DB_VERSION_FULL < 0x04070000)
+ 	BDB_LOCKER lptr = data;
+ 	lockid = lptr->id;
+ #else
+@@ -1508,7 +1508,7 @@ bdb_locker_id( Operation *op, DB_ENV *en
+ 		if ( rc != 0) {
+ 			return rc;
+ 		}
+-#if DB_VERSION_FULL >= 0x04060012
++#if (DB_VERSION_FULL >= 0x04060012) && (DB_VERSION_FULL < 0x04070000)
+ 		{ BDB_LOCKER lptr;
+ 		__lock_getlocker( env->lk_handle, lockid, 0, &lptr );
+ 		data = lptr;
+@@ -1527,7 +1527,7 @@ bdb_locker_id( Operation *op, DB_ENV *en
+ 	} else {
+ 		lockid = (long)data;
+ 	}
+-#if DB_VERSION_FULL >= 0x04060012
++#if (DB_VERSION_FULL >= 0x04060012) && (DB_VERSION_FULL < 0x04070000)
+ 	*locker = data;
+ #else
+ 	*locker = lockid;
+--- openldap-2.4.9/servers/slapd/back-bdb/back-bdb.h.orig	2008-05-01 23:39:35.000000000 +0200
++++ openldap-2.4.9/servers/slapd/back-bdb/back-bdb.h	2008-05-31 15:19:41.965070191 +0200
+@@ -59,7 +59,7 @@ LDAP_BEGIN_DECL
+ #endif
+ 
+ /* 4.6.18 redefines cursor->locker */
+-#if DB_VERSION_FULL >= 0x04060012
++#if (DB_VERSION_FULL >= 0x04060012) && (DB_VERSION_FULL < 0x04070000)
+ 
+ struct __db_locker {
+ 	u_int32_t	id;
+@@ -310,7 +310,7 @@ struct bdb_op_info {
+ #endif
+ 
+ /* BDB 4.6.18 makes locker a struct instead of an int */
+-#if DB_VERSION_FULL >= 0x04060012
++#if (DB_VERSION_FULL >= 0x04060012) && (DB_VERSION_FULL < 0x04070000)
+ #undef TXN_ID
+ #define TXN_ID(txn)	(txn)->locker
+ #endif
