@@ -27,12 +27,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.8
-Release:	4
+Version:	2.4.9
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	5ef2ea680479e0cee13fdf64a4ef548a
+# Source0-md5:	1d0c8913b4671b2e2e66ed546b4e9bbf
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -58,6 +58,7 @@ Patch14:	%{name}-smbk5pwd.patch
 Patch15:	%{name}-ldapc++.patch
 Patch16:	%{name}-pie.patch
 Patch17:	%{name}-gethostbyXXXX_r.patch
+Patch18:	%{name}-db.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -828,6 +829,7 @@ cd %{name}-%{version}
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
