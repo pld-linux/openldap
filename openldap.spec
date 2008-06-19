@@ -902,8 +902,7 @@ export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
 export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %endif
 
-%{__libtoolize}
-cp -f /usr/share/automake/config.sub ./build/
+%{__libtoolize} --install
 %{__aclocal}
 %{__autoconf}
 %configure \
@@ -980,8 +979,7 @@ cd contrib/ldapc++
 # and no shared libraries.
 cd ../../../evo-%{name}-%{version}
 
-%{__libtoolize}
-cp -f /usr/share/automake/config.sub ./build/
+%{__libtoolize} --install
 %{__aclocal}
 %{__autoconf}
 %configure \
