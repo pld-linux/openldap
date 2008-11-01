@@ -27,12 +27,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.11
+Version:	2.4.12
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	920fedbbb5bc61c2ca52c56edeef770a
+# Source0-md5:	78a03f7dd2c842103a987e97c243925e
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -58,7 +58,6 @@ Patch14:	%{name}-smbk5pwd.patch
 Patch15:	%{name}-ldapc++.patch
 Patch16:	%{name}-pie.patch
 Patch17:	%{name}-gethostbyXXXX_r.patch
-Patch18:	%{name}-db.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -459,6 +458,20 @@ zmian w danej bazie danych do podanego pliki loga. Zmiany są logowane
 jako standardowy LDIF z dodatkowym nagłówkiem komentarza podającym
 czas zmiany i identyfikującym użytkownika, który dokonał zmiany.
 
+%package overlay-collect
+Summary:	Collect overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka collect dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-collect
+The collect overlay is used to provide a relatively coarse
+implementation of RFC 3671 collective attributes.
+
+%description overlay-collect -l pl.UTF-8
+Nakładka collect jest używana do dostarczenia atrybutów wg RFC 3671.
+
 %package overlay-constraint
 Summary:	Constraint overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka constraint dla serwera OpenLDAP
@@ -467,10 +480,10 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-constraint
-This overlay limits the values which can be placed into an
-attribute, over and above the limits placed by the schema.
-It traps only LDAP adds and modify commands (and only seeks to
-control the add and modify value mods of a modify)
+This overlay limits the values which can be placed into an attribute,
+over and above the limits placed by the schema. It traps only LDAP
+adds and modify commands (and only seeks to control the add and modify
+value mods of a modify)
 
 %description overlay-constraint -l pl.UTF-8
 Ta nakładka ogranicza wartości, które można umieszczać w atrybucie,
@@ -540,9 +553,9 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-memberof
 The memberof overlay allows automatic reverse group membership
-maintenance. Any time a group entry is modified, its members
-are modified as appropriate in order to keep a DN-valued
-"is member of" attribute updated with the DN of the group.
+maintenance. Any time a group entry is modified, its members are
+modified as appropriate in order to keep a DN-valued "is member of"
+attribute updated with the DN of the group.
 
 %description overlay-memberof -l pl.UTF-8
 Nakładka memberof pozwala automatycznie utrzymywać odwrotne
@@ -829,7 +842,6 @@ cd %{name}-%{version}
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
-%patch18 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
@@ -1232,6 +1244,12 @@ fi \
 %preun overlay-auditlog
 %ldap_module_remove auditlog.la
 
+%post overlay-collect
+%ldap_module_add collect.la
+
+%preun overlay-collect
+%ldap_module_remove collect.la
+
 %post overlay-constraint
 %ldap_module_add constraint.la
 
@@ -1488,6 +1506,12 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/auditlog*.so*
 %{_libdir}/openldap/auditlog.la
 %{_mandir}/man5/slapo-auditlog.5*
+
+%files overlay-collect
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/collect*.so*
+%{_libdir}/openldap/collect.la
+%{_mandir}/man5/slapo-collect.5*
 
 %files overlay-constraint
 %defattr(644,root,root,755)
