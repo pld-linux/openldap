@@ -63,7 +63,10 @@ Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_sasl:BuildRequires:	cyrus-sasl-devel >= 2.1.15}
+%if %{with sasl}
+BuildRequires:	cyrus-sasl-devel >= 2.1.15
+BuildRequires:	libicu-devel
+%endif
 %{?with_system_db:BuildRequires:	db-devel >= 4.2}
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	groff
