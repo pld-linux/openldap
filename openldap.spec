@@ -1098,7 +1098,7 @@ echo "# This is a good place to put slapd access-control directives" > \
 echo "# This is a good place to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
-%if %{without sasl}
+%if %{with sasl}
 %{__make} -C contrib/ldapc++ install \
 	DESTDIR=$RPM_BUILD_ROOT
 %endif
