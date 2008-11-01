@@ -978,7 +978,7 @@ for d in liblber libldap libldap_r ; do
 done
 
 __topdir=`pwd`
-%if %{without sasl}
+%if %{with sasl}
 cd contrib/ldapc++
 %{__libtoolize}
 %{__aclocal}
