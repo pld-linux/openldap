@@ -978,6 +978,7 @@ for d in liblber libldap libldap_r ; do
 done
 
 __topdir=`pwd`
+%if %{without sasl}
 cd contrib/ldapc++
 %{__libtoolize}
 %{__aclocal}
@@ -987,6 +988,7 @@ cd contrib/ldapc++
 	--with-libldap=$__topdir/libs \
 	--with-ldap-includes=$__topdir/include
 %{__make}
+%endif
 
 %if %{with exchange}
 # Build evolution-specific clients just as we would normal clients,
@@ -1096,8 +1098,10 @@ echo "# This is a good place to put slapd access-control directives" > \
 echo "# This is a good place to put your schema definitions " > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/local.schema
 
+%if %{without sasl}
 %{__make} -C contrib/ldapc++ install \
 	DESTDIR=$RPM_BUILD_ROOT
+%endif
 
 %if %{without system_db}
 find $RPM_BUILD_ROOT -name \*.la | xargs sed -i -e "s|-L${dbdir}/%{_lib}||g"
