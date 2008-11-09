@@ -1,0 +1,11 @@
+--- openldap-2.3.43/libraries/libldap_r/Makefile.in~	2008-11-09 19:55:31.000000000 +0200
++++ openldap-2.3.43/libraries/libldap_r/Makefile.in	2008-11-09 20:00:26.770084595 +0200
+@@ -56,7 +56,7 @@
+ XXLIBS = $(SECURITY_LIBS) $(LUTIL_LIBS)
+ XXXLIBS = $(LTHREAD_LIBS)
+ NT_LINK_LIBS = $(LDAP_LIBLBER_LA) $(AC_LIBS) $(SECURITY_LIBS)
+-UNIX_LINK_LIBS = $(LDAP_LIBLBER_LA) $(AC_LIBS) $(SECURITY_LIBS)
++UNIX_LINK_LIBS = $(LDAP_LIBLBER_LA) $(AC_LIBS) $(SECURITY_LIBS) $(LTHREAD_LIBS)
+ 
+ .links : Makefile
+ 	@for i in $(XXSRCS); do \
