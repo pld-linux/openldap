@@ -18,7 +18,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.3.43
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -41,6 +41,7 @@ Patch11:	%{name}-whowhere.patch
 Patch12:	%{name}-ldaprc.patch
 Patch13:	%{name}-setugid.patch
 Patch14:	%{name}-nosql.patch
+Patch15:	%{name}-link.patch
 #Patch12:	%{name}-sendbuf.patch
 URL:		http://www.openldap.org/
 BuildRequires:	autoconf
@@ -694,6 +695,7 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
+%patch15 -p1
 
 %build
 %{__libtoolize}
