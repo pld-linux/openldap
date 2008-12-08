@@ -511,6 +511,19 @@ Nazwa dds oznacza Dynamic Directory Services (dynamiczne usługi
 katalogowe). Pozwala definiować obiekty dynamiczne, opisywane przez
 klasę dynamicObject objectClass.
 
+%package overlay-deref
+Summary:	Dereference Control overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Dereference Control dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-deref
+Dereference Control overlay for OpenLDAP server.
+
+%description overlay-deref -l pl.UTF-8
+Nakładka Dereference Control dla serwera OpenLDAP.
+
 %package overlay-dyngroup
 Summary:	Dyngroup overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka dynamicznych grup dla serwera OpenLDAP
@@ -1267,6 +1280,12 @@ fi \
 %preun overlay-dds
 %ldap_module_remove dds.la
 
+%post overlay-deref
+%ldap_module_add deref.la
+
+%preun overlay-deref
+%ldap_module_remove deref.la
+
 %post overlay-dyngroup
 %ldap_module_add dyngroup.la
 
@@ -1529,6 +1548,11 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/dds*.so*
 %{_libdir}/openldap/dds.la
 %{_mandir}/man5/slapo-dds.5*
+
+%files overlay-deref
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/deref*.so*
+%{_libdir}/openldap/deref.la
 
 %files overlay-dyngroup
 %defattr(644,root,root,755)
