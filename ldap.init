@@ -48,7 +48,7 @@ start() {
 			ARGS="$ARGS $SLAPDOPTIONS"
 		fi
 		SERVICE_RUN_NICE_LEVEL="$SLAPDNICE"
-		daemon slapd $ARGS
+		daemon /usr/sbin/slapd $ARGS
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
 		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
