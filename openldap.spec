@@ -7,6 +7,7 @@
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
 %bcond_without	odbc		# disable sql backend
+%bcond_with	ndb		# enable MySQL NDB Cluster backend
 %bcond_without	perl		# disable perl backend
 %bcond_without	sasl 		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
@@ -27,12 +28,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.15
-Release:	1
+Version:	2.4.16
+Release:	0.1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	6f97d2793a4c7e4b33839569b2fee2db
+# Source0-md5:	ed5b86e9d2b372d10edfe3bb59fee165
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -69,10 +70,12 @@ BuildRequires:	libicu-devel
 %{?with_system_db:BuildRequires:	db-devel >= 4.2}
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	groff
+BuildRequires:	krb5-devel
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2
 BuildRequires:	libwrap-devel
+%{?with_ndb:BuildRequires:	mysql-devel}
 %{?with_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_perl:BuildRequires:	perl-devel}
@@ -341,6 +344,19 @@ Meta backend to slapd, the OpenLDAP server.
 
 %description backend-monitor -l pl.UTF-8
 Backend Meta do slapd - serwera OpenLDAP.
+
+%package backend-ndb
+Summary:	MySQL NDB Cluster backend to OpenLDAP server
+Summary(pl.UTF-8):	Backend MySQL NDB Cluster do serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description backend-ndb
+MySQL NDB Cluster backend to slapd, the OpenLDAP server.
+
+%description backend-ndb -l pl.UTF-8
+Backend MySQL NDB Cluster do slapd do serwera OpenLDAP.
 
 %package backend-passwd
 Summary:	/etc/passwd backend to OpenLDAP server
@@ -937,12 +953,14 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	--enable-ipv6 \
 	--enable-local \
 	--enable-slapd \
+	--enable-dynacl \
 	--enable-aci \
 	--enable-crypt \
 	--enable-lmpasswd \
 	--enable-modules \
 	--enable-rewrite \
 	--enable-rlookups \
+	--enable-slapi \
 %if %{with sasl}
 	--with-cyrus-sasl \
 	--enable-spasswd \
@@ -961,6 +979,9 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	--enable-ldap=mod \
 	--enable-meta=mod \
 	--enable-monitor=mod \
+%if %{with ndb}
+	--enable-ndb=mod \
+%endif
 	--enable-null \
 	--enable-passwd=mod \
 %if %{with perl}
@@ -977,6 +998,7 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
+	--with-gssapi \
 	--with-mp=longlong
 
 %{__make} -j1 depend
@@ -1020,12 +1042,14 @@ cd ../../../evo-%{name}-%{version}
 	--enable-syslog \
 	--enable-ipv6 \
 	--enable-local \
+	--enable-dynacl \
 	--enable-aci \
 	--enable-crypt \
 	--enable-lmpasswd \
 	--enable-modules \
 	--enable-rewrite \
 	--enable-rlookups \
+	--enable-slapi \
 %if %{with sasl}
 	--with-cyrus-sasl \
 	--enable-spasswd \
@@ -1046,6 +1070,7 @@ cd ../../../evo-%{name}-%{version}
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
+	--with-gssapi \
 	--with-mp=longlong
 
 %{__make} -j1 depend
@@ -1207,6 +1232,12 @@ fi \
 
 %preun backend-monitor
 %ldap_module_remove back_monitor.la
+
+%post backend-ndb
+%ldap_module_add back_ndb.la
+
+%preun backend-ndb
+%ldap_module_remove back_ndb.la
 
 %post backend-passwd
 %ldap_module_add back_passwd.la
@@ -1391,18 +1422,22 @@ fi
 %attr(755,root,root) %{_libdir}/liblber-2.4.so.*.*.*
 %attr(755,root,root) %{_libdir}/libldap-2.4.so.*.*.*
 %attr(755,root,root) %{_libdir}/libldap_r-2.4.so.*.*.*
+%attr(755,root,root) %{_libdir}/libslapi-2.4.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/liblber-2.4.so.2
 %attr(755,root,root) %ghost %{_libdir}/libldap-2.4.so.2
 %attr(755,root,root) %ghost %{_libdir}/libldap_r-2.4.so.2
+%attr(755,root,root) %ghost %{_libdir}/libslapi-2.4.so.2
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblber.so
 %attr(755,root,root) %{_libdir}/libldap.so
 %attr(755,root,root) %{_libdir}/libldap_r.so
+%attr(755,root,root) %{_libdir}/libslapi.so
 %{_libdir}/liblber.la
 %{_libdir}/libldap.la
 %{_libdir}/libldap_r.la
+%{_libdir}/libslapi.la
 %{_includedir}/*.h
 %{_mandir}/man3/*
 
@@ -1411,6 +1446,7 @@ fi
 %{_libdir}/liblber.a
 %{_libdir}/libldap.a
 %{_libdir}/libldap_r.a
+%{_libdir}/libslapi.a
 
 %if %{with exchange}
 %files evolution-devel
@@ -1475,6 +1511,15 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/back_monitor*.so*
 %{_libdir}/openldap/back_monitor.la
 %{_mandir}/man5/slapd-monitor.5*
+
+%if %{with ndb}
+%files backend-ndb
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/servers/slapd/back-ndb/README
+%attr(755,root,root) %{_libdir}/openldap/back_ndb*.so*
+%{_libdir}/openldap/back_ndb.la
+%{_mandir}/man5/slapd-ndb.5*
+%endif
 
 %files backend-passwd
 %defattr(644,root,root,755)

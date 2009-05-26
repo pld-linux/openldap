@@ -11,3 +11,13 @@
  			LDAPAttribute.h \
  			LDAPAttributeList.h \
  			LDAPAttrType.h \
+--- openldap-2.4.16/contrib/ldapc++/src/SaslInteractionHandler.cpp~	2008-04-15 01:09:26.000000000 +0200
++++ openldap-2.4.16/contrib/ldapc++/src/SaslInteractionHandler.cpp	2009-05-25 16:47:09.488348393 +0200
+@@ -7,6 +7,7 @@
+ #include <iostream>
+ #include <iomanip>
+ #include <limits>
++#include <cstdio>
+ #include "config.h"
+ 
+ #ifdef HAVE_TERMIOS_H
