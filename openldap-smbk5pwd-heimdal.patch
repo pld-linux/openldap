@@ -1,0 +1,40 @@
+--- openldap-2.3.37/servers/slapd/overlays/Makefile.in.orig	2007-05-29 23:57:47.000000000 +0200
++++ openldap-2.3.37/servers/slapd/overlays/Makefile.in	2007-07-31 16:27:08.000000000 +0200
+@@ -28,7 +28,8 @@ SRCS = overlays.c \
+ 	syncprov.c \
+ 	translucent.c \
+ 	unique.c \
+-	valsort.c
++	valsort.c \
++	smbk5pwd.c
+ OBJS = statover.o \
+ 	@SLAPD_STATIC_OVERLAYS@ \
+ 	overlays.o
+@@ -41,14 +42,15 @@ LTONLY_MOD = $(LTONLY_mod)
+ LDAP_INCDIR= ../../../include       
+ LDAP_LIBDIR= ../../../libraries
+ 
+-MOD_DEFS = -DSLAPD_IMPORT
++MOD_DEFS = -DSLAPD_IMPORT -DDO_SAMBA -DDO_KRB5
+ 
+ shared_LDAP_LIBS = $(LDAP_LIBLDAP_R_LA) $(LDAP_LIBLBER_LA)
+ NT_LINK_LIBS = -L.. -lslapd $(@BUILD_LIBS_DYNAMIC@_LDAP_LIBS)
+ UNIX_LINK_LIBS = $(@BUILD_LIBS_DYNAMIC@_LDAP_LIBS)
++HEIMDAL_LIBS = -lkrb5 -lkadm5srv
+ 
+ LIBRARY = ../liboverlays.a
+-PROGRAMS = @SLAPD_DYNAMIC_OVERLAYS@
++PROGRAMS = @SLAPD_DYNAMIC_OVERLAYS@ smbk5pwd.la
+ 
+ XINCPATH = -I.. -I$(srcdir)/..
+ XDEFS = $(MODULES_CPPFLAGS)
+@@ -105,6 +106,9 @@ unique.la : unique.lo
+ valsort.la : valsort.lo
+ 	$(LTLINK_MOD) -module -o $@ valsort.lo version.lo $(LINK_LIBS)
+ 
++smbk5pwd.la : smbk5pwd.lo
++	$(LTLINK_MOD) -module -o $@ smbk5pwd.lo version.lo $(LINK_LIBS) $(HEIMDAL_LIBS)
++
+ install-local:	$(PROGRAMS)
+ 	@if test -n "$?" ; then \
+ 		$(MKDIR) $(DESTDIR)$(moduledir); \
