@@ -6,6 +6,7 @@
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
+%bcond_with	heimdal		# build with Heimdal Kerberos instead of MIT
 %bcond_without	odbc		# disable sql backend
 %bcond_with	ndb		# enable MySQL NDB Cluster backend
 %bcond_without	perl		# disable perl backend
@@ -58,6 +59,7 @@ Patch14:	%{name}-smbk5pwd.patch
 Patch15:	%{name}-ldapc++.patch
 Patch16:	%{name}-pie.patch
 Patch17:	%{name}-gethostbyXXXX_r.patch
+Patch18:	%{name}-smbk5pwd-heimdal.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -70,7 +72,11 @@ BuildRequires:	libicu-devel
 %{?with_system_db:BuildRequires:	db-devel >= 4.2}
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	groff
+%if %{with heimdal}
+BuildRequires:	heimdal-devel
+%else
 BuildRequires:	krb5-devel
+%endif
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2
@@ -165,6 +171,11 @@ Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel >= 2.1.15}
 Requires:	openssl-devel >= 0.9.7c
+%if %{with heimdal}
+Requires:	heimdal-devel
+%else
+Requires:	krb5-devel
+%endif
 
 %description devel
 Header files and libraries for developing applications that use LDAP.
@@ -868,7 +879,11 @@ cd %{name}-%{version}
 %patch10 -p1
 %patch11 -p1
 %patch13 -p1
+%if %{with heimdal}
+%patch18 -p1
+%else
 %patch14 -p1
+%endif
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
