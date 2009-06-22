@@ -30,7 +30,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.16
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -60,6 +60,7 @@ Patch15:	%{name}-ldapc++.patch
 Patch16:	%{name}-pie.patch
 Patch17:	%{name}-gethostbyXXXX_r.patch
 Patch18:	%{name}-smbk5pwd-heimdal.patch
+Patch19:	%{name}-smbk5pwd-shadowLastChange.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -887,6 +888,7 @@ cd %{name}-%{version}
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch19 -p0
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..

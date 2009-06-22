@@ -1,0 +1,113 @@
+--- contrib/slapd-modules/smbk5pwd/smbk5pwd.c.orig	2008-09-22 16:52:41.686969865 +0200
++++ contrib/slapd-modules/smbk5pwd/smbk5pwd.c	2008-09-22 20:08:23.591551210 +0200
+@@ -75,14 +75,19 @@
+ static ObjectClass *oc_sambaSamAccount;
+ #endif
+ 
++static AttributeDescription *ad_shadowLastChange;
++static ObjectClass *oc_shadowAccount;
++
+ /* Per-instance configuration information */
+ typedef struct smbk5pwd_t {
+ 	unsigned	mode;
+ #define	SMBK5PWD_F_KRB5		(0x1U)
+ #define	SMBK5PWD_F_SAMBA	(0x2U)
++#define	SMBK5PWD_F_SHADOW	(0x4U)
+ 
+ #define SMBK5PWD_DO_KRB5(pi)	((pi)->mode & SMBK5PWD_F_KRB5)
+ #define SMBK5PWD_DO_SAMBA(pi)	((pi)->mode & SMBK5PWD_F_SAMBA)
++#define SMBK5PWD_DO_SHADOW(pi)	((pi)->mode & SMBK5PWD_F_SHADOW)
+ 
+ #ifdef DO_KRB5
+ 	/* nothing yet */
+@@ -104,6 +109,7 @@
+ #ifdef DO_SAMBA
+ 	| SMBK5PWD_F_SAMBA
+ #endif
++	| SMBK5PWD_F_SHADOW
+ ;
+ 
+ static int smbk5pwd_modules_init( smbk5pwd_t *pi );
+@@ -620,6 +626,30 @@
+ 		}
+ 	}
+ #endif /* DO_SAMBA */
++	if ( SMBK5PWD_DO_SHADOW( pi ) && is_entry_objectclass(e, oc_shadowAccount, 0 ) ) {
++		struct berval *keys;
++
++		ml = ch_malloc(sizeof(Modifications));
++		ml->sml_next = qpw->rs_mods;
++		qpw->rs_mods = ml;
++
++		keys = ch_malloc( 2 * sizeof(struct berval) );
++		keys[0].bv_val = ch_malloc( STRLENOF( "9223372036854775807L" ) + 1 );
++		keys[0].bv_len = snprintf(keys[0].bv_val,
++			STRLENOF( "9223372036854775807L" ) + 1,
++			"%ld", slap_get_time()/86400);
++		BER_BVZERO( &keys[1] );
++		
++		ml->sml_desc = ad_shadowLastChange;
++		ml->sml_op = LDAP_MOD_REPLACE;
++#ifdef SLAP_MOD_INTERNAL
++		ml->sml_flags = SLAP_MOD_INTERNAL;
++#endif
++		ml->sml_values = keys;
++		ml->sml_nvalues = NULL;
++		ml->sml_numvals = 1;
++	}
++
+ 	be_entry_release_r( op, e );
+ 	qpw->rs_new.bv_val[qpw->rs_new.bv_len] = term;
+ 
+@@ -682,6 +712,7 @@
+ static slap_verbmasks smbk5pwd_modules[] = {
+ 	{ BER_BVC( "krb5" ),		SMBK5PWD_F_KRB5	},
+ 	{ BER_BVC( "samba" ),		SMBK5PWD_F_SAMBA },
++	{ BER_BVC( "shadow" ),		SMBK5PWD_F_SHADOW },
+ 	{ BER_BVNULL,			-1 }
+ };
+ 
+@@ -874,6 +905,10 @@
+ 		{ NULL }
+ 	},
+ #endif /* DO_SAMBA */
++	shadow_ad[] = {
++		{ "shadowLastChange",		&ad_shadowLastChange },
++		{ NULL }
++	},
+ 	dummy_ad;
+ 
+ 	/* this is to silence the unused var warning */
+@@ -973,6 +1008,32 @@
+ 	}
+ #endif /* DO_SAMBA */
+ 
++	if ( SMBK5PWD_DO_SHADOW( pi ) && oc_shadowAccount == NULL ) {
++		int		i, rc;
++
++		oc_shadowAccount = oc_find( "shadowAccount" );
++		if ( !oc_shadowAccount ) {
++			Debug( LDAP_DEBUG_ANY, "smbk5pwd: "
++				"unable to find \"shadowAccount\" objectClass.\n",
++				0, 0, 0 );
++			return -1;
++		}
++
++		for ( i = 0; shadow_ad[ i ].name != NULL; i++ ) {
++			const char	*text;
++
++			*(shadow_ad[ i ].adp) = NULL;
++
++			rc = slap_str2ad( shadow_ad[ i ].name, shadow_ad[ i ].adp, &text );
++			if ( rc != LDAP_SUCCESS ) {
++				Debug( LDAP_DEBUG_ANY, "smbk5pwd: "
++					"unable to find \"%s\" attributeType: %s (%d).\n",
++					shadow_ad[ i ].name, text, rc );
++				oc_shadowAccount = NULL;
++				return rc;
++			}
++		}
++	}
+ 	return 0;
+ }
+ 
