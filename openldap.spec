@@ -6,7 +6,7 @@
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
-%bcond_with	heimdal		# build with Heimdal Kerberos instead of MIT
+%bcond_with	krb5		# build with MIT Kerberos instead of Heimdal
 %bcond_without	odbc		# disable sql backend
 %bcond_with	ndb		# enable MySQL NDB Cluster backend
 %bcond_without	perl		# disable perl backend
@@ -30,7 +30,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.16
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -73,10 +73,10 @@ BuildRequires:	libicu-devel
 %{?with_system_db:BuildRequires:	db-devel >= 4.2}
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	groff
-%if %{with heimdal}
-BuildRequires:	heimdal-devel
-%else
+%if %{with krb5}
 BuildRequires:	krb5-devel
+%else
+BuildRequires:	heimdal-devel
 %endif
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
@@ -172,10 +172,10 @@ Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel >= 2.1.15}
 Requires:	openssl-devel >= 0.9.7c
-%if %{with heimdal}
-Requires:	heimdal-devel
-%else
+%if %{with krb5}
 Requires:	krb5-devel
+%else
+Requires:	heimdal-devel
 %endif
 
 %description devel
@@ -880,10 +880,10 @@ cd %{name}-%{version}
 %patch10 -p1
 %patch11 -p1
 %patch13 -p1
-%if %{with heimdal}
-%patch18 -p1
-%else
+%if %{with krb5}
 %patch14 -p1
+%else
+%patch18 -p1
 %endif
 %patch15 -p1
 %patch16 -p1
