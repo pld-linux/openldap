@@ -61,6 +61,7 @@ Patch16:	%{name}-pie.patch
 Patch17:	%{name}-gethostbyXXXX_r.patch
 Patch18:	%{name}-smbk5pwd-heimdal.patch
 Patch19:	%{name}-smbk5pwd-shadowLastChange.patch
+Patch20:	%{name}-nssov.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -606,6 +607,23 @@ członkostwo grup. Zawsze przy modyfikacji wpisu grupy jej członkowie
 są modyfikowani w odpowiedniej kolejności, aby utrzymać opisany w DN
 atrybut "jest członkiem grupy", uaktualniany wraz z DN grupy.
 
+%package overlay-nssov
+Summary:	NSS overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka NSS dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-nssov
+The nssov overlay handles NSS lookup requests through a local
+Unix Domain socket. It uses the same IPC protocol as Arthur de Jong's
+nss-ldapd.
+
+%description overlay-nssov -l pl.UTF-8
+Nakładka nssov obsługuje żądania wyszukiwania NSS poprzez lokalne
+gniazdo Unix Domain. Używa tego samego protokołu IPC co nss-ldapd
+Arthura de Jong.
+
 %package overlay-pcache
 Summary:	Proxy cache overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka proxy cache dla serwera OpenLDAP
@@ -889,6 +907,7 @@ cd %{name}-%{version}
 %patch16 -p1
 %patch17 -p1
 %patch19 -p0
+%patch20 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
@@ -1021,6 +1040,9 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %{__make} -j1 depend
 %{__make}
 
+%{__make} -j1 -C contrib/slapd-modules/nssov \
+	OPT="%{rpmcflags}"
+
 install -d libs
 for d in liblber libldap libldap_r ; do
 	ln -sf ../libraries/$d/.libs/$d.la libs/$d.la
@@ -1127,6 +1149,12 @@ cd %{name}-%{version}
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
+
+sed -e "s|/usr/local/libexec/openldap|%{_libdir}/%{name}|" contrib/slapd-modules/nssov/.libs/nssov.la \
+	> $RPM_BUILD_ROOT/%{_libdir}/%{name}/nssov.la
+install contrib/slapd-modules/nssov/.libs/nssov.so.0.0.0 $RPM_BUILD_ROOT/%{_libdir}/%{name}
+ln -s nssov.so.0.0.0 $RPM_BUILD_ROOT/%{_libdir}/%{name}/nssov.so.0
+ln -s nssov.so.0.0.0 $RPM_BUILD_ROOT/%{_libdir}/%{name}/nssov.so
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -1351,6 +1379,12 @@ fi \
 
 %preun overlay-memberof
 %ldap_module_remove memberof.la
+
+%post overlay-nssov
+%ldap_module_add nssov.la
+
+%preun overlay-nssov
+%ldap_module_remove nssov.la
 
 %post overlay-ppolicy
 %ldap_module_add ppolicy.la
@@ -1633,6 +1667,12 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/memberof*.so*
 %{_libdir}/openldap/memberof.la
 %{_mandir}/man5/slapo-memberof.5*
+
+%files overlay-nssov
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/nssov/README
+%attr(755,root,root) %{_libdir}/openldap/nssov*.so*
+%{_libdir}/openldap/nssov.la
 
 %files overlay-pcache
 %defattr(644,root,root,755)
