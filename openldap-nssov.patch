@@ -1,0 +1,30 @@
+--- openldap-2.4.16/contrib/slapd-modules/nssov/nss-ldapd/common/tio.c~	2008-07-08 20:53:58.000000000 +0200
++++ openldap-2.4.16/contrib/slapd-modules/nssov/nss-ldapd/common/tio.c	2009-07-08 15:15:52.498212146 +0200
+@@ -20,11 +20,7 @@
+    02110-1301 USA
+ */
+ 
+-#include "config.h"
+-
+-#ifdef HAVE_STDINT_H
+ #include <stdint.h>
+-#endif /* HAVE_STDINT_H */
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <sys/time.h>
+--- openldap-2.4.16/contrib/slapd-modules/nssov/Makefile~	2009-07-08 15:12:42.758230852 +0200
++++ openldap-2.4.16/contrib/slapd-modules/nssov/Makefile	2009-07-08 15:12:49.674898112 +0200
+@@ -42,7 +42,6 @@
+ tio.lo:	nss-ldapd/common/tio.c
+ 	$(LIBTOOL) --mode=compile $(CC) $(OPT) $(DEFS) $(NLDAPD_INC) -c $?
+ 
+-$(OBJS):	nssov.h
+ 
+ nssov.la:	$(OBJS) $(XOBJS)
+ 	$(LIBTOOL) --mode=link $(CC) $(OPT) -version-info 0:0:0 \
+@@ -45,4 +45,4 @@
+ 
+ nssov.la:	$(OBJS) $(XOBJS)
+ 	$(LIBTOOL) --mode=link $(CC) $(OPT) -version-info 0:0:0 \
+-	-rpath /usr/local/libexec/openldap -module -o $@ $(OBJS) $(XOBJS) $(LIBS)
++	-module -o $@ $(OBJS) $(XOBJS) $(LIBS)
