@@ -30,7 +30,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.17
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -98,6 +98,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
 %define		_localstatedir	/var/lib
+
+%undefine	configure_cache
 
 %description
 LDAP servers and clients, as well as interfaces to other protocols.
@@ -1461,12 +1463,12 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
-%{_mandir}/man5/ldap.conf.5*
 %{_mandir}/man5/ldif.5*
 
 %files nss-config
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ldap.conf
+%{_mandir}/man5/ldap.conf.5*
 
 %files libs
 %defattr(644,root,root,755)
