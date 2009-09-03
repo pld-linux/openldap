@@ -35,39 +35,41 @@ else
 fi
 
 start() {
-	if [ ! -f /var/lock/subsys/ldap ]; then
-		msg_starting "OpenLDAP"
-		ARGS="-u slapd -g slapd"
-		if [ -n "$SLAPDSYSLOGLEVEL" ]; then
-			ARGS="$ARGS -s $SLAPDSYSLOGLEVEL"
-		fi
-		if [ -n "$SLAPDOPTIONS" ]; then
-			ARGS="$ARGS $SLAPDOPTIONS"
-		fi
-		# optionally support old option
-		if [ -n "$SLAPDNICE" ]; then
-			SERVICE_RUN_NICE_LEVEL=$SLAPDNICE
-		fi
-		daemon /usr/sbin/slapd $ARGS ${SLAPDURLLIST:+ -h "$SLAPDURLLIST"}
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
-		if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
-			chown "$LDAPI_SOCKET_OWNER":"$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
-			chmod "$LDAPI_SOCKET_MODE" /var/run/ldapi
-		fi
-	else
+	if [ -f /var/lock/subsys/ldap ]; then
 		msg_already_running "OpenLDAP"
+		return
+	fi
+
+	msg_starting "OpenLDAP"
+	ARGS="-u slapd -g slapd"
+	if [ -n "$SLAPDSYSLOGLEVEL" ]; then
+		ARGS="$ARGS -s $SLAPDSYSLOGLEVEL"
+	fi
+	if [ -n "$SLAPDOPTIONS" ]; then
+		ARGS="$ARGS $SLAPDOPTIONS"
+	fi
+	# optionally support old option
+	if [ -n "$SLAPDNICE" ]; then
+		SERVICE_RUN_NICE_LEVEL=$SLAPDNICE
+	fi
+	daemon /usr/sbin/slapd $ARGS ${SLAPDURLLIST:+ -h "$SLAPDURLLIST"}
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
+	if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
+		chown "$LDAPI_SOCKET_OWNER":"$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
+		chmod "$LDAPI_SOCKET_MODE" /var/run/ldapi
 	fi
 }
 
 stop() {
-	if [ -f /var/lock/subsys/ldap ]; then
-		msg_stopping "OpenLDAP"
-		killproc --waitforname slapd --waitfortime 300 slapd -TERM
-		rm -f /var/lock/subsys/ldap >/dev/null 2>&1
-	else
+	if [ ! -f /var/lock/subsys/ldap ]; then
 		msg_not_running "OpenLDAP"
+		return
 	fi
+
+	msg_stopping "OpenLDAP"
+	killproc --waitforname slapd --waitfortime 300 slapd -TERM
+	rm -f /var/lock/subsys/ldap >/dev/null 2>&1
 }
 
 condrestart() {
