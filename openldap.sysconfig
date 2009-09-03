@@ -1,5 +1,5 @@
 # nice level for slapd
-SLAPDNICE="+2"
+SERVICE_RUN_NICE_LEVEL="+2"
 
 # debug level for slapd
 SLAPDSYSLOGLEVEL=""
