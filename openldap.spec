@@ -3,6 +3,7 @@
 # - complete & validate descriptions
 # - trigger for removed ldbm backend
 # - trigger for removed overlays (denyop,lastmod)
+# - ldap.conf.5 describes /etc/openldap/ldap.conf not /etc/ldap.conf, rename to ldaprc.5 ?
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
@@ -1463,12 +1464,12 @@ fi
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
+%{_mandir}/man5/ldap.conf.5*
 %{_mandir}/man5/ldif.5*
 
 %files nss-config
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ldap.conf
-%{_mandir}/man5/ldap.conf.5*
 
 %files libs
 %defattr(644,root,root,755)
