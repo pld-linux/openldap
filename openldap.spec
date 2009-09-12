@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.17
-Release:	4
+Release:	5
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -394,7 +394,6 @@ Summary(pl.UTF-8):	Backend Perl do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
-Requires:	perl(DynaLoader) = %(%{__perl} -MDynaLoader -e 'print DynaLoader->VERSION')
 
 %description backend-perl
 Perl backend to slapd, the OpenLDAP server.
