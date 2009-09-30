@@ -30,12 +30,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.17
-Release:	5
+Version:	2.4.18
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	5e82103780f8cfc2b2fbd0f77c47c158
+# Source0-md5:	fecd7a64b6d9a0eb79b817d2562956ed
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -745,6 +745,27 @@ Nakładka smbk5pwd rozszerza rozszerzoną operację PasswordModify o
 uaktualnianie kluczy Kerberosa i skrótów haseł Samby dla użytkownika
 LDAP.
 
+%package overlay-sssvlv
+Summary:	Server Side Sorting and Virtual List View overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Sortowania po stronie serwera i virtualnego widoku dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-sssvlv
+This overlay implements the LDAP Server Side Sorting (RFC2891)
+control as well as the Virtual List View control. It also replaces
+the default implementation of the LDAP PagedResults (RFC2696)
+control, to ensure that it works with Sorting. The overlay can
+be used with any backend or globally for all backends.
+
+%description overlay-sssvlv -l pl.UTF-8
+Ta nakładka implementuje Sortowanie po Stronie Servera (RFC2891)
+oraz Widoki List Wirtualnych. Zastępuje również domyślną
+implementację Stronicowanych Wyników (RFC2696) aby zapewnić
+ich działanie z sortowaniem. Nakładka może być użyta w dowolnym
+backendzie albo globalnie dla wszystkich backendów.
+
 %package overlay-syncprov
 Summary:	Syncrepl Provider overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Syncrepl Provider dla serwera OpenLDAP
@@ -1045,7 +1066,9 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %{__make}
 
 %{__make} -j1 -C contrib/slapd-modules/nssov \
-	OPT="%{rpmcflags}"
+	libdir=%{_libdir}/openldap \
+	OPT="%{rpmcflags}" \
+	nssov.la
 
 install -d libs
 for d in liblber libldap libldap_r ; do
@@ -1154,11 +1177,10 @@ cd %{name}-%{version}
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 
-sed -e "s|/usr/local/libexec/openldap|%{_libdir}/%{name}|" contrib/slapd-modules/nssov/.libs/nssov.la \
-	> $RPM_BUILD_ROOT/%{_libdir}/%{name}/nssov.la
-install contrib/slapd-modules/nssov/.libs/nssov.so.0.0.0 $RPM_BUILD_ROOT/%{_libdir}/%{name}
-ln -s nssov.so.0.0.0 $RPM_BUILD_ROOT/%{_libdir}/%{name}/nssov.so.0
-ln -s nssov.so.0.0.0 $RPM_BUILD_ROOT/%{_libdir}/%{name}/nssov.so
+%{__make} -C contrib/slapd-modules/nssov install \
+	moduledir=%{_libdir}/openldap \
+	schemadir=%{_datadir}/openldap/schema \
+	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -1386,9 +1408,17 @@ fi \
 
 %post overlay-nssov
 %ldap_module_add nssov.la
+%openldap_schema_register %{schemadir}/ldapns.schema
+%service -q ldap restart
 
 %preun overlay-nssov
 %ldap_module_remove nssov.la
+
+%postun overlay-nssov
+if [ "$1" = "0" ]; then
+	%openldap_schema_unregister %{schemadir}/ldapns.schema
+	%service -q ldap restart
+fi
 
 %post overlay-ppolicy
 %ldap_module_add ppolicy.la
@@ -1425,6 +1455,12 @@ fi \
 
 %preun overlay-seqmod
 %ldap_module_remove seqmod.la
+
+%post overlay-sssvlv
+%ldap_module_add sssvlv.la
+
+%preun overlay-sssvlv
+%ldap_module_remove sssvlv.la
 
 %post overlay-syncprov
 %ldap_module_add syncprov.la
@@ -1677,6 +1713,7 @@ fi
 %doc %{name}-%{version}/contrib/slapd-modules/nssov/README
 %attr(755,root,root) %{_libdir}/openldap/nssov*.so*
 %{_libdir}/openldap/nssov.la
+%{_datadir}/openldap/schema/ldapns.schema
 
 %files overlay-pcache
 %defattr(644,root,root,755)
@@ -1718,6 +1755,12 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/seqmod*.so*
 %{_libdir}/openldap/seqmod.la
+
+%files overlay-sssvlv
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/sssvlv*.so*
+%{_libdir}/openldap/sssvlv.la
+%{_mandir}/man5/slapo-sssvlv.5*
 
 %files overlay-syncprov
 %defattr(644,root,root,755)
@@ -1762,6 +1805,7 @@ fi
 %dir %{_datadir}/openldap/schema
 %{_datadir}/openldap/schema/*.ldif
 %{_datadir}/openldap/schema/*.schema
+%exclude %{_datadir}/openldap/schema/ldapns.schema
 %dir %{_libdir}/openldap
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/slapd.*.5*
