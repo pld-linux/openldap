@@ -30,12 +30,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.18
+Version:	2.4.19
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	fecd7a64b6d9a0eb79b817d2562956ed
+# Source0-md5:	4a6dab2711fcf141f19bb680bc335887
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -63,7 +63,6 @@ Patch17:	%{name}-gethostbyXXXX_r.patch
 Patch18:	%{name}-smbk5pwd-heimdal.patch
 Patch19:	%{name}-smbk5pwd-shadowLastChange.patch
 Patch20:	%{name}-nssov.patch
-Patch21:	%{name}-auditlog-modify.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -932,7 +931,6 @@ cd %{name}-%{version}
 %patch17 -p1
 %patch19 -p0
 %patch20 -p1
-%patch21 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
