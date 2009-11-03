@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.19
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -1145,8 +1145,8 @@ cd ../../../evo-%{name}-%{version}
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
-	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{schemadir}}
-	$RPM_BUILD_ROOT/var/run/slapd \
+	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{schemadir}} \
+	$RPM_BUILD_ROOT/var/run/slapd
 
 %if %{with exchange}
 # Install evolution hack first and remove everything but devel stuff
