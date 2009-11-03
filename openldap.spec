@@ -1404,19 +1404,21 @@ fi \
 %preun overlay-memberof
 %ldap_module_remove memberof.la
 
-#%post overlay-nssov
-#%ldap_module_add nssov.la
-#%openldap_schema_register %{schemadir}/ldapns.schema
-#%service -q ldap restart
+%if 0
+%post overlay-nssov
+%ldap_module_add nssov.la
+%openldap_schema_register %{schemadir}/ldapns.schema
+%service -q ldap restart
 
-#%preun overlay-nssov
-#%ldap_module_remove nssov.la
+%preun overlay-nssov
+%ldap_module_remove nssov.la
 
-#%postun overlay-nssov
-#if [ "$1" = "0" ]; then
-#	%openldap_schema_unregister %{schemadir}/ldapns.schema
-#	%service -q ldap restart
-#fi
+%postun overlay-nssov
+if [ "$1" = "0" ]; then
+	%openldap_schema_unregister %{schemadir}/ldapns.schema
+	%service -q ldap restart
+fi
+%endif
 
 %post overlay-ppolicy
 %ldap_module_add ppolicy.la
