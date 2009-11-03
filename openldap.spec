@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.19
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -99,6 +99,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
 %define		_localstatedir	/var/lib
+%define		schemadir	%{_datadir}/openldap/schema
 
 %undefine	configure_cache
 
@@ -1144,9 +1145,8 @@ cd ../../../evo-%{name}-%{version}
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
+	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{schemadir}}
 	$RPM_BUILD_ROOT/var/run/slapd \
-	$RPM_BUILD_ROOT%{_datadir}/openldap/schema \
-	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir}}
 
 %if %{with exchange}
 # Install evolution hack first and remove everything but devel stuff
@@ -1177,7 +1177,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 
 %{__make} -C contrib/slapd-modules/nssov install \
 	moduledir=%{_libdir}/openldap \
-	schemadir=%{_datadir}/openldap/schema \
+	schemadir=%{schemadir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
@@ -1711,7 +1711,7 @@ fi
 %doc %{name}-%{version}/contrib/slapd-modules/nssov/README
 %attr(755,root,root) %{_libdir}/openldap/nssov*.so*
 %{_libdir}/openldap/nssov.la
-%{_datadir}/openldap/schema/ldapns.schema
+%{schemadir}/ldapns.schema
 
 %files overlay-pcache
 %defattr(644,root,root,755)
@@ -1800,10 +1800,10 @@ fi
 %attr(770,root,slapd) %{_var}/run/slapd
 %dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
 %attr(660,root,slapd) %{_localstatedir}/openldap-data/*
-%dir %{_datadir}/openldap/schema
-%{_datadir}/openldap/schema/*.ldif
-%{_datadir}/openldap/schema/*.schema
-%exclude %{_datadir}/openldap/schema/ldapns.schema
+%dir %{schemadir}
+%{schemadir}/*.ldif
+%{schemadir}/*.schema
+%exclude %{schemadir}/ldapns.schema
 %dir %{_libdir}/openldap
 %attr(755,root,root) %{_sbindir}/*
 %{_mandir}/man5/slapd.*.5*
