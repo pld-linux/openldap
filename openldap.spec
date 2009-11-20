@@ -235,6 +235,18 @@ Bibliotecas estáticas para desenvolvimento com openldap.
 Статичні бібліотеки, необхідні для розробки програм, що використовують
 LDAP.
 
+%package headers
+Summary:	Development files for building OpenLDAP modules
+Summary(pl.UTF-8):	Pliki służące do budowania modułów OpenLDAP
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description headers
+Header files for developing OpenLDAP modules.
+
+%description headers -l pl.UTF-8
+Pliki nagłówkowe konieczne do rozwoju modułów OpenLDAP.
+
 %package evolution-devel
 Summary:	LDAP NTLM hack for the evolution-exchange
 Summary(pl.UTF-8):	Hack NTLM dla pakietu evolution-exchange
@@ -1212,6 +1224,16 @@ echo "# This is a good place to put your schema definitions " > \
 find $RPM_BUILD_ROOT -name \*.la | xargs sed -i -e "s|-L${dbdir}/%{_lib}||g"
 %endif
 
+# files for -headers subpackage
+install -d $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
+cp -a include/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}
+cp -a include/ac/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
+
+# remove headers, that are provided by -devel package
+for I in $RPM_BUILD_ROOT%{_includedir}/*.h; do
+  rm $RPM_BUILD_ROOT%{_includedir}/%{name}/$(basename $I)
+done
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -1538,6 +1560,10 @@ fi
 %{_libdir}/libldap.a
 %{_libdir}/libldap_r.a
 %{_libdir}/libslapi.a
+
+%files headers
+%defattr(644,root,root,755)
+%{_includedir}/%{name}
 
 %if %{with exchange}
 %files evolution-devel
