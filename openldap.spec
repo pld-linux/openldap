@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.19
-Release:	3
+Release:	4
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -630,8 +630,8 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-nssov
-The nssov overlay handles NSS lookup requests through a local
-Unix Domain socket. It uses the same IPC protocol as Arthur de Jong's
+The nssov overlay handles NSS lookup requests through a local Unix
+Domain socket. It uses the same IPC protocol as Arthur de Jong's
 nss-ldapd.
 
 %description overlay-nssov -l pl.UTF-8
@@ -765,18 +765,18 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-sssvlv
-This overlay implements the LDAP Server Side Sorting (RFC2891)
-control as well as the Virtual List View control. It also replaces
-the default implementation of the LDAP PagedResults (RFC2696)
-control, to ensure that it works with Sorting. The overlay can
-be used with any backend or globally for all backends.
+This overlay implements the LDAP Server Side Sorting (RFC2891) control
+as well as the Virtual List View control. It also replaces the default
+implementation of the LDAP PagedResults (RFC2696) control, to ensure
+that it works with Sorting. The overlay can be used with any backend
+or globally for all backends.
 
 %description overlay-sssvlv -l pl.UTF-8
-Ta nakładka implementuje Sortowanie po Stronie Servera (RFC2891)
-oraz Widoki List Wirtualnych. Zastępuje również domyślną
-implementację Stronicowanych Wyników (RFC2696) aby zapewnić
-ich działanie z sortowaniem. Nakładka może być użyta w dowolnym
-backendzie albo globalnie dla wszystkich backendów.
+Ta nakładka implementuje Sortowanie po Stronie Servera (RFC2891) oraz
+Widoki List Wirtualnych. Zastępuje również domyślną implementację
+Stronicowanych Wyników (RFC2696) aby zapewnić ich działanie z
+sortowaniem. Nakładka może być użyta w dowolnym backendzie albo
+globalnie dla wszystkich backendów.
 
 %package overlay-syncprov
 Summary:	Syncrepl Provider overlay for OpenLDAP server
@@ -1171,7 +1171,7 @@ install %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolutio
 %if %{without system_db}
 dbdir=`pwd`/db-instroot
 cd db-instroot
-install -m755 %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT%{_libdir}
+install %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT%{_libdir}
 cd bin
 for binary in db_* ; do
 	install -m755 ${binary} $RPM_BUILD_ROOT%{_sbindir}/slapd_${binary}
