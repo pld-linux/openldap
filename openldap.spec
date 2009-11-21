@@ -1078,7 +1078,8 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 %{__make} -j1 -C contrib/slapd-modules/nssov \
 	libdir=%{_libdir}/openldap \
-	OPT="%{rpmcflags}" \
+	CC="%{__cc}" \
+	OPT="%{rpmcflags} %{rpmldflags} -L../../../libraries/libldap_r" \
 	nssov.la
 
 install -d libs
