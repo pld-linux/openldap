@@ -629,6 +629,7 @@ Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 Conflicts:	openldap-schema-pam_ldap
+Provides:	nslcd
 
 %description overlay-nssov
 The nssov overlay handles NSS lookup requests through a local Unix
@@ -1160,7 +1161,7 @@ cd ../../../evo-%{name}-%{version}
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{schemadir}} \
-	$RPM_BUILD_ROOT/var/run/slapd
+	$RPM_BUILD_ROOT/var/run/{slapd,nslcd}
 
 %if %{with exchange}
 # Install evolution hack first and remove everything but devel stuff
@@ -1193,6 +1194,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 	moduledir=%{_libdir}/openldap \
 	schemadir=%{schemadir} \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install contrib/slapd-modules/nssov/slapo-nssov.5 $RPM_BUILD_ROOT%{_mandir}/man5
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -1740,6 +1743,8 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/nssov*.so*
 %{_libdir}/openldap/nssov.la
 %{schemadir}/ldapns.schema
+%{_mandir}/man5/slapo-nssov.5*
+%attr(755,slapd,slapd) %dir /var/run/nslcd
 
 %files overlay-pcache
 %defattr(644,root,root,755)
