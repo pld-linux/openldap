@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.21
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -628,6 +628,7 @@ Summary(pl.UTF-8):	Nakładka NSS dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
+Conflicts:	openldap-schema-pam_ldap
 
 %description overlay-nssov
 The nssov overlay handles NSS lookup requests through a local Unix
@@ -1427,7 +1428,6 @@ fi \
 %preun overlay-memberof
 %ldap_module_remove memberof.la
 
-%if 0
 %post overlay-nssov
 %ldap_module_add nssov.la
 %openldap_schema_register %{schemadir}/ldapns.schema
@@ -1441,7 +1441,6 @@ if [ "$1" = "0" ]; then
 	%openldap_schema_unregister %{schemadir}/ldapns.schema
 	%service -q ldap restart
 fi
-%endif
 
 %post overlay-ppolicy
 %ldap_module_add ppolicy.la
