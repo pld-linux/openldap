@@ -21,7 +21,7 @@
 #
 %define evolution_exchange_prefix	%{_libdir}/evolution-openldap
 %define evolution_exchange_includedir	%{evolution_exchange_prefix}/include
-%define evolution_exchange_libdir	%{evolution_exchange_prefix}/%{_lib}
+%define evolution_exchange_libdir	%{evolution_exchange_prefix}/lib
 
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es.UTF-8):	Clientes y servidor para LDAP
@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.21
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
