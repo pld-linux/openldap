@@ -639,7 +639,7 @@ nss-ldapd.
 
 %description overlay-nssov -l pl.UTF-8
 Nakładka nssov obsługuje żądania wyszukiwania NSS poprzez lokalne
-gniazdo Unix Domain. Używa tego samego protokołu IPC co nss-ldapd
+gniazdo Unix Domain. Używa tego samego protokołu IPC, co nss-ldapd
 Arthura de Jong.
 
 %package overlay-pcache
@@ -762,7 +762,7 @@ LDAP.
 
 %package overlay-sssvlv
 Summary:	Server Side Sorting and Virtual List View overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka Sortowania po stronie serwera i virtualnego widoku dla serwera OpenLDAP
+Summary(pl.UTF-8):	Nakładka sortowania po stronie serwera i wirtualnego widoku list dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
@@ -775,11 +775,12 @@ that it works with Sorting. The overlay can be used with any backend
 or globally for all backends.
 
 %description overlay-sssvlv -l pl.UTF-8
-Ta nakładka implementuje Sortowanie po Stronie Servera (RFC2891) oraz
-Widoki List Wirtualnych. Zastępuje również domyślną implementację
-Stronicowanych Wyników (RFC2696) aby zapewnić ich działanie z
-sortowaniem. Nakładka może być użyta w dowolnym backendzie albo
-globalnie dla wszystkich backendów.
+Ta nakładka implementuje sortowanie po stronie serwera (Server Side
+Sorting, RFC2891) oraz wirtualne widoki list (Virtual List View).
+Zastępuje również domyślną implementację stronnicowanych wyników
+(PagedResults, RFC2696), aby zapewnić ich działanie z sortowaniem.
+Nakładka może być użyta w dowolnym backendzie albo globalnie dla
+wszystkich backendów.
 
 %package overlay-syncprov
 Summary:	Syncrepl Provider overlay for OpenLDAP server
