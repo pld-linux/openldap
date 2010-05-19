@@ -30,12 +30,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.21
-Release:	5
+Version:	2.4.22
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	e7128c57b2bacd940e8906057c94ff26
+# Source0-md5:	ef01b52255ce8e3fbf8aa34f6fe7598b
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -55,6 +55,7 @@ Patch8:		%{name}-pic.patch
 Patch9:		%{name}-ltinstall-mode.patch
 Patch10:	%{name}-whowhere.patch
 Patch11:	%{name}-ldaprc.patch
+Patch12:	%{name}-db.patch
 Patch13:	%{name}-nosql.patch
 Patch14:	%{name}-smbk5pwd.patch
 Patch15:	%{name}-ldapc++.patch
@@ -935,6 +936,7 @@ cd %{name}-%{version}
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 %patch13 -p1
 %if %{with krb5}
 %patch14 -p1

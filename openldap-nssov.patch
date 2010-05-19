@@ -1,10 +1,11 @@
---- openldap-2.4.16/contrib/slapd-modules/nssov/nss-ldapd/common/tio.c~	2008-07-08 20:53:58.000000000 +0200
-+++ openldap-2.4.16/contrib/slapd-modules/nssov/nss-ldapd/common/tio.c	2009-07-08 15:15:52.498212146 +0200
-@@ -20,11 +20,7 @@
+--- openldap-2.4.22/contrib/slapd-modules/nssov/nss-pam-ldapd/tio.c.orig	2010-04-15 23:33:10.000000000 +0200
++++ openldap-2.4.22/contrib/slapd-modules/nssov/nss-pam-ldapd/tio.c	2010-05-18 21:40:39.694932556 +0200
+@@ -20,12 +20,7 @@
     02110-1301 USA
  */
  
--#include "config.h"
+-//#include "config.h"
+-#include "portable.h"
 -
 -#ifdef HAVE_STDINT_H
  #include <stdint.h>
@@ -22,3 +23,14 @@
  
  nssov.la:	$(OBJS) $(XOBJS)
  	$(LIBTOOL) --mode=link $(CC) $(OPT) -version-info 0:0:0 \
+--- openldap-2.4.22/contrib/slapd-modules/nssov/network.c.orig	2010-04-13 22:22:28.000000000 +0200
++++ openldap-2.4.22/contrib/slapd-modules/nssov/network.c	2010-05-18 22:14:04.522932556 +0200
+@@ -91,7 +91,7 @@
+ 	addrs = a->a_vals;
+ 	numaddr = a->a_numvals;
+ 	/* write the entry */
+-	WRITE_INT32(cbp->fp,NSLCD_RESULT_SUCCESS);
++	WRITE_INT32(cbp->fp,NSLCD_RESULT_BEGIN);
+ 	WRITE_BERVAL(cbp->fp,&name);
+ 	if ( dupname >= 0 ) {
+ 		WRITE_INT32(cbp->fp,numname-1);
