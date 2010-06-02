@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.22
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -1621,6 +1621,7 @@ fi
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
 %{_mandir}/man5/slapo-chain.5*
+%{_mandir}/man5/slapo-pbind.5*
 
 %files backend-meta
 %defattr(644,root,root,755)
