@@ -4,6 +4,12 @@
 # - trigger for removed ldbm backend
 # - trigger for removed overlays (denyop,lastmod)
 # - ldap.conf.5 describes /etc/openldap/ldap.conf not /etc/ldap.conf, rename to ldaprc.5 ?
+# - unpackaged:
+#   /usr/lib64/evolution-openldap/lib/liblber.la
+#   /usr/lib64/evolution-openldap/lib/libldap.la
+#   /usr/lib64/evolution-openldap/lib/libldap_r.la
+#   /usr/lib64/openldap/nssov.a
+#   /usr/share/man/man5/slapd-ndb.5.gz
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
@@ -14,11 +20,11 @@
 %bcond_without	sasl 		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
 %bcond_with	system_db	# system Berkeley DB
-#
+
 # Never change or update Berkeley DB, it's there to isolate OpenLDAP
 # from any future changes to the system-wide Berkeley DB library.
 %define		db_version		4.6.21
-#
+
 %define evolution_exchange_prefix	%{_libdir}/evolution-openldap
 %define evolution_exchange_includedir	%{evolution_exchange_prefix}/include
 %define evolution_exchange_libdir	%{evolution_exchange_prefix}/lib
@@ -30,12 +36,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.22
-Release:	3
+Version:	2.4.23
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	ef01b52255ce8e3fbf8aa34f6fe7598b
+# Source0-md5:	90150b8c0d0192e10b30157e68844ddf
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -63,7 +69,6 @@ Patch16:	%{name}-pie.patch
 Patch17:	%{name}-gethostbyXXXX_r.patch
 Patch18:	%{name}-smbk5pwd-heimdal.patch
 Patch19:	%{name}-smbk5pwd-shadowLastChange.patch
-Patch20:	%{name}-nssov.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -948,7 +953,6 @@ cd %{name}-%{version}
 %patch16 -p1
 %patch17 -p1
 %patch19 -p0
-%patch20 -p1
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
