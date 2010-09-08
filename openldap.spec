@@ -4,12 +4,6 @@
 # - trigger for removed ldbm backend
 # - trigger for removed overlays (denyop,lastmod)
 # - ldap.conf.5 describes /etc/openldap/ldap.conf not /etc/ldap.conf, rename to ldaprc.5 ?
-# - unpackaged:
-#   /usr/lib64/evolution-openldap/lib/liblber.la
-#   /usr/lib64/evolution-openldap/lib/libldap.la
-#   /usr/lib64/evolution-openldap/lib/libldap_r.la
-#   /usr/lib64/openldap/nssov.a
-#   /usr/share/man/man5/slapd-ndb.5.gz
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
@@ -1174,7 +1168,8 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} 
 # Install evolution hack first and remove everything but devel stuff
 %{__make} -C evo-%{name}-%{version} install \
 	DESTDIR=$RPM_BUILD_ROOT
-rm -rf $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
+%{__rm} -r $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
+%{__rm} $RPM_BUILD_ROOT%{evolution_exchange_libdir}/*.la
 install %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
 %endif
 
@@ -1195,14 +1190,15 @@ cd %{name}-%{version}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -f $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
-
 %{__make} -C contrib/slapd-modules/nssov install \
 	moduledir=%{_libdir}/openldap \
 	schemadir=%{schemadir} \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install contrib/slapd-modules/nssov/slapo-nssov.5 $RPM_BUILD_ROOT%{_mandir}/man5
+
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
+%{!?with_ndb:%{__rm} $RPM_BUILD_ROOT%{_mandir}/man5/slapd-ndb.5}
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -1214,7 +1210,7 @@ install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
-rm -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.{default,example},schema/README}
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.{default,example},schema/README}
 
 # Standard schemas should not be changed by users
 mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema
