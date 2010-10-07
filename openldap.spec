@@ -31,7 +31,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.23
-Release:	3
+Release:	4
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -159,8 +159,8 @@ Wspólna konfiguracja dla nss_ldap i pam_ldap.
 Summary:	LDAP shared libraries
 Summary(pl.UTF-8):	Biblioteki współdzielone LDAP
 Group:		Libraries
-%{?with_sasl:Requires:	cyrus-sasl >= 2.1.15}
 Conflicts:	openldap < 2.2.6-0.3
+%{?with_sasl:%requires_eq cyrus-sasl}
 
 %description libs
 LDAP shared libraries.
@@ -630,8 +630,8 @@ Summary(pl.UTF-8):	Nakładka NSS dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
-Conflicts:	openldap-schema-pam_ldap
 Provides:	nslcd
+Conflicts:	openldap-schema-pam_ldap
 
 %description overlay-nssov
 The nssov overlay handles NSS lookup requests through a local Unix
