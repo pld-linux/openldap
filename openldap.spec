@@ -55,13 +55,13 @@ Patch8:		%{name}-pic.patch
 Patch9:		%{name}-ltinstall-mode.patch
 Patch10:	%{name}-whowhere.patch
 Patch11:	%{name}-ldaprc.patch
-Patch13:	%{name}-nosql.patch
-Patch14:	%{name}-smbk5pwd.patch
-Patch15:	%{name}-ldapc++.patch
-Patch16:	%{name}-pie.patch
-Patch17:	%{name}-gethostbyXXXX_r.patch
+Patch12:	%{name}-nosql.patch
+Patch13:	%{name}-ldapc++.patch
+Patch14:	%{name}-pie.patch
+Patch15:	%{name}-gethostbyXXXX_r.patch
+Patch16:	%{name}-smbk5pwd-shadowLastChange.patch
+Patch17:	%{name}-smbk5pwd.patch
 Patch18:	%{name}-smbk5pwd-heimdal.patch
-Patch19:	%{name}-smbk5pwd-shadowLastChange.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -937,16 +937,16 @@ cd %{name}-%{version}
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 %patch13 -p1
-%if %{with krb5}
 %patch14 -p1
+%patch15 -p1
+%patch16 -p0
+%if %{with krb5}
+%patch17 -p1
 %else
 %patch18 -p1
 %endif
-%patch15 -p1
-%patch16 -p1
-%patch17 -p1
-%patch19 -p0
 
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
