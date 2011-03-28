@@ -60,8 +60,8 @@ Patch13:	%{name}-ldapc++.patch
 Patch14:	%{name}-pie.patch
 Patch15:	%{name}-gethostbyXXXX_r.patch
 Patch16:	%{name}-smbk5pwd-shadowLastChange.patch
-Patch17:	%{name}-smbk5pwd.patch
-Patch18:	%{name}-smbk5pwd-heimdal.patch
+Patch17:	%{name}-contrib-modules.patch
+Patch18:	%{name}-contrib-krb5.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -942,13 +942,10 @@ cd %{name}-%{version}
 %patch14 -p1
 %patch15 -p1
 %patch16 -p0
-%if %{with krb5}
 %patch17 -p1
-%else
+%if %{with krb5}
 %patch18 -p1
 %endif
-
-ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays/smbk5pwd.c
 cd ..
 
 %if %{without system_db}
@@ -1078,12 +1075,7 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 %{__make} -j1 depend
 %{__make}
-
-%{__make} -j1 -C contrib/slapd-modules/nssov \
-	libdir=%{_libdir}/openldap \
-	CC="%{__cc}" \
-	OPT="%{rpmcflags} %{rpmldflags} -L../../../libraries/libldap_r" \
-	nssov.la
+%{__make} -C contrib/slapd-modules
 
 install -d libs
 for d in liblber libldap libldap_r ; do
@@ -1190,14 +1182,9 @@ cd %{name}-%{version}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%{__make} -C contrib/slapd-modules/nssov install \
-	moduledir=%{_libdir}/openldap \
-	schemadir=%{schemadir} \
+%{__make} -C contrib/slapd-modules install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install contrib/slapd-modules/nssov/slapo-nssov.5 $RPM_BUILD_ROOT%{_mandir}/man5
-
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/openldap/*.a
 %{!?with_ndb:%{__rm} $RPM_BUILD_ROOT%{_mandir}/man5/slapd-ndb.5}
 
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
@@ -1240,6 +1227,14 @@ cp -a include/ac/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
 # remove headers, that are provided by -devel package
 for I in $RPM_BUILD_ROOT%{_includedir}/*.h; do
   rm $RPM_BUILD_ROOT%{_includedir}/%{name}/$(basename $I)
+done
+
+# check for undefined symbols in slapd modules
+for i in $RPM_BUILD_ROOT%{_libdir}/openldap/*.so ; do
+	if LD_PRELOAD=$RPM_BUILD_ROOT%{_libdir}/liblber-2.4.so.2:$RPM_BUILD_ROOT%{_libdir}/libldap_r-2.4.so.2:%{!?with_system_db:$RPM_BUILD_ROOT%{_libdir}/libslapd_db-4.6.so:}$RPM_BUILD_ROOT%{_sbindir}/slapd ldd -r $i 2>&1 | grep "undefined symbol"; then
+		echo "Undefined symbols found in" $i
+		exit 1
+	fi
 done
 
 %clean
