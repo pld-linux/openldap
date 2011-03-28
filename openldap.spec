@@ -2,7 +2,6 @@
 # - descriptions for contribs overlays
 # - complete & validate descriptions
 # - trigger for removed ldbm backend
-# - ldap.conf.5 describes /etc/openldap/ldap.conf not /etc/ldap.conf, rename to ldaprc.5 ?
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
@@ -1368,6 +1367,8 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
 # Config for openldap library
 install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldap.conf
+echo ".so ldap.conf.5" >$RPM_BUILD_ROOT%{_mandir}/man5/ldaprc.5
+
 # Config for nss_ldap and pam_ldap
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 
@@ -1803,6 +1804,7 @@ fi
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
 %{_mandir}/man5/ldap.conf.5*
+%{_mandir}/man5/ldaprc.5*
 %{_mandir}/man5/ldif.5*
 
 %files nss-config
