@@ -1,8 +1,7 @@
 # TODO:
-# - package contribs?
+# - descriptions for contribs overlays
 # - complete & validate descriptions
 # - trigger for removed ldbm backend
-# - trigger for removed overlays (denyop,lastmod)
 # - ldap.conf.5 describes /etc/openldap/ldap.conf not /etc/ldap.conf, rename to ldaprc.5 ?
 #
 # Conditional build:
@@ -296,6 +295,72 @@ Static LDAPv3 C++ Class Library.
 
 %description ldapc++-static -l pl.UTF-8
 Biblioteka statyczna klas C++ LDAPv3.
+
+%package servers
+Summary:	LDAP servers
+Summary(pl.UTF-8):	Serwery LDAP
+Summary(pt_BR.UTF-8):	Arquivos para o servidor OpenLDAP
+Summary(ru.UTF-8):	Сервера LDAP
+Summary(uk.UTF-8):	Сервера LDAP
+Group:		Networking/Daemons
+Requires(post):	/usr/sbin/usermod
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getent
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(pre):	textutils
+Requires:	%{name} = %{version}-%{release}
+Requires:	/sbin/chkconfig
+Requires:	rc-scripts
+Requires:	uname(release) >= 2.6
+Suggests:	%{name}-backend-hdb = %{version}-%{release}
+Provides:	group(slapd)
+Provides:	user(slapd)
+Obsoletes:	openldap-backend-ldbm
+Obsoletes:	openldap-overlay-glue
+Conflicts:	kernel24
+Conflicts:	kernel24-smp
+# for the posttrans scriptlet, conflicts because in vserver environment rpm package is not installed.
+Conflicts:	rpm < 4.4.2-0.2
+
+%description servers
+The openldap-server package contains the slapd daemon which is
+responsible for handling the database and client queries.
+
+Install this package if you want to setup an OpenLDAP-2.x server.
+
+You will also need some backend for server, so install some
+openldap-backend package. The bdb backend is recommended.
+
+%description servers -l pl.UTF-8
+Ten pakiet zawiera demona slapd odpowiadającego za obsługę bazy danych
+i zapytania klientów.
+
+Aby uruchomić serwer OpenLDAP 2.x należy zainstalować ten pakiet.
+
+Potrzebny też jest jakiś backend dla serwera, dlatego należy
+zainstalować odpowiedni pakiet openldap-backend. Zalecany jest backend
+bdb.
+
+%description servers -l pt_BR.UTF-8
+O pacote openldap-server contém o servidor slapd que é responsável por
+receber as requisições dos clientes e por manter a base de dados do
+diretório.
+
+O conjunto completo contém:
+- servidor LDAP (slapd),
+
+Instale este pacote se você desejar executar um servidor OpenLDAP.
+
+%description servers -l ru.UTF-8
+Сервера (демоны), поставляемые с LDAP.
+
+%description servers -l uk.UTF-8
+Сервера (демони), що поставляються з LDAP.
 
 %package backend-bdb
 Summary:	BDB backend to OpenLDAP server
@@ -854,73 +919,184 @@ returning them in a search response.
 Ta nakładka sortuje wartości wielowartościowych atrybutów przy
 zwracaniu ich jako odpowiedź przy wyszukiwaniu.
 
-%package servers
-Summary:	LDAP servers
-Summary(pl.UTF-8):	Serwery LDAP
-Summary(pt_BR.UTF-8):	Arquivos para o servidor OpenLDAP
-Summary(ru.UTF-8):	Сервера LDAP
-Summary(uk.UTF-8):	Сервера LDAP
+# contrib overlays
+
+%package overlay-addpartial
+Summary:	Addpartial overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka addpartial dla serwera OpenLDAP
 Group:		Networking/Daemons
-Requires(post):	/usr/sbin/usermod
-Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getent
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
-Requires(pre):	textutils
-Requires:	%{name} = %{version}-%{release}
-Requires:	/sbin/chkconfig
-Requires:	rc-scripts
-Requires:	uname(release) >= 2.6
-Suggests:	%{name}-backend-hdb = %{version}-%{release}
-Provides:	group(slapd)
-Provides:	user(slapd)
-Obsoletes:	openldap-backend-ldbm
-Obsoletes:	openldap-overlay-denyop
-Obsoletes:	openldap-overlay-glue
-Obsoletes:	openldap-overlay-lastmod
-Conflicts:	kernel24
-Conflicts:	kernel24-smp
-# for the posttrans scriptlet, conflicts because in vserver environment rpm package is not installed.
-Conflicts:	rpm < 4.4.2-0.2
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
 
-%description servers
-The openldap-server package contains the slapd daemon which is
-responsible for handling the database and client queries.
+%description overlay-addpartial
 
-Install this package if you want to setup an OpenLDAP-2.x server.
+%description overlay-addpartial -l pl.UTF-8
 
-You will also need some backend for server, so install some
-openldap-backend package. The bdb backend is recommended.
+%package overlay-allop
+Summary:	Allop overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka allop dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
 
-%description servers -l pl.UTF-8
-Ten pakiet zawiera demona slapd odpowiadającego za obsługę bazy danych
-i zapytania klientów.
+%description overlay-allop
 
-Aby uruchomić serwer OpenLDAP 2.x należy zainstalować ten pakiet.
+%description overlay-allop -l pl.UTF-8
 
-Potrzebny też jest jakiś backend dla serwera, dlatego należy
-zainstalować odpowiedni pakiet openldap-backend. Zalecany jest backend
-bdb.
+%package overlay-allowed
+Summary:	Allowed overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka allowed dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
 
-%description servers -l pt_BR.UTF-8
-O pacote openldap-server contém o servidor slapd que é responsável por
-receber as requisições dos clientes e por manter a base de dados do
-diretório.
+%description overlay-allowed
 
-O conjunto completo contém:
-- servidor LDAP (slapd),
+%description overlay-allowed -l pl.UTF-8
 
-Instale este pacote se você desejar executar um servidor OpenLDAP.
+%package overlay-autogroup
+Summary:	Autogroup overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka autogroup dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
 
-%description servers -l ru.UTF-8
-Сервера (демоны), поставляемые с LDAP.
+%description overlay-autogroup
 
-%description servers -l uk.UTF-8
-Сервера (демони), що поставляються з LDAP.
+%description overlay-autogroup -l pl.UTF-8
+
+%package overlay-cloak
+Summary:	Cloak overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka cloak dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-cloak
+
+%description overlay-cloak -l pl.UTF-8
+
+%package overlay-denyop
+Summary:	Denyop overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka denyop dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-denyop
+
+%description overlay-denyop -l pl.UTF-8
+
+%package overlay-dsaschema
+Summary:	Dsaschema overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka dsaschema dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-dsaschema
+
+%description overlay-dsaschema -l pl.UTF-8
+
+%package overlay-dupent
+Summary:	Dupent overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka dupent dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-dupent
+
+%description overlay-dupent -l pl.UTF-8
+
+%package overlay-kinit
+Summary:	Kinit overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka kinit dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-kinit
+
+%description overlay-kinit -l pl.UTF-8
+
+%package overlay-lastbind
+Summary:	Lastbind overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka lastbind dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-lastbind
+
+%description overlay-lastbind -l pl.UTF-8
+
+%package overlay-lastmod
+Summary:	Lastmod overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka lastmod dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-lastmod
+
+%description overlay-lastmod -l pl.UTF-8
+
+%package overlay-noopsrch
+Summary:	Noopsrch overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka noopsrch dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-noopsrch
+
+%description overlay-noopsrch -l pl.UTF-8
+
+%package overlay-nops
+Summary:	Nops overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka nops dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-nops
+
+%description overlay-nops -l pl.UTF-8
+
+%package overlay-proxyOld
+Summary:	ProxyOld overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka proxyOld dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-proxyOld
+
+%description overlay-proxyOld -l pl.UTF-8
+
+%package overlay-samba4
+Summary:	Samba4 overlays for OpenLDAP server
+Summary(pl.UTF-8):	Nakładki samba4 dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-samba4
+
+%description overlay-samba4 -l pl.UTF-8
+
+%package overlay-trace
+Summary:	Trace overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka trace dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-trace
+
+%description overlay-trace -l pl.UTF-8
+
 
 %prep
 %setup -q -c %{!?with_system_db:-a1}
@@ -1291,6 +1467,11 @@ if [ "$1" = "0" ]; then \
 fi \
 %{nil}
 
+%triggerpostun servers -- openldap-servers < 2.1.12
+if [ "`/usr/bin/getent passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
+	/usr/sbin/usermod -d /var/lib/openldap-data slapd
+fi
+
 %post backend-bdb
 %ldap_module_add back_bdb.la
 
@@ -1429,20 +1610,6 @@ fi \
 %preun overlay-memberof
 %ldap_module_remove memberof.la
 
-%post overlay-nssov
-%ldap_module_add nssov.la
-%openldap_schema_register %{schemadir}/ldapns.schema
-%service -q ldap restart
-
-%preun overlay-nssov
-%ldap_module_remove nssov.la
-
-%postun overlay-nssov
-if [ "$1" = "0" ]; then
-	%openldap_schema_unregister %{schemadir}/ldapns.schema
-	%service -q ldap restart
-fi
-
 %post overlay-ppolicy
 %ldap_module_add ppolicy.la
 
@@ -1466,12 +1633,6 @@ fi
 
 %preun overlay-rwm
 %ldap_module_remove rwm.la
-
-%post overlay-smbk5pwd
-%ldap_module_add smbk5pwd.la
-
-%preun overlay-smbk5pwd
-%ldap_module_remove smbk5pwd.la
 
 %post overlay-seqmod
 %ldap_module_add seqmod.la
@@ -1509,10 +1670,127 @@ fi
 %preun overlay-valsort
 %ldap_module_remove valsort.la
 
-%triggerpostun servers -- openldap-servers < 2.1.12
-if [ "`/usr/bin/getent passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
-	/usr/sbin/usermod -d /var/lib/openldap-data slapd
+# contrib/slapd-modules
+
+%post overlay-addpartial
+%ldap_module_add addpartial-overlay.la
+
+%preun overlay-addpartial
+%ldap_module_remove addpartial-overlay.la
+
+%post overlay-allop
+%ldap_module_add allop.la
+
+%preun overlay-allop
+%ldap_module_remove allop.la
+
+%post overlay-allowed
+%ldap_module_add allowed.la
+
+%preun overlay-allowed
+%ldap_module_remove allowed.la
+
+%post overlay-autogroup
+%ldap_module_add autogroup.la
+
+%preun overlay-autogroup
+%ldap_module_remove autogroup.la
+
+%post overlay-cloak
+%ldap_module_add cloak.la
+
+%preun overlay-cloak
+%ldap_module_remove cloak.la
+
+%post overlay-denyop
+%ldap_module_add denyop.la
+
+%preun overlay-denyop
+%ldap_module_remove denyop.la
+
+%post overlay-dsaschema
+%ldap_module_add dsaschema.la
+
+%preun overlay-dsaschema
+%ldap_module_remove dsaschema.la
+
+%post overlay-dupent
+%ldap_module_add dupent.la
+
+%preun overlay-dupent
+%ldap_module_remove dupent.la
+
+%post overlay-kinit
+%ldap_module_add kinit.la
+
+%preun overlay-kinit
+%ldap_module_remove kinit.la
+
+%post overlay-lastbind
+%ldap_module_add lastbind.la
+
+%preun overlay-lastbind
+%ldap_module_remove lastbind.la
+
+%post overlay-lastmod
+%ldap_module_add lastmod.la
+
+%preun overlay-lastmod
+%ldap_module_remove lastmod.la
+
+%post overlay-noopsrch
+%ldap_module_add noopsrch.la
+
+%preun overlay-noopsrch
+%ldap_module_remove noopsrch.la
+
+%post overlay-nops
+%ldap_module_add nops.la
+
+%preun overlay-nops
+%ldap_module_remove nops.la
+
+%post overlay-nssov
+%ldap_module_add nssov.la
+%openldap_schema_register %{schemadir}/ldapns.schema
+%service -q ldap restart
+
+%preun overlay-nssov
+%ldap_module_remove nssov.la
+
+%postun overlay-nssov
+if [ "$1" = "0" ]; then
+	%openldap_schema_unregister %{schemadir}/ldapns.schema
+	%service -q ldap restart
 fi
+
+%post overlay-proxyOld
+%ldap_module_add proxyOld.la
+
+%preun overlay-proxyOld
+%ldap_module_remove proxyOld.la
+
+%post overlay-samba4
+%ldap_module_add pguid.la
+%ldap_module_add rdnval.la
+%ldap_module_add vernum.la
+
+%preun overlay-samba4
+%ldap_module_remove pguid.la
+%ldap_module_remove rdnval.la
+%ldap_module_remove vernum.la
+
+%post overlay-smbk5pwd
+%ldap_module_add smbk5pwd.la
+
+%preun overlay-smbk5pwd
+%ldap_module_remove smbk5pwd.la
+
+%post overlay-trace
+%ldap_module_add trace.la
+
+%preun overlay-trace
+%ldap_module_remove trace.la
 
 %files
 %defattr(644,root,root,755)
@@ -1591,6 +1869,35 @@ fi
 %files ldapc++-static
 %defattr(644,root,root,755)
 %{_libdir}/libldapcpp.a
+
+%files servers
+%defattr(644,root,root,755)
+%if %{without system_db}
+# not used by slapd directly, but by two different backends (bdb,hdb), so include here
+%doc db-%{db_version}/LICENSE
+%attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
+%endif
+%dir %{_sysconfdir}/openldap/schema
+%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.conf
+%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.access.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
+%attr(754,root,root) /etc/rc.d/init.d/ldap
+%attr(770,root,slapd) %{_var}/run/slapd
+%dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
+%attr(660,root,slapd) %{_localstatedir}/openldap-data/*
+%dir %{schemadir}
+%{schemadir}/*.ldif
+%{schemadir}/*.schema
+%exclude %{schemadir}/ldapns.schema
+%dir %{_libdir}/openldap
+%attr(755,root,root) %{_sbindir}/*
+%{_mandir}/man5/slapd.*.5*
+%{_mandir}/man5/slapd-config.5*
+%{_mandir}/man5/slapd-ldbm.5*
+%{_mandir}/man5/slapd-ldif.5*
+%{_mandir}/man5/slapd-null.5*
+%{_mandir}/man8/slap*
 
 %files backend-bdb
 %defattr(644,root,root,755)
@@ -1736,15 +2043,6 @@ fi
 %{_libdir}/openldap/memberof.la
 %{_mandir}/man5/slapo-memberof.5*
 
-%files overlay-nssov
-%defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/nssov/README
-%attr(755,root,root) %{_libdir}/openldap/nssov*.so*
-%{_libdir}/openldap/nssov.la
-%{schemadir}/ldapns.schema
-%{_mandir}/man5/slapo-nssov.5*
-%attr(755,slapd,slapd) %dir /var/run/nslcd
-
 %files overlay-pcache
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/openldap/pcache*.so*
@@ -1774,12 +2072,6 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/rwm*.so*
 %{_libdir}/openldap/rwm.la
 %{_mandir}/man5/slapo-rwm.5*
-
-%files overlay-smbk5pwd
-%defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/smbk5pwd/README
-%attr(755,root,root) %{_libdir}/openldap/smbk5pwd*.so*
-%{_libdir}/openldap/smbk5pwd.la
 
 %files overlay-seqmod
 %defattr(644,root,root,755)
@@ -1816,31 +2108,118 @@ fi
 %{_libdir}/openldap/valsort.la
 %{_mandir}/man5/slapo-valsort.5*
 
-%files servers
+# contrib/slapd-modules
+
+%files overlay-addpartial
 %defattr(644,root,root,755)
-%if %{without system_db}
-# not used by slapd directly, but by two different backends (bdb,hdb), so include here
-%doc db-%{db_version}/LICENSE
-%attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
+%doc %{name}-%{version}/contrib/slapd-modules/addpartial/README
+%attr(755,root,root) %{_libdir}/openldap/addpartial-overlay*.so*
+%{_libdir}/openldap/addpartial-overlay.la
+
+%files overlay-allop
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/allop/README
+%attr(755,root,root) %{_libdir}/openldap/allop*.so*
+%{_libdir}/openldap/allop.la
+%{_mandir}/man5/slapo-allop.5*
+
+%files overlay-allowed
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/allowed/README
+%attr(755,root,root) %{_libdir}/openldap/allowed*.so*
+%{_libdir}/openldap/allowed.la
+
+%files overlay-autogroup
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/autogroup/README
+%attr(755,root,root) %{_libdir}/openldap/autogroup*.so*
+%{_libdir}/openldap/autogroup.la
+
+%files overlay-cloak
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/cloak*.so*
+%{_libdir}/openldap/cloak.la
+%{_mandir}/man5/slapo-cloak.5*
+
+%files overlay-denyop
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/denyop*.so*
+%{_libdir}/openldap/denyop.la
+
+%files overlay-dsaschema
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/dsaschema/README
+%attr(755,root,root) %{_libdir}/openldap/dsaschema*.so*
+%{_libdir}/openldap/dsaschema.la
+
+%files overlay-dupent
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/dupent*.so*
+%{_libdir}/openldap/dupent.la
+
+%if %{with krb5}
+%files overlay-kinit
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/kinit/README
+%attr(755,root,root) %{_libdir}/openldap/kinit*.so*
+%{_libdir}/openldap/kinit.la
 %endif
-%dir %{_sysconfdir}/openldap/schema
-%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.conf
-%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.access.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
-%attr(754,root,root) /etc/rc.d/init.d/ldap
-%attr(770,root,slapd) %{_var}/run/slapd
-%dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
-%attr(660,root,slapd) %{_localstatedir}/openldap-data/*
-%dir %{schemadir}
-%{schemadir}/*.ldif
-%{schemadir}/*.schema
-%exclude %{schemadir}/ldapns.schema
-%dir %{_libdir}/openldap
-%attr(755,root,root) %{_sbindir}/*
-%{_mandir}/man5/slapd.*.5*
-%{_mandir}/man5/slapd-config.5*
-%{_mandir}/man5/slapd-ldbm.5*
-%{_mandir}/man5/slapd-ldif.5*
-%{_mandir}/man5/slapd-null.5*
-%{_mandir}/man8/slap*
+
+%files overlay-lastbind
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/lastbind*.so*
+%{_libdir}/openldap/lastbind.la
+%{_mandir}/man5/slapo-lastbind.5*
+
+%files overlay-lastmod
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/lastmod*.so*
+%{_libdir}/openldap/lastmod.la
+%{_mandir}/man5/slapo-lastmod.5*
+
+%files overlay-noopsrch
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/noopsrch*.so*
+%{_libdir}/openldap/noopsrch.la
+
+%files overlay-nops
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/nops*.so*
+%{_libdir}/openldap/nops.la
+%{_mandir}/man5/slapo-nops.5*
+
+%files overlay-nssov
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/nssov/README
+%attr(755,root,root) %{_libdir}/openldap/nssov*.so*
+%{_libdir}/openldap/nssov.la
+%{schemadir}/ldapns.schema
+%{_mandir}/man5/slapo-nssov.5*
+%attr(755,slapd,slapd) %dir /var/run/nslcd
+
+%files overlay-proxyOld
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/proxyOld/README
+%attr(755,root,root) %{_libdir}/openldap/proxyOld*.so*
+%{_libdir}/openldap/proxyOld.la
+
+%files overlay-samba4
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/samba4/README
+%attr(755,root,root) %{_libdir}/openldap/pguid*.so*
+%attr(755,root,root) %{_libdir}/openldap/rdnval*.so*
+%attr(755,root,root) %{_libdir}/openldap/vernum*.so*
+%{_libdir}/openldap/pguid.la
+%{_libdir}/openldap/rdnval.la
+%{_libdir}/openldap/vernum.la
+
+%files overlay-smbk5pwd
+%defattr(644,root,root,755)
+%doc %{name}-%{version}/contrib/slapd-modules/smbk5pwd/README
+%attr(755,root,root) %{_libdir}/openldap/smbk5pwd*.so*
+%{_libdir}/openldap/smbk5pwd.la
+
+%files overlay-trace
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/trace*.so*
+%{_libdir}/openldap/trace.la
