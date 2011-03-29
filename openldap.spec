@@ -977,14 +977,22 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %package overlay-denyop
 Summary:	Denyop overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka denyop dla serwera OpenLDAP
+Summary(pl.UTF-8):	Nakładka zabraniająca wykonania operacji dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-denyop
+This overlay provides a quick'n'easy way to deny selected operations
+for a database whose backend implements the operations. It is intended
+to be less expensive than ACLs because its evaluation occurs before
+any backend specific operation is actually even initiated.
 
 %description overlay-denyop -l pl.UTF-8
+Ta nakładka udostępnia szybki i łatwy sposób na blokowanie wybranych
+operacji dla bazy danych, której backend implementuje te operacje. Ma
+być mniej kosztowna niż ACL-e, ponieważ obliczenia zachodzą przed
+rozpoczęciem jakichkolwiek operacji specyficznych dla backendu.
 
 %package overlay-dsaschema
 Summary:	Dsaschema overlay for OpenLDAP server
@@ -1032,14 +1040,22 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %package overlay-lastmod
 Summary:	Lastmod overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka lastmod dla serwera OpenLDAP
+Summary(pl.UTF-8):	Nakładka Last Modification dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-lastmod
+The lastmod overlay creates a service entry rooted at the suffix of
+the database it's stacked onto, which holds the DN, the modification
+type, the modifiersName and the modifyTimestamp of the last write
+operation performed on that database.
 
 %description overlay-lastmod -l pl.UTF-8
+Nakładka lastmod tworzy wpis usługi zaczynający się od przyrostka bazy
+danych, na której jest oparty, trzymający DN, rodzaj modyfikacji,
+modifiersName i modifyTimestamp dla ostatniej operacji zapisu
+wykonywanej na tej bazie.
 
 %package overlay-noopsrch
 Summary:	Noopsrch overlay for OpenLDAP server
