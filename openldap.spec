@@ -928,55 +928,85 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-addpartial
+This overlay intercepts ADD requests, determines if a change has
+actually taken place for that record, and then performs a modify
+request for those values that have changed (modified, added, deleted).
+If the record has not changed in any way, it is ignored.
+If the record does not exist, the record falls through to the normal
+add mechanism.  This overlay is useful for replicating from sources
+that are not LDAPs where it is easier to build entire records than
+to determine the changes (i.e. a database).    
 
 %description overlay-addpartial -l pl.UTF-8
 
 %package overlay-allop
-Summary:	Allop overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka allop dla serwera OpenLDAP
+Summary:	All Operational Attributes overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka All Operational Attributes dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-allop
+The All Operational Attributes overlay is designed to allow slapd to
+interoperate with dumb clients that expect all attributes, including
+operational ones, to be returned when "*" or an empty attribute list
+is requested, as opposed to RFC2251 and RFC3673.
 
 %description overlay-allop -l pl.UTF-8
 
 %package overlay-allowed
-Summary:	Allowed overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka allowed dla serwera OpenLDAP
+Summary:	Allowed Attributes overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Allowed Attributes dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-allowed
+Return in allowedAttributes the attributes required/allowed
+by the objectClasses that are currently present in an object.
+Return in allowedAttributesEffective the subset of the above that
+can be written by the identity that performs the search.
 
 %description overlay-allowed -l pl.UTF-8
 
 %package overlay-autogroup
-Summary:	Autogroup overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka autogroup dla serwera OpenLDAP
+Summary:	Automatic Group overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Automatic Group dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-autogroup
+The autogroup overlay allows automated updates of group memberships
+which meet the requirements of any filter contained in the group
+definition.  The filters are built from LDAP URI-valued attributes.
+Any time an object is added/deleted/updated, it is tested for
+compliance with the filters, and its membership is accordingly
+updated. For searches and compares it behaves like a static group.
+If the attribute part of the URI is filled, the group entry is
+populated by the values of this attribute in the entries resulting
+from the search.
 
 %description overlay-autogroup -l pl.UTF-8
 
 %package overlay-cloak
-Summary:	Cloak overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka cloak dla serwera OpenLDAP
+Summary:	Attribute Cloak overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Attribute Cloak dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-cloak
+The cloak overlay allows the server to hide specific attributes,
+unless explicitely requested by the client.  This improve performance
+when a client requests all attributes and get a huge binary attribute
+that is of no interest for it.  This behavior is disabled when the
+manageDSAit control (RFC 3296) is used.
 
 %description overlay-cloak -l pl.UTF-8
 
 %package overlay-denyop
-Summary:	Denyop overlay for OpenLDAP server
+Summary:	Deny Operations overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka zabraniająca wykonania operacji dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
@@ -995,24 +1025,29 @@ być mniej kosztowna niż ACL-e, ponieważ obliczenia zachodzą przed
 rozpoczęciem jakichkolwiek operacji specyficznych dla backendu.
 
 %package overlay-dsaschema
-Summary:	Dsaschema overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka dsaschema dla serwera OpenLDAP
+Summary:	DSA Schema overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka DSA Schema dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-dsaschema
+This overlay permits the loading of DSA-specific schema from
+configuration files (including operational attributes).
 
 %description overlay-dsaschema -l pl.UTF-8
 
 %package overlay-dupent
-Summary:	Dupent overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka dupent dla serwera OpenLDAP
+Summary:	Duplicate Entry overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Duplicate Entry dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-dupent
+LDAP Control for a Duplicate Entry Representation of Search Results
+<draft-ietf-ldapext-ldapv3-dupent-08.txt> (EXPIRED)
+<http://tools.ietf.org/id/draft-ietf-ldapext-ldapv3-dupent-08.txt>
 
 %description overlay-dupent -l pl.UTF-8
 
@@ -1024,22 +1059,30 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-kinit
+This overlay requests a Kerberos TGT and keeps it renewed as long as
+slapd is running.
 
 %description overlay-kinit -l pl.UTF-8
 
 %package overlay-lastbind
-Summary:	Lastbind overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka lastbind dla serwera OpenLDAP
+Summary:	Last Bind overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Last Bind dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-lastbind
+The lastbind overlay allows recording the timestamp of the last
+successful bind to entries in the directory, in the authTimestamp
+attribute.  The overlay can be configured to update this timestamp
+only if it is older than a given value, thus avoiding large numbers
+of write operations penalizing performance.  One sample use for this
+overlay would be to detect unused accounts.
 
 %description overlay-lastbind -l pl.UTF-8
 
 %package overlay-lastmod
-Summary:	Lastmod overlay for OpenLDAP server
+Summary:	Last Modification overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Last Modification dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
@@ -1065,17 +1108,24 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-noopsrch
+LDAP Control that counts entries a search would return.
 
 %description overlay-noopsrch -l pl.UTF-8
 
 %package overlay-nops
-Summary:	Nops overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka nops dla serwera OpenLDAP
+Summary:	Remove Null Operations overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka Remove Null Operations dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-nops
+Some broken client tend to implement modifications as replace
+operations where all attributes are replaced, most of the time by
+the same values they had before.  This can cause undesirable load
+on logs, ACL evaluation, or replication trafic.
+This overlay detects idempotent replace operations and filters them
+out.
 
 %description overlay-nops -l pl.UTF-8
 
@@ -1087,28 +1137,42 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-proxyOld
+This overlay provides support for the obsolete
+draft-weltman-ldapb3-proxy-05 revision of the LDAP Proxy Authorization
+control.  It is merely intended to provide compatibility in
+environments where other servers only recognize this old control.
+New installations should not use this code.
 
 %description overlay-proxyOld -l pl.UTF-8
 
 %package overlay-samba4
 Summary:	Samba4 overlays for OpenLDAP server
-Summary(pl.UTF-8):	Nakładki samba4 dla serwera OpenLDAP
+Summary(pl.UTF-8):	Nakładki Samba4 dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-samba4
+This package contains overlays specific to samba4 LDAP backend.
+pguid overlay maintains the operational attribute "parentUUID".
+It contains the entryUUID of the parent entry.
+rdnval overlay maintains the operational attribute "rdnValue".
+It contains the value of the entry's RDN.
+vernum overlay increments a counter any time an attribute is modified.
+It is intended to increment the counter 'msDS-KeyVersionNumber' when
+the attribute 'unicodePwd' is modified.
 
 %description overlay-samba4 -l pl.UTF-8
 
 %package overlay-trace
 Summary:	Trace overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka trace dla serwera OpenLDAP
+Summary(pl.UTF-8):	Nakładka Trace dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-trace
+Overlay to trace overlay invocation.
 
 %description overlay-trace -l pl.UTF-8
 
