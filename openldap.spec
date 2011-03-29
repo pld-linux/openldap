@@ -1,6 +1,5 @@
 # TODO:
 # - complete & validate descriptions
-# - trigger for removed ldbm backend
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
