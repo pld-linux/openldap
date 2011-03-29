@@ -1,5 +1,4 @@
 # TODO:
-# - descriptions for contribs overlays
 # - complete & validate descriptions
 # - trigger for removed ldbm backend
 #
@@ -931,13 +930,19 @@ Requires:	%{name}-servers = %{version}-%{release}
 This overlay intercepts ADD requests, determines if a change has
 actually taken place for that record, and then performs a modify
 request for those values that have changed (modified, added, deleted).
-If the record has not changed in any way, it is ignored.
-If the record does not exist, the record falls through to the normal
-add mechanism.  This overlay is useful for replicating from sources
-that are not LDAPs where it is easier to build entire records than
-to determine the changes (i.e. a database).    
+If the record has not changed in any way, it is ignored.  This overlay
+is useful for replicating from sources that are not LDAPs where it is
+easier to build entire records than to determine the changes
+(i.e. a database).    
 
 %description overlay-addpartial -l pl.UTF-8
+Ta nakładka przechwytuje operacje ADD, sprawdza czy dla danego rekordu
+rzeczywiście zmiana miała miejsce i wykonuje operacje modyfikacji
+jedynie dla tych atrybutów, które się zmieniły. Jeżeli rekord nie
+został zmieniony, operacja jest ignorowana. Nakładka jest użyteczna
+w przypadku migracji danych z nie-LDAPowych źródeł dla których
+prościej jest utworzyć pełne rekordy niż znaleźć zmiany
+(np. baza danych).
 
 %package overlay-allop
 Summary:	All Operational Attributes overlay for OpenLDAP server
@@ -953,6 +958,10 @@ operational ones, to be returned when "*" or an empty attribute list
 is requested, as opposed to RFC2251 and RFC3673.
 
 %description overlay-allop -l pl.UTF-8
+Nakładka All Operational Attributes pozwala serwerowi na współpracę z
+głupimi klientami, które spodziewają się wszystkich atrybutów,
+włącznie z operacyjnymi, w przypadku wyszukiwania "*" albo pustej
+listy atrybutów, co jest niezgodne z RFC2251 i RFC3673.
 
 %package overlay-allowed
 Summary:	Allowed Attributes overlay for OpenLDAP server
@@ -962,12 +971,17 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-allowed
-Return in allowedAttributes the attributes required/allowed
-by the objectClasses that are currently present in an object.
-Return in allowedAttributesEffective the subset of the above that
-can be written by the identity that performs the search.
+This overlay returns the attributes required/allowed by the
+objectClasses that are currently present in an object in the
+allowedAttributes attribute, and the subset of the above that
+can be written by the identity that performs the search in the
+allowedAttributesEffective attribute.
 
 %description overlay-allowed -l pl.UTF-8
+Ta nakładka zwraca atrybuty wymagane/dozwolone przez klasy
+(objectClass), które są obecnie obecne w obiekcie w atrybucie
+allowedAttributes, i ich podzbiór, który może być zapisywany
+przez wyszukującego w atrybucie allowedAttributesEffective.
 
 %package overlay-autogroup
 Summary:	Automatic Group overlay for OpenLDAP server
@@ -979,15 +993,11 @@ Requires:	%{name}-servers = %{version}-%{release}
 %description overlay-autogroup
 The autogroup overlay allows automated updates of group memberships
 which meet the requirements of any filter contained in the group
-definition.  The filters are built from LDAP URI-valued attributes.
-Any time an object is added/deleted/updated, it is tested for
-compliance with the filters, and its membership is accordingly
-updated. For searches and compares it behaves like a static group.
-If the attribute part of the URI is filled, the group entry is
-populated by the values of this attribute in the entries resulting
-from the search.
+definition.
 
 %description overlay-autogroup -l pl.UTF-8
+Nakładka Automatic Group pozwala na automatyczne zmiany zawartości
+grup, które pasują do dowolnego filtru zawartego w definicji grupy.
 
 %package overlay-cloak
 Summary:	Attribute Cloak overlay for OpenLDAP server
@@ -1004,6 +1014,11 @@ that is of no interest for it.  This behavior is disabled when the
 manageDSAit control (RFC 3296) is used.
 
 %description overlay-cloak -l pl.UTF-8
+Nakładka Attribute Cloak pozwala ukryć określone atrybuty, o ile nie
+są one jawnie żądane przez klienta. Pozwala to na poprawienie
+wydajności, gry klient żąda wszystkich atrybutów i otrzynuje ogromny
+blob binarny, którym nie jest zainteresowany. To zachowanie jest
+wyłączone, jeżeli jest używany manageDSAit (RFC 3296).
 
 %package overlay-denyop
 Summary:	Deny Operations overlay for OpenLDAP server
@@ -1036,6 +1051,8 @@ This overlay permits the loading of DSA-specific schema from
 configuration files (including operational attributes).
 
 %description overlay-dsaschema -l pl.UTF-8
+Ta nakładka umożliwia ładowanie schematów DSA bezpośrednio z plików
+konfiguracyjnych.
 
 %package overlay-dupent
 Summary:	Duplicate Entry overlay for OpenLDAP server
@@ -1050,6 +1067,9 @@ LDAP Control for a Duplicate Entry Representation of Search Results
 <http://tools.ietf.org/id/draft-ietf-ldapext-ldapv3-dupent-08.txt>
 
 %description overlay-dupent -l pl.UTF-8
+Nakładka implemetująca "Duplicate Entry Representation of Search
+Results" <draft-ietf-ldapext-ldapv3-dupent-08.txt> (EXPIRED)
+<http://tools.ietf.org/id/draft-ietf-ldapext-ldapv3-dupent-08.txt>
 
 %package overlay-kinit
 Summary:	Kinit overlay for OpenLDAP server
@@ -1063,6 +1083,8 @@ This overlay requests a Kerberos TGT and keeps it renewed as long as
 slapd is running.
 
 %description overlay-kinit -l pl.UTF-8
+Ta nakładka pobiera kerberosowy TGT i utrzymuje jego ważność tak
+długo, jak długo serwer jest uruchomiony.
 
 %package overlay-lastbind
 Summary:	Last Bind overlay for OpenLDAP server
@@ -1074,12 +1096,13 @@ Requires:	%{name}-servers = %{version}-%{release}
 %description overlay-lastbind
 The lastbind overlay allows recording the timestamp of the last
 successful bind to entries in the directory, in the authTimestamp
-attribute.  The overlay can be configured to update this timestamp
-only if it is older than a given value, thus avoiding large numbers
-of write operations penalizing performance.  One sample use for this
-overlay would be to detect unused accounts.
+attribute.  One sample use for this overlay would be to detect
+unused accounts.
 
 %description overlay-lastbind -l pl.UTF-8
+Nakładka lastbind pozwala na zapisywanie czsu ostaniej udanej operacji
+BIND w atrybucie authTimestamp. Przykładowo można wykorzystać ja do
+wykrycia nieużywanych kont.
 
 %package overlay-lastmod
 Summary:	Last Modification overlay for OpenLDAP server
@@ -1111,6 +1134,7 @@ Requires:	%{name}-servers = %{version}-%{release}
 LDAP Control that counts entries a search would return.
 
 %description overlay-noopsrch -l pl.UTF-8
+Noopsrch zlicza pozycje, które zostałyby zwrócone przez wyszukiwanie.
 
 %package overlay-nops
 Summary:	Remove Null Operations overlay for OpenLDAP server
@@ -1128,6 +1152,11 @@ This overlay detects idempotent replace operations and filters them
 out.
 
 %description overlay-nops -l pl.UTF-8
+Niektórzy, błędni klienci implementują modyfikacje jako operacje
+"replace", w których wszystkie atrybuty ulegają zmianie, przeważnie
+na takie same wartości jak przed modyfikacją. Może powodować to
+niepożądane obciążenie logów, obliczenia ACL albo replikacje.
+Ta nakładka wykrywa i odfiltrowuje idempotentne operacje "replace".
 
 %package overlay-proxyOld
 Summary:	ProxyOld overlay for OpenLDAP server
@@ -1144,6 +1173,10 @@ environments where other servers only recognize this old control.
 New installations should not use this code.
 
 %description overlay-proxyOld -l pl.UTF-8
+Ta nakładka udostępnia wsparcie dla przestarzałego draftu
+draft-weltman-ldapb3-proxy-05 Autoryzacji LDAP Proxy.
+Jest przeznaczona tylko dla kompatybilności ze starymi serwerami,
+nie powinna byc używana w nowych instalacjach.
 
 %package overlay-samba4
 Summary:	Samba4 overlays for OpenLDAP server
@@ -1163,6 +1196,14 @@ It is intended to increment the counter 'msDS-KeyVersionNumber' when
 the attribute 'unicodePwd' is modified.
 
 %description overlay-samba4 -l pl.UTF-8
+Ten pakiet zawiera nakładki specyficzne dla backendu LDAP samba4.
+pguid obsługuje atrybut operacyjny "parentUUID", który zawiera
+entryUUID nadrzędnej pozycji.
+rdnval obsługuje atrybut operacyjny "rdnValue", który zawiera
+wartość RDN danej pozycji.
+vernum zwiększa licznik za każdym razem gdy jakiś atrybut jest
+modyfikowany. Jest przeznaczony do zwiększania licznika
+'msDS-KeyVersionNumber' gdy modyfikowany jest atrybut 'unicodePwd'.
 
 %package overlay-trace
 Summary:	Trace overlay for OpenLDAP server
@@ -1175,7 +1216,7 @@ Requires:	%{name}-servers = %{version}-%{release}
 Overlay to trace overlay invocation.
 
 %description overlay-trace -l pl.UTF-8
-
+Nakładka śledząca wywołania nakładek.
 
 %prep
 %setup -q -c %{!?with_system_db:-a1}
