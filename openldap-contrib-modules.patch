@@ -1206,13 +1206,13 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/samba4/Makefile.in openldap-2.4.
 +
 +dynamic: $(PROGRAMS)
 +
-+pguid.la : pguid.lo
++pguid.la : pguid.lo version.lo
 +	$(LTLINK_MOD) -module -o $@ pguid.lo version.lo $(LINK_LIBS)
 +
-+rdnval.la : rdnval.lo
++rdnval.la : rdnval.lo version.lo
 +	$(LTLINK_MOD) -module -o $@ rdnval.lo version.lo $(LINK_LIBS)
 +
-+vernum.la : vernum.lo
++vernum.la : vernum.lo version.lo
 +	$(LTLINK_MOD) -module -o $@ vernum.lo version.lo $(LINK_LIBS)
 +
 +install-local:	$(PROGRAMS)
