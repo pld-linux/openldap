@@ -1,5 +1,3 @@
-# TODO:
-# - complete & validate descriptions
 #
 # Conditional build:
 %bcond_without	exchange	# hacked version of library for Evolution Exchange support
@@ -105,9 +103,7 @@ LDAP servers and clients, as well as interfaces to other protocols.
 Note that this does not include the slapd interface to X.500 and
 therefore does not require the ISODE package.
 
-The package includes:
-- libraries implementing the LDAP protocol,
-- utilities, tools, and sample clients.
+The package includes utilities, tools, and sample clients.
 
 %description -l es.UTF-8
 Cliente y servidor LDAP.
@@ -117,21 +113,13 @@ Serwery i klienci LDAP jak i interfejsy do innych protokołów. Wiedz,
 że pakiet ten nie zawiera interfejsu slapd to X.500 i dlatego nie
 wymaga pakietu ISODE.
 
-Pakiet ten zawiera:
-- biblioteki implementujące obsługę protokołu LDAP,
-- dodatkowe narzędzia i przykładowe aplikacje klienckie LDAP.
+Pakiet ten zawiera narzędzia i przykładowe aplikacje klienckie LDAP.
 
 %description -l pt_BR.UTF-8
 OpenLDAP é um conjunto de ferramentas e aplicações para construir um
 servidor de diretórios.
 
-O conjunto completo contém:
-- bibliotecas implementando o protocolo LDAP utilitários,
-- ferramentas e clientes.
-
-Este pacote contém apenas as bibliotecas usadas por alguns programas.
-Você provavelmente também vai querer instalar o pacote
-openldap-client.
+O conjunto completo contém ferramentas e clientes.
 
 %description -l ru.UTF-8
 Образцы клиентов, поставляемые с LDAP.
@@ -213,10 +201,7 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-This package includes the development libraries and header files
-needed for compilation of applications that are making use of the LDAP
-internals. Install this package only if you plan to develop or will
-need to compile cutomized LDAP clients.
+LDAP static libraries.
 
 %description static -l pl.UTF-8
 Biblioteki statyczne LDAP.
@@ -328,7 +313,7 @@ Conflicts:	rpm < 4.4.2-0.2
 The openldap-server package contains the slapd daemon which is
 responsible for handling the database and client queries.
 
-Install this package if you want to setup an OpenLDAP-2.x server.
+Install this package if you want to setup an OpenLDAP server.
 
 You will also need some backend for server, so install some
 openldap-backend package. The bdb backend is recommended.
@@ -337,7 +322,7 @@ openldap-backend package. The bdb backend is recommended.
 Ten pakiet zawiera demona slapd odpowiadającego za obsługę bazy danych
 i zapytania klientów.
 
-Aby uruchomić serwer OpenLDAP 2.x należy zainstalować ten pakiet.
+Aby uruchomić serwer OpenLDAP należy zainstalować ten pakiet.
 
 Potrzebny też jest jakiś backend dla serwera, dlatego należy
 zainstalować odpowiedni pakiet openldap-backend. Zalecany jest backend
@@ -485,15 +470,15 @@ Requires:	%{name}-overlay-rwm = %{version}-%{release}
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-relay
-The primary purpose of this slapd(8) backend is to map a naming
-context defined in a database running in the same slapd(8) instance
+The primary purpose of this backend is to map a naming
+context defined in a database running in the same slapd instance
 into a virtual naming context, with attributeType and objectClass
 manipulation, if required. It requires the rwm overlay.
 
 %description backend-relay -l pl.UTF-8
-Głównym celem tego backendu slapd(8) jest odwzorowywanie kontekstów
+Głównym celem tego backendu jest odwzorowywanie kontekstów
 nazw zdefiniowanych w bazie danych działającej w tej samej instancji
-slapd(8) na konteksty nazw wirtualnych z modyfikowaniem attributeType
+slapd na konteksty nazw wirtualnych z modyfikowaniem attributeType
 i objectClass w razie potrzeby. Wymaga nakładki rwm.
 
 %package backend-shell
@@ -685,25 +670,6 @@ członkostwo grup. Zawsze przy modyfikacji wpisu grupy jej członkowie
 są modyfikowani w odpowiedniej kolejności, aby utrzymać opisany w DN
 atrybut "jest członkiem grupy", uaktualniany wraz z DN grupy.
 
-%package overlay-nssov
-Summary:	NSS overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka NSS dla serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-Provides:	nslcd
-Conflicts:	openldap-schema-pam_ldap
-
-%description overlay-nssov
-The nssov overlay handles NSS lookup requests through a local Unix
-Domain socket. It uses the same IPC protocol as Arthur de Jong's
-nss-ldapd.
-
-%description overlay-nssov -l pl.UTF-8
-Nakładka nssov obsługuje żądania wyszukiwania NSS poprzez lokalne
-gniazdo Unix Domain. Używa tego samego protokołu IPC, co nss-ldapd
-Arthura de Jong.
-
 %package overlay-pcache
 Summary:	Proxy cache overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka proxy cache dla serwera OpenLDAP
@@ -806,22 +772,6 @@ This overlay serializes concurrent attempts to modify a single entry.
 Ta nakładka serializuje jednoczesne próby zmodyfikowania tego samego
 wpisu.
 
-%package overlay-smbk5pwd
-Summary:	smbk5pwd overlay for OpenLDAP server
-Summary(pl.UTF-8):	Nakładka smbk5pwd dla serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description overlay-smbk5pwd
-smbk5pwd overlay extends the PasswordModify Extended Operation to
-update Kerberos keys and Samba password hashes for an LDAP user.
-
-%description overlay-smbk5pwd -l pl.UTF-8
-Nakładka smbk5pwd rozszerza rozszerzoną operację PasswordModify o
-uaktualnianie kluczy Kerberosa i skrótów haseł Samby dla użytkownika
-LDAP.
-
 %package overlay-sssvlv
 Summary:	Server Side Sorting and Virtual List View overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka sortowania po stronie serwera i wirtualnego widoku list dla serwera OpenLDAP
@@ -874,14 +824,14 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-translucent
 The Translucent Proxy overlay can be used with a backend database such
-as slapd-bdb(5) to create a "translucent proxy". Entries retrieved
+as slapd-bdb to create a "translucent proxy". Entries retrieved
 from a remote LDAP server may have some or all attributes overridden,
 or new attributes added, by entries in the local database before being
 presented to the client.
 
 %description overlay-translucent -l pl.UTF-8
 Nakładka Translucent Proxy może być używana wraz z bazą danych taką
-jak slapd-bdb(5) do stworzenia "przezroczystego proxy". Wpisy
+jak slapd-bdb do stworzenia "przezroczystego proxy". Wpisy
 otrzymane ze zdalnego serwera LDAP mogą mieć nadpisane niektóre lub
 wszystkie atrybuty, albo dodane nowe atrybuty poprzez wpisy w lokalnej
 bazie danych przed przekazaniem do klienta.
@@ -1157,6 +1107,25 @@ na takie same wartości jak przed modyfikacją. Może powodować to
 niepożądane obciążenie logów, obliczenia ACL albo replikacje.
 Ta nakładka wykrywa i odfiltrowuje idempotentne operacje "replace".
 
+%package overlay-nssov
+Summary:	NSS overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka NSS dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+Provides:	nslcd
+Conflicts:	openldap-schema-pam_ldap
+
+%description overlay-nssov
+The nssov overlay handles NSS lookup requests through a local Unix
+Domain socket. It uses the same IPC protocol as Arthur de Jong's
+nss-ldapd.
+
+%description overlay-nssov -l pl.UTF-8
+Nakładka nssov obsługuje żądania wyszukiwania NSS poprzez lokalne
+gniazdo Unix Domain. Używa tego samego protokołu IPC, co nss-ldapd
+Arthura de Jong.
+
 %package overlay-proxyOld
 Summary:	ProxyOld overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka proxyOld dla serwera OpenLDAP
@@ -1203,6 +1172,22 @@ wartość RDN danej pozycji.
 vernum zwiększa licznik za każdym razem gdy jakiś atrybut jest
 modyfikowany. Jest przeznaczony do zwiększania licznika
 'msDS-KeyVersionNumber' gdy modyfikowany jest atrybut 'unicodePwd'.
+
+%package overlay-smbk5pwd
+Summary:	smbk5pwd overlay for OpenLDAP server
+Summary(pl.UTF-8):	Nakładka smbk5pwd dla serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description overlay-smbk5pwd
+smbk5pwd overlay extends the PasswordModify Extended Operation to
+update Kerberos keys and Samba password hashes for an LDAP user.
+
+%description overlay-smbk5pwd -l pl.UTF-8
+Nakładka smbk5pwd rozszerza rozszerzoną operację PasswordModify o
+uaktualnianie kluczy Kerberosa i skrótów haseł Samby dla użytkownika
+LDAP.
 
 %package overlay-trace
 Summary:	Trace overlay for OpenLDAP server
