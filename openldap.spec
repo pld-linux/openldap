@@ -470,16 +470,16 @@ Requires:	%{name}-overlay-rwm = %{version}-%{release}
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description backend-relay
-The primary purpose of this backend is to map a naming
-context defined in a database running in the same slapd instance
-into a virtual naming context, with attributeType and objectClass
-manipulation, if required. It requires the rwm overlay.
+The primary purpose of this backend is to map a naming context defined
+in a database running in the same slapd instance into a virtual naming
+context, with attributeType and objectClass manipulation, if required.
+It requires the rwm overlay.
 
 %description backend-relay -l pl.UTF-8
-Głównym celem tego backendu jest odwzorowywanie kontekstów
-nazw zdefiniowanych w bazie danych działającej w tej samej instancji
-slapd na konteksty nazw wirtualnych z modyfikowaniem attributeType
-i objectClass w razie potrzeby. Wymaga nakładki rwm.
+Głównym celem tego backendu jest odwzorowywanie kontekstów nazw
+zdefiniowanych w bazie danych działającej w tej samej instancji slapd
+na konteksty nazw wirtualnych z modyfikowaniem attributeType i
+objectClass w razie potrzeby. Wymaga nakładki rwm.
 
 %package backend-shell
 Summary:	Shell backend to OpenLDAP server
@@ -824,17 +824,17 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-translucent
 The Translucent Proxy overlay can be used with a backend database such
-as slapd-bdb to create a "translucent proxy". Entries retrieved
-from a remote LDAP server may have some or all attributes overridden,
-or new attributes added, by entries in the local database before being
+as slapd-bdb to create a "translucent proxy". Entries retrieved from a
+remote LDAP server may have some or all attributes overridden, or new
+attributes added, by entries in the local database before being
 presented to the client.
 
 %description overlay-translucent -l pl.UTF-8
 Nakładka Translucent Proxy może być używana wraz z bazą danych taką
-jak slapd-bdb do stworzenia "przezroczystego proxy". Wpisy
-otrzymane ze zdalnego serwera LDAP mogą mieć nadpisane niektóre lub
-wszystkie atrybuty, albo dodane nowe atrybuty poprzez wpisy w lokalnej
-bazie danych przed przekazaniem do klienta.
+jak slapd-bdb do stworzenia "przezroczystego proxy". Wpisy otrzymane
+ze zdalnego serwera LDAP mogą mieć nadpisane niektóre lub wszystkie
+atrybuty, albo dodane nowe atrybuty poprzez wpisy w lokalnej bazie
+danych przed przekazaniem do klienta.
 
 %package overlay-unique
 Summary:	Uniqueness overlay for OpenLDAP server
@@ -879,19 +879,18 @@ Requires:	%{name}-servers = %{version}-%{release}
 This overlay intercepts ADD requests, determines if a change has
 actually taken place for that record, and then performs a modify
 request for those values that have changed (modified, added, deleted).
-If the record has not changed in any way, it is ignored.  This overlay
+If the record has not changed in any way, it is ignored. This overlay
 is useful for replicating from sources that are not LDAPs where it is
-easier to build entire records than to determine the changes
-(i.e. a database).    
+easier to build entire records than to determine the changes (i.e. a
+database).
 
 %description overlay-addpartial -l pl.UTF-8
 Ta nakładka przechwytuje operacje ADD, sprawdza czy dla danego rekordu
 rzeczywiście zmiana miała miejsce i wykonuje operacje modyfikacji
 jedynie dla tych atrybutów, które się zmieniły. Jeżeli rekord nie
-został zmieniony, operacja jest ignorowana. Nakładka jest użyteczna
-w przypadku migracji danych z nie-LDAPowych źródeł dla których
-prościej jest utworzyć pełne rekordy niż znaleźć zmiany
-(np. baza danych).
+został zmieniony, operacja jest ignorowana. Nakładka jest użyteczna w
+przypadku migracji danych z nie-LDAPowych źródeł dla których prościej
+jest utworzyć pełne rekordy niż znaleźć zmiany (np. baza danych).
 
 %package overlay-allop
 Summary:	All Operational Attributes overlay for OpenLDAP server
@@ -922,15 +921,15 @@ Requires:	%{name}-servers = %{version}-%{release}
 %description overlay-allowed
 This overlay returns the attributes required/allowed by the
 objectClasses that are currently present in an object in the
-allowedAttributes attribute, and the subset of the above that
-can be written by the identity that performs the search in the
+allowedAttributes attribute, and the subset of the above that can be
+written by the identity that performs the search in the
 allowedAttributesEffective attribute.
 
 %description overlay-allowed -l pl.UTF-8
 Ta nakładka zwraca atrybuty wymagane/dozwolone przez klasy
 (objectClass), które są obecnie obecne w obiekcie w atrybucie
-allowedAttributes, i ich podzbiór, który może być zapisywany
-przez wyszukującego w atrybucie allowedAttributesEffective.
+allowedAttributes, i ich podzbiór, który może być zapisywany przez
+wyszukującego w atrybucie allowedAttributesEffective.
 
 %package overlay-autogroup
 Summary:	Automatic Group overlay for OpenLDAP server
@@ -957,9 +956,9 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-cloak
 The cloak overlay allows the server to hide specific attributes,
-unless explicitely requested by the client.  This improve performance
+unless explicitely requested by the client. This improve performance
 when a client requests all attributes and get a huge binary attribute
-that is of no interest for it.  This behavior is disabled when the
+that is of no interest for it. This behavior is disabled when the
 manageDSAit control (RFC 3296) is used.
 
 %description overlay-cloak -l pl.UTF-8
@@ -1045,8 +1044,8 @@ Requires:	%{name}-servers = %{version}-%{release}
 %description overlay-lastbind
 The lastbind overlay allows recording the timestamp of the last
 successful bind to entries in the directory, in the authTimestamp
-attribute.  One sample use for this overlay would be to detect
-unused accounts.
+attribute. One sample use for this overlay would be to detect unused
+accounts.
 
 %description overlay-lastbind -l pl.UTF-8
 Nakładka lastbind pozwala na zapisywanie czsu ostaniej udanej operacji
@@ -1094,18 +1093,17 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-nops
 Some broken client tend to implement modifications as replace
-operations where all attributes are replaced, most of the time by
-the same values they had before.  This can cause undesirable load
-on logs, ACL evaluation, or replication trafic.
-This overlay detects idempotent replace operations and filters them
-out.
+operations where all attributes are replaced, most of the time by the
+same values they had before. This can cause undesirable load on logs,
+ACL evaluation, or replication trafic. This overlay detects idempotent
+replace operations and filters them out.
 
 %description overlay-nops -l pl.UTF-8
 Niektórzy, błędni klienci implementują modyfikacje jako operacje
-"replace", w których wszystkie atrybuty ulegają zmianie, przeważnie
-na takie same wartości jak przed modyfikacją. Może powodować to
-niepożądane obciążenie logów, obliczenia ACL albo replikacje.
-Ta nakładka wykrywa i odfiltrowuje idempotentne operacje "replace".
+"replace", w których wszystkie atrybuty ulegają zmianie, przeważnie na
+takie same wartości jak przed modyfikacją. Może powodować to
+niepożądane obciążenie logów, obliczenia ACL albo replikacje. Ta
+nakładka wykrywa i odfiltrowuje idempotentne operacje "replace".
 
 %package overlay-nssov
 Summary:	NSS overlay for OpenLDAP server
@@ -1136,15 +1134,15 @@ Requires:	%{name}-servers = %{version}-%{release}
 %description overlay-proxyOld
 This overlay provides support for the obsolete
 draft-weltman-ldapb3-proxy-05 revision of the LDAP Proxy Authorization
-control.  It is merely intended to provide compatibility in
-environments where other servers only recognize this old control.
-New installations should not use this code.
+control. It is merely intended to provide compatibility in
+environments where other servers only recognize this old control. New
+installations should not use this code.
 
 %description overlay-proxyOld -l pl.UTF-8
 Ta nakładka udostępnia wsparcie dla przestarzałego draftu
-draft-weltman-ldapb3-proxy-05 Autoryzacji LDAP Proxy.
-Jest przeznaczona tylko dla kompatybilności ze starymi serwerami,
-nie powinna byc używana w nowych instalacjach.
+draft-weltman-ldapb3-proxy-05 Autoryzacji LDAP Proxy. Jest
+przeznaczona tylko dla kompatybilności ze starymi serwerami, nie
+powinna byc używana w nowych instalacjach.
 
 %package overlay-samba4
 Summary:	Samba4 overlays for OpenLDAP server
