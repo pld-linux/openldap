@@ -142,7 +142,7 @@ Summary:	LDAP shared libraries
 Summary(pl.UTF-8):	Biblioteki współdzielone LDAP
 Group:		Libraries
 Conflicts:	openldap < 2.2.6-0.3
-%{?with_sasl:%requires_eq cyrus-sasl}
+%{?with_sasl:%requires_eq_to cyrus-sasl cyrus-sasl-devel}
 
 %description libs
 LDAP shared libraries.
