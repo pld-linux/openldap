@@ -21,34 +21,32 @@
  #include "config.h"
  
  #ifdef HAVE_TERMIOS_H
---- openldap-2.4.22/contrib/ldapc++/examples/startTls.cpp.orig	2010-04-15 01:50:43.000000000 +0200
-+++ openldap-2.4.22/contrib/ldapc++/examples/startTls.cpp	2010-05-19 07:22:39.855313030 +0200
+--- openldap-2.4.27/contrib/ldapc++/examples/startTls.cpp.orig	2011-11-23 20:58:23.000000000 +0100
++++ openldap-2.4.27/contrib/ldapc++/examples/startTls.cpp	2011-11-27 10:15:54.434540198 +0100
 @@ -30,6 +30,7 @@
-     
+ 
      try {
          // 1. connect using global options
 +        {
          LDAPAsynConnection l(uri);
          try {
              l.start_tls();
-@@ -38,9 +39,11 @@
+@@ -38,8 +39,10 @@
          } catch ( LDAPException e ) {
              std::cerr << e << std::endl;
          }
 +	}
  
          // 2. connect using connection specific option
--        l = LDAPAsynConnection(uri);
 +	{
-+        LDAPAsynConnection l(uri);
-         tls=l.getTlsOptions();
+         LDAPAsynConnection l1(uri);
+         tls=l1.getTlsOptions();
          std::cout << "Current connection specific settings:" << std::endl;
-         std::cout << "    CaCertfile: " << tls.getStringOption( TlsOptions::CACERTFILE) << std::endl;
 @@ -58,6 +61,7 @@
          } catch ( LDAPException e ) {
              std::cerr << e << std::endl;
          }
 +	}
-         
+ 
          // 3. and once again using the globals
          try {

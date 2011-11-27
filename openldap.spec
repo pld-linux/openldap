@@ -24,12 +24,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.26
-Release:	2
+Version:	2.4.27
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	f36f3086031dd56ae94f722ffae8df5e
+# Source0-md5:	af754236477fea70bcf6e31824eb60a2
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -1981,8 +1981,9 @@ fi
 %attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
 %endif
 %dir %{_sysconfdir}/openldap/schema
-%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.conf
 %attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.access.conf
+%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.conf
+%attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.ldif
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
@@ -1994,13 +1995,14 @@ fi
 %{schemadir}/*.schema
 %exclude %{schemadir}/ldapns.schema
 %dir %{_libdir}/openldap
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/slap*
 %{_mandir}/man5/slapd.*.5*
 %{_mandir}/man5/slapd-config.5*
 %{_mandir}/man5/slapd-ldbm.5*
 %{_mandir}/man5/slapd-ldif.5*
+%{_mandir}/man5/slapd-mdb.5*
 %{_mandir}/man5/slapd-null.5*
-%{_mandir}/man8/slap*
+%{_mandir}/man8/slap*.8*
 
 %files backend-bdb
 %defattr(644,root,root,755)
@@ -2082,6 +2084,7 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/back_sock*.so*
 %{_libdir}/openldap/back_sock.la
 %{_mandir}/man5/slapd-sock.5*
+%{_mandir}/man5/slapo-sock.5*
 
 %if %{with odbc}
 %files backend-sql

@@ -917,14 +917,13 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/nssov/Makefile.in openldap-2.4.2
 +	$(MKDIR) $(DESTDIR)$(schemadir)
 +	echo $(INSTALL) $(INSTALLFLAGS) -m 444 ldapns.schema $(DESTDIR)$(schemadir)
 +	$(INSTALL) $(INSTALLFLAGS) -m 444 $(srcdir)/ldapns.schema $(DESTDIR)$(schemadir)
-diff -urN openldap-2.4.25/contrib/slapd-modules/passwd/Makefile openldap-2.4.25-contrib/contrib/slapd-modules/passwd/Makefile
---- openldap-2.4.25/contrib/slapd-modules/passwd/Makefile	2009-04-28 03:06:14.000000000 +0200
-+++ openldap-2.4.25-contrib/contrib/slapd-modules/passwd/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,37 +0,0 @@
+--- openldap-2.4.27/contrib/slapd-modules/passwd/Makefile	2009-04-28 03:06:14.000000000 +0200
++++ openldap-2.4.27-contrib/contrib/slapd-modules/passwd/Makefile	1970-01-01 01:00:00.000000000 +0100
+@@ -1,46 +0,0 @@
 -# $OpenLDAP$
 -CPPFLAGS+=-I../../../include -I../../../servers/slapd
 -
--all: kerberos.la netscape.la radius.la
+-all: kerberos.la netscape.la radius.la apr1.la
 -
 -kerberos.lo:	kerberos.c
 -	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -DHAVE_KRB5 -Wall -c $?
@@ -947,24 +946,32 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/passwd/Makefile openldap-2.4.25-
 -	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
 -	-rpath $(PREFIX)/lib -module -o $@ $? -lradius
 -
+-apr1.lo:	apr1.c
+-	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -Wall -c $?
+-
+-apr1.la:	apr1.lo
+-	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
+-	-rpath $(PREFIX)/lib -module -o $@ $? 
+-
 -clean:
 -	rm -f kerberos.lo kerberos.la
 -	rm -f netscape.lo netscape.la
 -	rm -f radius.lo radius.la
+-	rm -f apr1.lo apr1.la
 -
--install: kerberos.la netscape.la radius.la
+-install: kerberos.la netscape.la radius.la apr1.la
 -	mkdir -p $(PREFIX)/lib/openldap
 -	$(LIBTOOL) --mode=install cp kerberos.la $(PREFIX)/lib/openldap
 -	$(LIBTOOL) --mode=install cp netscape.la $(PREFIX)/lib/openldap
 -	$(LIBTOOL) --mode=install cp radius.la $(PREFIX)/lib/openldap
+-	$(LIBTOOL) --mode=install cp apr1.la $(PREFIX)/lib/openldap
 -	$(LIBTOOL) --finish $(PREFIX)/lib
-diff -urN openldap-2.4.25/contrib/slapd-modules/passwd/Makefile.in openldap-2.4.25-contrib/contrib/slapd-modules/passwd/Makefile.in
---- openldap-2.4.25/contrib/slapd-modules/passwd/Makefile.in	1970-01-01 01:00:00.000000000 +0100
-+++ openldap-2.4.25-contrib/contrib/slapd-modules/passwd/Makefile.in	2011-03-28 17:51:20.148152000 +0200
-@@ -0,0 +1,61 @@
-+SRCS = kerberos.c netscape.c radius.c
+--- openldap-2.4.27/contrib/slapd-modules/passwd/Makefile.in	1970-01-01 01:00:00.000000000 +0100
++++ openldap-2.4.27-contrib/contrib/slapd-modules/passwd/Makefile.in	2011-03-28 17:51:20.148152000 +0200
+@@ -0,0 +1,64 @@
++SRCS = kerberos.c netscape.c radius.c apr1.c
 +
-+OBJS = kerberos.lo netscape.lo radius.lo
++OBJS = kerberos.lo netscape.lo radius.lo apr1.lo
 +
 +LTONLY_MOD = $(LTONLY_mod)
 +LDAP_INCDIR= ../../../include       
@@ -982,7 +989,7 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/passwd/Makefile.in openldap-2.4.
 +UNIX_LINK_LIBS = $(@BUILD_LIBS_DYNAMIC@_LDAP_LIBS)
 +
 +LIBRARY = libpasswd.a
-+PROGRAMS = kerberos.la netscape.la radius.la
++PROGRAMS = kerberos.la netscape.la radius.la apr1.la
 +
 +XINCPATH = -I.. -I$(srcdir)/.. -I../../../servers/slapd
 +XDEFS = $(MODULES_CPPFLAGS)
@@ -999,6 +1006,9 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/passwd/Makefile.in openldap-2.4.
 +
 +radius.la : radius.lo
 +	$(LTLINK_MOD) -module -o $@ radius.lo version.lo $(LINK_LIBS) $(RADIUS_LIBS)
++
++apr1.la : apr1.lo
++	$(LTLINK_MOD) -module -o $@ apr1.lo version.lo $(LINK_LIBS) $(RADIUS_LIBS)
 +
 +install-local:	$(PROGRAMS)
 +	@if test -n "$?" ; then \
