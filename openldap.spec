@@ -25,7 +25,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.28
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -394,6 +394,19 @@ LDAP backend to slapd, the OpenLDAP server.
 
 %description backend-ldap -l pl.UTF-8
 Backend LDAP do slapd - serwera OpenLDAP.
+
+%package backend-mdb
+Summary:	MDB (Memory-Mapped DB) backend to OpenLDAP server
+Summary(pl.UTF-8):	Backend MDB (Memory-Mapped DB) do serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description backend-mdb
+MDB (Memory-Mapped DB) backend to slapd, the OpenLDAP server.
+
+%description backend-mdb -l pl.UTF-8
+Backend MDB (Memory-Mapped DB) do slapd - serwera OpenLDAP.
 
 %package backend-meta
 Summary:	Meta backend to OpenLDAP server
@@ -1325,6 +1338,7 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	--enable-dnssrv=mod \
 	--enable-hdb=mod \
 	--enable-ldap=mod \
+	--enable-mdb=mod \
 	--enable-meta=mod \
 	--enable-monitor=mod \
 %if %{with ndb}
@@ -1597,6 +1611,12 @@ fi
 
 %preun backend-ldap
 %ldap_module_remove back_ldap.la
+
+%post backend-mdb
+%ldap_module_add back_mdb.la
+
+%preun backend-mdb
+%ldap_module_remove back_mdb.la
 
 %post backend-meta
 %ldap_module_add back_meta.la
@@ -1976,7 +1996,7 @@ fi
 %files servers
 %defattr(644,root,root,755)
 %if %{without system_db}
-# not used by slapd directly, but by two different backends (bdb,hdb), so include here
+# not used by slapd directly, but by three different backends (bdb,hdb,mdb), so include here
 %doc db-%{db_version}/LICENSE
 %attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
 %endif
@@ -2000,7 +2020,6 @@ fi
 %{_mandir}/man5/slapd-config.5*
 %{_mandir}/man5/slapd-ldbm.5*
 %{_mandir}/man5/slapd-ldif.5*
-%{_mandir}/man5/slapd-mdb.5*
 %{_mandir}/man5/slapd-null.5*
 %{_mandir}/man8/slap*.8*
 
@@ -2029,6 +2048,12 @@ fi
 %{_mandir}/man5/slapd-ldap.5*
 %{_mandir}/man5/slapo-chain.5*
 %{_mandir}/man5/slapo-pbind.5*
+
+%files backend-mdb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_mdb*.so*
+%{_libdir}/openldap/back_mdb.la
+%{_mandir}/man5/slapd-mdb.5*
 
 %files backend-meta
 %defattr(644,root,root,755)
