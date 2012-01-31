@@ -36,6 +36,8 @@ Source2:	ldap.init
 Source3:	%{name}.sysconfig
 Source4:	%{name}.conf
 Source5:	ldap.conf
+Source6:	%{name}.tmpfiles
+Source7:	nssov.tmpfiles
 Source100:	%{name}-README.evolution
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-config.patch
@@ -1444,7 +1446,8 @@ cd ../../../evo-%{name}-%{version}
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{schemadir}} \
-	$RPM_BUILD_ROOT/var/run/{slapd,nslcd}
+	$RPM_BUILD_ROOT/var/run/{slapd,nslcd} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %if %{with exchange}
 # Install evolution hack first and remove everything but devel stuff
@@ -1486,6 +1489,8 @@ echo ".so ldap.conf.5" >$RPM_BUILD_ROOT%{_mandir}/man5/ldaprc.5
 
 # Config for nss_ldap and pam_ldap
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
+install %{SOURCE6} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/slapd.conf
+install %{SOURCE7} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/nssov.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
@@ -2007,6 +2012,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
+/usr/lib/tmpfiles.d/slapd.conf
 %attr(770,root,slapd) %{_var}/run/slapd
 %dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
 %attr(660,root,slapd) %{_localstatedir}/openldap-data/*
@@ -2327,6 +2333,7 @@ fi
 %{schemadir}/ldapns.schema
 %{_mandir}/man5/slapo-nssov.5*
 %attr(755,slapd,slapd) %dir /var/run/nslcd
+/usr/lib/tmpfiles.d/nssov.conf
 
 %files overlay-proxyOld
 %defattr(644,root,root,755)
