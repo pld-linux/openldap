@@ -52,7 +52,13 @@ start() {
 	if [ -n "$SLAPDNICE" ]; then
 		SERVICE_RUN_NICE_LEVEL=$SLAPDNICE
 	fi
-	daemon /usr/sbin/slapd $ARGS ${SLAPDURLLIST:+ -h \"$SLAPDURLLIST\"}
+
+	if is_yes $RC_LOGGING; then
+		daemon /usr/sbin/slapd $ARGS ${SLAPDURLLIST:+ -h \"$SLAPDURLLIST\"}
+	else
+		daemon /usr/sbin/slapd $ARGS ${SLAPDURLLIST:+ -h "$SLAPDURLLIST"}
+	fi
+
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
 	if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
