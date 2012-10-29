@@ -1,0 +1,21 @@
+--- db-4.6.21/repmgr/repmgr_net.c.orig	2012-10-18 12:52:44.099497404 +0200
++++ db-4.6.21/repmgr/repmgr_net.c	2012-10-18 13:01:34.266824983 +0200
+@@ -981,7 +981,7 @@
+ 	}
+ 
+ 	ret = net_errno;
+-	__db_err(dbenv, ret, why);
++	__db_err(dbenv, ret, "%s", why);
+ clean:	if (s != INVALID_SOCKET)
+ 		(void)closesocket(s);
+ 	return (ret);
+--- db-4.6.21/crypto/aes_method.c.orig	2012-10-18 13:41:47.465441979 +0200
++++ db-4.6.21/crypto/aes_method.c	2012-10-18 13:42:30.641467820 +0200
+@@ -263,6 +263,6 @@
+ 		errstr = "AES error unrecognized";
+ 		break;
+ 	}
+-	__db_errx(dbenv, errstr);
++	__db_errx(dbenv, "%s", errstr);
+ 	return;
+ }
