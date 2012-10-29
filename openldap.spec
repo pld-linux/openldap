@@ -57,6 +57,7 @@ Patch14:	%{name}-pie.patch
 Patch15:	%{name}-gethostbyXXXX_r.patch
 Patch16:	%{name}-contrib-modules.patch
 Patch17:	%{name}-contrib-krb5.patch
+Patch18:	%{name}-format-security.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -1216,6 +1217,8 @@ Nakładka śledząca wywołania nakładek.
 
 %prep
 %setup -q -c %{!?with_system_db:-a1}
+
+%patch18 -p0
 cd %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
