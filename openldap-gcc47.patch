@@ -1,0 +1,10 @@
+--- openldap-2.4.33/contrib/ldapc++/src/SaslInteractionHandler.cpp~	2012-10-29 11:59:49.357558346 +0100
++++ openldap-2.4.33/contrib/ldapc++/src/SaslInteractionHandler.cpp	2012-10-29 12:03:57.609899390 +0100
+@@ -8,6 +8,7 @@
+ #include <iomanip>
+ #include <limits>
+ #include <cstdio>
++#include <unistd.h>
+ #include "config.h"
+ 
+ #ifdef HAVE_TERMIOS_H
