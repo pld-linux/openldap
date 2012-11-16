@@ -1,0 +1,10 @@
+--- openldap-2.4.33/servers/slapd/slapd.conf~	2012-11-16 13:24:10.000000000 +0200
++++ openldap-2.4.33/servers/slapd/slapd.conf	2012-11-16 13:26:51.521652021 +0200
+@@ -30,6 +30,7 @@
+ # moduleload	back_ldap.la
+ # moduleload	back_ldif.la
+ # moduleload	back_meta.la
++# moduleload	back_mdb.la
+ # moduleload	back_monitor.la
+ # moduleload	back_passwd.la
+ # moduleload	back_perl.la

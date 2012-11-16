@@ -25,7 +25,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.33
-Release:	2
+Release:	3
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -59,6 +59,7 @@ Patch16:	%{name}-contrib-modules.patch
 Patch17:	%{name}-contrib-krb5.patch
 Patch18:	%{name}-format-security.patch
 Patch19:	%{name}-gcc47.patch
+Patch20:	enable-mdb.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -1237,6 +1238,7 @@ cd %{name}-%{version}
 %patch15 -p1
 %patch16 -p1
 %patch19 -p1
+%patch20 -p1
 %if %{with krb5}
 %patch17 -p1
 %endif
