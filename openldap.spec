@@ -99,8 +99,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_localstatedir	/var/lib
 %define		schemadir	%{_datadir}/openldap/schema
 
-%undefine	configure_cache
-
 %description
 LDAP servers and clients, as well as interfaces to other protocols.
 Note that this does not include the slapd interface to X.500 and
@@ -1263,7 +1261,7 @@ cd evo-%{name}-%{version}
 
 %build
 %if %{without system_db}
-dbdir=`pwd`/db-instroot
+dbdir=$(pwd)/db-instroot
 cd db-%{db_version}/build-rpm
 
 CC="%{__cc}"
@@ -1274,6 +1272,7 @@ LDFLAGS="%{rpmcflags} %{rpmldflags}"
 export CC CXX CFLAGS CXXFLAGS LDFLAGS
 
 ../dist/%configure \
+	--cache-file=%{?configure_cache_file}%{!?configure_cache_file:configure}-db.cache \
 	--disable-compat185 \
 	--disable-dump185 \
 	--disable-java \
@@ -1379,7 +1378,7 @@ for d in liblber libldap libldap_r ; do
 	ln -sf ../libraries/$d/.libs/$d.so libs/$d.so
 done
 
-__topdir=`pwd`
+__topdir=$(pwd)
 %if %{with sasl}
 cd contrib/ldapc++
 %{__libtoolize}
@@ -1459,16 +1458,16 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} 
 	DESTDIR=$RPM_BUILD_ROOT
 %{__rm} -r $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
 %{__rm} $RPM_BUILD_ROOT%{evolution_exchange_libdir}/*.la
-install %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
+cp -p %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
 %endif
 
 %if %{without system_db}
-dbdir=`pwd`/db-instroot
+dbdir=$(pwd)/db-instroot
 cd db-instroot
-install %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT%{_libdir}
+install -p %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT%{_libdir}
 cd bin
 for binary in db_* ; do
-	install -m755 ${binary} $RPM_BUILD_ROOT%{_sbindir}/slapd_${binary}
+	install -p -m755 ${binary} $RPM_BUILD_ROOT%{_sbindir}/slapd_${binary}
 done
 
 cd ../..
@@ -1484,24 +1483,24 @@ cd %{name}-%{version}
 
 %{!?with_ndb:%{__rm} $RPM_BUILD_ROOT%{_mandir}/man5/slapd-ndb.5}
 
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
+install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
 
 # Config for openldap library
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldap.conf
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldap.conf
 echo ".so ldap.conf.5" >$RPM_BUILD_ROOT%{_mandir}/man5/ldaprc.5
 
 # Config for nss_ldap and pam_ldap
-install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
-install %{SOURCE6} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/slapd.conf
-install %{SOURCE7} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/nssov.conf
+cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
+cp -p %{SOURCE6} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/slapd.conf
+cp -p %{SOURCE7} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/nssov.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
-%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/{*.{default,example},schema/README}
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/*.{default,example}
 
 # Standard schemas should not be changed by users
-mv -f $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema
+mv $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema
 
 # create slapd.access.conf
 echo "# This is a good place to put slapd access-control directives" > \
@@ -1517,17 +1516,17 @@ echo "# This is a good place to put your schema definitions " > \
 %endif
 
 %if %{without system_db}
-find $RPM_BUILD_ROOT -name \*.la | xargs sed -i -e "s|-L${dbdir}/%{_lib}||g"
+find $RPM_BUILD_ROOT -name '*.la' | xargs sed -i -e "s|-L${dbdir}/%{_lib}||g"
 %endif
 
 # files for -headers subpackage
 install -d $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
-cp -a include/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}
-cp -a include/ac/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
+cp -p include/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}
+cp -p include/ac/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
 
 # remove headers, that are provided by -devel package
 for I in $RPM_BUILD_ROOT%{_includedir}/*.h; do
-  rm $RPM_BUILD_ROOT%{_includedir}/%{name}/$(basename $I)
+	rm $RPM_BUILD_ROOT%{_includedir}/%{name}/$(basename $I)
 done
 
 # check for undefined symbols in slapd modules
@@ -2023,6 +2022,7 @@ fi
 %dir %{schemadir}
 %{schemadir}/*.ldif
 %{schemadir}/*.schema
+%{schemadir}/README
 %exclude %{schemadir}/ldapns.schema
 %dir %{_libdir}/openldap
 %attr(755,root,root) %{_sbindir}/slap*
@@ -2053,6 +2053,7 @@ fi
 
 %files backend-ldap
 %defattr(644,root,root,755)
+%doc openldap-*/servers/slapd/back-ldap/TODO.proxy
 %attr(755,root,root) %{_libdir}/openldap/back_ldap*.so*
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
@@ -2097,6 +2098,7 @@ fi
 %files backend-perl
 %defattr(644,root,root,755)
 %doc %{name}-%{version}/servers/slapd/back-perl/*.pm
+%doc %{name}-%{version}/servers/slapd/back-perl/README
 %attr(755,root,root) %{_libdir}/openldap/back_perl*.so*
 %{_libdir}/openldap/back_perl.la
 %{_mandir}/man5/slapd-perl.5*
@@ -2104,6 +2106,7 @@ fi
 
 %files backend-relay
 %defattr(644,root,root,755)
+%doc %{name}-%{version}/servers/slapd/back-relay/README
 %attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
 %{_libdir}/openldap/back_relay.la
 %{_mandir}/man5/slapd-relay.5*
