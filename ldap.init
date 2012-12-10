@@ -20,6 +20,12 @@
 SLAPDSYSLOGLEVEL=""
 SLAPDURLLIST=""
 SLAPDOPTIONS=""
+SLAPD_SOCKET_PATH=/var/run/ldapi
+SLAPD_CONFIG_FILE=/etc/openldap/slapd.conf
+
+# setup instance variable, can be used to sysconfig/ldap to do some magic
+SLAPD_INSTANCE=${0##*/}
+SLAPD_INSTANCE=${SLAPD_INSTANCE##[0-9][0-9]_}
 
 # Get service config
 [ -f /etc/sysconfig/ldap ] && . /etc/sysconfig/ldap
@@ -34,8 +40,12 @@ else
 	exit 0
 fi
 
+lockfile=/var/lock/subsys/$SLAPD_INSTANCE
+pidfile=$(awk '/^pidfile/ {print $2}' $SLAPD_CONFIG_FILE)
+pidfile=${pidfile:-/var/run/slapd/slapd.pid}
+
 start() {
-	if [ -f /var/lock/subsys/ldap ]; then
+	if [ -f $lockfile ]; then
 		msg_already_running "OpenLDAP"
 		return
 	fi
@@ -53,6 +63,10 @@ start() {
 		SERVICE_RUN_NICE_LEVEL=$SLAPDNICE
 	fi
 
+	if [ -n "$SLAPD_CONFIG_FILE" ]; then
+		ARGS="$ARGS -f $SLAPD_CONFIG_FILE"
+	fi
+
 	if is_yes $RC_LOGGING; then
 		daemon /usr/sbin/slapd $ARGS ${SLAPDURLLIST:+ -h \"$SLAPDURLLIST\"}
 	else
@@ -60,26 +74,26 @@ start() {
 	fi
 
 	RETVAL=$?
-	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/ldap
-	if [ $RETVAL -eq 0 -a -S /var/run/ldapi ]; then
-		chown "$LDAPI_SOCKET_OWNER":"$LDAPI_SOCKET_GROUP" /var/run/ldapi && \
-		chmod "$LDAPI_SOCKET_MODE" /var/run/ldapi
+	[ $RETVAL -eq 0 ] && touch $lockfile
+	if [ $RETVAL -eq 0 -a -S $SLAPD_SOCKET_PATH ]; then
+		chown "$LDAPI_SOCKET_OWNER":"$LDAPI_SOCKET_GROUP" $SLAPD_SOCKET_PATH && \
+		chmod "$LDAPI_SOCKET_MODE" $SLAPD_SOCKET_PATH
 	fi
 }
 
 stop() {
-	if [ ! -f /var/lock/subsys/ldap ]; then
+	if [ ! -f $lockfile ]; then
 		msg_not_running "OpenLDAP"
 		return
 	fi
 
 	msg_stopping "OpenLDAP"
-	killproc --waitforname slapd --waitfortime 300 slapd -TERM
-	rm -f /var/lock/subsys/ldap >/dev/null 2>&1
+	killproc --pidfile $pidfile --waitforname slapd --waitfortime 300 slapd -TERM
+	rm -f $lockfile >/dev/null 2>&1
 }
 
 condrestart() {
-	if [ -f /var/lock/subsys/ldap ]; then
+	if [ -f $lockfile ]; then
 		stop
 		start
 	else
@@ -108,7 +122,7 @@ case "$1" in
 	condrestart 7
 	;;
   status)
-	status slapd
+	status --pidfile $pidfile slapd
 	RETVAL=$?
 	;;
   *)
