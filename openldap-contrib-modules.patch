@@ -54,23 +54,6 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/acl/Makefile.in openldap-2.4.25-
 +
 +XINCPATH = -I. -I$(srcdir)/. -I../../../servers/slapd
 +XDEFS = $(MODULES_CPPFLAGS)
-diff -urN openldap-2.4.25/contrib/slapd-modules/addpartial/Makefile openldap-2.4.25-contrib/contrib/slapd-modules/addpartial/Makefile
---- openldap-2.4.25/contrib/slapd-modules/addpartial/Makefile	2009-01-21 01:18:19.000000000 +0100
-+++ openldap-2.4.25-contrib/contrib/slapd-modules/addpartial/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,13 +0,0 @@
--# $OpenLDAP$
--OPENLDAP_SRC=../../..
--OPENLDAP_BLD=../../..
--CPPFLAGS+=-I${OPENLDAP_SRC}/include -I${OPENLDAP_SRC}/servers/slapd -I${OPENLDAP_BLD}/include
--CC=gcc
--
--all: addpartial-overlay.so
--
--addpartial-overlay.so: addpartial-overlay.c
--	$(CC) -shared $(CPPFLAGS) $(LDFLAGS) -Wall -o $@ $?
--
--clean:
--	rm addpartial-overlay.so
 diff -urN openldap-2.4.25/contrib/slapd-modules/addpartial/Makefile.in openldap-2.4.25-contrib/contrib/slapd-modules/addpartial/Makefile.in
 --- openldap-2.4.25/contrib/slapd-modules/addpartial/Makefile.in	1970-01-01 01:00:00.000000000 +0100
 +++ openldap-2.4.25-contrib/contrib/slapd-modules/addpartial/Makefile.in	2011-03-28 17:51:20.122152000 +0200
@@ -145,37 +128,6 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/allowed/Makefile.in openldap-2.4
 +
 +XINCPATH = -I. -I$(srcdir)/. -I../../../servers/slapd
 +XDEFS = $(MODULES_CPPFLAGS)
-diff -urN openldap-2.4.25/contrib/slapd-modules/autogroup/Makefile openldap-2.4.25-contrib/contrib/slapd-modules/autogroup/Makefile
---- openldap-2.4.25/contrib/slapd-modules/autogroup/Makefile	2011-01-04 20:29:39.000000000 +0100
-+++ openldap-2.4.25-contrib/contrib/slapd-modules/autogroup/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,27 +0,0 @@
--LIBTOOL=../../../libtool
--
--CPPFLAGS+=-I../../../include -I../../../servers/slapd
--
--ldap_subdir = openldap
--prefix=/usr/local
--exec_prefix = $(prefix)
--libdir = $(exec_prefix)/lib
--libexecdir = $(exec_prefix)/libexec
--moduledir = $(exec_prefix)/libexec/$(ldap_subdir)
--
--all: autogroup.la
--
--autogroup.lo:	autogroup.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -Wall -c $?
--
--autogroup.la:	autogroup.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--	-rpath $(libdir) -module -o $@ $? 
--
--clean:
--	rm -f autogroup.lo autogroup.la
--
--install: autogroup.la
--	mkdir -p $(DESTDIR)$(moduledir)
--	$(LIBTOOL) --mode=install cp autogroup.la $(DESTDIR)$(moduledir)
--	$(LIBTOOL) --finish $(DESTDIR)$(moduledir)
 diff -urN openldap-2.4.25/contrib/slapd-modules/autogroup/Makefile.in openldap-2.4.25-contrib/contrib/slapd-modules/autogroup/Makefile.in
 --- openldap-2.4.25/contrib/slapd-modules/autogroup/Makefile.in	1970-01-01 01:00:00.000000000 +0100
 +++ openldap-2.4.25-contrib/contrib/slapd-modules/autogroup/Makefile.in	2011-03-28 17:51:20.127152000 +0200
@@ -200,27 +152,6 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/autogroup/Makefile.in openldap-2
 +
 +XINCPATH = -I. -I$(srcdir)/. -I../../../servers/slapd
 +XDEFS = $(MODULES_CPPFLAGS)
-diff -urN openldap-2.4.25/contrib/slapd-modules/cloak/Makefile openldap-2.4.25-contrib/contrib/slapd-modules/cloak/Makefile
---- openldap-2.4.25/contrib/slapd-modules/cloak/Makefile	2011-03-24 19:15:01.000000000 +0100
-+++ openldap-2.4.25-contrib/contrib/slapd-modules/cloak/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,17 +0,0 @@
--# $OpenLDAP$
--CPPFLAGS+=-I../../../include -I../../../servers/slapd 
--CPPFLAGS+=-DSLAPD_OVER_CLOAK=SLAPD_MOD_DYNAMIC
--LIBS=-lldap_r -llber -lcrypto
--LIBTOOL=../../../libtool
--
--all: cloak.la
--
--cloak.lo:    cloak.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -c $?
--
--cloak.la:    cloak.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--		   -rpath $(PREFIX)/lib -module -o $@ $? $(LIBS)
--
--clean:
--	rm cloak.lo cloak.la
 diff -urN openldap-2.4.25/contrib/slapd-modules/cloak/Makefile.in openldap-2.4.25-contrib/contrib/slapd-modules/cloak/Makefile.in
 --- openldap-2.4.25/contrib/slapd-modules/cloak/Makefile.in	1970-01-01 01:00:00.000000000 +0100
 +++ openldap-2.4.25-contrib/contrib/slapd-modules/cloak/Makefile.in	2011-03-28 19:59:11.461991161 +0200
@@ -378,44 +309,6 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/kinit/Makefile.in openldap-2.4.2
 +
 +XINCPATH = -I. -I$(srcdir)/. -I../../../servers/slapd
 +XDEFS = $(MODULES_CPPFLAGS)
-diff -urN openldap-2.4.25/contrib/slapd-modules/lastbind/Makefile openldap-2.4.25-contrib/contrib/slapd-modules/lastbind/Makefile
---- openldap-2.4.25/contrib/slapd-modules/lastbind/Makefile	2011-03-25 20:39:47.000000000 +0100
-+++ openldap-2.4.25-contrib/contrib/slapd-modules/lastbind/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,34 +0,0 @@
--# $OpenLDAP$
--# Copyright 2009 Jonathan Clarke <jonathan@phillipoux.net>.
--# All rights reserved.
--#
--# Redistribution and use in source and binary forms, with or without
--# modification, are permitted only as authorized by the OpenLDAP
--# Public License.
--#
--# A copy of this license is available in the file LICENSE in the
--# top-level directory of the distribution or, alternatively, at
--# <http://www.OpenLDAP.org/license.html>.
--
--CPPFLAGS+=-I../../../include -I../../../servers/slapd 
--CPPFLAGS+=-DSLAPD_OVER_LASTBIND=SLAPD_MOD_DYNAMIC
--#LIBTOOL=libtool
--LIBTOOL=../../../libtool
--
--prefix=/usr/local
--
--all: lastbind.la
--
--lastbind.lo:    lastbind.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -Wall -c $?
--
--lastbind.la:    lastbind.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--		   -rpath $(prefix)/lib -module -o $@ $?
--
--clean:
--	rm -rf lastbind.lo lastbind.la lastbind.o .libs/
--
--install: lastbind.la
--	mkdir -p $(prefix)/libexec/openldap
--	$(LIBTOOL) --mode=install cp lastbind.la $(prefix)/libexec/openldap
 diff -urN openldap-2.4.25/contrib/slapd-modules/lastbind/Makefile.in openldap-2.4.25-contrib/contrib/slapd-modules/lastbind/Makefile.in
 --- openldap-2.4.25/contrib/slapd-modules/lastbind/Makefile.in	1970-01-01 01:00:00.000000000 +0100
 +++ openldap-2.4.25-contrib/contrib/slapd-modules/lastbind/Makefile.in	2011-03-28 19:59:18.355991161 +0200
@@ -519,33 +412,6 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/noopsrch/Makefile.in openldap-2.
 +
 +XINCPATH = -I. -I$(srcdir)/. -I../../../servers/slapd
 +XDEFS = $(MODULES_CPPFLAGS)
-diff -urN openldap-2.4.25/contrib/slapd-modules/nops/Makefile openldap-2.4.25-contrib/contrib/slapd-modules/nops/Makefile
---- openldap-2.4.25/contrib/slapd-modules/nops/Makefile	2009-04-28 01:35:48.000000000 +0200
-+++ openldap-2.4.25-contrib/contrib/slapd-modules/nops/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,23 +0,0 @@
--# $OpenLDAP$
--CPPFLAGS+=-I../../../include -I../../../servers/slapd 
--CPPFLAGS+=-DSLAPD_OVER_NOPS=SLAPD_MOD_DYNAMIC
--LIBS=-L$(PREFIX)/lib -lldap_r -llber -lcrypto
--
--all: nops.la
--
--nops.lo:    nops.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -c $?
--
--nops.la:    nops.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--		   -rpath $(PREFIX)/lib -module -o $@ $? $(LIBS)
--
--clean:
--	rm -f nops.lo nops.la
--
--install: nops.la
--	mkdir -p $(PREFIX)/lib/openldap 
--	mkdir -p $(PREFIX)/man/man5
--	$(LIBTOOL) --mode=install cp nops.la $(PREFIX)/lib/openldap
--	$(LIBTOOL) --finish $(PREFIX)/lib
--	cp nops.5 $(PREFIX)/man/man5
 diff -urN openldap-2.4.25/contrib/slapd-modules/nops/Makefile.in openldap-2.4.25-contrib/contrib/slapd-modules/nops/Makefile.in
 --- openldap-2.4.25/contrib/slapd-modules/nops/Makefile.in	1970-01-01 01:00:00.000000000 +0100
 +++ openldap-2.4.25-contrib/contrib/slapd-modules/nops/Makefile.in	2011-03-28 19:59:27.566991161 +0200
@@ -610,55 +476,6 @@ diff -urN openldap-2.4.25/contrib/slapd-modules/nssov/Makefile.in openldap-2.4.2
 +	$(MKDIR) $(DESTDIR)$(schemadir)
 +	echo $(INSTALL) $(INSTALLFLAGS) -m 444 ldapns.schema $(DESTDIR)$(schemadir)
 +	$(INSTALL) $(INSTALLFLAGS) -m 444 $(srcdir)/ldapns.schema $(DESTDIR)$(schemadir)
---- openldap-2.4.27/contrib/slapd-modules/passwd/Makefile	2009-04-28 03:06:14.000000000 +0200
-+++ openldap-2.4.27-contrib/contrib/slapd-modules/passwd/Makefile	1970-01-01 01:00:00.000000000 +0100
-@@ -1,46 +0,0 @@
--# $OpenLDAP$
--CPPFLAGS+=-I../../../include -I../../../servers/slapd
--
--all: kerberos.la netscape.la radius.la apr1.la
--
--kerberos.lo:	kerberos.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -DHAVE_KRB5 -Wall -c $?
--
--kerberos.la:	kerberos.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--	-rpath $(PREFIX)/lib -module -o $@ $? -lkrb5
--
--netscape.lo:	netscape.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -Wall -c $?
--
--netscape.la:	netscape.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--	-rpath $(PREFIX)/lib -module -o $@ $? 
--
--radius.lo:	radius.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -Wall -c $?
--
--radius.la:	radius.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--	-rpath $(PREFIX)/lib -module -o $@ $? -lradius
--
--apr1.lo:	apr1.c
--	$(LIBTOOL) --mode=compile $(CC) $(CPPFLAGS) -Wall -c $?
--
--apr1.la:	apr1.lo
--	$(LIBTOOL) --mode=link $(CC) -version-info 0:0:0 \
--	-rpath $(PREFIX)/lib -module -o $@ $? 
--
--clean:
--	rm -f kerberos.lo kerberos.la
--	rm -f netscape.lo netscape.la
--	rm -f radius.lo radius.la
--	rm -f apr1.lo apr1.la
--
--install: kerberos.la netscape.la radius.la apr1.la
--	mkdir -p $(PREFIX)/lib/openldap
--	$(LIBTOOL) --mode=install cp kerberos.la $(PREFIX)/lib/openldap
--	$(LIBTOOL) --mode=install cp netscape.la $(PREFIX)/lib/openldap
--	$(LIBTOOL) --mode=install cp radius.la $(PREFIX)/lib/openldap
--	$(LIBTOOL) --mode=install cp apr1.la $(PREFIX)/lib/openldap
--	$(LIBTOOL) --finish $(PREFIX)/lib
 --- openldap-2.4.27/contrib/slapd-modules/passwd/Makefile.in	1970-01-01 01:00:00.000000000 +0100
 +++ openldap-2.4.27-contrib/contrib/slapd-modules/passwd/Makefile.in	2011-03-28 17:51:20.148152000 +0200
 @@ -0,0 +1,64 @@

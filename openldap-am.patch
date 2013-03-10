@@ -1,0 +1,11 @@
+--- openldap-2.4.34/contrib/ldapc++/configure.in.orig	2013-03-03 22:17:30.000000000 +0100
++++ openldap-2.4.34/contrib/ldapc++/configure.in	2013-03-10 14:47:37.632547924 +0100
+@@ -11,7 +11,7 @@
+ AC_INIT(ldapcpplib, [] , [http://www.openldap.org/its/] )
+ AC_CONFIG_SRCDIR(src/LDAPConnection.h)
+ AM_INIT_AUTOMAKE(foreign)
+-AM_CONFIG_HEADER(src/config.h)
++AC_CONFIG_HEADERS(src/config.h)
+ 
+ eval `$ac_aux_dir/version.sh`
+ if test -z "$OL_CPP_API_RELEASE"; then
