@@ -24,12 +24,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.34
+Version:	2.4.35
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	df93a62e396ac312333cdeab0c5b48b6
+# Source0-md5:	cd75d82ca89fb0280cba66ca6bd97448
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -1169,24 +1169,22 @@ Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-samba4
-This package contains overlays specific to samba4 LDAP backend.
-pguid overlay maintains the operational attribute "parentUUID".
-It contains the entryUUID of the parent entry.
-rdnval overlay maintains the operational attribute "rdnValue".
-It contains the value of the entry's RDN.
-vernum overlay increments a counter any time an attribute is modified.
-It is intended to increment the counter 'msDS-KeyVersionNumber' when
-the attribute 'unicodePwd' is modified.
+This package contains overlays specific to samba4 LDAP backend. pguid
+overlay maintains the operational attribute "parentUUID". It contains
+the entryUUID of the parent entry. rdnval overlay maintains the
+operational attribute "rdnValue". It contains the value of the entry's
+RDN. vernum overlay increments a counter any time an attribute is
+modified. It is intended to increment the counter
+'msDS-KeyVersionNumber' when the attribute 'unicodePwd' is modified.
 
 %description overlay-samba4 -l pl.UTF-8
 Ten pakiet zawiera nakładki specyficzne dla backendu LDAP samba4.
 pguid obsługuje atrybut operacyjny "parentUUID", który zawiera
-entryUUID nadrzędnej pozycji.
-rdnval obsługuje atrybut operacyjny "rdnValue", który zawiera
-wartość RDN danej pozycji.
-vernum zwiększa licznik za każdym razem gdy jakiś atrybut jest
-modyfikowany. Jest przeznaczony do zwiększania licznika
-'msDS-KeyVersionNumber' gdy modyfikowany jest atrybut 'unicodePwd'.
+entryUUID nadrzędnej pozycji. rdnval obsługuje atrybut operacyjny
+"rdnValue", który zawiera wartość RDN danej pozycji. vernum zwiększa
+licznik za każdym razem gdy jakiś atrybut jest modyfikowany. Jest
+przeznaczony do zwiększania licznika 'msDS-KeyVersionNumber' gdy
+modyfikowany jest atrybut 'unicodePwd'.
 
 %package overlay-smbk5pwd
 Summary:	smbk5pwd overlay for OpenLDAP server
@@ -1455,7 +1453,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{schemadir}} \
 	$RPM_BUILD_ROOT/var/run/{slapd,nslcd} \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %if %{with exchange}
 # Install evolution hack first and remove everything but devel stuff
@@ -1497,8 +1495,8 @@ echo ".so ldap.conf.5" >$RPM_BUILD_ROOT%{_mandir}/man5/ldaprc.5
 
 # Config for nss_ldap and pam_ldap
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
-cp -p %{SOURCE6} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/slapd.conf
-cp -p %{SOURCE7} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/nssov.conf
+cp -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/slapd.conf
+cp -p %{SOURCE7} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/nssov.conf
 
 echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
 
@@ -1541,6 +1539,9 @@ for i in $RPM_BUILD_ROOT%{_libdir}/openldap/*.so ; do
 		exit 1
 	fi
 done
+
+# bogus include
+%{__sed} -i -e '/^\.so \.\.\/Project/d' $RPM_BUILD_ROOT%{_mandir}/man5/slapo-nops.5
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -2020,7 +2021,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
-/usr/lib/tmpfiles.d/slapd.conf
+%{systemdtmpfilesdir}/slapd.conf
 %attr(770,root,slapd) %{_var}/run/slapd
 %dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
 %attr(660,root,slapd) %{_localstatedir}/openldap-data/*
@@ -2345,7 +2346,7 @@ fi
 %{schemadir}/ldapns.schema
 %{_mandir}/man5/slapo-nssov.5*
 %attr(755,slapd,slapd) %dir /var/run/nslcd
-/usr/lib/tmpfiles.d/nssov.conf
+%{systemdtmpfilesdir}/nssov.conf
 
 %files overlay-proxyOld
 %defattr(644,root,root,755)

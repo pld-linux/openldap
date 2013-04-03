@@ -1,11 +1,11 @@
---- openldap-2.3.20/servers/slapd/Makefile.in~	2006-02-28 12:21:11.000000000 +0200
-+++ openldap-2.3.20/servers/slapd/Makefile.in	2006-02-28 12:56:13.000000000 +0200
-@@ -370,7 +370,7 @@
- 	done
+--- openldap-2.4.35/servers/slapd/Makefile.in~	2013-04-03 18:01:39.000000000 +0300
++++ openldap-2.4.35/servers/slapd/Makefile.in	2013-04-03 18:02:55.360948577 +0300
+@@ -373,7 +373,7 @@
+ install-dbc-no:
  
  install-local-srv: install-slapd install-tools \
--	install-conf install-db-config install-schema install-tools
-+	install-conf install-db-config install-schema
+-	install-conf install-dbc-maybe install-schema install-tools
++	install-conf install-dbc-maybe install-schema
  
  install-slapd: FORCE
  	-$(MKDIR) $(DESTDIR)$(libexecdir)
