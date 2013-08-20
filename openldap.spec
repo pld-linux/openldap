@@ -5,7 +5,7 @@
 %bcond_without	odbc		# disable sql backend
 %bcond_with	ndb		# enable MySQL NDB Cluster backend
 %bcond_without	perl		# disable perl backend
-%bcond_without	sasl 		# don't build cyrus sasl support
+%bcond_without	sasl		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
 %bcond_with	system_db	# system Berkeley DB
 
@@ -24,12 +24,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.35
-Release:	2
+Version:	2.4.36
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	cd75d82ca89fb0280cba66ca6bd97448
+# Source0-md5:	744701405d396b1fb9de6cb7a453c6e9
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -60,7 +60,6 @@ Patch17:	%{name}-contrib-krb5.patch
 Patch18:	%{name}-format-security.patch
 Patch19:	%{name}-gcc47.patch
 Patch20:	enable-mdb.patch
-Patch21:	%{name}-nssov-nss-pam-ldapd-update.patch
 Patch22:	%{name}-am.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
@@ -1238,7 +1237,6 @@ cd %{name}-%{version}
 %patch16 -p1
 %patch19 -p1
 %patch20 -p1
-%patch21 -p1
 %patch22 -p1
 %if %{with krb5}
 %patch17 -p1
