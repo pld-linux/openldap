@@ -25,7 +25,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.38
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -1932,9 +1932,7 @@ fi
 %defattr(644,root,root,755)
 %doc %{name}-%{version}/{ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
 %doc %{name}-%{version}/doc/{drafts,rfc}
-%dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldapserver
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldap.conf
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
@@ -1948,6 +1946,8 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
+%dir %{_sysconfdir}/openldap
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldap.conf
 %attr(755,root,root) %{_libdir}/liblber-2.4.so.*.*.*
 %attr(755,root,root) %{_libdir}/libldap-2.4.so.*.*.*
 %attr(755,root,root) %{_libdir}/libldap_r-2.4.so.*.*.*
