@@ -1498,8 +1498,6 @@ cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/slapd.conf
 cp -p %{SOURCE7} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/nssov.conf
 
-echo "localhost" > $RPM_BUILD_ROOT%{_sysconfdir}/openldap/ldapserver
-
 %{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/*.{default,example}
 
 # Standard schemas should not be changed by users
@@ -1932,7 +1930,6 @@ fi
 %defattr(644,root,root,755)
 %doc %{name}-%{version}/{ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
 %doc %{name}-%{version}/doc/{drafts,rfc}
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldapserver
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
