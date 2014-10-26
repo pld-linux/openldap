@@ -8,6 +8,7 @@
 %bcond_without	sasl		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
 %bcond_with	system_db	# system Berkeley DB
+%bcond_with	nondist		# non-distributable package (DB >= 6.0.20)
 
 # Never change or update Berkeley DB, it's there to isolate OpenLDAP
 # from any future changes to the system-wide Berkeley DB library.
@@ -24,12 +25,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.39
-Release:	2
+Version:	2.4.40
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	b0d5ee4b252c841dec6b332d679cf943
+# Source0-md5:	423c1f23d2a0cb96b3e9baf7e9d7dda7
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -71,7 +72,10 @@ BuildRequires:	automake
 BuildRequires:	cyrus-sasl-devel >= 2.1.15
 BuildRequires:	libicu-devel
 %endif
-%{?with_system_db:BuildRequires:	db-devel >= 4.2}
+%if %{with system_db}
+BuildRequires:	db-devel >= 4.4
+%{!?with_nondist:BuildRequires:	db-devel < 6.0.20}
+%endif
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	groff
 %if %{with krb5}
@@ -1242,6 +1246,10 @@ cd %{name}-%{version}
 %patch23 -p1
 %if %{with krb5}
 %patch17 -p1
+%endif
+%if %{with nondist}
+# disable check for compatible DB package (< 6.0.20)
+%{__sed} -i -e 's/0x060014/0xFFFFFF/' build/openldap.m4
 %endif
 cd ..
 
