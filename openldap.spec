@@ -9,7 +9,7 @@
 %bcond_without	perl	# disable perl backend
 %bcond_without	sasl 	# don't build cyrus sasl support
 %bcond_without	slp	# disable SLP support
-#
+
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es.UTF-8):	Clientes y servidor para LDAP
 Summary(pl.UTF-8):	Klienci Lightweight Directory Access Protocol
@@ -60,6 +60,8 @@ BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	openldap-clients
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		no_install_post_check_so	1
 
 %define		_libexecdir	%{_sbindir}
 %define		_localstatedir	/var/lib
