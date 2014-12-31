@@ -62,6 +62,7 @@ Obsoletes:	openldap-clients
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_check_so	1
+%define		no_install_post_check_tmpfiles	1
 
 %define		_libexecdir	%{_sbindir}
 %define		_localstatedir	/var/lib
