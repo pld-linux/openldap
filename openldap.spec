@@ -1997,6 +1997,7 @@ fi
 %{evolution_exchange_libdir}/*.a
 %endif
 
+%if %{with sasl}
 %files ldapc++
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libldapcpp.so.*.*.*
@@ -2011,6 +2012,7 @@ fi
 %files ldapc++-static
 %defattr(644,root,root,755)
 %{_libdir}/libldapcpp.a
+%endif
 
 %files servers
 %defattr(644,root,root,755)
