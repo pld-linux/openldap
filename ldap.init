@@ -88,7 +88,7 @@ stop() {
 	fi
 
 	msg_stopping "OpenLDAP"
-	killproc --pidfile $pidfile --waitforname slapd --waitfortime 300 slapd -TERM
+	killproc --pidfile $pidfile --waitforname slapd --waitfortime 300 slapd
 	rm -f $lockfile >/dev/null 2>&1
 }
 
