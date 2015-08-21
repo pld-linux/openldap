@@ -14,10 +14,6 @@
 # from any future changes to the system-wide Berkeley DB library.
 %define		db_version		4.6.21
 
-%define evolution_exchange_prefix	%{_libdir}/evolution-openldap
-%define evolution_exchange_includedir	%{evolution_exchange_prefix}/include
-%define evolution_exchange_libdir	%{evolution_exchange_prefix}/lib
-
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es.UTF-8):	Clientes y servidor para LDAP
 Summary(pl.UTF-8):	Klienci Lightweight Directory Access Protocol
@@ -25,12 +21,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.41
+Version:	2.4.42
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	3f1a4cea52827e18feaedfdc1634b5d0
+# Source0-md5:	47c8e2f283647a6105b8b0325257e922
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -105,6 +101,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_libexecdir	%{_sbindir}
 %define		_localstatedir	/var/lib
 %define		schemadir	%{_datadir}/openldap/schema
+%define		evolution_exchange_prefix	%{_libdir}/evolution-openldap
+%define		evolution_exchange_includedir	%{evolution_exchange_prefix}/include
+%define		evolution_exchange_libdir	%{evolution_exchange_prefix}/lib
 
 %description
 LDAP servers and clients, as well as interfaces to other protocols.
@@ -1222,7 +1221,9 @@ Nakładka śledząca wywołania nakładek.
 %prep
 %setup -q -c %{!?with_system_db:-a1}
 %{!?with_system_db:%patch18 -p0}
-cd %{name}-%{version}
+%{!?with_system_db:mv db-%{db_version} db}
+mv %{name}-%{version} %{name}
+cd %{name}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -1254,7 +1255,7 @@ cd %{name}-%{version}
 cd ..
 
 %if %{without system_db}
-install -d db-%{db_version}/build-rpm
+install -d db/build-rpm
 %endif
 
 %if %{with exchange}
@@ -1262,18 +1263,18 @@ install -d db-%{db_version}/build-rpm
 # non-standard NTLM bind type which is needed to connect to Win2k GC servers
 # (Win2k3 supports SASL with DIGEST-MD5, so this shouldn't be needed for those
 # servers, though as of version 1.4 the exchange doesn't try SASL first).
-if ! cp -al %{name}-%{version} evo-%{name}-%{version} ; then
-	rm -fr evo-%{name}-%{version}
-	cp -a %{name}-%{version} evo-%{name}-%{version}
+if ! cp -al %{name} evo-%{name}; then
+	rm -rf evo-%{name}
+	cp -a %{name} evo-%{name}
 fi
-cd evo-%{name}-%{version}
+cd evo-%{name}
 %patch100 -p0
 %endif
 
 %build
 %if %{without system_db}
 dbdir=$(pwd)/db-instroot
-cd db-%{db_version}/build-rpm
+cd db/build-rpm
 
 CC="%{__cc}"
 CXX="%{__cxx}"
@@ -1311,7 +1312,7 @@ ln -sf libslapd_db.so ${dbdir}/%{_lib}/${subdir}/libdb.so
 cd ../..
 %endif
 
-cd %{name}-%{version}
+cd %{name}
 
 CPPFLAGS="%{!?with_system_db:-I${dbdir}/include -D__lock_getlocker=__lock_getlocker_openldap }-I/usr/include/ncurses"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC -D_GNU_SOURCE"
@@ -1406,7 +1407,7 @@ cd contrib/ldapc++
 # Build evolution-specific clients just as we would normal clients,
 # except with a different installation directory in mind
 # and no shared libraries.
-cd ../../../evo-%{name}-%{version}
+cd ../../../evo-%{name}
 
 %{__libtoolize} --install
 %{__aclocal}
@@ -1465,7 +1466,7 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} 
 
 %if %{with exchange}
 # Install evolution hack first and remove everything but devel stuff
-%{__make} -C evo-%{name}-%{version} install \
+%{__make} -C evo-%{name} install \
 	DESTDIR=$RPM_BUILD_ROOT
 %{__rm} -r $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
 %{__rm} $RPM_BUILD_ROOT%{evolution_exchange_libdir}/*.la
@@ -1484,7 +1485,7 @@ done
 cd ../..
 %endif
 
-cd %{name}-%{version}
+cd %{name}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -1936,8 +1937,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/{ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
-%doc %{name}-%{version}/doc/{drafts,rfc}
+%doc %{name}/{ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
+%doc %{name}/doc/{drafts,rfc}
 %attr(755,root,root) %{_bindir}/*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
@@ -2018,7 +2019,7 @@ fi
 %defattr(644,root,root,755)
 %if %{without system_db}
 # not used by slapd directly, but by three different backends (bdb,hdb,mdb), so include here
-%doc db-%{db_version}/LICENSE
+%doc db/LICENSE
 %attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
 %endif
 %dir %{_sysconfdir}/openldap/schema
@@ -2066,7 +2067,7 @@ fi
 
 %files backend-ldap
 %defattr(644,root,root,755)
-%doc openldap-*/servers/slapd/back-ldap/TODO.proxy
+%doc %{name}/servers/slapd/back-ldap/TODO.proxy
 %attr(755,root,root) %{_libdir}/openldap/back_ldap*.so*
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
@@ -2087,7 +2088,7 @@ fi
 
 %files backend-monitor
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/servers/slapd/back-monitor/README
+%doc %{name}/servers/slapd/back-monitor/README
 %attr(755,root,root) %{_libdir}/openldap/back_monitor*.so*
 %{_libdir}/openldap/back_monitor.la
 %{_mandir}/man5/slapd-monitor.5*
@@ -2095,7 +2096,7 @@ fi
 %if %{with ndb}
 %files backend-ndb
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/servers/slapd/back-ndb/README
+%doc %{name}/servers/slapd/back-ndb/README
 %attr(755,root,root) %{_libdir}/openldap/back_ndb*.so*
 %{_libdir}/openldap/back_ndb.la
 %{_mandir}/man5/slapd-ndb.5*
@@ -2110,8 +2111,8 @@ fi
 %if %{with perl}
 %files backend-perl
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/servers/slapd/back-perl/*.pm
-%doc %{name}-%{version}/servers/slapd/back-perl/README
+%doc %{name}/servers/slapd/back-perl/*.pm
+%doc %{name}/servers/slapd/back-perl/README
 %attr(755,root,root) %{_libdir}/openldap/back_perl*.so*
 %{_libdir}/openldap/back_perl.la
 %{_mandir}/man5/slapd-perl.5*
@@ -2119,7 +2120,7 @@ fi
 
 %files backend-relay
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/servers/slapd/back-relay/README
+%doc %{name}/servers/slapd/back-relay/README
 %attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
 %{_libdir}/openldap/back_relay.la
 %{_mandir}/man5/slapd-relay.5*
@@ -2140,8 +2141,8 @@ fi
 %if %{with odbc}
 %files backend-sql
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/servers/slapd/back-sql/docs/*
-%doc %{name}-%{version}/servers/slapd/back-sql/rdbms_depend
+%doc %{name}/servers/slapd/back-sql/docs/*
+%doc %{name}/servers/slapd/back-sql/rdbms_depend
 %attr(755,root,root) %{_libdir}/openldap/back_sql*.so*
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
@@ -2269,26 +2270,26 @@ fi
 
 %files overlay-addpartial
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/addpartial/README
+%doc %{name}/contrib/slapd-modules/addpartial/README
 %attr(755,root,root) %{_libdir}/openldap/addpartial-overlay*.so*
 %{_libdir}/openldap/addpartial-overlay.la
 
 %files overlay-allop
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/allop/README
+%doc %{name}/contrib/slapd-modules/allop/README
 %attr(755,root,root) %{_libdir}/openldap/allop*.so*
 %{_libdir}/openldap/allop.la
 %{_mandir}/man5/slapo-allop.5*
 
 %files overlay-allowed
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/allowed/README
+%doc %{name}/contrib/slapd-modules/allowed/README
 %attr(755,root,root) %{_libdir}/openldap/allowed*.so*
 %{_libdir}/openldap/allowed.la
 
 %files overlay-autogroup
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/autogroup/README
+%doc %{name}/contrib/slapd-modules/autogroup/README
 %attr(755,root,root) %{_libdir}/openldap/autogroup*.so*
 %{_libdir}/openldap/autogroup.la
 
@@ -2305,7 +2306,7 @@ fi
 
 %files overlay-dsaschema
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/dsaschema/README
+%doc %{name}/contrib/slapd-modules/dsaschema/README
 %attr(755,root,root) %{_libdir}/openldap/dsaschema*.so*
 %{_libdir}/openldap/dsaschema.la
 
@@ -2317,7 +2318,7 @@ fi
 %if %{with krb5}
 %files overlay-kinit
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/kinit/README
+%doc %{name}/contrib/slapd-modules/kinit/README
 %attr(755,root,root) %{_libdir}/openldap/kinit*.so*
 %{_libdir}/openldap/kinit.la
 %endif
@@ -2347,7 +2348,7 @@ fi
 
 %files overlay-nssov
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/nssov/README
+%doc %{name}/contrib/slapd-modules/nssov/README
 %attr(755,root,root) %{_libdir}/openldap/nssov*.so*
 %{_libdir}/openldap/nssov.la
 %{schemadir}/ldapns.schema
@@ -2357,13 +2358,13 @@ fi
 
 %files overlay-proxyOld
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/proxyOld/README
+%doc %{name}/contrib/slapd-modules/proxyOld/README
 %attr(755,root,root) %{_libdir}/openldap/proxyOld*.so*
 %{_libdir}/openldap/proxyOld.la
 
 %files overlay-samba4
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/samba4/README
+%doc %{name}/contrib/slapd-modules/samba4/README
 %attr(755,root,root) %{_libdir}/openldap/pguid*.so*
 %attr(755,root,root) %{_libdir}/openldap/rdnval*.so*
 %attr(755,root,root) %{_libdir}/openldap/vernum*.so*
@@ -2373,7 +2374,7 @@ fi
 
 %files overlay-smbk5pwd
 %defattr(644,root,root,755)
-%doc %{name}-%{version}/contrib/slapd-modules/smbk5pwd/README
+%doc %{name}/contrib/slapd-modules/smbk5pwd/README
 %attr(755,root,root) %{_libdir}/openldap/smbk5pwd*.so*
 %{_libdir}/openldap/smbk5pwd.la
 
