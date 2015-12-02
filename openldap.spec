@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without	exchange	# hacked version of library for Evolution Exchange support
+%bcond_with	exchange	# hacked version of library for Evolution Exchange support
 %bcond_with	krb5		# build with MIT Kerberos instead of Heimdal
 %bcond_without	odbc		# disable sql backend
 %bcond_with	ndb		# enable MySQL NDB Cluster backend
@@ -21,12 +21,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.42
+Version:	2.4.43
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	47c8e2f283647a6105b8b0325257e922
+# Source0-md5:	49ca65e27891fcf977d78c10f073c705
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -174,6 +174,7 @@ Requires:	krb5-devel
 %else
 Requires:	heimdal-devel
 %endif
+%{!?with_exchange:Obsoletes:	openldap-evolution-devel}
 
 %description devel
 Header files and libraries for developing applications that use LDAP.
@@ -1939,7 +1940,7 @@ fi
 %defattr(644,root,root,755)
 %doc %{name}/{ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
 %doc %{name}/doc/{drafts,rfc}
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/ldap*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
 %{_mandir}/man5/ldap.conf.5*
@@ -1973,8 +1974,17 @@ fi
 %{_libdir}/libldap.la
 %{_libdir}/libldap_r.la
 %{_libdir}/libslapi.la
-%{_includedir}/*.h
-%{_mandir}/man3/*
+%{_includedir}/lber.h
+%{_includedir}/lber_types.h
+%{_includedir}/ldap.h
+%{_includedir}/ldap_*.h
+%{_includedir}/ldif.h
+%{_includedir}/slapi-plugin.h
+%{_mandir}/man3/ber_*.3*
+%{_mandir}/man3/lber-*.3*
+%{_mandir}/man3/ld_errno.3*
+%{_mandir}/man3/ldap.3*
+%{_mandir}/man3/ldap_*.3*
 
 %files static
 %defattr(644,root,root,755)
@@ -2022,6 +2032,8 @@ fi
 %doc db/LICENSE
 %attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
 %endif
+%attr(755,root,root) %{_sbindir}/slap*
+%dir %{_libdir}/openldap
 %dir %{_sysconfdir}/openldap/schema
 %attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.access.conf
 %attr(640,root,slapd) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/slapd.conf
@@ -2034,12 +2046,33 @@ fi
 %dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
 %attr(660,root,slapd) %{_localstatedir}/openldap-data/*
 %dir %{schemadir}
-%{schemadir}/*.ldif
-%{schemadir}/*.schema
 %{schemadir}/README
-%exclude %{schemadir}/ldapns.schema
-%dir %{_libdir}/openldap
-%attr(755,root,root) %{_sbindir}/slap*
+%{schemadir}/collective.ldif
+%{schemadir}/collective.schema
+%{schemadir}/corba.ldif
+%{schemadir}/corba.schema
+%{schemadir}/core.ldif
+%{schemadir}/core.schema
+%{schemadir}/cosine.ldif
+%{schemadir}/cosine.schema
+%{schemadir}/duaconf.ldif
+%{schemadir}/duaconf.schema
+%{schemadir}/dyngroup.ldif
+%{schemadir}/dyngroup.schema
+%{schemadir}/inetorgperson.ldif
+%{schemadir}/inetorgperson.schema
+%{schemadir}/java.ldif
+%{schemadir}/java.schema
+%{schemadir}/misc.ldif
+%{schemadir}/misc.schema
+%{schemadir}/nis.ldif
+%{schemadir}/nis.schema
+%{schemadir}/openldap.ldif
+%{schemadir}/openldap.schema
+%{schemadir}/pmi.ldif
+%{schemadir}/pmi.schema
+%{schemadir}/ppolicy.ldif
+%{schemadir}/ppolicy.schema
 %{_mandir}/man5/slapd.*.5*
 %{_mandir}/man5/slapd-config.5*
 %{_mandir}/man5/slapd-ldbm.5*
