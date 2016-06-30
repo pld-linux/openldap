@@ -1,6 +1,6 @@
---- openldap-2.2.6/servers/slapd/slapd.conf	2004-02-28 15:42:39.692604592 +0100
-+++ openldap-2.3.24/servers/slapd/slapd.conf	2006-07-18 14:25:02.356103035 +0300
-@@ -2,22 +2,62 @@
+--- openldap-2.4.44/servers/slapd/slapd.conf.orig	2016-06-29 20:55:38.281854483 +0200
++++ openldap-2.4.44/servers/slapd/slapd.conf	2016-06-29 21:19:04.660902139 +0200
+@@ -2,21 +2,61 @@
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
  #
@@ -24,15 +24,14 @@
  
 -pidfile		%LOCALSTATEDIR%/run/slapd.pid
 -argsfile	%LOCALSTATEDIR%/run/slapd.args
-+pidfile		/var/run/slapd/slapd.pid
-+argsfile	/var/run/slapd/slapd.args
++pidfile		/var/run/slapd.pid
++argsfile	/var/run/slapd.args
  
  # Load dynamic backend modules:
 -# modulepath	%MODULEDIR%
 +modulepath	%MODULEDIR%
- # moduleload	back_bdb.la
 +# moduleload	back_dnssrv.la
- # moduleload	back_hdb.la
+ # moduleload	back_mdb.la
  # moduleload	back_ldap.la
 +# moduleload	back_ldif.la
 +# moduleload	back_meta.la
@@ -64,21 +63,10 @@
 +# TLSCertificateFile /etc/openldap/slapd.pem
 +# TLSCertificateKeyFile /etc/openldap/slapd.key
 +# TLSVerifyClient never
-
+ 
  # Sample security restrictions
  #	Require integrity protection (prevent hijacking)
-@@ -54,19 +85,30 @@
- # rootdn can always read and write EVERYTHING!
- 
- #######################################################################
--# BDB database definitions
-+# BDB or HDB database definitions
- #######################################################################
- 
--database	bdb
-+database	hdb
- suffix		"dc=my-domain,dc=com"
- rootdn		"cn=Manager,dc=my-domain,dc=com"
+@@ -56,10 +96,21 @@
  # Cleartext passwords, especially for the rootdn, should
  # be avoid.  See slappasswd(8) and slapd.conf(5) for details.
  # Use of strong authentication encouraged.

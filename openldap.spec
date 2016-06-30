@@ -21,12 +21,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.43
-Release:	3
+Version:	2.4.44
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	49ca65e27891fcf977d78c10f073c705
+# Source0-md5:	693ac26de86231f8dcae2b4e9d768e51
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -56,7 +56,6 @@ Patch16:	%{name}-contrib-modules.patch
 Patch17:	%{name}-contrib-krb5.patch
 Patch18:	%{name}-format-security.patch
 Patch19:	%{name}-gcc47.patch
-Patch20:	enable-mdb.patch
 Patch22:	%{name}-am.patch
 Patch23:	%{name}-db.patch
 # Patch for the evolution library
@@ -307,7 +306,7 @@ Requires:	%{name} = %{version}-%{release}
 Requires:	/sbin/chkconfig
 Requires:	rc-scripts
 Requires:	uname(release) >= 2.6
-Suggests:	%{name}-backend-hdb = %{version}-%{release}
+Suggests:	%{name}-backend-mdb = %{version}-%{release}
 Provides:	group(slapd)
 Provides:	user(slapd)
 Obsoletes:	openldap-backend-ldbm
@@ -1243,7 +1242,6 @@ cd %{name}
 %patch15 -p1
 %patch16 -p1
 %patch19 -p1
-%patch20 -p1
 %patch22 -p1
 %patch23 -p1
 %if %{with krb5}
