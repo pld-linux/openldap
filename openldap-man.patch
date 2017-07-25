@@ -1,0 +1,19 @@
+--- openldap-2.4.45/contrib/slapd-modules/autogroup/Makefile.in.orig	2017-07-25 19:25:12.227897681 +0200
++++ openldap-2.4.45/contrib/slapd-modules/autogroup/Makefile.in	2017-07-25 20:08:05.781201631 +0200
+@@ -18,3 +18,5 @@
+ 
+ XINCPATH = -I. -I$(srcdir)/. -I../../../servers/slapd
+ XDEFS = $(MODULES_CPPFLAGS)
++
++MANSECT = 5
+--- openldap-2.4.45/configure.in.orig	2017-07-25 20:09:59.361200332 +0200
++++ openldap-2.4.45/configure.in	2017-07-25 20:29:01.057853963 +0200
+@@ -3221,7 +3221,7 @@
+ [contrib/slapd-modules/addpartial/Makefile:build/top.mk:contrib/slapd-modules/addpartial/Makefile.in:build/mod.mk]
+ [contrib/slapd-modules/allop/Makefile:build/top.mk:contrib/slapd-modules/allop/Makefile.in:build/mod.mk:build/man.mk]
+ [contrib/slapd-modules/allowed/Makefile:build/top.mk:contrib/slapd-modules/allowed/Makefile.in:build/mod.mk]
+-[contrib/slapd-modules/autogroup/Makefile:build/top.mk:contrib/slapd-modules/autogroup/Makefile.in:build/mod.mk]
++[contrib/slapd-modules/autogroup/Makefile:build/top.mk:contrib/slapd-modules/autogroup/Makefile.in:build/mod.mk:build/man.mk]
+ [contrib/slapd-modules/cloak/Makefile:build/top.mk:contrib/slapd-modules/cloak/Makefile.in:build/mod.mk:build/man.mk]
+ [contrib/slapd-modules/comp_match/Makefile:build/top.mk:contrib/slapd-modules/comp_match/Makefile.in:build/mod.mk]
+ [contrib/slapd-modules/denyop/Makefile:build/top.mk:contrib/slapd-modules/denyop/Makefile.in:build/mod.mk]
