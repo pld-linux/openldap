@@ -83,6 +83,7 @@ BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2
 BuildRequires:	libwrap-devel
+BuildRequires:	lmdb-devel
 %{?with_ndb:BuildRequires:	mysql-devel}
 %{?with_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
