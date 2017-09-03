@@ -59,6 +59,7 @@ Patch19:	%{name}-gcc47.patch
 Patch20:	%{name}-man.patch
 Patch22:	%{name}-am.patch
 Patch23:	%{name}-db.patch
+Patch24:	%{name}-default_cacert_path.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -1247,6 +1248,7 @@ cd %{name}
 %patch20 -p1
 %patch22 -p1
 %patch23 -p1
+%patch24 -p1
 %if %{with krb5}
 %patch17 -p1
 %endif
