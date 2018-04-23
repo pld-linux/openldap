@@ -2078,7 +2078,6 @@ fi
 %{schemadir}/ppolicy.schema
 %{_mandir}/man5/slapd.*.5*
 %{_mandir}/man5/slapd-config.5*
-%{_mandir}/man5/slapd-ldbm.5*
 %{_mandir}/man5/slapd-ldif.5*
 %{_mandir}/man5/slapd-null.5*
 %{_mandir}/man8/slap*.8*
