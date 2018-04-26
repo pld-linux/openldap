@@ -8,6 +8,7 @@
 %bcond_without	sasl		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
 %bcond_with	system_db	# system Berkeley DB
+%bcond_without	system_lmdb	# system LMDB
 %bcond_with	nondist		# non-distributable package (DB >= 6.0.20)
 
 # Never change or update Berkeley DB, it's there to isolate OpenLDAP
@@ -60,6 +61,7 @@ Patch20:	%{name}-man.patch
 Patch22:	%{name}-am.patch
 Patch23:	%{name}-db.patch
 Patch24:	%{name}-default_cacert_path.patch
+Patch25:	%{name}-system-lmdb.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -84,7 +86,7 @@ BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2
 BuildRequires:	libwrap-devel
-BuildRequires:	lmdb-devel
+%{?with_system_lmdb:BuildRequires:	lmdb-devel >= 0.9.22}
 %{?with_ndb:BuildRequires:	mysql-devel}
 %{?with_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -412,6 +414,7 @@ Summary(pl.UTF-8):	Backend MDB (Memory-Mapped DB) do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
 Requires:	%{name}-servers = %{version}-%{release}
+%{?with_system_lmdb:Requires:	lmdb-libs >= 0.9.22}
 
 %description backend-mdb
 MDB (Memory-Mapped DB) backend to slapd, the OpenLDAP server.
@@ -1224,8 +1227,8 @@ Nakładka śledząca wywołania nakładek.
 %prep
 %setup -q -c %{!?with_system_db:-a1}
 %{!?with_system_db:%patch18 -p0}
-%{!?with_system_db:mv db-%{db_version} db}
-mv %{name}-%{version} %{name}
+%{!?with_system_db:%{__mv} db-%{db_version} db}
+%{__mv} %{name}-%{version} %{name}
 cd %{name}
 %patch0 -p1
 %patch1 -p1
@@ -1249,6 +1252,9 @@ cd %{name}
 %patch22 -p1
 %patch23 -p1
 %patch24 -p1
+%if %{with system_lmdb}
+%patch25 -p1
+%endif
 %if %{with krb5}
 %patch17 -p1
 %endif
