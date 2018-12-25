@@ -23,7 +23,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.47
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
@@ -1290,8 +1290,6 @@ CFLAGS="%{rpmcflags}"
 CXXFLAGS="%{rpmcflags} -fno-implicit-templates"
 LDFLAGS="%{rpmcflags} %{rpmldflags}"
 export CC CXX CFLAGS CXXFLAGS LDFLAGS
-# force "reproducible build", no builddir in resulting package
-export SOURCE_DATE_EPOCH=dummy
 ../dist/%configure \
 	--cache-file=%{?configure_cache_file}%{!?configure_cache_file:configure}-db.cache \
 	--disable-compat185 \
@@ -1335,6 +1333,8 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %{__libtoolize} --install
 %{__aclocal}
 %{__autoconf}
+# force "reproducible build", no builddir in resulting package
+export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 %configure \
 	--enable-dynamic \
 	--enable-syslog \
