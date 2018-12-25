@@ -22,12 +22,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.46
-Release:	4
+Version:	2.4.47
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	829016c5a9f45c51adc50073ac6f9fd7
+# Source0-md5:	e508f97bfd778fec7799f286e5c07176
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -47,7 +47,6 @@ Patch6:		%{name}-backend_libs.patch
 Patch7:		%{name}-perl.patch
 Patch8:		%{name}-pic.patch
 Patch9:		%{name}-ltinstall-mode.patch
-Patch10:	%{name}-whowhere.patch
 Patch11:	%{name}-ldaprc.patch
 Patch12:	%{name}-nosql.patch
 Patch13:	%{name}-ldapc++.patch
@@ -1240,7 +1239,6 @@ cd %{name}
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
@@ -1292,7 +1290,8 @@ CFLAGS="%{rpmcflags}"
 CXXFLAGS="%{rpmcflags} -fno-implicit-templates"
 LDFLAGS="%{rpmcflags} %{rpmldflags}"
 export CC CXX CFLAGS CXXFLAGS LDFLAGS
-
+# force "reproducible build", no builddir in resulting package
+export SOURCE_DATE_EPOCH=dummy
 ../dist/%configure \
 	--cache-file=%{?configure_cache_file}%{!?configure_cache_file:configure}-db.cache \
 	--disable-compat185 \
