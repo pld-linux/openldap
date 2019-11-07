@@ -22,12 +22,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.47
-Release:	2
+Version:	2.4.48
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	e508f97bfd778fec7799f286e5c07176
+# Source0-md5:	0729a0711fe096831dedc159e0bbe73f
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -61,6 +61,7 @@ Patch22:	%{name}-am.patch
 Patch23:	%{name}-db.patch
 Patch24:	%{name}-default_cacert_path.patch
 Patch25:	%{name}-system-lmdb.patch
+Patch26:	%{name}-slapd_for_symbols_check.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		http://www.openldap.org/
@@ -1253,6 +1254,7 @@ cd %{name}
 %if %{with system_lmdb}
 %patch25 -p1
 %endif
+%patch26 -p1
 %if %{with krb5}
 %patch17 -p1
 %endif
@@ -1545,16 +1547,17 @@ cp -p include/ac/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
 
 # remove headers, that are provided by -devel package
 for I in $RPM_BUILD_ROOT%{_includedir}/*.h; do
-	rm $RPM_BUILD_ROOT%{_includedir}/%{name}/$(basename $I)
+	%{__rm} $RPM_BUILD_ROOT%{_includedir}/%{name}/$(basename $I)
 done
 
 # check for undefined symbols in slapd modules
 for i in $RPM_BUILD_ROOT%{_libdir}/openldap/*.so ; do
-	if LD_PRELOAD=$RPM_BUILD_ROOT%{_libdir}/liblber-2.4.so.2:$RPM_BUILD_ROOT%{_libdir}/libldap_r-2.4.so.2:%{!?with_system_db:$RPM_BUILD_ROOT%{_libdir}/libslapd_db-4.6.so:}$RPM_BUILD_ROOT%{_sbindir}/slapd ldd -r $i 2>&1 | grep "undefined symbol"; then
+	if LD_PRELOAD=$RPM_BUILD_ROOT%{_libdir}/liblber-2.4.so.2:$RPM_BUILD_ROOT%{_libdir}/libldap_r-2.4.so.2:%{!?with_system_db:$RPM_BUILD_ROOT%{_libdir}/libslapd_db-4.6.so:}$RPM_BUILD_ROOT%{_sbindir}/slapd-shared.so ldd -r $i 2>&1 | grep "undefined symbol"; then
 		echo "Undefined symbols found in" $i
 		exit 1
 	fi
 done
+%{__rm} $RPM_BUILD_ROOT%{_sbindir}/slapd-shared.so
 
 # bogus include
 %{__sed} -i -e '/^\.so \.\.\/Project/d' $RPM_BUILD_ROOT%{_mandir}/man5/slapo-nops.5
@@ -1987,6 +1990,7 @@ fi
 %{_includedir}/ldap.h
 %{_includedir}/ldap_*.h
 %{_includedir}/ldif.h
+%{_includedir}/openldap.h
 %{_includedir}/slapi-plugin.h
 %{_mandir}/man3/ber_*.3*
 %{_mandir}/man3/lber-*.3*
