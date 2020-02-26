@@ -22,12 +22,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.48
-Release:	2
+Version:	2.4.49
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	0729a0711fe096831dedc159e0bbe73f
+# Source0-md5:	2a47a6bb4319357ea7b032c45283e79e
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -69,7 +69,6 @@ BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
 %if %{with sasl}
 BuildRequires:	cyrus-sasl-devel >= 2.1.15
-BuildRequires:	libicu-devel
 %endif
 %if %{with system_db}
 BuildRequires:	db-devel >= 4.4
