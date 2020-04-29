@@ -1282,6 +1282,7 @@ cd evo-%{name}
 
 %build
 %if %{without system_db}
+cp -f /usr/share/automake/config.sub db/dist
 dbdir=$(pwd)/db-instroot
 cd db/build-rpm
 
