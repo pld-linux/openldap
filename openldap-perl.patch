@@ -1,15 +1,16 @@
---- openldap-2.1.17/servers/slapd/back-perl/init.c.wigp	Mon Apr 14 23:51:53 2003
-+++ openldap-2.1.17/servers/slapd/back-perl/init.c	Mon Apr 14 23:55:17 2003
-@@ -25,7 +25,7 @@
- #include "perl_back.h"
- 
+diff -urNp -x '*.orig' openldap-2.4.49.org/servers/slapd/back-perl/init.c openldap-2.4.49/servers/slapd/back-perl/init.c
+--- openldap-2.4.49.org/servers/slapd/back-perl/init.c	2020-01-30 18:58:35.000000000 +0100
++++ openldap-2.4.49/servers/slapd/back-perl/init.c	2021-05-07 23:04:45.762194508 +0200
+@@ -23,7 +23,7 @@
+ extern char **environ;
+ #endif
  
 -static void perl_back_xs_init LDAP_P((PERL_BACK_XS_INIT_PARAMS));
 +XSINIT_t perl_back_xs_init LDAP_P((PERL_BACK_XS_INIT_PARAMS));
  EXT void boot_DynaLoader LDAP_P((PERL_BACK_BOOT_DYNALOADER_PARAMS));
  
  PerlInterpreter *PERL_INTERPRETER = NULL;
-@@ -174,7 +174,7 @@
+@@ -159,7 +159,7 @@ perl_back_db_open(
  }
  
  
@@ -18,9 +19,10 @@
  perl_back_xs_init(PERL_BACK_XS_INIT_PARAMS)
  {
  	char *file = __FILE__;
---- openldap-2.1.17/servers/slapd/back-perl/perl_back.h.wigp	Tue Apr 15 00:19:36 2003
-+++ openldap-2.1.17/servers/slapd/back-perl/perl_back.h	Tue Apr 15 00:22:42 2003
-@@ -11,6 +11,9 @@
+diff -urNp -x '*.orig' openldap-2.4.49.org/servers/slapd/back-perl/perl_back.h openldap-2.4.49/servers/slapd/back-perl/perl_back.h
+--- openldap-2.4.49.org/servers/slapd/back-perl/perl_back.h	2020-01-30 18:58:35.000000000 +0100
++++ openldap-2.4.49/servers/slapd/back-perl/perl_back.h	2021-05-07 23:04:45.762194508 +0200
+@@ -36,6 +36,9 @@ LDAP_BEGIN_DECL
  #if defined(pTHX_) || (PERL_REVISION > 5 || (PERL_REVISION == 5 && PERL_VERSION >= 6))
  #define PERL_IS_5_6
  #endif
@@ -30,8 +32,8 @@
  
  #define EVAL_BUF_SIZE 500
  
-@@ -23,7 +26,7 @@
- # define na	PL_na
+@@ -52,7 +55,7 @@ extern ldap_pvt_thread_mutex_t  perl_int
+ # define ERRSV	GvSV(errgv)
  #endif
  
 -#if defined( HAVE_WIN32_ASPERL ) || defined( USE_ITHREADS )

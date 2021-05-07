@@ -1,29 +1,7 @@
---- openldap-2.4.6/contrib/ldapc++/src/Makefile.am~	2005-10-05 17:30:05.000000000 +0200
-+++ openldap-2.4.6/contrib/ldapc++/src/Makefile.am	2007-10-31 18:51:32.000000000 +0100
-@@ -44,7 +44,9 @@
- 			SaslInteractionHandler.cpp \
- 			StringList.cpp 
- 
--include_HEADERS = LDAPAsynConnection.h \
-+ldapcppincludedir = $(includedir)/ldapc++
-+
-+ldapcppinclude_HEADERS = LDAPAsynConnection.h \
- 			LDAPAttribute.h \
- 			LDAPAttributeList.h \
- 			LDAPAttrType.h \
---- openldap-2.4.16/contrib/ldapc++/src/SaslInteractionHandler.cpp~	2008-04-15 01:09:26.000000000 +0200
-+++ openldap-2.4.16/contrib/ldapc++/src/SaslInteractionHandler.cpp	2009-05-25 16:47:09.488348393 +0200
-@@ -7,6 +7,7 @@
- #include <iostream>
- #include <iomanip>
- #include <limits>
-+#include <cstdio>
- #include "config.h"
- 
- #ifdef HAVE_TERMIOS_H
---- openldap-2.4.27/contrib/ldapc++/examples/startTls.cpp.orig	2011-11-23 20:58:23.000000000 +0100
-+++ openldap-2.4.27/contrib/ldapc++/examples/startTls.cpp	2011-11-27 10:15:54.434540198 +0100
-@@ -30,6 +30,7 @@
+diff -urNp -x '*.orig' openldap-2.4.49.org/contrib/ldapc++/examples/startTls.cpp openldap-2.4.49/contrib/ldapc++/examples/startTls.cpp
+--- openldap-2.4.49.org/contrib/ldapc++/examples/startTls.cpp	2020-01-30 18:58:35.000000000 +0100
++++ openldap-2.4.49/contrib/ldapc++/examples/startTls.cpp	2021-05-07 23:04:51.668862326 +0200
+@@ -30,6 +30,7 @@ int main( int argc, char* argv[]){
  
      try {
          // 1. connect using global options
@@ -31,7 +9,7 @@
          LDAPAsynConnection l(uri);
          try {
              l.start_tls();
-@@ -38,8 +39,10 @@
+@@ -38,8 +39,10 @@ int main( int argc, char* argv[]){
          } catch ( LDAPException e ) {
              std::cerr << e << std::endl;
          }
@@ -42,7 +20,7 @@
          LDAPAsynConnection l1(uri);
          tls=l1.getTlsOptions();
          std::cout << "Current connection specific settings:" << std::endl;
-@@ -58,6 +61,7 @@
+@@ -58,6 +61,7 @@ int main( int argc, char* argv[]){
          } catch ( LDAPException e ) {
              std::cerr << e << std::endl;
          }
@@ -50,3 +28,28 @@
  
          // 3. and once again using the globals
          try {
+diff -urNp -x '*.orig' openldap-2.4.49.org/contrib/ldapc++/src/Makefile.am openldap-2.4.49/contrib/ldapc++/src/Makefile.am
+--- openldap-2.4.49.org/contrib/ldapc++/src/Makefile.am	2020-01-30 18:58:35.000000000 +0100
++++ openldap-2.4.49/contrib/ldapc++/src/Makefile.am	2021-05-07 23:04:51.668862326 +0200
+@@ -51,7 +51,9 @@ libldapcpp_la_SOURCES = LDAPAddRequest.c
+ 			StringList.cpp \
+ 			TlsOptions.cpp
+ 
+-include_HEADERS = LDAPAsynConnection.h \
++ldapcppincludedir = $(includedir)/ldapc++
++
++ldapcppinclude_HEADERS = LDAPAsynConnection.h \
+ 			LDAPAttribute.h \
+ 			LDAPAttributeList.h \
+ 			LDAPAttrType.h \
+diff -urNp -x '*.orig' openldap-2.4.49.org/contrib/ldapc++/src/SaslInteractionHandler.cpp openldap-2.4.49/contrib/ldapc++/src/SaslInteractionHandler.cpp
+--- openldap-2.4.49.org/contrib/ldapc++/src/SaslInteractionHandler.cpp	2020-01-30 18:58:35.000000000 +0100
++++ openldap-2.4.49/contrib/ldapc++/src/SaslInteractionHandler.cpp	2021-05-07 23:04:51.668862326 +0200
+@@ -7,6 +7,7 @@
+ #include <iostream>
+ #include <iomanip>
+ #include <limits>
++#include <cstdio>
+ #include "config.h"
+ 
+ #ifdef HAVE_TERMIOS_H
