@@ -26,7 +26,7 @@ Version:	2.4.58
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
-Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
+Source0:	https://www.openldap.org/software/download/OpenLDAP/openldap-release/%{name}-%{version}.tgz
 # Source0-md5:	c203d735ba69976e5b28dc39006f29b5
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
@@ -64,7 +64,7 @@ Patch25:	%{name}-system-lmdb.patch
 Patch26:	%{name}-slapd_for_symbols_check.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
-URL:		http://www.openldap.org/
+URL:		https://www.openldap.org/
 BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
 %if %{with sasl}
