@@ -22,12 +22,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.49
+Version:	2.4.58
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	2a47a6bb4319357ea7b032c45283e79e
+# Source0-md5:	c203d735ba69976e5b28dc39006f29b5
 Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
 # Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
 Source2:	ldap.init
@@ -1335,6 +1335,7 @@ export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 %{__libtoolize} --install
 %{__aclocal}
 %{__autoconf}
+%{__automake} || :
 # force "reproducible build", no builddir in resulting package
 export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 %configure \
