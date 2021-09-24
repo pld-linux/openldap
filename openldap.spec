@@ -23,7 +23,7 @@ Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
 Version:	2.4.58
-Release:	1
+Release:	2
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	https://www.openldap.org/software/download/OpenLDAP/openldap-release/%{name}-%{version}.tgz
