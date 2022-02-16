@@ -1,11 +1,18 @@
---- openldap-2.4.34/contrib/ldapc++/configure.in.orig	2013-03-03 22:17:30.000000000 +0100
-+++ openldap-2.4.34/contrib/ldapc++/configure.in	2013-03-10 14:47:37.632547924 +0100
-@@ -11,7 +11,7 @@
+--- openldap-2.4.59/contrib/ldapc++/configure.in.orig	2022-02-16 06:21:28.859182292 +0100
++++ openldap-2.4.59/contrib/ldapc++/configure.in	2022-02-16 06:23:16.645762156 +0100
+@@ -10,13 +10,13 @@ Restrictions apply, see COPYRIGHT and LI
+ AC_REVISION([$Id: 9e53b7243116521c824456d5fb2d4d3c358c0d76 $])
  AC_INIT(ldapcpplib, [] , [http://www.openldap.org/its/] )
  AC_CONFIG_SRCDIR(src/LDAPConnection.h)
- AM_INIT_AUTOMAKE(foreign)
+-AM_INIT_AUTOMAKE(foreign)
 -AM_CONFIG_HEADER(src/config.h)
 +AC_CONFIG_HEADERS(src/config.h)
  
  eval `$ac_aux_dir/version.sh`
  if test -z "$OL_CPP_API_RELEASE"; then
+         AC_MSG_ERROR([could not determine version])
+ fi
++AM_INIT_AUTOMAKE([ldapcpplib], [$OL_CPP_API_RELEASE], [foreign])
+ 
+ VERSION=$OL_CPP_API_RELEASE
+ OPENLDAP_CPP_API_VERSION=$OL_CPP_API_VERSION
