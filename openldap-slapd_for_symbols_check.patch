@@ -11,18 +11,12 @@
  
  sslapd: version.o
  	$(LTLINK) -static -o $@ $(OBJS) version.o $(LIBS) $(WRAP_LIBS)
-@@ -380,6 +384,8 @@
- 	-$(MKDIR) $(DESTDIR)$(localstatedir)/run
- 	$(LTINSTALL) $(INSTALLFLAGS) $(STRIP) -m 755 \
- 		slapd$(EXEEXT) $(DESTDIR)$(libexecdir)
-+	$(LTINSTALL) $(INSTALLFLAGS) $(STRIP) -m 755 \
-+		slapd-shared.la $(DESTDIR)$(libexecdir)
- 	@for i in $(SUBDIRS); do \
- 	    if test -d $$i && test -f $$i/Makefile ; then \
- 		echo; echo "  cd $$i; $(MAKE) $(MFLAGS) install"; \
-@@ -394,7 +394,7 @@
+@@ -387,8 +391,10 @@
+ 		if test $$? != 0 ; then exit 1; fi ; \
  	    fi; \
  	done
++	$(LTINSTALL) $(INSTALLFLAGS) $(STRIP) -m 755 \
++		slapd-shared.la $(DESTDIR)$(libexecdir)
  
 -all-cffiles: slapd $(SLAPD_DYNAMIC_BACKENDS) dynamic_overlays
 +all-cffiles: slapd slapd-shared.la $(SLAPD_DYNAMIC_BACKENDS) dynamic_overlays
