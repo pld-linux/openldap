@@ -62,6 +62,7 @@ Patch23:	%{name}-db.patch
 Patch24:	%{name}-default_cacert_path.patch
 Patch25:	%{name}-system-lmdb.patch
 Patch26:	%{name}-slapd_for_symbols_check.patch
+Patch27:	gcc14.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		https://www.openldap.org/
@@ -1254,6 +1255,7 @@ cd %{name}
 %patch25 -p1
 %endif
 %patch26 -p1
+%patch27 -p0
 %if %{with krb5}
 %patch17 -p1
 %endif
