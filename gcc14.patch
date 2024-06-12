@@ -176,3 +176,14 @@
  static int
  smbk5pwd_modules_init( smbk5pwd_t *pi )
  {
+--- servers/slapd/config.c.orig	2021-06-03 20:40:31.000000000 +0200
++++ servers/slapd/config.c	2024-06-13 00:03:34.605728087 +0200
+@@ -133,7 +133,7 @@
+ 	int rc, arg_user, arg_type, arg_syn, iarg;
+ 	unsigned uiarg;
+ 	long larg;
+-	size_t ularg;
++	unsigned long ularg;
+ 	ber_len_t barg;
+ 	
+ 	if(Conf->arg_type == ARG_IGNORED) {
