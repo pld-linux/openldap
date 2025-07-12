@@ -92,7 +92,7 @@ BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_perl:BuildRequires:	perl-devel}
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 2.043
 BuildRequires:	sed >= 4.0
 BuildRequires:	uname(release) >= 2.6
 %{?with_odbc:BuildRequires:	unixODBC-devel}
@@ -1294,7 +1294,8 @@ CFLAGS="%{rpmcflags}"
 CXXFLAGS="%{rpmcflags} -fno-implicit-templates"
 LDFLAGS="%{rpmcflags} %{rpmldflags}"
 export CC CXX CFLAGS CXXFLAGS LDFLAGS
-../dist/%configure \
+%define	configuredir	../dist
+%configure \
 	--cache-file=%{?configure_cache_file}%{!?configure_cache_file:configure}-db.cache \
 	--disable-compat185 \
 	--disable-dump185 \
@@ -1310,6 +1311,8 @@ export CC CXX CFLAGS CXXFLAGS LDFLAGS
 	--bindir=${dbdir}/bin \
 	--includedir=${dbdir}/include \
 	--libdir=${dbdir}/%{_lib}
+
+%undefine	configuredir
 
 %{__make} \
 	libdb_base=libslapd_db \
