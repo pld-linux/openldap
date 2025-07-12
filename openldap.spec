@@ -1226,38 +1226,38 @@ Nakładka śledząca wywołania nakładek.
 
 %prep
 %setup -q -c %{!?with_system_db:-a1}
-%{!?with_system_db:%patch18 -p0}
+%{!?with_system_db:%patch -P18 -p0}
 %{!?with_system_db:%{__mv} db-%{db_version} db}
 %{__mv} %{name}-%{version} %{name}
 cd %{name}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
-%patch16 -p1
-%patch19 -p1
-%patch20 -p1
-%patch22 -p1
-%patch23 -p1
-%patch24 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P11 -p1
+%patch -P12 -p1
+%patch -P13 -p1
+%patch -P14 -p1
+%patch -P15 -p1
+%patch -P16 -p1
+%patch -P19 -p1
+%patch -P20 -p1
+%patch -P22 -p1
+%patch -P23 -p1
+%patch -P24 -p1
 %if %{with system_lmdb}
-%patch25 -p1
+%patch -P25 -p1
 %endif
-%patch26 -p1
-%patch27 -p0
+%patch -P26 -p1
+%patch -P27 -p0
 %if %{with krb5}
-%patch17 -p1
+%patch -P17 -p1
 %endif
 %if %{with nondist}
 # disable check for compatible DB package (< 6.0.20)
@@ -1279,7 +1279,7 @@ if ! cp -al %{name} evo-%{name}; then
 	cp -a %{name} evo-%{name}
 fi
 cd evo-%{name}
-%patch100 -p0
+%patch -P100 -p0
 %endif
 
 %build
