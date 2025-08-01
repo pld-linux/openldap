@@ -36,6 +36,8 @@ Patch3:		%{name}-cldap.patch
 Patch4:		attr.patch
 Patch5:		%{name}-install.patch
 
+Patch9:		%{name}-ltinstall-mode.patch
+
 Patch11:	%{name}-ldaprc.patch
 Patch12:	%{name}-nosql.patch
 Patch13:	%{name}-ldapc++.patch
