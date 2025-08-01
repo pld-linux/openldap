@@ -7,13 +7,6 @@
 %bcond_without	perl		# disable perl backend
 %bcond_without	sasl		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
-%bcond_with	system_db	# system Berkeley DB
-%bcond_without	system_lmdb	# system LMDB
-%bcond_with	nondist		# non-distributable package (DB >= 6.0.20)
-
-# Never change or update Berkeley DB, it's there to isolate OpenLDAP
-# from any future changes to the system-wide Berkeley DB library.
-%define		db_version		4.6.21
 
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es.UTF-8):	Clientes y servidor para LDAP
@@ -22,14 +15,13 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.4.59
-Release:	10
+Version:	2.6.10
+Release:	0.1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	https://www.openldap.org/software/download/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	6036a03b3a67b4a1fe1246e0a2c7265a
-Source1:	http://download.oracle.com/berkeley-db/db-%{db_version}.tar.gz
-# Source1-md5:	718082e7e35fc48478a2334b0bc4cd11
+# Source0-md5:	6be5e6c43d599e7a422669c70229ca74
+
 Source2:	ldap.init
 Source3:	%{name}.sysconfig
 Source4:	%{name}.conf
@@ -39,30 +31,25 @@ Source7:	nssov.tmpfiles
 Source100:	%{name}-README.evolution
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-config.patch
-Patch2:		%{name}-fast.patch
+
 Patch3:		%{name}-cldap.patch
-Patch4:		%{name}-ldapi_FHS.patch
+Patch4:		attr.patch
 Patch5:		%{name}-install.patch
-Patch6:		%{name}-backend_libs.patch
-Patch7:		%{name}-perl.patch
-Patch8:		%{name}-pic.patch
-Patch9:		%{name}-ltinstall-mode.patch
+
 Patch11:	%{name}-ldaprc.patch
 Patch12:	%{name}-nosql.patch
 Patch13:	%{name}-ldapc++.patch
-Patch14:	%{name}-pie.patch
+
 Patch15:	%{name}-gethostbyXXXX_r.patch
 Patch16:	%{name}-contrib-modules.patch
 Patch17:	%{name}-contrib-krb5.patch
-Patch18:	%{name}-format-security.patch
-Patch19:	%{name}-gcc47.patch
+
 Patch20:	%{name}-man.patch
 Patch22:	%{name}-am.patch
-Patch23:	%{name}-db.patch
+
 Patch24:	%{name}-default_cacert_path.patch
 Patch25:	%{name}-system-lmdb.patch
 Patch26:	%{name}-slapd_for_symbols_check.patch
-Patch27:	gcc14.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		https://www.openldap.org/
@@ -70,10 +57,6 @@ BuildRequires:	autoconf >= 2.59
 BuildRequires:	automake
 %if %{with sasl}
 BuildRequires:	cyrus-sasl-devel >= 2.1.15
-%endif
-%if %{with system_db}
-BuildRequires:	db-devel >= 4.4
-%{!?with_nondist:BuildRequires:	db-devel < 6.0.20}
 %endif
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	groff
@@ -328,7 +311,7 @@ responsible for handling the database and client queries.
 Install this package if you want to setup an OpenLDAP server.
 
 You will also need some backend for server, so install some
-openldap-backend package. The bdb backend is recommended.
+openldap-backend package.
 
 %description servers -l pl.UTF-8
 Ten pakiet zawiera demona slapd odpowiadającego za obsługę bazy danych
@@ -337,8 +320,7 @@ i zapytania klientów.
 Aby uruchomić serwer OpenLDAP należy zainstalować ten pakiet.
 
 Potrzebny też jest jakiś backend dla serwera, dlatego należy
-zainstalować odpowiedni pakiet openldap-backend. Zalecany jest backend
-bdb.
+zainstalować odpowiedni pakiet openldap-backend.
 
 %description servers -l pt_BR.UTF-8
 O pacote openldap-server contém o servidor slapd que é responsável por
@@ -356,19 +338,6 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %description servers -l uk.UTF-8
 Сервера (демони), що поставляються з LDAP.
 
-%package backend-bdb
-Summary:	BDB backend to OpenLDAP server
-Summary(pl.UTF-8):	Backend BDB do serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description backend-bdb
-BDB backend to slapd, the OpenLDAP server.
-
-%description backend-bdb -l pl.UTF-8
-Backend BDB do slapd - serwera OpenLDAP.
-
 %package backend-dnssrv
 Summary:	DNS SRV backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend DNS SRV do serwera OpenLDAP
@@ -381,19 +350,6 @@ DNS SRV backend to slapd, the OpenLDAP server.
 
 %description backend-dnssrv -l pl.UTF-8
 Backend DNS SRV do slapd - serwera OpenLDAP.
-
-%package backend-hdb
-Summary:	HDB (Hierarchical DB) backend to OpenLDAP server
-Summary(pl.UTF-8):	Backend HDB (Hierarchical DB) do serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description backend-hdb
-HDB (Hierarchical DB) backend to slapd, the OpenLDAP server.
-
-%description backend-hdb -l pl.UTF-8
-Backend HDB (Hierarchical DB) do slapd - serwera OpenLDAP.
 
 %package backend-ldap
 Summary:	LDAP backend to OpenLDAP server
@@ -433,19 +389,6 @@ Requires:	%{name}-servers = %{version}-%{release}
 Meta backend to slapd, the OpenLDAP server.
 
 %description backend-meta -l pl.UTF-8
-Backend Meta do slapd - serwera OpenLDAP.
-
-%package backend-monitor
-Summary:	Monitor backend to OpenLDAP server
-Summary(pl.UTF-8):	Backend Monitor do serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description backend-monitor
-Meta backend to slapd, the OpenLDAP server.
-
-%description backend-monitor -l pl.UTF-8
 Backend Meta do slapd - serwera OpenLDAP.
 
 %package backend-ndb
@@ -506,19 +449,6 @@ Głównym celem tego backendu jest odwzorowywanie kontekstów nazw
 zdefiniowanych w bazie danych działającej w tej samej instancji slapd
 na konteksty nazw wirtualnych z modyfikowaniem attributeType i
 objectClass w razie potrzeby. Wymaga nakładki rwm.
-
-%package backend-shell
-Summary:	Shell backend to OpenLDAP server
-Summary(pl.UTF-8):	Backend Shell do serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description backend-shell
-Shell backend to slapd, the OpenLDAP server.
-
-%description backend-shell -l pl.UTF-8
-Backend Shell do slapd - serwera OpenLDAP.
 
 %package backend-sock
 Summary:	Socket backend to OpenLDAP server
@@ -850,14 +780,14 @@ Requires:	%{name}-servers = %{version}-%{release}
 
 %description overlay-translucent
 The Translucent Proxy overlay can be used with a backend database such
-as slapd-bdb to create a "translucent proxy". Entries retrieved from a
+to create a "translucent proxy". Entries retrieved from a
 remote LDAP server may have some or all attributes overridden, or new
 attributes added, by entries in the local database before being
 presented to the client.
 
 %description overlay-translucent -l pl.UTF-8
-Nakładka Translucent Proxy może być używana wraz z bazą danych taką
-jak slapd-bdb do stworzenia "przezroczystego proxy". Wpisy otrzymane
+Nakładka Translucent Proxy może być używana wraz z bazą danych
+do stworzenia "przezroczystego proxy". Wpisy otrzymane
 ze zdalnego serwera LDAP mogą mieć nadpisane niektóre lub wszystkie
 atrybuty, albo dodane nowe atrybuty poprzez wpisy w lokalnej bazie
 danych przed przekazaniem do klienta.
@@ -1225,49 +1155,38 @@ Overlay to trace overlay invocation.
 Nakładka śledząca wywołania nakładek.
 
 %prep
-%setup -q -c %{!?with_system_db:-a1}
-%{!?with_system_db:%patch -P18 -p0}
-%{!?with_system_db:%{__mv} db-%{db_version} db}
-%{__mv} %{name}-%{version} %{name}
-cd %{name}
+%setup -q
 %patch -P0 -p1
-%patch -P1 -p1
-%patch -P2 -p1
+# update
+#%%patch -P1 -p1
+
 %patch -P3 -p1
 %patch -P4 -p1
 %patch -P5 -p1
-%patch -P6 -p1
-%patch -P7 -p1
-%patch -P8 -p1
+
 %patch -P9 -p1
+
 %patch -P11 -p1
 %patch -P12 -p1
 %patch -P13 -p1
-%patch -P14 -p1
+
 %patch -P15 -p1
 %patch -P16 -p1
-%patch -P19 -p1
+
 %patch -P20 -p1
 %patch -P22 -p1
-%patch -P23 -p1
+
 %patch -P24 -p1
 %if %{with system_lmdb}
 %patch -P25 -p1
 %endif
-%patch -P26 -p1
-%patch -P27 -p0
+# test if needed
+#%%patch -P26 -p1
+
 %if %{with krb5}
 %patch -P17 -p1
 %endif
-%if %{with nondist}
-# disable check for compatible DB package (< 6.0.20)
-%{__sed} -i -e 's/0x060014/0xFFFFFF/' build/openldap.m4
-%endif
 cd ..
-
-%if %{without system_db}
-install -d db/build-rpm
-%endif
 
 %if %{with exchange}
 # Set up a build tree for a static version of libldap with the hooks for the
@@ -1283,59 +1202,11 @@ cd evo-%{name}
 %endif
 
 %build
-%if %{without system_db}
-cp -f /usr/share/automake/config.sub db/dist
-dbdir=$(pwd)/db-instroot
-cd db/build-rpm
-
-CC="%{__cc}"
-CXX="%{__cxx}"
-CFLAGS="%{rpmcflags}"
-CXXFLAGS="%{rpmcflags} -fno-implicit-templates"
-LDFLAGS="%{rpmcflags} %{rpmldflags}"
-export CC CXX CFLAGS CXXFLAGS LDFLAGS
-%define	configuredir	../dist
-%configure \
-	--cache-file=%{?configure_cache_file}%{!?configure_cache_file:configure}-db.cache \
-	--disable-compat185 \
-	--disable-dump185 \
-	--disable-java \
-	--disable-tcl \
-	--disable-cxx \
-	--with-pic \
-	--disable-static \
-	--enable-shared \
-	--with-uniquename=_openldap \
-	--prefix=${dbdir} \
-	--exec-prefix=${dbdir} \
-	--bindir=${dbdir}/bin \
-	--includedir=${dbdir}/include \
-	--libdir=${dbdir}/%{_lib}
-
-%undefine	configuredir
-
-%{__make} \
-	libdb_base=libslapd_db \
-	libso_base=libslapd_db
-%{__make} install \
-	libdb_base=libslapd_db \
-	libso_base=libslapd_db \
-	strip="false"
-ln -sf libslapd_db.so ${dbdir}/%{_lib}/${subdir}/libdb.so
-
-cd ../..
-%endif
-
-cd %{name}
-
-CPPFLAGS="%{!?with_system_db:-I${dbdir}/include -D__lock_getlocker=__lock_getlocker_openldap }-I/usr/include/ncurses"
+CPPFLAGS="-I/usr/include/ncurses"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC -D_GNU_SOURCE"
 CXXFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
-LDFLAGS="%{rpmcflags} %{rpmldflags}%{!?with_system_db: -L${dbdir}/%{_lib}}"
+LDFLAGS="%{rpmcflags} %{rpmldflags}"
 export CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
-%if %{without system_db}
-export LD_LIBRARY_PATH=${dbdir}/%{_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-%endif
 
 %{__libtoolize} --install
 %{__aclocal}
@@ -1369,13 +1240,10 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--disable-slp \
 %endif
 	--enable-wrappers \
-	--enable-bdb=mod \
 	--enable-dnssrv=mod \
-	--enable-hdb=mod \
 	--enable-ldap=mod \
 	--enable-mdb=mod \
 	--enable-meta=mod \
-	--enable-monitor=mod \
 %if %{with ndb}
 	--enable-ndb=mod \
 %endif
@@ -1385,7 +1253,6 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-perl=mod \
 %endif
 	--enable-relay=mod \
-	--enable-shell=mod \
 	--enable-sock=mod \
 %if %{with odbc}
 	--enable-sql=mod \
@@ -1402,7 +1269,7 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 %{__make} -C contrib/slapd-modules
 
 install -d libs
-for d in liblber libldap libldap_r ; do
+for d in liblber libldap; do
 	ln -sf ../libraries/$d/.libs/$d.la libs/$d.la
 	ln -sf ../libraries/$d/.libs/$d.so libs/$d.so
 done
@@ -1490,27 +1357,11 @@ install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} 
 cp -p %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
 %endif
 
-%if %{without system_db}
-dbdir=$(pwd)/db-instroot
-cd db-instroot
-install -p %{_lib}/libslapd_db-*.*.so $RPM_BUILD_ROOT%{_libdir}
-cd bin
-for binary in db_* ; do
-	install -p -m755 ${binary} $RPM_BUILD_ROOT%{_sbindir}/slapd_${binary}
-done
-
-cd ../..
-%endif
-
-cd %{name}
-
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__make} -C contrib/slapd-modules install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-%{!?with_ndb:%{__rm} $RPM_BUILD_ROOT%{_mandir}/man5/slapd-ndb.5}
 
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/ldap
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/ldap
@@ -1524,7 +1375,7 @@ cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/ldap.conf
 cp -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/slapd.conf
 cp -p %{SOURCE7} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/nssov.conf
 
-%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/*.{default,example}
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/openldap/*.default
 
 # Standard schemas should not be changed by users
 mv $RPM_BUILD_ROOT%{_sysconfdir}/openldap/schema/* $RPM_BUILD_ROOT%{_datadir}/openldap/schema
@@ -1542,10 +1393,6 @@ echo "# This is a good place to put your schema definitions " > \
 	DESTDIR=$RPM_BUILD_ROOT
 %endif
 
-%if %{without system_db}
-find $RPM_BUILD_ROOT -name '*.la' | xargs sed -i -e "s|-L${dbdir}/%{_lib}||g"
-%endif
-
 # files for -headers subpackage
 install -d $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
 cp -p include/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}
@@ -1555,15 +1402,6 @@ cp -p include/ac/*.h $RPM_BUILD_ROOT%{_includedir}/%{name}/ac
 for I in $RPM_BUILD_ROOT%{_includedir}/*.h; do
 	%{__rm} $RPM_BUILD_ROOT%{_includedir}/%{name}/$(basename $I)
 done
-
-# check for undefined symbols in slapd modules
-for i in $RPM_BUILD_ROOT%{_libdir}/openldap/*.so ; do
-	if LD_PRELOAD=$RPM_BUILD_ROOT%{_libdir}/liblber-2.4.so.2:$RPM_BUILD_ROOT%{_libdir}/libldap_r-2.4.so.2:%{!?with_system_db:$RPM_BUILD_ROOT%{_libdir}/libslapd_db-4.6.so:}$RPM_BUILD_ROOT%{_sbindir}/slapd-shared.so ldd -r $i 2>&1 | grep "undefined symbol"; then
-		echo "Undefined symbols found in" $i
-		exit 1
-	fi
-done
-%{__rm} $RPM_BUILD_ROOT%{_sbindir}/slapd-shared.so
 
 # bogus include
 %{__sed} -i -e '/^\.so \.\.\/Project/d' $RPM_BUILD_ROOT%{_mandir}/man5/slapo-nops.5
@@ -1593,6 +1431,12 @@ rm -rf $RPM_BUILD_ROOT
 # the strict internal deps between modules and
 # server package are very important for all this to work.
 
+%ldap_module_add autoca.la
+%ldap_module_add homedir.la
+%ldap_module_add nestgroup.la
+%ldap_module_add otp.la
+%ldap_module_add remoteauth.la
+
 %posttrans servers
 %service ldap restart "OpenLDAP server"
 
@@ -1601,6 +1445,11 @@ if [ "$1" = "0" ] ; then
 	%service ldap stop
 	/sbin/chkconfig --del ldap || :
 fi
+%ldap_module_remove autoca.la
+%ldap_module_remove homedir.la
+%ldap_module_remove nestgroup.la
+%ldap_module_remove otp.la
+%ldap_module_remove remoteauth.la
 
 %postun servers
 if [ "$1" = "0" ]; then
@@ -1627,23 +1476,11 @@ if [ "`/usr/bin/getent passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]
 	/usr/sbin/usermod -d /var/lib/openldap-data slapd
 fi
 
-%post backend-bdb
-%ldap_module_add back_bdb.la
-
-%preun backend-bdb
-%ldap_module_remove back_bdb.la
-
 %post backend-dnssrv
 %ldap_module_add back_dnssrv.la
 
 %preun backend-dnssrv
 %ldap_module_remove back_dnssrv.la
-
-%post backend-hdb
-%ldap_module_add back_hdb.la
-
-%preun backend-hdb
-%ldap_module_remove back_hdb.la
 
 %post backend-ldap
 %ldap_module_add back_ldap.la
@@ -1662,12 +1499,6 @@ fi
 
 %preun backend-meta
 %ldap_module_remove back_meta.la
-
-%post backend-monitor
-%ldap_module_add back_monitor.la
-
-%preun backend-monitor
-%ldap_module_remove back_monitor.la
 
 %post backend-ndb
 %ldap_module_add back_ndb.la
@@ -1692,12 +1523,6 @@ fi
 
 %preun backend-relay
 %ldap_module_remove back_relay.la
-
-%post backend-shell
-%ldap_module_add back_shell.la
-
-%preun backend-shell
-%ldap_module_remove back_shell.la
 
 %post backend-sock
 %ldap_module_add back_sock.la
@@ -1955,8 +1780,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc %{name}/{ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
-%doc %{name}/doc/{drafts,rfc}
+%doc {ANNOUNCEMENT,CHANGES,COPYRIGHT,README,LICENSE}
+%doc doc/{drafts,rfc}
 %attr(755,root,root) %{_bindir}/ldap*
 %dir %{_datadir}/openldap
 %{_mandir}/man1/ldap*.1*
@@ -1972,24 +1797,20 @@ fi
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldap.conf
-%attr(755,root,root) %{_libdir}/liblber-2.4.so.*.*.*
-%attr(755,root,root) %{_libdir}/libldap-2.4.so.*.*.*
-%attr(755,root,root) %{_libdir}/libldap_r-2.4.so.*.*.*
-%attr(755,root,root) %{_libdir}/libslapi-2.4.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/liblber-2.4.so.2
-%attr(755,root,root) %ghost %{_libdir}/libldap-2.4.so.2
-%attr(755,root,root) %ghost %{_libdir}/libldap_r-2.4.so.2
-%attr(755,root,root) %ghost %{_libdir}/libslapi-2.4.so.2
+%attr(755,root,root) %{_libdir}/liblber.so.*.*.*
+%attr(755,root,root) %{_libdir}/libldap.so.*.*.*
+%attr(755,root,root) %{_libdir}/libslapi.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblber.so.2
+%attr(755,root,root) %ghost %{_libdir}/libldap.so.2
+%attr(755,root,root) %ghost %{_libdir}/libslapi.so.2
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblber.so
 %attr(755,root,root) %{_libdir}/libldap.so
-%attr(755,root,root) %{_libdir}/libldap_r.so
 %attr(755,root,root) %{_libdir}/libslapi.so
 %{_libdir}/liblber.la
 %{_libdir}/libldap.la
-%{_libdir}/libldap_r.la
 %{_libdir}/libslapi.la
 %{_includedir}/lber.h
 %{_includedir}/lber_types.h
@@ -1998,6 +1819,8 @@ fi
 %{_includedir}/ldif.h
 %{_includedir}/openldap.h
 %{_includedir}/slapi-plugin.h
+%{_pkgconfigdir}/lber.pc
+%{_pkgconfigdir}/ldap.pc
 %{_mandir}/man3/ber_*.3*
 %{_mandir}/man3/lber-*.3*
 %{_mandir}/man3/ld_errno.3*
@@ -2008,7 +1831,6 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/liblber.a
 %{_libdir}/libldap.a
-%{_libdir}/libldap_r.a
 %{_libdir}/libslapi.a
 
 %files headers
@@ -2045,11 +1867,6 @@ fi
 
 %files servers
 %defattr(644,root,root,755)
-%if %{without system_db}
-# not used by slapd directly, but by three different backends (bdb,hdb,mdb), so include here
-%doc db/LICENSE
-%attr(755,root,root) %{_libdir}/libslapd_db-4.6.so
-%endif
 %attr(755,root,root) %{_sbindir}/slap*
 %dir %{_libdir}/openldap
 %dir %{_sysconfdir}/openldap/schema
@@ -2061,8 +1878,21 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/ldap
 %{systemdtmpfilesdir}/slapd.conf
 %attr(770,root,slapd) %{_var}/run/slapd
-%dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
-%attr(660,root,slapd) %{_localstatedir}/openldap-data/*
+#%dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
+#%attr(660,root,slapd) %{_localstatedir}/openldap-data/*
+
+# no external deps
+%{_libdir}/%{name}/autoca.la
+%attr(755,root,root) %{_libdir}/%{name}/autoca.so*
+%{_libdir}/%{name}/homedir.la
+%attr(755,root,root) %{_libdir}/%{name}/homedir.so*
+%{_libdir}/%{name}/nestgroup.la
+%attr(755,root,root) %{_libdir}/%{name}/nestgroup.so*
+%{_libdir}/%{name}/otp.la
+%attr(755,root,root) %{_libdir}/%{name}/otp.so*
+%{_libdir}/%{name}/remoteauth.la
+%attr(755,root,root) %{_libdir}/%{name}/remoteauth.so*
+
 %dir %{schemadir}
 %{schemadir}/README
 %{schemadir}/collective.ldif
@@ -2073,6 +1903,8 @@ fi
 %{schemadir}/core.schema
 %{schemadir}/cosine.ldif
 %{schemadir}/cosine.schema
+%{schemadir}/dsee.ldif
+%{schemadir}/dsee.schema
 %{schemadir}/duaconf.ldif
 %{schemadir}/duaconf.schema
 %{schemadir}/dyngroup.ldif
@@ -2083,25 +1915,31 @@ fi
 %{schemadir}/java.schema
 %{schemadir}/misc.ldif
 %{schemadir}/misc.schema
+%{schemadir}/msuser.ldif
+%{schemadir}/msuser.schema
+%{schemadir}/namedobject.ldif
+%{schemadir}/namedobject.schema
 %{schemadir}/nis.ldif
 %{schemadir}/nis.schema
 %{schemadir}/openldap.ldif
 %{schemadir}/openldap.schema
 %{schemadir}/pmi.ldif
 %{schemadir}/pmi.schema
-%{schemadir}/ppolicy.ldif
-%{schemadir}/ppolicy.schema
 %{_mandir}/man5/slapd.*.5*
+%{_mandir}/man5/slapd-asyncmeta.5*
 %{_mandir}/man5/slapd-config.5*
 %{_mandir}/man5/slapd-ldif.5*
+%{_mandir}/man5/slapd-monitor.5*
 %{_mandir}/man5/slapd-null.5*
+%{_mandir}/man5/slapd-wt.5*
+%{_mandir}/man5/slapo-autoca.5*
+%{_mandir}/man5/slapo-deref.5*
+%{_mandir}/man5/slapo-homedir.5*
+%{_mandir}/man5/slapo-nestgroup.5*
+%{_mandir}/man5/slapo-otp.5*
+%{_mandir}/man5/slapo-remoteauth.5*
+%{_mandir}/man5/slappw-argon2.5*
 %{_mandir}/man8/slap*.8*
-
-%files backend-bdb
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_bdb*.so*
-%{_libdir}/openldap/back_bdb.la
-%{_mandir}/man5/slapd-bdb.5*
 
 %files backend-dnssrv
 %defattr(644,root,root,755)
@@ -2109,15 +1947,9 @@ fi
 %{_libdir}/openldap/back_dnssrv.la
 %{_mandir}/man5/slapd-dnssrv.5*
 
-%files backend-hdb
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_hdb*.so*
-%{_libdir}/openldap/back_hdb.la
-%{_mandir}/man5/slapd-hdb.5*
-
 %files backend-ldap
 %defattr(644,root,root,755)
-%doc %{name}/servers/slapd/back-ldap/TODO.proxy
+%doc servers/slapd/back-ldap/TODO.proxy
 %attr(755,root,root) %{_libdir}/openldap/back_ldap*.so*
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
@@ -2136,17 +1968,10 @@ fi
 %{_libdir}/openldap/back_meta.la
 %{_mandir}/man5/slapd-meta.5*
 
-%files backend-monitor
-%defattr(644,root,root,755)
-%doc %{name}/servers/slapd/back-monitor/README
-%attr(755,root,root) %{_libdir}/openldap/back_monitor*.so*
-%{_libdir}/openldap/back_monitor.la
-%{_mandir}/man5/slapd-monitor.5*
-
 %if %{with ndb}
 %files backend-ndb
 %defattr(644,root,root,755)
-%doc %{name}/servers/slapd/back-ndb/README
+%doc servers/slapd/back-ndb/README
 %attr(755,root,root) %{_libdir}/openldap/back_ndb*.so*
 %{_libdir}/openldap/back_ndb.la
 %{_mandir}/man5/slapd-ndb.5*
@@ -2161,8 +1986,8 @@ fi
 %if %{with perl}
 %files backend-perl
 %defattr(644,root,root,755)
-%doc %{name}/servers/slapd/back-perl/*.pm
-%doc %{name}/servers/slapd/back-perl/README
+%doc servers/slapd/back-perl/*.pm
+%doc servers/slapd/back-perl/README
 %attr(755,root,root) %{_libdir}/openldap/back_perl*.so*
 %{_libdir}/openldap/back_perl.la
 %{_mandir}/man5/slapd-perl.5*
@@ -2170,16 +1995,10 @@ fi
 
 %files backend-relay
 %defattr(644,root,root,755)
-%doc %{name}/servers/slapd/back-relay/README
+%doc servers/slapd/back-relay/README
 %attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
 %{_libdir}/openldap/back_relay.la
 %{_mandir}/man5/slapd-relay.5*
-
-%files backend-shell
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_shell*.so*
-%{_libdir}/openldap/back_shell.la
-%{_mandir}/man5/slapd-shell.5*
 
 %files backend-sock
 %defattr(644,root,root,755)
@@ -2191,8 +2010,8 @@ fi
 %if %{with odbc}
 %files backend-sql
 %defattr(644,root,root,755)
-%doc %{name}/servers/slapd/back-sql/docs/*
-%doc %{name}/servers/slapd/back-sql/rdbms_depend
+%doc servers/slapd/back-sql/docs/*
+%doc servers/slapd/back-sql/rdbms_depend
 %attr(755,root,root) %{_libdir}/openldap/back_sql*.so*
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
@@ -2320,26 +2139,26 @@ fi
 
 %files overlay-addpartial
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/addpartial/README
+%doc contrib/slapd-modules/addpartial/README
 %attr(755,root,root) %{_libdir}/openldap/addpartial-overlay*.so*
 %{_libdir}/openldap/addpartial-overlay.la
 
 %files overlay-allop
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/allop/README
+%doc contrib/slapd-modules/allop/README
 %attr(755,root,root) %{_libdir}/openldap/allop*.so*
 %{_libdir}/openldap/allop.la
 %{_mandir}/man5/slapo-allop.5*
 
 %files overlay-allowed
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/allowed/README
+%doc contrib/slapd-modules/allowed/README
 %attr(755,root,root) %{_libdir}/openldap/allowed*.so*
 %{_libdir}/openldap/allowed.la
 
 %files overlay-autogroup
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/autogroup/README
+%doc contrib/slapd-modules/autogroup/README
 %attr(755,root,root) %{_libdir}/openldap/autogroup*.so*
 %{_libdir}/openldap/autogroup.la
 %{_mandir}/man5/slapo-autogroup.5*
@@ -2357,7 +2176,7 @@ fi
 
 %files overlay-dsaschema
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/dsaschema/README
+%doc contrib/slapd-modules/dsaschema/README
 %attr(755,root,root) %{_libdir}/openldap/dsaschema*.so*
 %{_libdir}/openldap/dsaschema.la
 
@@ -2369,7 +2188,7 @@ fi
 %if %{with krb5}
 %files overlay-kinit
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/kinit/README
+%doc contrib/slapd-modules/kinit/README
 %attr(755,root,root) %{_libdir}/openldap/kinit*.so*
 %{_libdir}/openldap/kinit.la
 %endif
@@ -2399,7 +2218,7 @@ fi
 
 %files overlay-nssov
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/nssov/README
+%doc contrib/slapd-modules/nssov/README
 %attr(755,root,root) %{_libdir}/openldap/nssov*.so*
 %{_libdir}/openldap/nssov.la
 %{schemadir}/ldapns.schema
@@ -2409,13 +2228,13 @@ fi
 
 %files overlay-proxyOld
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/proxyOld/README
+%doc contrib/slapd-modules/proxyOld/README
 %attr(755,root,root) %{_libdir}/openldap/proxyOld*.so*
 %{_libdir}/openldap/proxyOld.la
 
 %files overlay-samba4
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/samba4/README
+%doc contrib/slapd-modules/samba4/README
 %attr(755,root,root) %{_libdir}/openldap/pguid*.so*
 %attr(755,root,root) %{_libdir}/openldap/rdnval*.so*
 %attr(755,root,root) %{_libdir}/openldap/vernum*.so*
@@ -2425,7 +2244,7 @@ fi
 
 %files overlay-smbk5pwd
 %defattr(644,root,root,755)
-%doc %{name}/contrib/slapd-modules/smbk5pwd/README
+%doc contrib/slapd-modules/smbk5pwd/README
 %attr(755,root,root) %{_libdir}/openldap/smbk5pwd*.so*
 %{_libdir}/openldap/smbk5pwd.la
 

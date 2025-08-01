@@ -1,16 +1,15 @@
-diff -urN openldap-2.4.25/configure.in openldap-2.4.25-contrib/configure.in
---- openldap-2.4.25/configure.in	2011-03-24 02:18:25.000000000 +0100
-+++ openldap-2.4.25-contrib/configure.in	2011-03-28 17:59:14.569152000 +0200
-@@ -3188,6 +3188,28 @@
- [servers/slapd/shell-backends/Makefile:build/top.mk:servers/slapd/shell-backends/Makefile.in:build/srv.mk]
- [servers/slapd/slapi/Makefile:build/top.mk:servers/slapd/slapi/Makefile.in:build/lib.mk:build/lib-shared.mk]
+--- openldap-2.6.10/configure.ac~	2025-05-22 19:56:21.000000000 +0200
++++ openldap-2.6.10/configure.ac	2025-08-01 19:15:12.997716322 +0200
+@@ -3278,6 +3278,28 @@ AC_CONFIG_FILES([Makefile:build/top.mk:M
  [servers/slapd/overlays/Makefile:build/top.mk:servers/slapd/overlays/Makefile.in:build/lib.mk]
+ [servers/slapd/pwmods/Makefile:build/top.mk:servers/slapd/pwmods/Makefile.in:build/lib.mk]
+ [servers/lloadd/Makefile:build/top.mk:servers/lloadd/Makefile.in:$BALANCER_MAKE]
 +[contrib/slapd-modules/Makefile:build/top.mk:contrib/slapd-modules/Makefile.in:build/dir.mk]
 +[contrib/slapd-modules/acl/Makefile:build/top.mk:contrib/slapd-modules/acl/Makefile.in:build/mod.mk]
 +[contrib/slapd-modules/addpartial/Makefile:build/top.mk:contrib/slapd-modules/addpartial/Makefile.in:build/mod.mk]
 +[contrib/slapd-modules/allop/Makefile:build/top.mk:contrib/slapd-modules/allop/Makefile.in:build/mod.mk:build/man.mk]
 +[contrib/slapd-modules/allowed/Makefile:build/top.mk:contrib/slapd-modules/allowed/Makefile.in:build/mod.mk]
-+[contrib/slapd-modules/autogroup/Makefile:build/top.mk:contrib/slapd-modules/autogroup/Makefile.in:build/mod.mk]
++[contrib/slapd-modules/autogroup/Makefile:build/top.mk:contrib/slapd-modules/autogroup/Makefile.in:build/mod.mk:build/man.mk]
 +[contrib/slapd-modules/cloak/Makefile:build/top.mk:contrib/slapd-modules/cloak/Makefile.in:build/mod.mk:build/man.mk]
 +[contrib/slapd-modules/comp_match/Makefile:build/top.mk:contrib/slapd-modules/comp_match/Makefile.in:build/mod.mk]
 +[contrib/slapd-modules/denyop/Makefile:build/top.mk:contrib/slapd-modules/denyop/Makefile.in:build/mod.mk]

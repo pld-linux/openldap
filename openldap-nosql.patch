@@ -1,14 +1,11 @@
-Don't link directly with perl or sql libraries -- they're pulled in by
-demand-loaded backends.
-
---- openldap-2.4.49/build/top.mk.orig	2020-02-26 19:49:38.964606730 +0100
-+++ openldap-2.4.49/build/top.mk	2020-02-26 19:57:31.642046017 +0100
-@@ -200,7 +200,7 @@
+--- openldap-2.6.10/build/top.mk~	2025-05-22 19:56:21.000000000 +0200
++++ openldap-2.6.10/build/top.mk	2025-08-01 19:12:55.028807892 +0200
+@@ -206,7 +206,7 @@ SLAPD_SQL_LDFLAGS = @SLAPD_SQL_LDFLAGS@
  SLAPD_SQL_INCLUDES = @SLAPD_SQL_INCLUDES@
  SLAPD_SQL_LIBS = @SLAPD_SQL_LIBS@
  
 -SLAPD_LIBS = @SLAPD_LIBS@ @SLAPD_PERL_LDFLAGS@ @SLAPD_SQL_LDFLAGS@ @SLAPD_SQL_LIBS@ @SLAPD_SLP_LIBS@ @SLAPD_GMP_LIBS@
-+SLAPD_LIBS = @SLAPD_LIBS@ @SLAPD_SLP_LIBS@ @SLAPD_GMP_LIBS@
++SLAPD_LIBS = @SLAPD_LIBS@ @SLAPD_PERL_LDFLAGS@ @SLAPD_SLP_LIBS@ @SLAPD_GMP_LIBS@
+ LLOADD_LIBS = @BALANCER_LIBS@ $(LEVENT_LIBS)
  
  # Our Defaults
- CC = $(AC_CC)

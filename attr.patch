@@ -1,0 +1,11 @@
+--- openldap-2.6.10/contrib/slapd-modules/cloak/cloak.c~	2025-05-22 19:56:21.000000000 +0200
++++ openldap-2.6.10/contrib/slapd-modules/cloak/cloak.c	2025-08-01 20:31:29.314886502 +0200
+@@ -32,6 +32,8 @@
+ #include "slap.h"
+ #include "slap-config.h"
+ 
++extern void attr_clean( Attribute *a );
++
+ enum { CLOAK_ATTR = 1 };
+ 
+ typedef struct cloak_info_t {

@@ -1,13 +1,12 @@
-diff -ruNp openldap-2.4.45.orig/libraries/libldap/tls_o.c openldap-2.4.45/libraries/libldap/tls_o.c
---- openldap-2.4.45.orig/libraries/libldap/tls_o.c	2017-06-01 22:01:07.000000000 +0200
-+++ openldap-2.4.45/libraries/libldap/tls_o.c	2017-09-03 20:23:39.222111712 +0200
-@@ -275,7 +275,8 @@ tlso_ctx_init( struct ldapoptions *lo, s
- 		}
- 	} else {
- 		if ( !SSL_CTX_load_verify_locations( ctx,
--				lt->lt_cacertfile, lt->lt_cacertdir ) )
-+				lt->lt_cacertfile, lt->lt_cacertdir ) ||
-+			!SSL_CTX_set_default_verify_paths( ctx ) )
- 		{
- 			Debug( LDAP_DEBUG_ANY, "TLS: "
- 				"could not load verify locations (file:`%s',dir:`%s').\n",
+--- openldap-2.6.10/libraries/libldap/tls_o.c~	2025-05-22 19:56:21.000000000 +0200
++++ openldap-2.6.10/libraries/libldap/tls_o.c	2025-08-01 19:20:17.006534542 +0200
+@@ -485,7 +485,8 @@ tlso_ctx_init( struct ldapoptions *lo, s
+ 			}
+ 			/* Start with the first dir in path */
+ 			if ( !SSL_CTX_load_verify_locations( ctx,
+-				lt->lt_cacertfile, dirs[0] ) )
++				lt->lt_cacertfile, dirs[0] ) ||
++                                !SSL_CTX_set_default_verify_paths( ctx ) )
+ 			{
+ 				Debug2( LDAP_DEBUG_ANY, "TLS: "
+ 					"could not load verify locations (file:`%s',dir:`%s').\n",
