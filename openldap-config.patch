@@ -1,10 +1,13 @@
---- openldap-2.4.44/servers/slapd/slapd.conf.orig	2016-06-29 20:55:38.281854483 +0200
-+++ openldap-2.4.44/servers/slapd/slapd.conf	2016-06-29 21:19:04.660902139 +0200
-@@ -2,21 +2,61 @@
+diff -ur openldap-2.6.10.orig/servers/slapd/slapd.conf openldap-2.6.10/servers/slapd/slapd.conf
+--- openldap-2.6.10.orig/servers/slapd/slapd.conf	2025-05-22 19:56:21.000000000 +0200
++++ openldap-2.6.10/servers/slapd/slapd.conf	2025-08-27 22:09:49.925792816 +0200
+@@ -1,22 +1,87 @@
+ #
  # See slapd.conf(5) for details on configuration options.
  # This file should NOT be world readable.
- #
+-#
 -include		%SYSCONFDIR%/schema/core.schema
++
 +include		/usr/share/openldap/schema/core.schema
 +include		/usr/share/openldap/schema/cosine.schema
 +include		/usr/share/openldap/schema/inetorgperson.schema
@@ -16,7 +19,7 @@
 +include		%SYSCONFDIR%/schema/local.schema
  
  # Define global ACLs to disable default read access.
-+include 	%SYSCONFDIR%/slapd.access.conf
++include		%SYSCONFDIR%/slapd.access.conf
  
  # Do not enable referrals until AFTER you have a working directory
  # service AND an understanding of referrals.
@@ -28,36 +31,62 @@
 +argsfile	/var/run/slapd/slapd.args
  
  # Load dynamic backend modules:
--# modulepath	%MODULEDIR%
-+modulepath	%MODULEDIR%
-+# moduleload	back_dnssrv.la
- # moduleload	back_mdb.la
- # moduleload	back_ldap.la
-+# moduleload	back_ldif.la
-+# moduleload	back_meta.la
-+# moduleload	back_monitor.la
-+# moduleload	back_passwd.la
-+# moduleload	back_perl.la
-+# moduleload	back_relay.la
-+# moduleload	back_shell.la
-+# moduleload	back_sql.la
-+# moduleload	accesslog.la
-+# moduleload	auditlog.la
-+# moduleload	constraint.la
-+# moduleload	dds.la
-+# moduleload	dyngroup.la
-+# moduleload	dynlist.la
-+# moduleload	memberof.la
-+# moduleload	pcache.la
-+# moduleload	ppolicy.la
-+# moduleload	refint.la
-+# moduleload	retcode.la
-+# moduleload	rwm.la
-+# moduleload	smbk5pwd.la
-+# moduleload	syncprov.la
-+# moduleload	translucent.la
-+# moduleload	unique.la
-+# moduleload	valsort.la
+ modulepath	%MODULEDIR%
+-moduleload	back_mdb.la
+-# moduleload	back_ldap.la
++# moduleload    back_dnssrv.la
++# moduleload    back_ldap.la
++# moduleload    back_mdb.la
++# moduleload    back_meta.la
++# moduleload    back_passwd.la
++# moduleload    back_perl.la
++# moduleload    back_relay.la
++# moduleload    back_sock.la
++# moduleload    back_sql.la
++# moduleload    accesslog.la
++# moduleload    addpartial-overlay.la
++# moduleload    allop.la
++# moduleload    allowed.la
++# moduleload    auditlog.la
++# moduleload    autoca.la
++# moduleload    autogroup.la
++# moduleload    cloak.la
++# moduleload    collect.la
++# moduleload    constraint.la
++# moduleload    dds.la
++# moduleload    denyop.la
++# moduleload    deref.la
++# moduleload    dsaschema.la
++# moduleload    dupent.la
++# moduleload    dyngroup.la
++# moduleload    dynlist.la
++# moduleload    homedir.la
++# moduleload    lastbind.la
++# moduleload    lastmod.la
++# moduleload    memberof.la
++# moduleload    nestgroup.la
++# moduleload    noopsrch.la
++# moduleload    nops.la
++# moduleload    nssov.la
++# moduleload    otp.la
++# moduleload    pcache.la
++# moduleload    pguid.la
++# moduleload    ppolicy.la
++# moduleload    proxyOld.la
++# moduleload    rdnval.la
++# moduleload    refint.la
++# moduleload    remoteauth.la
++# moduleload    retcode.la
++# moduleload    rwm.la
++# moduleload    seqmod.la
++# moduleload    smbk5pwd.la
++# moduleload    sssvlv.la
++# moduleload    syncprov.la
++# moduleload    trace.la
++# moduleload    translucent.la
++# moduleload    unique.la
++# moduleload    valsort.la
++# moduleload    vernum.la
 +
 +# TLSCACertificateFile /usr/share/ssl/ca-bundle.crt
 +# TLSCertificateFile /etc/openldap/slapd.pem
@@ -66,7 +95,7 @@
  
  # Sample security restrictions
  #	Require integrity protection (prevent hijacking)
-@@ -56,10 +96,21 @@
+@@ -65,13 +130,24 @@
  # Cleartext passwords, especially for the rootdn, should
  # be avoid.  See slappasswd(8) and slapd.conf(5) for details.
  # Use of strong authentication encouraged.
@@ -90,3 +119,6 @@
 +#replica host=ldap-1.example.com:389 starttls=critical
 +#	bindmethod=sasl saslmech=GSSAPI
 +#	authcId=host/ldap-master.example.com@EXAMPLE.COM
+ 
+ #######################################################################
+ # monitor database definitions

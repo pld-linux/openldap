@@ -1159,8 +1159,7 @@ Nakładka śledząca wywołania nakładek.
 %prep
 %setup -q
 %patch -P0 -p1
-# update
-#%%patch -P1 -p1
+%patch -P1 -p1
 
 %patch -P3 -p1
 %patch -P4 -p1
