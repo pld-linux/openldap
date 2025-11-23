@@ -341,6 +341,19 @@ Instale este pacote se você desejar executar um servidor OpenLDAP.
 %description servers -l uk.UTF-8
 Сервера (демони), що поставляються з LDAP.
 
+%package backend-asyncmeta
+Summary:	Asyncmeta backend to OpenLDAP server
+Summary(pl.UTF-8):	Backend Asyncmeta do serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers = %{version}-%{release}
+
+%description backend-asyncmeta
+Asyncmeta backend to slapd, the OpenLDAP server.
+
+%description backend-asyncmeta -l pl.UTF-8
+Backend Asyncmeta do slapd - serwera OpenLDAP.
+
 %package backend-dnssrv
 Summary:	DNS SRV backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend DNS SRV do serwera OpenLDAP
@@ -1231,6 +1244,7 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-ldap=mod \
 	--enable-mdb=mod \
 	--enable-meta=mod \
+	--enable-asyncmeta=mod \
 	--enable-null \
 	--enable-passwd=mod \
 %if %{with perl}
@@ -1460,6 +1474,12 @@ fi \
 if [ "`/usr/bin/getent passwd slapd | cut -d: -f6`" = "/var/lib/openldap-ldbm" ]; then
 	/usr/sbin/usermod -d /var/lib/openldap-data slapd
 fi
+
+%post backend-asyncmeta
+%ldap_module_add back_asyncmeta.la
+
+%preun backend-asyncmeta
+%ldap_module_remove back_asyncmeta.la
 
 %post backend-dnssrv
 %ldap_module_add back_dnssrv.la
@@ -1905,7 +1925,6 @@ fi
 %{schemadir}/pmi.ldif
 %{schemadir}/pmi.schema
 %{_mandir}/man5/slapd.*.5*
-%{_mandir}/man5/slapd-asyncmeta.5*
 %{_mandir}/man5/slapd-config.5*
 %{_mandir}/man5/slapd-ldif.5*
 %{_mandir}/man5/slapd-monitor.5*
@@ -1919,6 +1938,12 @@ fi
 %{_mandir}/man5/slapo-remoteauth.5*
 %{_mandir}/man5/slappw-argon2.5*
 %{_mandir}/man8/slap*.8*
+
+%files backend-asyncmeta
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/openldap/back_asyncmeta*.so*
+%{_libdir}/openldap/back_asyncmeta.la
+%{_mandir}/man5/slapd-asyncmeta.5*
 
 %files backend-dnssrv
 %defattr(644,root,root,755)
