@@ -3,7 +3,6 @@
 %bcond_with	exchange	# hacked version of library for Evolution Exchange support
 %bcond_with	krb5		# build with MIT Kerberos instead of Heimdal
 %bcond_without	odbc		# disable sql backend
-%bcond_with	ndb		# enable MySQL NDB Cluster backend
 %bcond_without	perl		# disable perl backend
 %bcond_without	sasl		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
@@ -73,7 +72,6 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2
 BuildRequires:	libwrap-devel
 %{?with_system_lmdb:BuildRequires:	lmdb-devel >= 0.9.22}
-%{?with_ndb:BuildRequires:	mysql-devel}
 %{?with_slp:BuildRequires:	openslp-devel}
 BuildRequires:	openssl-devel >= 1.1.1
 %{?with_perl:BuildRequires:	perl-devel}
@@ -395,19 +393,6 @@ Meta backend to slapd, the OpenLDAP server.
 
 %description backend-meta -l pl.UTF-8
 Backend Meta do slapd - serwera OpenLDAP.
-
-%package backend-ndb
-Summary:	MySQL NDB Cluster backend to OpenLDAP server
-Summary(pl.UTF-8):	Backend MySQL NDB Cluster do serwera OpenLDAP
-Group:		Networking/Daemons
-Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-
-%description backend-ndb
-MySQL NDB Cluster backend to slapd, the OpenLDAP server.
-
-%description backend-ndb -l pl.UTF-8
-Backend MySQL NDB Cluster do slapd do serwera OpenLDAP.
 
 %package backend-passwd
 Summary:	/etc/passwd backend to OpenLDAP server
@@ -1227,9 +1212,7 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-dynacl \
 	--enable-aci \
 	--enable-crypt \
-	--enable-lmpasswd \
 	--enable-modules \
-	--enable-rewrite \
 	--enable-rlookups \
 	--enable-slapi \
 %if %{with sasl}
@@ -1248,9 +1231,6 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-ldap=mod \
 	--enable-mdb=mod \
 	--enable-meta=mod \
-%if %{with ndb}
-	--enable-ndb=mod \
-%endif
 	--enable-null \
 	--enable-passwd=mod \
 %if %{with perl}
@@ -1504,12 +1484,6 @@ fi
 
 %preun backend-meta
 %ldap_module_remove back_meta.la
-
-%post backend-ndb
-%ldap_module_add back_ndb.la
-
-%preun backend-ndb
-%ldap_module_remove back_ndb.la
 
 %post backend-passwd
 %ldap_module_add back_passwd.la
@@ -1972,15 +1946,6 @@ fi
 %attr(755,root,root) %{_libdir}/openldap/back_meta*.so*
 %{_libdir}/openldap/back_meta.la
 %{_mandir}/man5/slapd-meta.5*
-
-%if %{with ndb}
-%files backend-ndb
-%defattr(644,root,root,755)
-%doc servers/slapd/back-ndb/README
-%attr(755,root,root) %{_libdir}/openldap/back_ndb*.so*
-%{_libdir}/openldap/back_ndb.la
-%{_mandir}/man5/slapd-ndb.5*
-%endif
 
 %files backend-passwd
 %defattr(644,root,root,755)
