@@ -7,6 +7,7 @@
 %bcond_without	perl		# disable perl backend
 %bcond_without	sasl		# don't build cyrus sasl support
 %bcond_without	slp		# disable SLP support
+%bcond_without	systemd		# systemd service notification
 
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es.UTF-8):	Clientes y servidor para LDAP
@@ -55,7 +56,7 @@ Patch26:	%{name}-slapd_for_symbols_check.patch
 # Patch for the evolution library
 Patch100:	%{name}-ntlm.diff
 URL:		https://www.openldap.org/
-BuildRequires:	autoconf >= 2.59
+BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake
 %if %{with sasl}
 BuildRequires:	cyrus-sasl-devel >= 2.1.15
@@ -74,11 +75,13 @@ BuildRequires:	libwrap-devel
 %{?with_system_lmdb:BuildRequires:	lmdb-devel >= 0.9.22}
 %{?with_ndb:BuildRequires:	mysql-devel}
 %{?with_slp:BuildRequires:	openslp-devel}
-BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	openssl-devel >= 1.1.1
 %{?with_perl:BuildRequires:	perl-devel}
+BuildRequires:	pkgconfig >= 1:0.29
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 2.043
 BuildRequires:	sed >= 4.0
+%{?with_systemd:BuildRequires:	systemd-devel}
 BuildRequires:	uname(release) >= 2.6
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Requires:	%{name}-libs = %{version}-%{release}
@@ -157,7 +160,7 @@ Summary(uk.UTF-8):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel >= 2.1.15}
-Requires:	openssl-devel >= 0.9.7c
+Requires:	openssl-devel >= 1.1.1
 %if %{with krb5}
 Requires:	krb5-devel
 %else
@@ -1203,7 +1206,7 @@ cd evo-%{name}
 %endif
 
 %build
-CPPFLAGS="-I/usr/include/ncurses"
+CPPFLAGS="%{rpmcppflags}"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC -D_GNU_SOURCE"
 CXXFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
 LDFLAGS="%{rpmcflags} %{rpmldflags}"
@@ -1263,7 +1266,8 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--with-threads \
 	--with-tls \
 	--with-yielding-select \
-	--with-mp=longlong
+	--with-mp=longlong \
+	%{__with_without systemd}
 
 %{__make} -j1 depend
 %{__make}
