@@ -1,7 +1,7 @@
 --- openldap-2.6.10/contrib/ldapc++/configure.ac~	2025-05-22 19:56:21.000000000 +0200
 +++ openldap-2.6.10/contrib/ldapc++/configure.ac	2025-08-01 22:36:38.103964979 +0200
 @@ -10,13 +10,13 @@ Restrictions apply, see COPYRIGHT and LI
- AC_REVISION([$Id: 2301b679cf9abbd19de02c85ece6e712e070107a $])
+ AC_REVISION([$Id: ee3c792e83596e61ae611327761b22bfa2bc277a $])
  AC_INIT([ldapcpplib],[ ],[http://www.openldap.org/its/ ])
  AC_CONFIG_SRCDIR(src/LDAPConnection.h)
 -AM_INIT_AUTOMAKE(foreign)
