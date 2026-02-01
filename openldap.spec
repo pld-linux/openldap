@@ -82,7 +82,7 @@ BuildRequires:	sed >= 4.0
 %{?with_systemd:BuildRequires:	systemd-devel}
 BuildRequires:	uname(release) >= 2.6
 %{?with_odbc:BuildRequires:	unixODBC-devel}
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 Obsoletes:	openldap-clients
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -156,13 +156,13 @@ Summary(pt_BR.UTF-8):	Bibliotecas de desenvolvimento e arquivos de inclusão par
 Summary(ru.UTF-8):	Файлы для программирования с LDAP
 Summary(uk.UTF-8):	Файли для програмування з LDAP
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
-%{?with_sasl:Requires:	cyrus-sasl-devel >= 2.1.15}
-Requires:	openssl-devel >= 1.1.1
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
+%{?with_sasl:Requires:	cyrus-sasl-devel%{?_isa} >= 2.1.15}
+Requires:	openssl-devel%{?_isa} >= 1.1.1
 %if %{with krb5}
-Requires:	krb5-devel
+Requires:	krb5-devel%{?_isa}
 %else
-Requires:	heimdal-devel
+Requires:	heimdal-devel%{?_isa}
 %endif
 %{!?with_exchange:Obsoletes:	openldap-evolution-devel}
 
@@ -196,7 +196,7 @@ Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com openldap
 Summary(ru.UTF-8):	Статические библиотеки LDAP
 Summary(uk.UTF-8):	Статичні бібліотеки LDAP
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
 
 %description static
 LDAP static libraries.
@@ -219,7 +219,7 @@ LDAP.
 Summary:	Development files for building OpenLDAP modules
 Summary(pl.UTF-8):	Pliki służące do budowania modułów OpenLDAP
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
 
 %description headers
 Header files for developing OpenLDAP modules.
@@ -231,7 +231,7 @@ Pliki nagłówkowe konieczne do rozwoju modułów OpenLDAP.
 Summary:	LDAP NTLM hack for the evolution-exchange
 Summary(pl.UTF-8):	Hack NTLM dla pakietu evolution-exchange
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
 
 %description evolution-devel
 LDAP NTLM hack for the evolution-exchange.
@@ -243,7 +243,7 @@ Hack NTLM dla pakietu evolution-exchange.
 Summary:	LDAPv3 C++ Class Library
 Summary(pl.UTF-8):	Biblioteka klas C++ LDAPv3
 Group:		Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description ldapc++
 LDAPv3 C++ Class Library
@@ -255,7 +255,7 @@ Biblioteka klas C++ LDAPv3.
 Summary:	LDAPv3 C++ Class Library development files
 Summary(pl.UTF-8):	Pliki dla programistów C++ LDAPv3
 Group:		Libraries
-Requires:	%{name}-ldapc++ = %{version}-%{release}
+Requires:	%{name}-ldapc++%{?_isa} = %{version}-%{release}
 
 %description ldapc++-devel
 LDAPv3 C++ Class Library development files.
@@ -267,8 +267,8 @@ Pliki dla programistów C++ LDAPv3.
 Summary:	Static LDAPv3 C++ Class Library
 Summary(pl.UTF-8):	Biblioteka statyczna klas C++ LDAPv3
 Group:		Libraries
-Requires:	%{name}-ldapc++-devel = %{version}-%{release}
-Requires:	libstdc++-devel
+Requires:	%{name}-ldapc++-devel%{?_isa} = %{version}-%{release}
+Requires:	libstdc++-devel%{?_isa}
 
 %description ldapc++-static
 Static LDAPv3 C++ Class Library.
@@ -293,11 +293,11 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(pre):	textutils
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 Requires:	/sbin/chkconfig
 Requires:	rc-scripts
 Requires:	uname(release) >= 2.6
-Suggests:	%{name}-backend-mdb = %{version}-%{release}
+Suggests:	%{name}-backend-mdb%{?_isa} = %{version}-%{release}
 Provides:	group(slapd)
 Provides:	user(slapd)
 Obsoletes:	openldap-backend-ldbm
@@ -346,7 +346,7 @@ Summary:	Asyncmeta backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend Asyncmeta do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-asyncmeta
 Asyncmeta backend to slapd, the OpenLDAP server.
@@ -359,7 +359,7 @@ Summary:	DNS SRV backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend DNS SRV do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-dnssrv
 DNS SRV backend to slapd, the OpenLDAP server.
@@ -372,7 +372,7 @@ Summary:	LDAP backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend LDAP do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-ldap
 LDAP backend to slapd, the OpenLDAP server.
@@ -385,8 +385,8 @@ Summary:	MDB (Memory-Mapped DB) backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend MDB (Memory-Mapped DB) do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
-%{?with_system_lmdb:Requires:	lmdb-libs >= 0.9.22}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
+%{?with_system_lmdb:Requires:	lmdb-libs%{?_isa} >= 0.9.22}
 
 %description backend-mdb
 MDB (Memory-Mapped DB) backend to slapd, the OpenLDAP server.
@@ -399,7 +399,7 @@ Summary:	Meta backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend Meta do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-meta
 Meta backend to slapd, the OpenLDAP server.
@@ -412,7 +412,7 @@ Summary:	/etc/passwd backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend /etc/passwd do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-passwd
 /etc/passwd backend to slapd, the OpenLDAP server.
@@ -425,7 +425,7 @@ Summary:	Perl backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend Perl do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-perl
 Perl backend to slapd, the OpenLDAP server.
@@ -438,8 +438,8 @@ Summary:	Relay backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend przekazujący do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-overlay-rwm = %{version}-%{release}
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-overlay-rwm%{?_isa} = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-relay
 The primary purpose of this backend is to map a naming context defined
@@ -458,7 +458,7 @@ Summary:	Socket backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend Socket do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-sock
 Socket backend to slapd, the OpenLDAP server.
@@ -471,7 +471,7 @@ Summary:	SQL backend to OpenLDAP server
 Summary(pl.UTF-8):	Backend SQL do serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description backend-sql
 SQL backend to slapd, the OpenLDAP server.
@@ -484,7 +484,7 @@ Summary:	Accesslog overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka accesslog dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-accesslog
 Accesslog overlay for OpenLDAP server.
@@ -497,7 +497,7 @@ Summary:	Auditlog overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka auditog dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-auditlog
 The Audit Logging overlay can be used to record all changes on a given
@@ -516,7 +516,7 @@ Summary:	Collect overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka collect dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-collect
 The collect overlay is used to provide a relatively coarse
@@ -530,7 +530,7 @@ Summary:	Constraint overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka constraint dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-constraint
 This overlay limits the values which can be placed into an attribute,
@@ -549,7 +549,7 @@ Summary:	Dynamic Directory Services overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka DDS dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-dds
 The dds overlay implements dynamic objects as per RFC 2589. The name
@@ -567,7 +567,7 @@ Summary:	Dereference Control overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Dereference Control dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-deref
 Dereference Control overlay for OpenLDAP server.
@@ -580,7 +580,7 @@ Summary:	Dyngroup overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka dynamicznych grup dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-dyngroup
 This overlay extends the Compare operation to detect members of a
@@ -601,7 +601,7 @@ Summary:	Dynnamic list overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka dynamicznych list dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-dynlist
 The dynlist overlay allows expansion of dynamic groups and more.
@@ -615,7 +615,7 @@ Summary:	Reverse Group Membership overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka memberof dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-memberof
 The memberof overlay allows automatic reverse group membership
@@ -634,7 +634,7 @@ Summary:	Proxy cache overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka proxy cache dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-pcache
 The proxy cache overlay allows caching of LDAP search requests
@@ -649,7 +649,7 @@ Summary:	Password Policy overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka do polityki haseł dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-ppolicy
 The ppolicy overlay is an implementation of the most recent IETF
@@ -668,7 +668,7 @@ Summary:	Referential Integrity overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka sprawdzają integralność odwołań dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-refint
 The Referential Integrity overlay can be used to maintain the
@@ -683,7 +683,7 @@ Summary:	Return code overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka obsługująca zwracane wartości dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-retcode
 The retcode overlay to slapd is useful to test the behavior of clients
@@ -701,7 +701,7 @@ Summary:	Rewrite/remap overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka mapująca dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-rwm
 The rwm overlay performs basic DN/data rewrite and
@@ -722,7 +722,7 @@ Summary:	Sequenced modifies overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka seqmod dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-seqmod
 This overlay serializes concurrent attempts to modify a single entry.
@@ -736,7 +736,7 @@ Summary:	Server Side Sorting and Virtual List View overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka sortowania po stronie serwera i wirtualnego widoku list dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-sssvlv
 This overlay implements the LDAP Server Side Sorting (RFC2891) control
@@ -758,7 +758,7 @@ Summary:	Syncrepl Provider overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Syncrepl Provider dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-syncprov
 The Syncrepl Provider overlay implements the provider-side support for
@@ -779,7 +779,7 @@ Summary:	Translucent Proxy overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Translucent Proxy dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-translucent
 The Translucent Proxy overlay can be used with a backend database such
@@ -800,7 +800,7 @@ Summary:	Uniqueness overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka sprawdzająca unikatowość dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-unique
 The Attribute Uniqueness overlay can be used to enforce the uniqueness
@@ -815,7 +815,7 @@ Summary:	Valsort overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka valsort dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-valsort
 This overlay sorts the values of multi-valued attributes when
@@ -832,7 +832,7 @@ Summary:	Addpartial overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka addpartial dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-addpartial
 This overlay intercepts ADD requests, determines if a change has
@@ -856,7 +856,7 @@ Summary:	All Operational Attributes overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka All Operational Attributes dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-allop
 The All Operational Attributes overlay is designed to allow slapd to
@@ -875,7 +875,7 @@ Summary:	Allowed Attributes overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Allowed Attributes dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-allowed
 This overlay returns the attributes required/allowed by the
@@ -895,7 +895,7 @@ Summary:	Automatic Group overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Automatic Group dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-autogroup
 The autogroup overlay allows automated updates of group memberships
@@ -911,7 +911,7 @@ Summary:	Attribute Cloak overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Attribute Cloak dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-cloak
 The cloak overlay allows the server to hide specific attributes,
@@ -932,7 +932,7 @@ Summary:	Deny Operations overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka zabraniająca wykonania operacji dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-denyop
 This overlay provides a quick'n'easy way to deny selected operations
@@ -951,7 +951,7 @@ Summary:	DSA Schema overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka DSA Schema dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-dsaschema
 This overlay permits the loading of DSA-specific schema from
@@ -966,7 +966,7 @@ Summary:	Duplicate Entry overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Duplicate Entry dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-dupent
 LDAP Control for a Duplicate Entry Representation of Search Results
@@ -983,7 +983,7 @@ Summary:	Kinit overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka kinit dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-kinit
 This overlay requests a Kerberos TGT and keeps it renewed as long as
@@ -998,7 +998,7 @@ Summary:	Last Bind overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Last Bind dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-lastbind
 The lastbind overlay allows recording the timestamp of the last
@@ -1016,7 +1016,7 @@ Summary:	Last Modification overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Last Modification dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-lastmod
 The lastmod overlay creates a service entry rooted at the suffix of
@@ -1035,7 +1035,7 @@ Summary:	Noopsrch overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka noopsrch dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-noopsrch
 LDAP Control that counts entries a search would return.
@@ -1048,7 +1048,7 @@ Summary:	Remove Null Operations overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Remove Null Operations dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-nops
 Some broken client tend to implement modifications as replace
@@ -1069,7 +1069,7 @@ Summary:	NSS overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka NSS dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 Provides:	nslcd
 Conflicts:	openldap-schema-pam_ldap
 
@@ -1088,7 +1088,7 @@ Summary:	ProxyOld overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka proxyOld dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-proxyOld
 This overlay provides support for the obsolete
@@ -1108,7 +1108,7 @@ Summary:	Samba4 overlays for OpenLDAP server
 Summary(pl.UTF-8):	Nakładki Samba4 dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-samba4
 This package contains overlays specific to samba4 LDAP backend. pguid
@@ -1133,7 +1133,7 @@ Summary:	smbk5pwd overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka smbk5pwd dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-smbk5pwd
 smbk5pwd overlay extends the PasswordModify Extended Operation to
@@ -1149,7 +1149,7 @@ Summary:	Trace overlay for OpenLDAP server
 Summary(pl.UTF-8):	Nakładka Trace dla serwera OpenLDAP
 Group:		Networking/Daemons
 Requires(post,preun):	sed >= 4.0
-Requires:	%{name}-servers = %{version}-%{release}
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
 
 %description overlay-trace
 Overlay to trace overlay invocation.
