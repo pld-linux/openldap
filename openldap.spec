@@ -1,6 +1,5 @@
 #
 # Conditional build:
-%bcond_with	exchange	# hacked version of library for Evolution Exchange support
 %bcond_with	krb5		# MIT Kerberos instead of Heimdal
 %bcond_without	odbc		# sql backend (deprecated)
 %bcond_without	perl		# perl backend (deprecated)
@@ -52,8 +51,6 @@ Patch22:	%{name}-am.patch
 Patch24:	%{name}-default_cacert_path.patch
 Patch25:	%{name}-system-lmdb.patch
 Patch26:	%{name}-slapd_for_symbols_check.patch
-# Patch for the evolution library
-Patch100:	%{name}-ntlm.diff
 URL:		https://www.openldap.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake
@@ -91,9 +88,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_libexecdir	%{_sbindir}
 %define		_localstatedir	/var/lib
 %define		schemadir	%{_datadir}/openldap/schema
-%define		evolution_exchange_prefix	%{_libdir}/evolution-openldap
-%define		evolution_exchange_includedir	%{evolution_exchange_prefix}/include
-%define		evolution_exchange_libdir	%{evolution_exchange_prefix}/lib
 
 %description
 LDAP servers and clients, as well as interfaces to other protocols.
@@ -164,7 +158,7 @@ Requires:	krb5-devel%{?_isa}
 %else
 Requires:	heimdal-devel%{?_isa}
 %endif
-%{!?with_exchange:Obsoletes:	openldap-evolution-devel}
+Obsoletes:	openldap-evolution-devel < 2.5
 
 %description devel
 Header files and libraries for developing applications that use LDAP.
@@ -226,18 +220,6 @@ Header files for developing OpenLDAP modules.
 
 %description headers -l pl.UTF-8
 Pliki nagłówkowe konieczne do rozwoju modułów OpenLDAP.
-
-%package evolution-devel
-Summary:	LDAP NTLM hack for the evolution-exchange
-Summary(pl.UTF-8):	Hack NTLM dla pakietu evolution-exchange
-Group:		Development/Libraries
-Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
-
-%description evolution-devel
-LDAP NTLM hack for the evolution-exchange.
-
-%description evolution-devel -l pl.UTF-8
-Hack NTLM dla pakietu evolution-exchange.
 
 %package ldapc++
 Summary:	LDAPv3 C++ Class Library
@@ -1195,19 +1177,6 @@ Nakładka śledząca wywołania nakładek.
 %endif
 cd ..
 
-%if %{with exchange}
-# Set up a build tree for a static version of libldap with the hooks for the
-# non-standard NTLM bind type which is needed to connect to Win2k GC servers
-# (Win2k3 supports SASL with DIGEST-MD5, so this shouldn't be needed for those
-# servers, though as of version 1.4 the exchange doesn't try SASL first).
-if ! cp -al %{name} evo-%{name}; then
-	rm -rf evo-%{name}
-	cp -a %{name} evo-%{name}
-fi
-cd evo-%{name}
-%patch -P100 -p0
-%endif
-
 %build
 CPPFLAGS="%{rpmcppflags}"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC -D_GNU_SOURCE"
@@ -1291,75 +1260,12 @@ cd contrib/ldapc++
 %{__make}
 %endif
 
-%if %{with exchange}
-# Build evolution-specific clients just as we would normal clients,
-# except with a different installation directory in mind
-# and no shared libraries.
-cd ../../../evo-%{name}
-
-%{__libtoolize} --install
-%{__aclocal}
-%{__autoconf}
-%configure \
-	--includedir=%{evolution_exchange_includedir} \
-	--libdir=%{evolution_exchange_libdir} \
-	--disable-dynamic \
-	--disable-slapd \
-	--disable-shared \
-	--enable-static \
-	--enable-syslog \
-	--enable-ipv6 \
-	--enable-local \
-	--enable-dynacl \
-	--enable-aci \
-	--enable-crypt \
-	--enable-lmpasswd \
-	--enable-modules \
-	--enable-rewrite \
-	--enable-rlookups \
-	--enable-slapi \
-%if %{with sasl}
-	--with-cyrus-sasl \
-	--enable-spasswd \
-%else
-	--without-cyrus-sasl \
-%endif
-%if %{with slp}
-	--enable-slp \
-%else
-	--disable-slp \
-%endif
-	--enable-wrappers \
-	--enable-backends=no \
-	--enable-overlays=no \
-%if %{with odbc}
-	--with-odbc=unixodbc \
-%endif
-	--with-threads \
-	--with-tls \
-	--with-yielding-select \
-	--with-mp=longlong
-#	--with-gssapi currently not supported
-
-%{__make} -j1 depend
-%{__make}
-%endif
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d},/var/lib/openldap-data} \
 	$RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{schemadir}} \
 	$RPM_BUILD_ROOT/var/run/{slapd,nslcd} \
 	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
-
-%if %{with exchange}
-# Install evolution hack first and remove everything but devel stuff
-%{__make} -C evo-%{name} install \
-	DESTDIR=$RPM_BUILD_ROOT
-%{__rm} -r $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_bindir},%{_mandir}}/*
-%{__rm} $RPM_BUILD_ROOT%{evolution_exchange_libdir}/*.la
-cp -p %{SOURCE100} $RPM_BUILD_ROOT%{evolution_exchange_prefix}/README.evolution
-%endif
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -1840,17 +1746,6 @@ fi
 %files headers
 %defattr(644,root,root,755)
 %{_includedir}/%{name}
-
-%if %{with exchange}
-%files evolution-devel
-%defattr(644,root,root,755)
-%dir %{evolution_exchange_prefix}
-%dir %{evolution_exchange_includedir}
-%dir %{evolution_exchange_libdir}
-%{evolution_exchange_prefix}/README*
-%{evolution_exchange_includedir}/*.h
-%{evolution_exchange_libdir}/*.a
-%endif
 
 %if %{with sasl}
 %files ldapc++
