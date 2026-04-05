@@ -1,11 +1,11 @@
 #
 # Conditional build:
 %bcond_with	exchange	# hacked version of library for Evolution Exchange support
-%bcond_with	krb5		# build with MIT Kerberos instead of Heimdal
-%bcond_without	odbc		# disable sql backend
-%bcond_without	perl		# disable perl backend
-%bcond_without	sasl		# don't build cyrus sasl support
-%bcond_without	slp		# disable SLP support
+%bcond_with	krb5		# MIT Kerberos instead of Heimdal
+%bcond_without	odbc		# sql backend (deprecated)
+%bcond_without	perl		# perl backend (deprecated)
+%bcond_without	sasl		# cyrus sasl support
+%bcond_without	slp		# SLP support
 %bcond_without	systemd		# systemd service notification
 
 Summary:	Lightweight Directory Access Protocol clients/servers
@@ -15,12 +15,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.6.12
+Version:	2.6.13
 Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	https://www.openldap.org/software/download/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	0f2dc1afef5b39287dd0a4a294a261d1
+# Source0-md5:	761be850c8ff85dbf5031af7c6c6da44
 
 Source2:	ldap.init
 Source3:	%{name}.sysconfig
@@ -1801,18 +1801,18 @@ fi
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/openldap
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/ldap.conf
-%attr(755,root,root) %{_libdir}/liblber.so.*.*.*
-%attr(755,root,root) %{_libdir}/libldap.so.*.*.*
-%attr(755,root,root) %{_libdir}/libslapi.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/liblber.so.2
-%attr(755,root,root) %ghost %{_libdir}/libldap.so.2
-%attr(755,root,root) %ghost %{_libdir}/libslapi.so.2
+%{_libdir}/liblber.so.*.*.*
+%ghost %{_libdir}/liblber.so.2
+%{_libdir}/libldap.so.*.*.*
+%ghost %{_libdir}/libldap.so.2
+%{_libdir}/libslapi.so.*.*.*
+%ghost %{_libdir}/libslapi.so.2
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/liblber.so
-%attr(755,root,root) %{_libdir}/libldap.so
-%attr(755,root,root) %{_libdir}/libslapi.so
+%{_libdir}/liblber.so
+%{_libdir}/libldap.so
+%{_libdir}/libslapi.so
 %{_libdir}/liblber.la
 %{_libdir}/libldap.la
 %{_libdir}/libslapi.la
@@ -1855,12 +1855,12 @@ fi
 %if %{with sasl}
 %files ldapc++
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libldapcpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libldapcpp.so.0
+%{_libdir}/libldapcpp.so.*.*.*
+%ghost %{_libdir}/libldapcpp.so.0
 
 %files ldapc++-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libldapcpp.so
+%{_libdir}/libldapcpp.so
 %{_libdir}/libldapcpp.la
 %{_includedir}/ldapc++
 
@@ -1880,6 +1880,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
+%{systemdunitdir}/slapd.service
 %{systemdtmpfilesdir}/slapd.conf
 %attr(770,root,slapd) %{_var}/run/slapd
 #%dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
@@ -1887,15 +1888,15 @@ fi
 
 # no external deps
 %{_libdir}/%{name}/autoca.la
-%attr(755,root,root) %{_libdir}/%{name}/autoca.so*
+%{_libdir}/%{name}/autoca.so*
 %{_libdir}/%{name}/homedir.la
-%attr(755,root,root) %{_libdir}/%{name}/homedir.so*
+%{_libdir}/%{name}/homedir.so*
 %{_libdir}/%{name}/nestgroup.la
-%attr(755,root,root) %{_libdir}/%{name}/nestgroup.so*
+%{_libdir}/%{name}/nestgroup.so*
 %{_libdir}/%{name}/otp.la
-%attr(755,root,root) %{_libdir}/%{name}/otp.so*
+%{_libdir}/%{name}/otp.so*
 %{_libdir}/%{name}/remoteauth.la
-%attr(755,root,root) %{_libdir}/%{name}/remoteauth.so*
+%{_libdir}/%{name}/remoteauth.so*
 
 %dir %{schemadir}
 %{schemadir}/README
@@ -1946,20 +1947,20 @@ fi
 
 %files backend-asyncmeta
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_asyncmeta*.so*
+%{_libdir}/openldap/back_asyncmeta.so*
 %{_libdir}/openldap/back_asyncmeta.la
 %{_mandir}/man5/slapd-asyncmeta.5*
 
 %files backend-dnssrv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_dnssrv*.so*
+%{_libdir}/openldap/back_dnssrv.so*
 %{_libdir}/openldap/back_dnssrv.la
 %{_mandir}/man5/slapd-dnssrv.5*
 
 %files backend-ldap
 %defattr(644,root,root,755)
 %doc servers/slapd/back-ldap/TODO.proxy
-%attr(755,root,root) %{_libdir}/openldap/back_ldap*.so*
+%{_libdir}/openldap/back_ldap.so*
 %{_libdir}/openldap/back_ldap.la
 %{_mandir}/man5/slapd-ldap.5*
 %{_mandir}/man5/slapo-chain.5*
@@ -1967,19 +1968,19 @@ fi
 
 %files backend-mdb
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_mdb*.so*
+%{_libdir}/openldap/back_mdb.so*
 %{_libdir}/openldap/back_mdb.la
 %{_mandir}/man5/slapd-mdb.5*
 
 %files backend-meta
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_meta*.so*
+%{_libdir}/openldap/back_meta.so*
 %{_libdir}/openldap/back_meta.la
 %{_mandir}/man5/slapd-meta.5*
 
 %files backend-passwd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_passwd*.so*
+%{_libdir}/openldap/back_passwd.so*
 %{_libdir}/openldap/back_passwd.la
 %{_mandir}/man5/slapd-passwd.5*
 
@@ -1988,7 +1989,7 @@ fi
 %defattr(644,root,root,755)
 %doc servers/slapd/back-perl/*.pm
 %doc servers/slapd/back-perl/README
-%attr(755,root,root) %{_libdir}/openldap/back_perl*.so*
+%{_libdir}/openldap/back_perl.so*
 %{_libdir}/openldap/back_perl.la
 %{_mandir}/man5/slapd-perl.5*
 %endif
@@ -1996,13 +1997,13 @@ fi
 %files backend-relay
 %defattr(644,root,root,755)
 %doc servers/slapd/back-relay/README
-%attr(755,root,root) %{_libdir}/openldap/back_relay*.so*
+%{_libdir}/openldap/back_relay.so*
 %{_libdir}/openldap/back_relay.la
 %{_mandir}/man5/slapd-relay.5*
 
 %files backend-sock
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/back_sock*.so*
+%{_libdir}/openldap/back_sock.so*
 %{_libdir}/openldap/back_sock.la
 %{_mandir}/man5/slapd-sock.5*
 %{_mandir}/man5/slapo-sock.5*
@@ -2012,126 +2013,126 @@ fi
 %defattr(644,root,root,755)
 %doc servers/slapd/back-sql/docs/*
 %doc servers/slapd/back-sql/rdbms_depend
-%attr(755,root,root) %{_libdir}/openldap/back_sql*.so*
+%{_libdir}/openldap/back_sql.so*
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
 %endif
 
 %files overlay-accesslog
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/accesslog*.so*
+%{_libdir}/openldap/accesslog.so*
 %{_libdir}/openldap/accesslog.la
 %{_mandir}/man5/slapo-accesslog.5*
 
 %files overlay-auditlog
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/auditlog*.so*
+%{_libdir}/openldap/auditlog.so*
 %{_libdir}/openldap/auditlog.la
 %{_mandir}/man5/slapo-auditlog.5*
 
 %files overlay-collect
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/collect*.so*
+%{_libdir}/openldap/collect.so*
 %{_libdir}/openldap/collect.la
 %{_mandir}/man5/slapo-collect.5*
 
 %files overlay-constraint
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/constraint*.so*
+%{_libdir}/openldap/constraint.so*
 %{_libdir}/openldap/constraint.la
 %{_mandir}/man5/slapo-constraint.5*
 
 %files overlay-dds
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/dds*.so*
+%{_libdir}/openldap/dds.so*
 %{_libdir}/openldap/dds.la
 %{_mandir}/man5/slapo-dds.5*
 
 %files overlay-deref
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/deref*.so*
+%{_libdir}/openldap/deref.so*
 %{_libdir}/openldap/deref.la
 
 %files overlay-dyngroup
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/dyngroup*.so*
+%{_libdir}/openldap/dyngroup.so*
 %{_libdir}/openldap/dyngroup.la
 %{_mandir}/man5/slapo-dyngroup.5*
 
 %files overlay-dynlist
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/dynlist*.so*
+%{_libdir}/openldap/dynlist.so*
 %{_libdir}/openldap/dynlist.la
 %{_mandir}/man5/slapo-dynlist.5*
 
 %files overlay-memberof
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/memberof*.so*
+%{_libdir}/openldap/memberof.so*
 %{_libdir}/openldap/memberof.la
 %{_mandir}/man5/slapo-memberof.5*
 
 %files overlay-pcache
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/pcache*.so*
+%{_libdir}/openldap/pcache.so*
 %{_libdir}/openldap/pcache.la
 %{_mandir}/man5/slapo-pcache.5*
 
 %files overlay-ppolicy
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/ppolicy*.so*
+%{_libdir}/openldap/ppolicy.so*
 %{_libdir}/openldap/ppolicy.la
 %{_mandir}/man5/slapo-ppolicy.5*
 
 %files overlay-refint
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/refint*.so*
+%{_libdir}/openldap/refint.so*
 %{_libdir}/openldap/refint.la
 %{_mandir}/man5/slapo-refint.5*
 
 %files overlay-retcode
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/retcode*.so*
+%{_libdir}/openldap/retcode.so*
 %{_libdir}/openldap/retcode.la
 %{_mandir}/man5/slapo-retcode.5*
 
 %files overlay-rwm
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/rwm*.so*
+%{_libdir}/openldap/rwm.so*
 %{_libdir}/openldap/rwm.la
 %{_mandir}/man5/slapo-rwm.5*
 
 %files overlay-seqmod
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/seqmod*.so*
+%{_libdir}/openldap/seqmod.so*
 %{_libdir}/openldap/seqmod.la
 
 %files overlay-sssvlv
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/sssvlv*.so*
+%{_libdir}/openldap/sssvlv.so*
 %{_libdir}/openldap/sssvlv.la
 %{_mandir}/man5/slapo-sssvlv.5*
 
 %files overlay-syncprov
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/syncprov*.so*
+%{_libdir}/openldap/syncprov.so*
 %{_libdir}/openldap/syncprov.la
 %{_mandir}/man5/slapo-syncprov.5*
 
 %files overlay-translucent
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/translucent*.so*
+%{_libdir}/openldap/translucent.so*
 %{_libdir}/openldap/translucent.la
 %{_mandir}/man5/slapo-translucent.5*
 
 %files overlay-unique
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/unique*.so*
+%{_libdir}/openldap/unique.so*
 %{_libdir}/openldap/unique.la
 %{_mandir}/man5/slapo-unique.5*
 
 %files overlay-valsort
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/valsort*.so*
+%{_libdir}/openldap/valsort.so*
 %{_libdir}/openldap/valsort.la
 %{_mandir}/man5/slapo-valsort.5*
 
@@ -2140,86 +2141,86 @@ fi
 %files overlay-addpartial
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/addpartial/README
-%attr(755,root,root) %{_libdir}/openldap/addpartial-overlay*.so*
+%{_libdir}/openldap/addpartial-overlay.so*
 %{_libdir}/openldap/addpartial-overlay.la
 
 %files overlay-allop
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/allop/README
-%attr(755,root,root) %{_libdir}/openldap/allop*.so*
+%{_libdir}/openldap/allop.so*
 %{_libdir}/openldap/allop.la
 %{_mandir}/man5/slapo-allop.5*
 
 %files overlay-allowed
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/allowed/README
-%attr(755,root,root) %{_libdir}/openldap/allowed*.so*
+%{_libdir}/openldap/allowed.so*
 %{_libdir}/openldap/allowed.la
 
 %files overlay-autogroup
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/autogroup/README
-%attr(755,root,root) %{_libdir}/openldap/autogroup*.so*
+%{_libdir}/openldap/autogroup.so*
 %{_libdir}/openldap/autogroup.la
 %{_mandir}/man5/slapo-autogroup.5*
 
 %files overlay-cloak
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/cloak*.so*
+%{_libdir}/openldap/cloak.so*
 %{_libdir}/openldap/cloak.la
 %{_mandir}/man5/slapo-cloak.5*
 
 %files overlay-denyop
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/denyop*.so*
+%{_libdir}/openldap/denyop.so*
 %{_libdir}/openldap/denyop.la
 
 %files overlay-dsaschema
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/dsaschema/README
-%attr(755,root,root) %{_libdir}/openldap/dsaschema*.so*
+%{_libdir}/openldap/dsaschema.so*
 %{_libdir}/openldap/dsaschema.la
 
 %files overlay-dupent
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/dupent*.so*
+%{_libdir}/openldap/dupent.so*
 %{_libdir}/openldap/dupent.la
 
 %if %{with krb5}
 %files overlay-kinit
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/kinit/README
-%attr(755,root,root) %{_libdir}/openldap/kinit*.so*
+%{_libdir}/openldap/kinit.so*
 %{_libdir}/openldap/kinit.la
 %endif
 
 %files overlay-lastbind
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/lastbind*.so*
+%{_libdir}/openldap/lastbind.so*
 %{_libdir}/openldap/lastbind.la
 %{_mandir}/man5/slapo-lastbind.5*
 
 %files overlay-lastmod
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/lastmod*.so*
+%{_libdir}/openldap/lastmod.so*
 %{_libdir}/openldap/lastmod.la
 %{_mandir}/man5/slapo-lastmod.5*
 
 %files overlay-noopsrch
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/noopsrch*.so*
+%{_libdir}/openldap/noopsrch.so*
 %{_libdir}/openldap/noopsrch.la
 
 %files overlay-nops
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/nops*.so*
+%{_libdir}/openldap/nops.so*
 %{_libdir}/openldap/nops.la
 %{_mandir}/man5/slapo-nops.5*
 
 %files overlay-nssov
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/nssov/README
-%attr(755,root,root) %{_libdir}/openldap/nssov*.so*
+%{_libdir}/openldap/nssov.so*
 %{_libdir}/openldap/nssov.la
 %{schemadir}/ldapns.schema
 %{_mandir}/man5/slapo-nssov.5*
@@ -2229,15 +2230,15 @@ fi
 %files overlay-proxyOld
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/proxyOld/README
-%attr(755,root,root) %{_libdir}/openldap/proxyOld*.so*
+%{_libdir}/openldap/proxyOld.so*
 %{_libdir}/openldap/proxyOld.la
 
 %files overlay-samba4
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/samba4/README
-%attr(755,root,root) %{_libdir}/openldap/pguid*.so*
-%attr(755,root,root) %{_libdir}/openldap/rdnval*.so*
-%attr(755,root,root) %{_libdir}/openldap/vernum*.so*
+%{_libdir}/openldap/pguid.so*
+%{_libdir}/openldap/rdnval.so*
+%{_libdir}/openldap/vernum.so*
 %{_libdir}/openldap/pguid.la
 %{_libdir}/openldap/rdnval.la
 %{_libdir}/openldap/vernum.la
@@ -2245,10 +2246,14 @@ fi
 %files overlay-smbk5pwd
 %defattr(644,root,root,755)
 %doc contrib/slapd-modules/smbk5pwd/README
-%attr(755,root,root) %{_libdir}/openldap/smbk5pwd*.so*
+%{_libdir}/openldap/smbk5pwd.so*
 %{_libdir}/openldap/smbk5pwd.la
 
 %files overlay-trace
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/openldap/trace*.so*
+%{_libdir}/openldap/trace.so*
 %{_libdir}/openldap/trace.la
+
+# TODO: lloadd (load balancer)
+# %{_mandir}/man5/lloadd.conf.5*
+# %{_mandir}/man8/lloadd.8*
