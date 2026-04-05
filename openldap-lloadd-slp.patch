@@ -1,0 +1,14 @@
+--- openldap-2.6.13/servers/lloadd/main.c.orig	2026-04-05 21:22:49.634482858 +0200
++++ openldap-2.6.13/servers/lloadd/main.c	2026-04-05 21:23:15.551009123 +0200
+@@ -114,6 +114,11 @@ const char Versionstr[] = OPENLDAP_PACKA
+ static int check = CHECK_NONE;
+ static int version = 0;
+ 
++#ifdef HAVE_SLP
++int slapd_register_slp = 0;
++const char *slapd_slp_attrs = NULL;
++#endif
++
+ static int
+ slapd_opt_slp( const char *val, void *arg )
+ {

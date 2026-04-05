@@ -1,5 +1,8 @@
+# TODO: --enable-wt=mod (BR: github.com/wiredtiger)
+# TODO: --enable-fetch? (BR: libfetch)
 #
 # Conditional build:
+%bcond_without	lloadd		# lloadd (load balancer) server
 %bcond_with	krb5		# MIT Kerberos instead of Heimdal
 %bcond_without	odbc		# sql backend (deprecated)
 %bcond_without	perl		# perl backend (deprecated)
@@ -30,7 +33,7 @@ Source7:	nssov.tmpfiles
 Source100:	%{name}-README.evolution
 Patch0:		%{name}-make_man_link.patch
 Patch1:		%{name}-config.patch
-
+Patch2:		%{name}-lloadd-slp.patch
 Patch3:		%{name}-cldap.patch
 Patch4:		attr.patch
 Patch5:		%{name}-install.patch
@@ -64,9 +67,12 @@ BuildRequires:	krb5-devel
 %else
 BuildRequires:	heimdal-devel
 %endif
+BuildRequires:	libargon2-devel
+%{?with_lloadd:BuildRequires:	libevent-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2
+BuildRequires:	libuuid-devel
 BuildRequires:	libwrap-devel
 %{?with_system_lmdb:BuildRequires:	lmdb-devel >= 0.9.22}
 %{?with_slp:BuildRequires:	openslp-devel}
@@ -1148,7 +1154,7 @@ Nakładka śledząca wywołania nakładek.
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1
-
+%patch -P2 -p1
 %patch -P3 -p1
 %patch -P4 -p1
 %patch -P5 -p1
@@ -1199,20 +1205,11 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-dynacl \
 	--enable-aci \
 	--enable-crypt \
+	%{?with_sasl:--enable-spasswd} \
 	--enable-modules \
 	--enable-rlookups \
 	--enable-slapi \
-%if %{with sasl}
-	--with-cyrus-sasl \
-	--enable-spasswd \
-%else
-	--without-cyrus-sasl \
-%endif
-%if %{with slp}
-	--enable-slp \
-%else
-	--disable-slp \
-%endif
+	--enable-slp%{!?with_slp:=no} \
 	--enable-wrappers \
 	--enable-dnssrv=mod \
 	--enable-ldap=mod \
@@ -1221,21 +1218,21 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-asyncmeta=mod \
 	--enable-null \
 	--enable-passwd=mod \
-%if %{with perl}
-	--enable-perl=mod \
-%endif
+	%{?with_perl:--enable-perl=mod} \
 	--enable-relay=mod \
 	--enable-sock=mod \
-%if %{with odbc}
-	--enable-sql=mod \
-	--with-odbc=unixodbc \
-%endif
+	%{?with_odbc:--enable-sql=mod} \
+	--enable-wt=no \
 	--enable-overlays=mod \
+	--enable-balancer%{!?with_lloadd:=no} \
+	--with-argon2=libargon2 \
+	--with-cyrus-sasl%{!?with_sasl:=no} \
+	--with-mp=longlong \
+	%{?with_odbc:--with-odbc=unixodbc} \
+	%{__with_without systemd} \
 	--with-threads \
 	--with-tls \
-	--with-yielding-select \
-	--with-mp=longlong \
-	%{__with_without systemd}
+	--with-yielding-select
 
 %{__make} -j1 depend
 %{__make}
@@ -1778,8 +1775,12 @@ fi
 %{systemdunitdir}/slapd.service
 %{systemdtmpfilesdir}/slapd.conf
 %attr(770,root,slapd) %{_var}/run/slapd
-#%dir %attr(770,root,slapd) %{_localstatedir}/openldap-data
-#%attr(660,root,slapd) %{_localstatedir}/openldap-data/*
+%if %{with lloadd}
+%attr(755,root,root) %{_sbindir}/lloadd
+%{systemdunitdir}/lloadd.service
+%{_mandir}/man5/lloadd.conf.5*
+%{_mandir}/man8/lloadd.8*
+%endif
 
 # no external deps
 %{_libdir}/%{name}/autoca.la
@@ -2148,7 +2149,3 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/openldap/trace.so*
 %{_libdir}/openldap/trace.la
-
-# TODO: lloadd (load balancer)
-# %{_mandir}/man5/lloadd.conf.5*
-# %{_mandir}/man8/lloadd.8*
