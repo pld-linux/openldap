@@ -300,8 +300,13 @@ Requires:	uname(release) >= 2.6
 Suggests:	%{name}-backend-mdb%{?_isa} = %{version}-%{release}
 Provides:	group(slapd)
 Provides:	user(slapd)
-Obsoletes:	openldap-backend-ldbm
-Obsoletes:	openldap-overlay-glue
+Obsoletes:	openldap-backend-bdb < 2.5
+Obsoletes:	openldap-backend-hdb < 2.5
+Obsoletes:	openldap-backend-ndb < 2.6
+Obsoletes:	openldap-backend-ldbm < 2.4
+Obsoletes:	openldap-backend-monitor < 2.5
+Obsoletes:	openldap-backend-shell < 2.5
+Obsoletes:	openldap-overlay-glue < 2.3.7
 Conflicts:	kernel24
 Conflicts:	kernel24-smp
 # for the posttrans scriptlet, conflicts because in vserver environment rpm package is not installed.
