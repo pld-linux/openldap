@@ -3,9 +3,10 @@
 #
 # Conditional build:
 %bcond_without	lloadd		# lloadd (load balancer) server
-%bcond_with	krb5		# MIT Kerberos instead of Heimdal
+%bcond_with	krb5		# MIT Kerberos instead of Heimdal + kinit overlay
 %bcond_without	odbc		# sql backend (deprecated)
 %bcond_without	perl		# perl backend (deprecated)
+%bcond_without	libfetch	# ldif network URLs support via libfetch
 %bcond_without	sasl		# cyrus sasl support
 %bcond_without	slp		# SLP support
 %bcond_without	systemd		# systemd service notification
@@ -69,6 +70,7 @@ BuildRequires:	heimdal-devel
 %endif
 BuildRequires:	libargon2-devel
 %{?with_lloadd:BuildRequires:	libevent-devel}
+%{?with_libfetch:BuildRequires:	libfetch-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:2.2
@@ -158,6 +160,7 @@ Summary(uk.UTF-8):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel%{?_isa} >= 2.1.15}
+%{?with_libfetch:Requires:	libfetch%{?_isa}-devel}
 Requires:	openssl-devel%{?_isa} >= 1.1.1
 %if %{with krb5}
 Requires:	krb5-devel%{?_isa}
@@ -1227,6 +1230,7 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-balancer%{!?with_lloadd:=no} \
 	--with-argon2=libargon2 \
 	--with-cyrus-sasl%{!?with_sasl:=no} \
+	%{?with_libfetch:--with-fetch} \
 	--with-mp=longlong \
 	%{?with_odbc:--with-odbc=unixodbc} \
 	%{__with_without systemd} \
