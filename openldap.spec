@@ -1,16 +1,21 @@
-# TODO: --enable-wt=mod (BR: github.com/wiredtiger)
-# TODO: --enable-fetch? (BR: libfetch)
 #
 # Conditional build:
 %bcond_without	lloadd		# lloadd (load balancer) server
 %bcond_with	krb5		# MIT Kerberos instead of Heimdal + kinit overlay
 %bcond_without	odbc		# sql backend (deprecated)
 %bcond_without	perl		# perl backend (deprecated)
+%bcond_without	wiredtiger	# wiredtiger backend
+%bcond_with	wiredtiger1	# use legacy wiredtiger 1.x
 %bcond_without	libfetch	# ldif network URLs support via libfetch
 %bcond_without	sasl		# cyrus sasl support
 %bcond_without	slp		# SLP support
 %bcond_without	systemd		# systemd service notification
 
+%ifnarch %{x8664} aarch64 loongarch64 ppc64le riscv64 s390x
+%if %{without wiredtiger1}
+%undefine	with_wiredtiger
+%endif
+%endif
 Summary:	Lightweight Directory Access Protocol clients/servers
 Summary(es.UTF-8):	Clientes y servidor para LDAP
 Summary(pl.UTF-8):	Klienci Lightweight Directory Access Protocol
@@ -87,6 +92,9 @@ BuildRequires:	sed >= 4.0
 %{?with_systemd:BuildRequires:	systemd-devel}
 BuildRequires:	uname(release) >= 2.6
 %{?with_odbc:BuildRequires:	unixODBC-devel}
+%if %{with wiredtiger}
+BuildRequires:	wiredtiger-devel%{!?with_wiredtiger1: >= 2.9.2}
+%endif
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 Obsoletes:	openldap-clients
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -474,6 +482,19 @@ SQL backend to slapd, the OpenLDAP server.
 
 %description backend-sql -l pl.UTF-8
 Backend SQL do slapd - serwera OpenLDAP.
+
+%package backend-wt
+Summary:	WiredTiger backend to OpenLDAP server
+Summary(pl.UTF-8):	Backend WiredTiger do serwera OpenLDAP
+Group:		Networking/Daemons
+Requires(post,preun):	sed >= 4.0
+Requires:	%{name}-servers%{?_isa} = %{version}-%{release}
+
+%description backend-wt
+WiredTiger backend to slapd, the OpenLDAP server.
+
+%description backend-wt -l pl.UTF-8
+Backend WiredTiger do slapd - serwera OpenLDAP.
 
 %package overlay-accesslog
 Summary:	Accesslog overlay for OpenLDAP server
@@ -1187,7 +1208,7 @@ Nakładka śledząca wywołania nakładek.
 cd ..
 
 %build
-CPPFLAGS="%{rpmcppflags}"
+CPPFLAGS="%{rpmcppflags}%{?with_wiredtiger1: -DWT_ROLLBACK=WT_DEADLOCK}"
 CFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC -D_GNU_SOURCE"
 CXXFLAGS="%{rpmcflags} $CPPFLAGS -D_REENTRANT -fPIC"
 LDFLAGS="%{rpmcflags} %{rpmldflags}"
@@ -1225,7 +1246,7 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-relay=mod \
 	--enable-sock=mod \
 	%{?with_odbc:--enable-sql=mod} \
-	--enable-wt=no \
+	--enable-wt=%{?with_wiredtiger:mod}%{!?with_wiredtiger:no} \
 	--enable-overlays=mod \
 	--enable-balancer%{!?with_lloadd:=no} \
 	--with-argon2=libargon2 \
@@ -1446,6 +1467,12 @@ fi
 
 %preun backend-sql
 %ldap_module_remove back_sql.la
+
+%post backend-wt
+%ldap_module_add back_wt.la
+
+%preun backend-wt
+%ldap_module_remove back_wt.la
 
 %post overlay-pcache
 %ldap_module_add pcache.la
@@ -1916,6 +1943,13 @@ fi
 %{_libdir}/openldap/back_sql.so*
 %{_libdir}/openldap/back_sql.la
 %{_mandir}/man5/slapd-sql.5*
+%endif
+
+%if %{with wiredtiger}
+%files backend-wt
+%defattr(644,root,root,755)
+%{_libdir}/openldap/back_wt.so*
+%{_libdir}/openldap/back_wt.la
 %endif
 
 %files overlay-accesslog
