@@ -168,7 +168,7 @@ Summary(uk.UTF-8):	Файли для програмування з LDAP
 Group:		Development/Libraries
 Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 %{?with_sasl:Requires:	cyrus-sasl-devel%{?_isa} >= 2.1.15}
-%{?with_libfetch:Requires:	libfetch%{?_isa}-devel}
+%{?with_libfetch:Requires:	libfetch-devel%{?_isa}}
 Requires:	openssl-devel%{?_isa} >= 1.1.1
 %if %{with krb5}
 Requires:	krb5-devel%{?_isa}
