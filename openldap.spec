@@ -1251,7 +1251,7 @@ export SOURCE_DATE_EPOCH=$(stat -c '%Y' CHANGES)
 	--enable-balancer%{!?with_lloadd:=no} \
 	--with-argon2=libargon2 \
 	--with-cyrus-sasl%{!?with_sasl:=no} \
-	%{?with_libfetch:--with-fetch} \
+	%{__with_without libfetch fetch} \
 	--with-mp=longlong \
 	%{?with_odbc:--with-odbc=unixodbc} \
 	%{__with_without systemd} \
@@ -1803,12 +1803,16 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/schema/*.schema
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/ldap
 %attr(754,root,root) /etc/rc.d/init.d/ldap
+%if %{with systemd}
 %{systemdunitdir}/slapd.service
+%endif
 %{systemdtmpfilesdir}/slapd.conf
 %attr(770,root,slapd) %{_var}/run/slapd
 %if %{with lloadd}
 %attr(755,root,root) %{_sbindir}/lloadd
+%if %{with systemd}
 %{systemdunitdir}/lloadd.service
+%endif
 %{_mandir}/man5/lloadd.conf.5*
 %{_mandir}/man8/lloadd.8*
 %endif
