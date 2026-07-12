@@ -6,7 +6,7 @@
 %bcond_without	perl		# perl backend (deprecated)
 %bcond_without	wiredtiger	# wiredtiger backend
 %bcond_with	wiredtiger1	# use legacy wiredtiger 1.x
-%bcond_without	libfetch	# ldif network URLs support via libfetch
+%bcond_with	libfetch	# ldif network URLs support via libfetch [with FILE* API]
 %bcond_without	sasl		# cyrus sasl support
 %bcond_without	slp		# SLP support
 %bcond_without	systemd		# systemd service notification
