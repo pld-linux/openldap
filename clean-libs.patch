@@ -1,0 +1,11 @@
+--- openldap-2.6.13/configure.ac.orig	2026-08-30 21:01:10.513980035 +0200
++++ openldap-2.6.13/configure.ac	2026-08-30 21:03:23.722869415 +0200
+@@ -2192,7 +2192,7 @@
+ 			[have_libevent=yes
+ 			LEVENT_LIBS="$LEVENT_LIBS -levent"],
+ 			[have_libevent=no])])
+-	AC_CHECK_LIB(event, libevent_global_shutdown, [], [have_libevent=no])
++	AC_CHECK_LIB(event, libevent_global_shutdown, [have_libevent=yes], [have_libevent=no])
+ 
+ 	if test $have_libevent = yes ; then
+ 		AC_DEFINE(HAVE_LIBEVENT, 1, [define if you have -levent])
