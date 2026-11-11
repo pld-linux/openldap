@@ -23,12 +23,12 @@ Summary(pt_BR.UTF-8):	Clientes e servidor para LDAP
 Summary(ru.UTF-8):	Образцы клиентов LDAP
 Summary(uk.UTF-8):	Зразки клієнтів LDAP
 Name:		openldap
-Version:	2.6.13
-Release:	3
+Version:	2.6.16
+Release:	1
 License:	OpenLDAP Public License
 Group:		Networking/Daemons
 Source0:	https://www.openldap.org/software/download/OpenLDAP/openldap-release/%{name}-%{version}.tgz
-# Source0-md5:	761be850c8ff85dbf5031af7c6c6da44
+# Source0-md5:	29ae21afb3877bbf77d055698127452b
 
 Source2:	ldap.init
 Source3:	%{name}.sysconfig
@@ -61,6 +61,7 @@ Patch24:	%{name}-default_cacert_path.patch
 Patch25:	%{name}-system-lmdb.patch
 Patch26:	%{name}-slapd_for_symbols_check.patch
 Patch27:	clean-libs.patch
+Patch28:	%{name}-wt-add-snapshot.patch
 URL:		https://www.openldap.org/
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake
@@ -1203,6 +1204,7 @@ Nakładka śledząca wywołania nakładek.
 # test if needed
 #%%patch -P26 -p1
 %patch -P27 -p1
+%patch -P28 -p1
 
 %if %{with krb5}
 %patch -P17 -p1

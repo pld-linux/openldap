@@ -1,0 +1,14 @@
+WiredTiger >= 11 rejects writes in read-uncommitted transactions;
+wt_add then fails every online add with err=80 (ENOTSUP).
+
+--- a/servers/slapd/back-wt/add.c	2026-11-11 23:27:09.299999999 +0100
++++ b/servers/slapd/back-wt/add.c	2026-11-11 23:27:09.309368399 +0100
+@@ -260,7 +260,7 @@
+ 		goto return_results;
+ 	}
+ 
+-	rc = wc->session->begin_transaction(wc->session, "isolation=read-uncommitted");
++	rc = wc->session->begin_transaction(wc->session, "isolation=snapshot");
+ 	if( rc ) {
+ 		Debug( LDAP_DEBUG_TRACE, "wt_add: begin_transaction failed: %s (%d)\n",
+ 			   wiredtiger_strerror(rc), rc );
